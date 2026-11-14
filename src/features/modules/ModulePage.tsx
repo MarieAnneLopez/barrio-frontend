@@ -7,7 +7,7 @@ import { ModuleDetailView } from './ModuleDetailView';
 
 /** Ruta de cada uno de los 14 módulos: /categorias/:slug. */
 export function ModulePage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { slug } = useParams();
   const [params] = useSearchParams();
   const category = findCategory(slug);
@@ -23,6 +23,11 @@ export function ModulePage() {
         title={t(`categories.${category.slug}.name`)}
         description={t(`categories.${category.slug}.description`)}
       />
+      {category && i18n.exists(`categories.${category.slug}.notice`) ? (
+        <p role="note" className="m-0 max-w-3xl rounded-md border border-warning border-dashed p-4 text-step--1 text-fg">
+          {t(`categories.${category.slug}.notice`)}
+        </p>
+      ) : null}
       <ModuleDetailView key={category.slug} category={category} initialOpenId={lugar > 0 ? lugar : null} />
     </div>
   );

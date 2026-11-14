@@ -70,7 +70,7 @@
     },
     "datos-catastrales": {
       "name": "Cadastral Data",
-      "description": "Plots with their use, areas, floors, socioeconomic stratum and appraisal, without personal data."
+      "description": "El Tintal cadastral lots with their area and socioeconomic stratum (UAECD and SDP), without personal data."
     },
     "estado-calles": {
       "name": "Street Conditions",
@@ -90,7 +90,8 @@
     },
     "robos": {
       "name": "Theft Data",
-      "description": "Aggregated, anonymous theft data by time of day and method."
+      "description": "Citizen theft reports to the 123 emergency line, aggregated by month, UPZ and type.",
+      "notice": "These are calls to the 123 line, not police reports or confirmed events. They are aggregated by month and by UPZ and placed at an interior point of each UPZ, never at an address. Use them to see trends, not to single out streets or people."
     },
     "localidad": {
       "name": "Locality Information",

@@ -70,7 +70,7 @@
     },
     "datos-catastrales": {
       "name": "Datos Catastrales",
-      "description": "Predios con su uso, áreas, pisos, estrato y avalúo, sin datos personales."
+      "description": "Lotes catastrales de El Tintal con su área y estrato (UAECD y SDP), sin datos personales."
     },
     "estado-calles": {
       "name": "Estado de Calles",
@@ -90,7 +90,8 @@
     },
     "robos": {
       "name": "Datos sobre Robos",
-      "description": "Datos agregados y anónimos sobre robos por franja horaria y modalidad."
+      "description": "Reportes ciudadanos de hurto a la Línea 123, agregados por mes, UPZ y modalidad.",
+      "notice": "Estos datos son llamadas a la Línea 123, no denuncias ni hechos confirmados. Se agregan por mes y por UPZ y se ubican en un punto interior de cada UPZ, nunca en una dirección. Sirven para conocer tendencias, no para señalar calles ni personas."
     },
     "localidad": {
       "name": "Información de la Localidad",

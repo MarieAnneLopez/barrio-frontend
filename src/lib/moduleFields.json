@@ -454,6 +454,7 @@
   },
   "robos": {
     "label": "modalidad",
+    "sort": "-fecha",
     "summary": [
       "fecha",
       "cantidad",
@@ -463,7 +464,8 @@
       {
         "name": "fecha",
         "kind": "date",
-        "required": true
+        "required": true,
+        "format": "month"
       },
       {
         "name": "franja_horaria",

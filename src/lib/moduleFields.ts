@@ -16,11 +16,15 @@ export interface FieldSpec {
   options?: string[];
   /** Aparece en los filtros de la lista. */
   filter?: boolean;
+  /** Fechas que representan un mes entero (robos agregados por mes). */
+  format?: 'month';
 }
 
 export interface ModuleFields {
   /** Campo que nombra un registro (título de la tarjeta, ranking). */
   label: string;
+  /** Orden de la lista si no es por el nombre (p. ej. "-fecha": recientes primero). */
+  sort?: string;
   /** Datos clave de la tarjeta. */
   summary: string[];
   fields: FieldSpec[];
