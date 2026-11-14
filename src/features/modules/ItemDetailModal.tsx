@@ -5,6 +5,8 @@ import { useApi } from '../../hooks/useApi';
 import type { ModuleItem } from '../../lib/apiTypes';
 import { labelOf, moduleFields } from '../../lib/moduleFields';
 import { displayValue, hasValue } from './displayValue';
+import { Gallery } from './Gallery';
+import { RatingPanel } from './RatingPanel';
 import { SourceLine } from './SourceLine';
 import { VerifiedBadge } from './VerifiedBadge';
 
@@ -14,7 +16,7 @@ interface ItemDetailModalProps {
   onClose: () => void;
 }
 
-/** Ficha completa de un lugar: todos sus campos, verificación y fuente del dato. */
+/** Ficha completa de un lugar: campos, verificación, fuente, galería y calificaciones. */
 export function ItemDetailModal({ slug, itemId, onClose }: ItemDetailModalProps) {
   const { t, i18n } = useTranslation();
   const item = useApi<ModuleItem>(itemId === null ? null : `/${slug}/${itemId}`);
@@ -22,7 +24,7 @@ export function ItemDetailModal({ slug, itemId, onClose }: ItemDetailModalProps)
   const title = data ? labelOf(data, slug) : t('modules.detail');
 
   return (
-    <Modal open={itemId !== null} onClose={onClose} title={title}>
+    <Modal open={itemId !== null} onClose={onClose} title={title} wide>
       {item.status === 'loading' ? <Skeleton className="h-24 w-full" lines={4} /> : null}
       {item.status === 'error' ? (
         <p role="alert" className="m-0 text-fg">
@@ -45,6 +47,8 @@ export function ItemDetailModal({ slug, itemId, onClose }: ItemDetailModalProps)
               ))}
           </dl>
           <SourceLine item={data} />
+          <Gallery slug={slug} itemId={data.id} place={title} />
+          <RatingPanel slug={slug} itemId={data.id} />
         </div>
       ) : null}
     </Modal>

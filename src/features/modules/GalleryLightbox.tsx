@@ -1,0 +1,61 @@
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Button } from '../../components/ui/Button';
+import { Modal } from '../../components/ui/Modal';
+import type { Photo } from '../../lib/apiTypes';
+
+interface GalleryLightboxProps {
+  photos: Photo[];
+  /** Foto abierta; null = cerrado. */
+  index: number | null;
+  onIndex: (index: number | null) => void;
+  place: string;
+}
+
+/**
+ * Visor (§11.3 punto 4): entra con el modal (escala + opacidad), flechas
+ * izquierda/derecha o botones para navegar, Escape cierra, pie con autor y licencia.
+ */
+export function GalleryLightbox({ photos, index, onIndex, place }: GalleryLightboxProps) {
+  const { t } = useTranslation();
+  const total = photos.length;
+  const photo = index === null ? undefined : photos[index];
+  const go = (step: number) => index !== null && onIndex((index + step + total) % total);
+
+  useEffect(() => {
+    if (index === null || total < 2) return undefined;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowRight') onIndex((index + 1) % total);
+      if (event.key === 'ArrowLeft') onIndex((index - 1 + total) % total);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [index, total, onIndex]);
+
+  return (
+    <Modal open={photo !== undefined} onClose={() => onIndex(null)} title={place} wide>
+      {photo ? (
+        <figure className="m-0 flex flex-col gap-3">
+          <img key={photo.id} src={photo.url} alt={photo.alt_text} className="ui-lightbox-img max-h-[60dvh] w-full rounded-md object-contain" />
+          <figcaption className="text-step--1 text-fg-secondary">
+            {photo.alt_text}
+            {photo.autor || photo.licencia ? (
+              <span className="block text-fg-muted">
+                {[photo.autor && t('gallery.author', { author: photo.autor }), photo.licencia].filter(Boolean).join(' · ')}
+              </span>
+            ) : null}
+          </figcaption>
+          {total > 1 ? (
+            <div className="flex items-center justify-between gap-3">
+              <Button variant="secondary" size="sm" onClick={() => go(-1)}>{t('gallery.previous')}</Button>
+              <span className="font-mono text-step--1 text-fg-muted" aria-live="polite">
+                {t('gallery.position', { current: (index ?? 0) + 1, total })}
+              </span>
+              <Button variant="secondary" size="sm" onClick={() => go(1)}>{t('gallery.next')}</Button>
+            </div>
+          ) : null}
+        </figure>
+      ) : null}
+    </Modal>
+  );
+}

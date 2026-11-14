@@ -28,3 +28,35 @@ export interface BarrioPolygon {
   geometry: MultiPolygon;
   properties: { nombre: string; source_ref: string[]; license: string };
 }
+
+export interface Rating {
+  id: number;
+  estrellas: number;
+  comentario: string | null;
+  autor_nombre: string | null;
+  created_at: string;
+}
+
+export interface RatingSummary {
+  promedio: number | null;
+  total: number;
+  items: Rating[];
+}
+
+/** Foto local (/assets/photos/...) con atribución. */
+export interface Photo {
+  id: number;
+  url: string;
+  alt_text: string;
+  orden: number;
+  autor: string | null;
+  licencia: string | null;
+}
+
+export interface RankingEntry {
+  categoria_slug: string;
+  objeto_id: number;
+  nombre: string;
+  promedio: number;
+  total: number;
+}

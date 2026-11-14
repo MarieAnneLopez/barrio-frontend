@@ -10,13 +10,15 @@ interface ModalProps {
   description?: string;
   children: ReactNode;
   footer?: ReactNode;
+  /** Panel ancho (ficha de un lugar, visor de fotos). */
+  wide?: boolean;
 }
 
 /**
  * Diálogo modal: aria-modal, trampa de foco, Escape y clic fuera cierran,
  * bloqueo de scroll y foco devuelto al disparador. Entra desde scale(0.96).
  */
-export function Modal({ open, onClose, title, description, children, footer }: ModalProps) {
+export function Modal({ open, onClose, title, description, children, footer, wide }: ModalProps) {
   const { t } = useTranslation();
   const titleId = useId();
   const descId = useId();
@@ -48,7 +50,7 @@ export function Modal({ open, onClose, title, description, children, footer }: M
         aria-labelledby={titleId}
         aria-describedby={description ? descId : undefined}
         tabIndex={-1}
-        className="ui-modal-panel glass relative w-full max-w-lg rounded-lg bg-surface p-6 shadow-[var(--shadow-deep)]"
+        className={`ui-modal-panel glass relative w-full ${wide ? 'max-w-3xl' : 'max-w-lg'} rounded-lg bg-surface p-6 shadow-[var(--shadow-deep)]`}
       >
         <div className="mb-4 flex items-start justify-between gap-4">
           <h2 id={titleId} className="m-0 text-step-2 text-fg">

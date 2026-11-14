@@ -450,5 +450,34 @@
       "history": "En Historia Local está el recorrido de El Tintal y de la Localidad de Kennedy.",
       "fallback": "Por ahora respondo con un repertorio local: puedo llevarte a los 14 módulos, al mapa 3D, a la historia o al contacto de Marie. Pronto responderé con los datos del barrio."
     }
+  },
+  "ratings": {
+    "title": "Calificaciones",
+    "none": "Sin calificaciones todavía",
+    "average": "{{value}} de 5 estrellas",
+    "count_one": "{{count}} calificación",
+    "count_other": "{{count}} calificaciones",
+    "yourRating": "Tu calificación",
+    "starsValue": "{{value}} estrellas",
+    "required": "Elige de 0,5 a 5 estrellas",
+    "comment": "Comentario (opcional)",
+    "author": "Tu nombre (opcional)",
+    "submit": "Enviar calificación",
+    "thanks": "¡Gracias! Tu calificación quedó registrada.",
+    "needLogin": "Para calificar necesitas iniciar sesión.",
+    "login": "Iniciar sesión",
+    "anonymous": "Visitante"
+  },
+  "gallery": {
+    "title": "Galería",
+    "empty": "Este lugar todavía no tiene fotos.",
+    "open": "Ampliar foto de {{place}}",
+    "author": "Autor: {{author}}",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "position": "{{current}} de {{total}}"
+  },
+  "forms": {
+    "max": "Máximo {{max}} caracteres"
   }
 }

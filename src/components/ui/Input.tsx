@@ -6,7 +6,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
   hint?: string;
   /** Mensaje de error junto al campo; activa aria-invalid. */
-  error?: string;
+  error?: string | undefined;
   /** Validación o búsqueda en curso. */
   loading?: boolean;
 }

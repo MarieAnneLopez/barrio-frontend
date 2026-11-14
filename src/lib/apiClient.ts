@@ -52,3 +52,22 @@ export async function apiGet<T>(path: string, params?: QueryParams, signal?: Abo
   if (!response.ok) throw await toApiError(response);
   return (await response.json()) as T;
 }
+
+export type WriteMethod = 'POST' | 'PATCH' | 'DELETE';
+
+/** Escritura JSON (crear, editar, borrar); 204 devuelve undefined. */
+export async function apiSend<T>(method: WriteMethod, path: string, body?: unknown): Promise<T | undefined> {
+  let response: Response;
+  try {
+    const init: RequestInit = { method, headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(TIMEOUT_MS) };
+    if (body !== undefined) {
+      init.headers = { Accept: 'application/json', 'Content-Type': 'application/json' };
+      init.body = JSON.stringify(body);
+    }
+    response = await fetch(buildUrl(path), init);
+  } catch {
+    throw new ApiError(0, 'NETWORK_ERROR', 'No se pudo conectar con el servidor');
+  }
+  if (!response.ok) throw await toApiError(response);
+  return response.status === 204 ? undefined : ((await response.json()) as T);
+}

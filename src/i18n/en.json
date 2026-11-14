@@ -450,5 +450,34 @@
       "history": "Local History tells the story of El Tintal and the Kennedy district.",
       "fallback": "For now I answer from a local repertoire: I can take you to the 14 modules, the 3D map, the history or Marie's contact. Soon I'll answer with the neighborhood's data."
     }
+  },
+  "ratings": {
+    "title": "Ratings",
+    "none": "No ratings yet",
+    "average": "{{value}} out of 5 stars",
+    "count_one": "{{count}} rating",
+    "count_other": "{{count}} ratings",
+    "yourRating": "Your rating",
+    "starsValue": "{{value}} stars",
+    "required": "Choose 0.5 to 5 stars",
+    "comment": "Comment (optional)",
+    "author": "Your name (optional)",
+    "submit": "Send rating",
+    "thanks": "Thanks! Your rating was saved.",
+    "needLogin": "You need to sign in to rate.",
+    "login": "Sign in",
+    "anonymous": "Visitor"
+  },
+  "gallery": {
+    "title": "Gallery",
+    "empty": "This place has no photos yet.",
+    "open": "Enlarge photo of {{place}}",
+    "author": "Author: {{author}}",
+    "previous": "Previous",
+    "next": "Next",
+    "position": "{{current}} of {{total}}"
+  },
+  "forms": {
+    "max": "{{max}} characters at most"
   }
 }
