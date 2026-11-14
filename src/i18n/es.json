@@ -3,5 +3,9 @@
     "title": "Reconoce tu Barrio: El Tintal",
     "location": "Kennedy · Bogotá D.C.",
     "tagline": "Explora los lugares, la historia y la vida de tu barrio."
+  },
+  "ui": {
+    "loading": "Cargando…",
+    "close": "Cerrar"
   }
 }

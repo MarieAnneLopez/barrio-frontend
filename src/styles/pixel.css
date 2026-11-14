@@ -1,0 +1,39 @@
+/* Universo pixel art exclusivo de Mini Marie (§10): sprites nítidos,
+   tipografía Press Start 2P y burbujas con bordes escalonados. */
+.pixel-art {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.pixel-font {
+  font-family: var(--ff-pixel);
+  letter-spacing: 0.02em;
+  line-height: 1.6;
+}
+
+/* Borde escalonado de 4 px dibujado con sombras (sin imágenes externas). */
+.pixel-bubble {
+  --px: 4px;
+  --pixel-edge: var(--accent-soft);
+  position: relative;
+  margin: var(--px);
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--pixel-edge),
+    0 var(--px) 0 0 var(--pixel-edge),
+    calc(var(--px) * -1) 0 0 0 var(--pixel-edge),
+    var(--px) 0 0 0 var(--pixel-edge);
+}
+
+.pixel-bubble--tail::after {
+  content: '';
+  position: absolute;
+  left: var(--space-4);
+  bottom: calc(var(--px) * -3);
+  width: calc(var(--px) * 2);
+  height: calc(var(--px) * 2);
+  background: var(--pixel-edge);
+  box-shadow: calc(var(--px) * -1) calc(var(--px) * -1) 0 0 var(--pixel-edge);
+}

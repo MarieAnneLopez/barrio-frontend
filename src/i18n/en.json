@@ -3,5 +3,9 @@
     "title": "Get to Know Your Neighborhood: El Tintal",
     "location": "Kennedy · Bogotá D.C.",
     "tagline": "Explore the places, history and life of your neighborhood."
+  },
+  "ui": {
+    "loading": "Loading…",
+    "close": "Close"
   }
 }

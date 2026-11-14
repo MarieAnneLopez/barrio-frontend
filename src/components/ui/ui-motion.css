@@ -1,0 +1,53 @@
+/* Movimiento de componentes: entrada del modal y animaciones de carga.
+   Con movimiento reducido no hay escala ni pulso. */
+
+/* Modal: entra con opacidad + scale(0.96) desde el centro (sin JS). */
+.ui-modal-panel {
+  transition:
+    opacity var(--dur-3) var(--ease-emphasis),
+    transform var(--dur-3) var(--ease-emphasis);
+
+  @starting-style {
+    opacity: 0;
+    transform: scale(calc(var(--press-scale) - 0.01));
+  }
+}
+
+.ui-modal-backdrop {
+  transition: opacity var(--dur-2) ease;
+
+  @starting-style {
+    opacity: 0;
+  }
+}
+
+@keyframes ui-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ui-spinner {
+  animation: ui-spin 700ms linear infinite;
+}
+
+@keyframes ui-shimmer {
+  from {
+    opacity: 0.55;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.ui-skeleton {
+  background-color: var(--skeleton-shine);
+  animation: ui-shimmer 900ms ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-skeleton {
+    animation: none;
+    background-color: var(--skeleton-base);
+  }
+}

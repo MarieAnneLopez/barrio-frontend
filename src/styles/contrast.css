@@ -1,0 +1,33 @@
+/* Modo Alto Contraste: clase .high-contrast en <html> (barra de accesibilidad).
+   Máximo ratio texto/fondo, bordes sólidos y sin vidrio translúcido. */
+:root.high-contrast {
+  --bg-primary: #000000;
+  --bg-surface: #000000;
+  --text-primary: #ffffff;
+  --text-secondary: #ffffff;
+  --text-muted: #ffffff;
+  --accent-soft: #ffffff;
+  --interactive-primary: var(--palette-cobalt);
+  --interactive-hover: #000000;
+  --text-on-interactive: #ffffff;
+  --border-subtle: var(--palette-sky);
+  --border-strong: #ffffff;
+  --glass-fill: #000000;
+  --glass-blur: 0px;
+  --hairline: var(--palette-sky);
+  --focus-ring: #ffffff;
+  --overlay: rgb(0 0 0 / 0.9);
+  --skeleton-base: rgb(255 255 255 / 0.2);
+  --skeleton-shine: rgb(255 255 255 / 0.35);
+  --shadow-deep: none;
+  --glow-active: 0 0 0 2px #ffffff;
+}
+
+:root.high-contrast a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+:root.high-contrast :focus-visible {
+  outline-width: 3px;
+}

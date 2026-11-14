@@ -1,14 +1,74 @@
 @import 'tailwindcss';
+@import './tokens.css';
+@import './contrast.css';
+@import './pixel.css';
+@import '../components/ui/ui.css';
+@import '../components/ui/ui-motion.css';
 
-/* Base mínima del scaffold; los tokens completos llegan en H3 (tokens.css). */
+/* Utilidades de Tailwind ligadas a los tokens (cambian solas en alto contraste). */
+@theme inline {
+  --color-bg: var(--bg-primary);
+  --color-surface: var(--bg-surface);
+  --color-accent: var(--accent-soft);
+  --color-interactive: var(--interactive-primary);
+  --color-interactive-hover: var(--interactive-hover);
+  --color-active: var(--interactive-active);
+  --color-fg: var(--text-primary);
+  --color-fg-secondary: var(--text-secondary);
+  --color-fg-muted: var(--text-muted);
+  --color-on-interactive: var(--text-on-interactive);
+  --color-line: var(--border-subtle);
+  --color-line-strong: var(--border-strong);
+  --color-glass: var(--glass-fill);
+  --color-success: var(--state-success);
+  --color-warning: var(--state-warning);
+  --color-error: var(--state-error);
+  --font-display: var(--ff-display);
+  --font-body: var(--ff-body);
+  --font-mono: var(--ff-mono);
+  --font-pixel: var(--ff-pixel);
+  --text-step--1: var(--step--1);
+  --text-step-0: var(--step-0);
+  --text-step-1: var(--step-1);
+  --text-step-2: var(--step-2);
+  --text-step-3: var(--step-3);
+  --text-step-4: var(--step-4);
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --ease-out: var(--ease-emphasis);
+}
+
 :root {
   color-scheme: dark;
-  background-color: #0b131e;
-  color: #ffffff;
 }
 
 body {
   margin: 0;
   min-height: 100dvh;
-  background-color: #0b131e;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--ff-body);
+  font-size: var(--step-0);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--ff-display);
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.glass {
+  background-color: var(--glass-fill);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--border-subtle);
 }

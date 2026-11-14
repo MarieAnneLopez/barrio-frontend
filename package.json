@@ -19,6 +19,10 @@
     "sprite": "node scripts/slice_spritesheet.mjs"
   },
   "dependencies": {
+    "@fontsource/inter": "5.3.0",
+    "@fontsource/jetbrains-mono": "5.3.0",
+    "@fontsource/press-start-2p": "5.3.0",
+    "@fontsource/space-grotesk": "5.3.0",
     "i18next": "27.1.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
@@ -35,6 +39,7 @@
     "@types/react": "18.3.31",
     "@types/react-dom": "18.3.7",
     "@vitejs/plugin-react": "6.3.0",
+    "axe-core": "4.14.0",
     "eslint": "10.15.0",
     "eslint-plugin-react-hooks": "7.1.1",
     "eslint-plugin-react-refresh": "0.5.7",

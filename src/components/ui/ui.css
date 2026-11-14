@@ -1,0 +1,60 @@
+/* Estados compartidos de los controles (§10): hover, focus-visible,
+   active/pressed, disabled y loading. Solo transform/opacity/color. */
+.ui-pressable {
+  transition:
+    transform var(--dur-1) var(--ease-emphasis),
+    background-color var(--dur-2) ease,
+    border-color var(--dur-2) ease,
+    box-shadow var(--dur-2) ease,
+    opacity var(--dur-2) ease;
+}
+
+.ui-pressable:active:not([aria-disabled='true']) {
+  transform: scale(var(--press-scale));
+}
+
+.ui-pressable:disabled,
+.ui-pressable[aria-disabled='true'] {
+  opacity: var(--disabled-opacity);
+  pointer-events: none;
+}
+
+.ui-pressable[aria-busy='true'] {
+  cursor: progress;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ui-btn--primary:hover {
+    background-color: var(--interactive-hover);
+    box-shadow: var(--glow-active);
+  }
+
+  .ui-btn--secondary:hover,
+  .ui-btn--ghost:hover {
+    border-color: var(--interactive-active);
+    background-color: var(--glass-fill);
+  }
+
+  .ui-field:hover {
+    border-color: var(--border-strong);
+  }
+}
+
+.ui-field {
+  transition: border-color var(--dur-2) ease, box-shadow var(--dur-2) ease;
+}
+
+.ui-field:focus-visible {
+  outline: none;
+  border-color: var(--focus-ring);
+  box-shadow: 0 0 0 2px var(--focus-ring);
+}
+
+.ui-field[aria-invalid='true'] {
+  border-color: var(--state-error);
+}
+
+.ui-field:disabled {
+  opacity: var(--disabled-opacity);
+  pointer-events: none;
+}
