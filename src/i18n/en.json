@@ -1,11 +1,75 @@
 {
   "app": {
     "title": "Get to Know Your Neighborhood: El Tintal",
+    "shortTitle": "El Tintal",
     "location": "Kennedy · Bogotá D.C.",
     "tagline": "Explore the places, history and life of your neighborhood."
   },
   "ui": {
     "loading": "Loading…",
     "close": "Close"
+  },
+  "a11y": {
+    "skipToContent": "Skip to main content"
+  },
+  "header": {
+    "home": "Go to the Get to Know Your Neighborhood home page",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "language": "Language",
+    "languageNames": {
+      "es": "Spanish",
+      "en": "English"
+    }
+  },
+  "sidebar": {
+    "label": "Main navigation",
+    "collapse": "Collapse menu",
+    "expand": "Expand menu",
+    "categories": "Categories",
+    "categoriesHint": "14 neighborhood modules"
+  },
+  "nav": {
+    "home": "Home",
+    "map": "3D Map",
+    "history": "Local History",
+    "ranking": "Ratings Ranking",
+    "gallery": "Photo Gallery",
+    "faq": "FAQ",
+    "creator": "About the Creator",
+    "help": "Help",
+    "access": "Sign in"
+  },
+  "pages": {
+    "map": "3D model of El Tintal with its blocks, roads and parks, plus markers for places in the neighborhood.",
+    "history": "History of the El Tintal neighborhood and the Kennedy locality, from the savanna haciendas to today.",
+    "ranking": "Neighborhood places sorted by visitor ratings, overall and by category.",
+    "gallery": "Photos of the El Tintal area with their author and license.",
+    "faq": "Answers to the most common questions about the platform and the neighborhood.",
+    "creator": "Who created this platform and why.",
+    "help": "How to use the platform: navigation, accessibility, language and contact.",
+    "access": "Sign in to create, edit or rate places."
+  },
+  "categories": {
+    "module": "Module {{id}}",
+    "centros-educativos": { "name": "Schools", "description": "Kindergartens, schools and universities in the neighborhood, public and private." },
+    "escenarios-deportivos": { "name": "Sports Venues", "description": "Courts and sports spaces with their surface, lighting and opening hours." },
+    "camaras-seguridad": { "name": "Security Cameras", "description": "Location and details of police, community and private cameras. Video is never shown." },
+    "zonas-verdes": { "name": "Green Areas", "description": "Parks, tree-lined walkways and gardens with their area, trees and condition." },
+    "datos-catastrales": { "name": "Cadastral Data", "description": "Plots with their use, areas, floors, socioeconomic stratum and appraisal, without personal data." },
+    "estado-calles": { "name": "Street Conditions", "description": "Neighborhood roads with their material, condition and recent works." },
+    "estaciones-transporte": { "name": "Transit Stations", "description": "TransMilenio trunk stations, feeder routes and SITP stops." },
+    "sitios-comida": { "name": "Places to Eat", "description": "Restaurants and food stands with their specialty, hours and prices." },
+    "librerias": { "name": "Bookstores", "description": "Bookstores and stationery shops with their specialty and hours." },
+    "robos": { "name": "Theft Data", "description": "Aggregated, anonymous theft data by time of day and method." },
+    "localidad": { "name": "Locality Information", "description": "Kennedy locality profile: population, area, local mayor's office and challenges." },
+    "atencion-inmediata": { "name": "Emergency Services", "description": "Police posts (CAI), hospitals and emergency services with 24/7 phone numbers." },
+    "veterinarias": { "name": "Veterinary Clinics", "description": "Veterinary clinics with their services, hours and rating." },
+    "barberias": { "name": "Barbershops", "description": "Barbershops with their services, hours and rating." }
+  },
+  "notFound": {
+    "title": "This page does not exist",
+    "description": "The address does not match any section of the neighborhood.",
+    "back": "Back to home"
   }
 }

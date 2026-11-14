@@ -1,11 +1,75 @@
 {
   "app": {
     "title": "Reconoce tu Barrio: El Tintal",
+    "shortTitle": "El Tintal",
     "location": "Kennedy · Bogotá D.C.",
     "tagline": "Explora los lugares, la historia y la vida de tu barrio."
   },
   "ui": {
     "loading": "Cargando…",
     "close": "Cerrar"
+  },
+  "a11y": {
+    "skipToContent": "Saltar al contenido principal"
+  },
+  "header": {
+    "home": "Ir al inicio de Reconoce tu Barrio",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "language": "Idioma",
+    "languageNames": {
+      "es": "Español",
+      "en": "Inglés"
+    }
+  },
+  "sidebar": {
+    "label": "Navegación principal",
+    "collapse": "Contraer menú",
+    "expand": "Expandir menú",
+    "categories": "Categorías",
+    "categoriesHint": "14 módulos del barrio"
+  },
+  "nav": {
+    "home": "Inicio",
+    "map": "Mapa 3D",
+    "history": "Historia Local",
+    "ranking": "Ranking de Calificaciones",
+    "gallery": "Galería General",
+    "faq": "Preguntas Frecuentes",
+    "creator": "Perfil de la Creadora",
+    "help": "Ayuda",
+    "access": "Acceso / Sesión"
+  },
+  "pages": {
+    "map": "Maqueta 3D de El Tintal con sus manzanas, vías y parques, y marcadores de los lugares del barrio.",
+    "history": "Historia del barrio El Tintal y de la Localidad de Kennedy, desde las haciendas de la sabana hasta hoy.",
+    "ranking": "Lugares del barrio ordenados por la calificación de sus visitantes, en general y por categoría.",
+    "gallery": "Fotografías del entorno de El Tintal con su autor y licencia.",
+    "faq": "Respuestas a las dudas más comunes sobre la plataforma y el barrio.",
+    "creator": "Quién creó esta plataforma y por qué.",
+    "help": "Cómo usar la plataforma: navegación, accesibilidad, idioma y contacto.",
+    "access": "Inicia sesión para crear, editar o calificar lugares."
+  },
+  "categories": {
+    "module": "Módulo {{id}}",
+    "centros-educativos": { "name": "Centros Educativos", "description": "Jardines, colegios y universidades del barrio, públicos y privados." },
+    "escenarios-deportivos": { "name": "Escenarios Deportivos", "description": "Canchas y espacios deportivos con su superficie, iluminación y horario." },
+    "camaras-seguridad": { "name": "Cámaras de Seguridad", "description": "Ubicación y datos de las cámaras policiales, comunitarias y privadas. Nunca se muestra video." },
+    "zonas-verdes": { "name": "Zonas Verdes", "description": "Parques, alamedas y jardines con su área, arborización y estado." },
+    "datos-catastrales": { "name": "Datos Catastrales", "description": "Predios con su uso, áreas, pisos, estrato y avalúo, sin datos personales." },
+    "estado-calles": { "name": "Estado de Calles", "description": "Vías del barrio con su material, estado e intervenciones recientes." },
+    "estaciones-transporte": { "name": "Estaciones de Transporte", "description": "Estaciones troncales de TransMilenio, alimentadores y paraderos del SITP." },
+    "sitios-comida": { "name": "Sitios de Comida", "description": "Restaurantes y puestos de comida con su especialidad, horario y precios." },
+    "librerias": { "name": "Librerías", "description": "Librerías y papelerías con su especialidad y horario." },
+    "robos": { "name": "Datos sobre Robos", "description": "Datos agregados y anónimos sobre robos por franja horaria y modalidad." },
+    "localidad": { "name": "Información de la Localidad", "description": "Ficha de la Localidad de Kennedy: población, superficie, alcaldía local y retos." },
+    "atencion-inmediata": { "name": "Atención Inmediata", "description": "CAI, hospitales y servicios de urgencias con teléfono 24/7." },
+    "veterinarias": { "name": "Veterinarias", "description": "Veterinarias con sus servicios, horario y calificación." },
+    "barberias": { "name": "Barberías", "description": "Barberías con sus servicios, horario y calificación." }
+  },
+  "notFound": {
+    "title": "Esta página no existe",
+    "description": "La dirección no corresponde a ninguna sección del barrio.",
+    "back": "Volver al inicio"
   }
 }
