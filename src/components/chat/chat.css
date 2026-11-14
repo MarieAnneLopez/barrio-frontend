@@ -1,0 +1,37 @@
+/* Chat de Mini Marie (§11.4.4): el panel crece desde el lanzador (abajo a la
+   derecha) con la curva de énfasis; solo transform y opacity. */
+.chat-panel {
+  transform-origin: bottom right;
+  animation: chat-panel-in var(--dur-4) var(--ease-emphasis) both;
+}
+
+@keyframes chat-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+}
+
+/* Cada mensaje nuevo entra con un desplazamiento corto. */
+.chat-msg {
+  animation: chat-msg-in var(--dur-3) var(--ease-emphasis) both;
+}
+
+@keyframes chat-msg-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+.reduce-motion .chat-panel,
+.reduce-motion .chat-msg {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-panel,
+  .chat-msg {
+    animation: none;
+  }
+}

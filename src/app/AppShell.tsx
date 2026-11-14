@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { WelcomeChoreography } from '../components/avatar/WelcomeChoreography';
+import { ChatWidget } from '../components/chat/ChatWidget';
 import { AccessibilityRail } from '../components/layout/AccessibilityRail';
 import { Footer } from '../components/layout/Footer';
 import { Header } from '../components/layout/Header';
@@ -18,7 +19,7 @@ const MAIN_ID = 'contenido';
 /**
  * Estructura común: enlace de salto, Header, Sidebar (fijo en escritorio,
  * cajón con trampa de foco en móvil), contenido, Footer, barra de
- * accesibilidad y botón de WhatsApp.
+ * accesibilidad, chat flotante y botón de WhatsApp.
  */
 export function AppShell() {
   useApplyA11y();
@@ -76,6 +77,7 @@ export function AppShell() {
         </div>
       </div>
       <AccessibilityRail />
+      <ChatWidget />
       <WhatsAppFloat />
       <WelcomeChoreography />
     </div>

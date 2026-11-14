@@ -16,6 +16,8 @@ const PATHS = {
   chevron: 'm6 9 6 6 6-6',
   collapse: 'm15 6-6 6 6 6',
   replay: 'M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4M10 9.5v5l4-2.5-4-2.5Z',
+  close: 'M6 6l12 12M18 6 6 18',
+  send: 'M4 12 20 4l-6 16-3-7-7-1Z',
 } as const;
 
 export type IconName = keyof typeof PATHS;

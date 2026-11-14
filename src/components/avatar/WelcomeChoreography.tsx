@@ -3,7 +3,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
-import { useA11yStore } from '../../store/a11yStore';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { useWelcomeStore } from '../../store/welcomeStore';
 import { Button } from '../ui/Button';
 import { useFocusTrap } from '../ui/useFocusTrap';
@@ -20,9 +20,7 @@ export function WelcomeChoreography() {
   const root = useRef<HTMLDivElement>(null);
   const closing = useRef(false);
   const mobile = useMediaQuery('(max-width: 640px)', false);
-  const userReduced = useA11yStore((s) => s.reducedMotion);
-  const systemReduced = useMediaQuery('(prefers-reduced-motion: reduce)', false);
-  const reduced = userReduced || systemReduced;
+  const reduced = useReducedMotion();
 
   useEffect(() => openIfFirstVisit(), [openIfFirstVisit]);
 

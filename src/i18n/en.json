@@ -324,5 +324,37 @@
     "cta": "Hi! Explore El Tintal",
     "avatar": "Mini Marie waving",
     "replay": "Replay welcome"
+  },
+  "chat": {
+    "title": "Mini Marie",
+    "subtitle": "El Tintal assistant · local answers",
+    "launcherOpen": "Open chat with Mini Marie",
+    "launcherClose": "Close chat with Mini Marie",
+    "close": "Close chat",
+    "log": "Conversation with Mini Marie",
+    "suggestions": "Suggested questions",
+    "inputLabel": "Type your question",
+    "placeholder": "Ask me about the neighborhood…",
+    "send": "Send",
+    "you": "You",
+    "go": "Go to {{place}}",
+    "thisPage": "this page",
+    "greeting": "Hi! I'm Mini Marie. You're on {{place}}. What would you like to know about El Tintal?",
+    "suggested": {
+      "q1": "Which schools are in El Tintal?",
+      "q2": "Show me places to eat",
+      "q3": "What's on the 3D map?",
+      "q4": "How do I contact Marie?"
+    },
+    "replies": {
+      "greet": "Hi! I can take you to any of the neighborhood's 14 modules, the 3D map or El Tintal's history.",
+      "help": "Ask me about schools, parks, food, transport, vets and the other modules; I'll take you to the section with its map and list. I can also tell you how to contact Marie.",
+      "contact": "Marie Anne Lopez Poveda created this platform. You can message her on WhatsApp at +57 313 259 6937 with the WhatsApp button in the corner, or see her profile.",
+      "category": "Let's go to {{name}}: you'll see the places on the map and in the list, and every record says where it comes from.",
+      "theft": "Let's go to {{name}}. These reports are for prevention, not alarm. In an emergency call 123.",
+      "map": "The 3D map shows El Tintal's blocks, roads and parks with the places of each module.",
+      "history": "Local History tells the story of El Tintal and the Kennedy district.",
+      "fallback": "For now I answer from a local repertoire: I can take you to the 14 modules, the 3D map, the history or Marie's contact. Soon I'll answer with the neighborhood's data."
+    }
   }
 }
