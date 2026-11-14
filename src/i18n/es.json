@@ -317,5 +317,12 @@
       }
     },
     "roledescription": "carrusel"
+  },
+  "welcome": {
+    "dialog": "Bienvenida de Mini Marie",
+    "sign": "Hola",
+    "cta": "¡Hola! Explorar El Tintal",
+    "avatar": "Mini Marie saludando",
+    "replay": "Repetir bienvenida"
   }
 }

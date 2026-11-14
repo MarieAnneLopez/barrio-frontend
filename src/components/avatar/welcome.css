@@ -1,0 +1,53 @@
+/* Bienvenida: velo, avatares en anillo, letrero pixel "Hola" y confeti azul (D6). */
+.welcome-backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 50%, rgb(29 78 216 / 0.35), transparent 60%),
+    var(--overlay);
+  backdrop-filter: blur(6px);
+}
+
+/* La ranura coloca (left/top + translate); GSAP anima solo el avatar interior,
+   así sus x/y no pisan el translate de colocación. */
+.welcome-slot {
+  position: absolute;
+  transform: translate(-50%, -100%);
+}
+
+.welcome-avatar {
+  display: block;
+}
+
+.welcome-sign {
+  font-family: var(--ff-pixel);
+  font-size: clamp(2.5rem, 9vw, 6rem);
+  line-height: 1.1;
+  color: var(--text-primary);
+  text-shadow:
+    4px 4px 0 var(--palette-cobalt),
+    -2px -2px 0 var(--palette-azure);
+  letter-spacing: 0.08em;
+}
+
+.welcome-letter {
+  display: inline-block;
+}
+
+.welcome-confetti {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  opacity: 0;
+  background-color: var(--palette-sky);
+}
+
+.welcome-confetti:nth-child(3n) {
+  background-color: var(--palette-azure);
+}
+
+.welcome-confetti:nth-child(3n + 1) {
+  background-color: var(--palette-cobalt);
+}

@@ -71,7 +71,10 @@ async function main() {
     shadow: { minX: shadow.minX, maxX: shadow.maxX, minY: shadow.minY, maxY: shadow.maxY },
     frames,
   };
-  await writeFile(join(avatarDir, 'atlas.json'), `${JSON.stringify(atlas, null, 2)}\n`);
+  const atlasJson = `${JSON.stringify(atlas, null, 2)}\n`;
+  await writeFile(join(avatarDir, 'atlas.json'), atlasJson);
+  // Copia para el código (Vite no importa desde public/): AvatarSprite la usa síncrona.
+  await writeFile(join(root, 'src', 'components', 'avatar', 'atlas.json'), atlasJson);
   console.log(
     `Fondo rgb(${bg.join(',')}); sombra x ${shadow.minX}–${shadow.maxX}, ` +
       `y ${shadow.minY}–${shadow.maxY} (${shadowRemoved} px oscuros quitados); ` +

@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { useWelcomeStore } from '../../store/welcomeStore';
+import { Tooltip } from '../ui/Tooltip';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { NavIcon } from './NavIcon';
 
@@ -13,6 +15,7 @@ interface HeaderProps {
 /** Barra superior: menú (móvil), marca y selector de idioma. */
 export function Header({ menuOpen, onToggleMenu, sidebarId }: HeaderProps) {
   const { t } = useTranslation();
+  const replay = useWelcomeStore((s) => s.replay);
   return (
     <header className="glass sticky top-0 z-40 flex h-16 items-center gap-3 border-x-0 border-t-0 px-4 md:px-6">
       <button
@@ -38,6 +41,16 @@ export function Header({ menuOpen, onToggleMenu, sidebarId }: HeaderProps) {
         </span>
       </Link>
       <div className="ml-auto flex items-center gap-2">
+        <Tooltip content={t('welcome.replay')} side="bottom">
+          <button
+            type="button"
+            onClick={replay}
+            aria-label={t('welcome.replay')}
+            className="ui-pressable ui-btn--ghost inline-flex size-11 items-center justify-center rounded-md border border-transparent text-fg-secondary"
+          >
+            <NavIcon name="replay" />
+          </button>
+        </Tooltip>
         <LanguageSwitcher />
       </div>
     </header>

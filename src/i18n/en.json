@@ -317,5 +317,12 @@
       }
     },
     "roledescription": "carousel"
+  },
+  "welcome": {
+    "dialog": "Welcome from Mini Marie",
+    "sign": "Hola",
+    "cta": "Hi! Explore El Tintal",
+    "avatar": "Mini Marie waving",
+    "replay": "Replay welcome"
   }
 }

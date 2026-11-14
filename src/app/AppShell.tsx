@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
+import { WelcomeChoreography } from '../components/avatar/WelcomeChoreography';
 import { AccessibilityRail } from '../components/layout/AccessibilityRail';
 import { Footer } from '../components/layout/Footer';
 import { Header } from '../components/layout/Header';
@@ -76,6 +77,7 @@ export function AppShell() {
       </div>
       <AccessibilityRail />
       <WhatsAppFloat />
+      <WelcomeChoreography />
     </div>
   );
 }
