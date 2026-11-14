@@ -46,30 +46,156 @@
     "ranking": "Neighborhood places sorted by visitor ratings, overall and by category.",
     "gallery": "Photos of the El Tintal area with their author and license.",
     "faq": "Answers to the most common questions about the platform and the neighborhood.",
-    "creator": "Who created this platform and why.",
+    "creator": "Who created this platform and how to contact her.",
     "help": "How to use the platform: navigation, accessibility, language and contact.",
     "access": "Sign in to create, edit or rate places."
   },
   "categories": {
     "module": "Module {{id}}",
-    "centros-educativos": { "name": "Schools", "description": "Kindergartens, schools and universities in the neighborhood, public and private." },
-    "escenarios-deportivos": { "name": "Sports Venues", "description": "Courts and sports spaces with their surface, lighting and opening hours." },
-    "camaras-seguridad": { "name": "Security Cameras", "description": "Location and details of police, community and private cameras. Video is never shown." },
-    "zonas-verdes": { "name": "Green Areas", "description": "Parks, tree-lined walkways and gardens with their area, trees and condition." },
-    "datos-catastrales": { "name": "Cadastral Data", "description": "Plots with their use, areas, floors, socioeconomic stratum and appraisal, without personal data." },
-    "estado-calles": { "name": "Street Conditions", "description": "Neighborhood roads with their material, condition and recent works." },
-    "estaciones-transporte": { "name": "Transit Stations", "description": "TransMilenio trunk stations, feeder routes and SITP stops." },
-    "sitios-comida": { "name": "Places to Eat", "description": "Restaurants and food stands with their specialty, hours and prices." },
-    "librerias": { "name": "Bookstores", "description": "Bookstores and stationery shops with their specialty and hours." },
-    "robos": { "name": "Theft Data", "description": "Aggregated, anonymous theft data by time of day and method." },
-    "localidad": { "name": "Locality Information", "description": "Kennedy locality profile: population, area, local mayor's office and challenges." },
-    "atencion-inmediata": { "name": "Emergency Services", "description": "Police posts (CAI), hospitals and emergency services with 24/7 phone numbers." },
-    "veterinarias": { "name": "Veterinary Clinics", "description": "Veterinary clinics with their services, hours and rating." },
-    "barberias": { "name": "Barbershops", "description": "Barbershops with their services, hours and rating." }
+    "centros-educativos": {
+      "name": "Schools",
+      "description": "Kindergartens, schools and universities in the neighborhood, public and private."
+    },
+    "escenarios-deportivos": {
+      "name": "Sports Venues",
+      "description": "Courts and sports spaces with their surface, lighting and opening hours."
+    },
+    "camaras-seguridad": {
+      "name": "Security Cameras",
+      "description": "Location and details of police, community and private cameras. Video is never shown."
+    },
+    "zonas-verdes": {
+      "name": "Green Areas",
+      "description": "Parks, tree-lined walkways and gardens with their area, trees and condition."
+    },
+    "datos-catastrales": {
+      "name": "Cadastral Data",
+      "description": "Plots with their use, areas, floors, socioeconomic stratum and appraisal, without personal data."
+    },
+    "estado-calles": {
+      "name": "Street Conditions",
+      "description": "Neighborhood roads with their material, condition and recent works."
+    },
+    "estaciones-transporte": {
+      "name": "Transit Stations",
+      "description": "TransMilenio trunk stations, feeder routes and SITP stops."
+    },
+    "sitios-comida": {
+      "name": "Places to Eat",
+      "description": "Restaurants and food stands with their specialty, hours and prices."
+    },
+    "librerias": {
+      "name": "Bookstores",
+      "description": "Bookstores and stationery shops with their specialty and hours."
+    },
+    "robos": {
+      "name": "Theft Data",
+      "description": "Aggregated, anonymous theft data by time of day and method."
+    },
+    "localidad": {
+      "name": "Locality Information",
+      "description": "Kennedy locality profile: population, area, local mayor's office and challenges."
+    },
+    "atencion-inmediata": {
+      "name": "Emergency Services",
+      "description": "Police posts (CAI), hospitals and emergency services with 24/7 phone numbers."
+    },
+    "veterinarias": {
+      "name": "Veterinary Clinics",
+      "description": "Veterinary clinics with their services, hours and rating."
+    },
+    "barberias": {
+      "name": "Barbershops",
+      "description": "Barbershops with their services, hours and rating."
+    }
   },
   "notFound": {
     "title": "This page does not exist",
     "description": "The address does not match any section of the neighborhood.",
     "back": "Back to home"
+  },
+  "a11yRail": {
+    "label": "Accessibility",
+    "open": "Open accessibility options",
+    "close": "Close accessibility options",
+    "decrease": "Decrease text size",
+    "increase": "Increase text size",
+    "reset": "Reset accessibility",
+    "contrast": "High contrast",
+    "motion": "Reduce motion",
+    "scale": "Text size: {{value}}%"
+  },
+  "whatsapp": {
+    "label": "Message Marie on WhatsApp (opens in a new tab)",
+    "tooltip": "Message Marie",
+    "message": "Hola Marie, estoy visitando la plataforma de reconocimiento del barrio El Tintal.",
+    "cta": "Message on WhatsApp",
+    "newTab": "(opens in a new tab)"
+  },
+  "footer": {
+    "label": "Footer",
+    "modules": "Neighborhood modules",
+    "location": "Location",
+    "locationLines": [
+      "El Tintal neighborhood",
+      "Kennedy locality",
+      "Bogotá D.C., Colombia"
+    ],
+    "faq": "Frequently asked questions",
+    "seeAllFaq": "See all questions",
+    "academic": "Academic project",
+    "rights": "© 2026 Marie Anne Lopez Poveda"
+  },
+  "creator": {
+    "title": "About the Creator",
+    "name": "Marie Anne Lopez Poveda",
+    "profile": "High school graduate with an agro-industrial focus and Cadastral and Geodesy Engineering student, living in Funza (Cundinamarca).",
+    "avatarAlt": "Mini Marie, the pixel art version of Marie",
+    "phone": "+57 313 259 6937"
+  },
+  "faq": {
+    "intro": "Answers about El Tintal, the geospatial data, the maps and the project.",
+    "items": {
+      "q1": {
+        "q": "What is Get to Know Your Neighborhood: El Tintal?",
+        "a": "An academic web platform to learn about the places, history and data of the El Tintal neighborhood: 14 modules with a map, list, photos and ratings."
+      },
+      "q2": {
+        "q": "Where is El Tintal?",
+        "a": "In western Bogotá D.C., within the Kennedy locality. Main roads such as Avenida Ciudad de Cali and Avenida de las Américas run through it."
+      },
+      "q3": {
+        "q": "Where does the data come from?",
+        "a": "From open sources: OpenStreetMap (queried with Overpass and Nominatim), the Bogotá open data portal and datos.gov.co. Each record keeps its source and whether it was verified."
+      },
+      "q4": {
+        "q": "What do “to be verified” and “sample data” mean?",
+        "a": "“To be verified” marks information that could not be confirmed in a public source. “Sample data” marks demo records that do not describe a real place."
+      },
+      "q5": {
+        "q": "Which coordinate system do the maps use?",
+        "a": "WGS84 (EPSG:4326), the same as GPS: latitude and longitude in decimal degrees. Areas are shown in square meters."
+      },
+      "q6": {
+        "q": "How do I use the maps?",
+        "a": "Drag to move, use the wheel or gestures to zoom in and select a marker to open the place card. Everything also works with the keyboard."
+      },
+      "q7": {
+        "q": "Why does the theft module show no personal data?",
+        "a": "It only uses aggregated, anonymous data by time of day and method, to inform without exposing anyone or stigmatizing places."
+      },
+      "q8": {
+        "q": "Can I add or rate places?",
+        "a": "Any visitor can browse and rate. Creating, editing or deleting records requires signing in with an admin account."
+      },
+      "q9": {
+        "q": "How do I change the language or text size?",
+        "a": "The ES/EN selector is in the top bar. The accessibility bar on the right changes the text size, turns on high contrast and reduces motion."
+      },
+      "q10": {
+        "q": "Who created the project and how can I contact her?",
+        "a": "Marie Anne Lopez Poveda, a Cadastral and Geodesy Engineering student. You can message her on WhatsApp with the button in the bottom-right corner."
+      }
+    }
   }
 }

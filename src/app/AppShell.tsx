@@ -1,20 +1,26 @@
 import { useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
+import { AccessibilityRail } from '../components/layout/AccessibilityRail';
+import { Footer } from '../components/layout/Footer';
 import { Header } from '../components/layout/Header';
 import { Sidebar } from '../components/layout/Sidebar';
+import { SkipLink } from '../components/layout/SkipLink';
+import { WhatsAppFloat } from '../components/layout/WhatsAppFloat';
 import { useFocusTrap } from '../components/ui/useFocusTrap';
+import { useApplyA11y } from '../hooks/useApplyA11y';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { usePersistentFlag } from '../hooks/usePersistentFlag';
 
 const SIDEBAR_ID = 'menu-principal';
+const MAIN_ID = 'contenido';
 
 /**
  * Estructura común: enlace de salto, Header, Sidebar (fijo en escritorio,
- * cajón con trampa de foco en móvil) y el contenido de la ruta.
+ * cajón con trampa de foco en móvil), contenido, Footer, barra de
+ * accesibilidad y botón de WhatsApp.
  */
 export function AppShell() {
-  const { t } = useTranslation();
+  useApplyA11y();
   const isDesktop = useMediaQuery('(min-width: 768px)');
   const [collapsed, setCollapsed] = usePersistentFlag('sidebar-collapsed', false);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -31,18 +37,15 @@ export function AppShell() {
   useFocusTrap(drawer, !isDesktop && drawerOpen, () => setDrawerOpen(false));
 
   const sidebarCollapsed = isDesktop && collapsed;
-  const drawerClasses = drawerOpen
-    ? 'visible translate-x-0'
-    : 'invisible -translate-x-full';
+  const asideClasses = isDesktop
+    ? `sticky top-16 h-[calc(100dvh-4rem)] shrink-0 ${sidebarCollapsed ? 'w-[72px]' : 'w-[260px]'}`
+    : `fixed top-16 bottom-0 left-0 z-40 w-[280px] max-w-[85vw] transition-[transform,visibility] duration-[var(--dur-3)] ease-out ${
+        drawerOpen ? 'visible translate-x-0' : 'invisible -translate-x-full'
+      }`;
 
   return (
     <div className="min-h-dvh">
-      <a
-        href="#contenido"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[200] focus:rounded-md focus:bg-interactive focus:px-4 focus:py-2 focus:text-on-interactive"
-      >
-        {t('a11y.skipToContent')}
-      </a>
+      <SkipLink target={MAIN_ID} />
       <Header
         menuOpen={drawerOpen}
         onToggleMenu={() => setDrawerOpen((open) => !open)}
@@ -56,16 +59,7 @@ export function AppShell() {
             className="fixed inset-0 top-16 z-30 bg-[var(--overlay)]"
           />
         ) : null}
-        <aside
-          ref={drawer}
-          className={
-            isDesktop
-              ? `sticky top-16 h-[calc(100dvh-4rem)] shrink-0 border-r border-line bg-surface ${
-                  sidebarCollapsed ? 'w-[72px]' : 'w-[260px]'
-                }`
-              : `fixed top-16 bottom-0 left-0 z-40 w-[280px] max-w-[85vw] border-r border-line bg-surface transition-[transform,visibility] duration-[var(--dur-3)] ease-out ${drawerClasses}`
-          }
-        >
+        <aside ref={drawer} className={`border-r border-line bg-surface ${asideClasses}`}>
           <Sidebar
             id={SIDEBAR_ID}
             collapsed={sidebarCollapsed}
@@ -73,10 +67,15 @@ export function AppShell() {
             onExpand={() => setCollapsed(false)}
           />
         </aside>
-        <main id="contenido" tabIndex={-1} className="min-w-0 flex-1 px-4 py-8 md:px-10">
-          <Outlet />
-        </main>
+        <div className="flex min-w-0 flex-1 flex-col">
+          <main id={MAIN_ID} tabIndex={-1} className="flex-1 px-4 py-8 md:pr-24 md:pl-10">
+            <Outlet />
+          </main>
+          <Footer />
+        </div>
       </div>
+      <AccessibilityRail />
+      <WhatsAppFloat />
     </div>
   );
 }

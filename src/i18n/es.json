@@ -46,30 +46,156 @@
     "ranking": "Lugares del barrio ordenados por la calificación de sus visitantes, en general y por categoría.",
     "gallery": "Fotografías del entorno de El Tintal con su autor y licencia.",
     "faq": "Respuestas a las dudas más comunes sobre la plataforma y el barrio.",
-    "creator": "Quién creó esta plataforma y por qué.",
+    "creator": "Quién creó esta plataforma y cómo contactarla.",
     "help": "Cómo usar la plataforma: navegación, accesibilidad, idioma y contacto.",
     "access": "Inicia sesión para crear, editar o calificar lugares."
   },
   "categories": {
     "module": "Módulo {{id}}",
-    "centros-educativos": { "name": "Centros Educativos", "description": "Jardines, colegios y universidades del barrio, públicos y privados." },
-    "escenarios-deportivos": { "name": "Escenarios Deportivos", "description": "Canchas y espacios deportivos con su superficie, iluminación y horario." },
-    "camaras-seguridad": { "name": "Cámaras de Seguridad", "description": "Ubicación y datos de las cámaras policiales, comunitarias y privadas. Nunca se muestra video." },
-    "zonas-verdes": { "name": "Zonas Verdes", "description": "Parques, alamedas y jardines con su área, arborización y estado." },
-    "datos-catastrales": { "name": "Datos Catastrales", "description": "Predios con su uso, áreas, pisos, estrato y avalúo, sin datos personales." },
-    "estado-calles": { "name": "Estado de Calles", "description": "Vías del barrio con su material, estado e intervenciones recientes." },
-    "estaciones-transporte": { "name": "Estaciones de Transporte", "description": "Estaciones troncales de TransMilenio, alimentadores y paraderos del SITP." },
-    "sitios-comida": { "name": "Sitios de Comida", "description": "Restaurantes y puestos de comida con su especialidad, horario y precios." },
-    "librerias": { "name": "Librerías", "description": "Librerías y papelerías con su especialidad y horario." },
-    "robos": { "name": "Datos sobre Robos", "description": "Datos agregados y anónimos sobre robos por franja horaria y modalidad." },
-    "localidad": { "name": "Información de la Localidad", "description": "Ficha de la Localidad de Kennedy: población, superficie, alcaldía local y retos." },
-    "atencion-inmediata": { "name": "Atención Inmediata", "description": "CAI, hospitales y servicios de urgencias con teléfono 24/7." },
-    "veterinarias": { "name": "Veterinarias", "description": "Veterinarias con sus servicios, horario y calificación." },
-    "barberias": { "name": "Barberías", "description": "Barberías con sus servicios, horario y calificación." }
+    "centros-educativos": {
+      "name": "Centros Educativos",
+      "description": "Jardines, colegios y universidades del barrio, públicos y privados."
+    },
+    "escenarios-deportivos": {
+      "name": "Escenarios Deportivos",
+      "description": "Canchas y espacios deportivos con su superficie, iluminación y horario."
+    },
+    "camaras-seguridad": {
+      "name": "Cámaras de Seguridad",
+      "description": "Ubicación y datos de las cámaras policiales, comunitarias y privadas. Nunca se muestra video."
+    },
+    "zonas-verdes": {
+      "name": "Zonas Verdes",
+      "description": "Parques, alamedas y jardines con su área, arborización y estado."
+    },
+    "datos-catastrales": {
+      "name": "Datos Catastrales",
+      "description": "Predios con su uso, áreas, pisos, estrato y avalúo, sin datos personales."
+    },
+    "estado-calles": {
+      "name": "Estado de Calles",
+      "description": "Vías del barrio con su material, estado e intervenciones recientes."
+    },
+    "estaciones-transporte": {
+      "name": "Estaciones de Transporte",
+      "description": "Estaciones troncales de TransMilenio, alimentadores y paraderos del SITP."
+    },
+    "sitios-comida": {
+      "name": "Sitios de Comida",
+      "description": "Restaurantes y puestos de comida con su especialidad, horario y precios."
+    },
+    "librerias": {
+      "name": "Librerías",
+      "description": "Librerías y papelerías con su especialidad y horario."
+    },
+    "robos": {
+      "name": "Datos sobre Robos",
+      "description": "Datos agregados y anónimos sobre robos por franja horaria y modalidad."
+    },
+    "localidad": {
+      "name": "Información de la Localidad",
+      "description": "Ficha de la Localidad de Kennedy: población, superficie, alcaldía local y retos."
+    },
+    "atencion-inmediata": {
+      "name": "Atención Inmediata",
+      "description": "CAI, hospitales y servicios de urgencias con teléfono 24/7."
+    },
+    "veterinarias": {
+      "name": "Veterinarias",
+      "description": "Veterinarias con sus servicios, horario y calificación."
+    },
+    "barberias": {
+      "name": "Barberías",
+      "description": "Barberías con sus servicios, horario y calificación."
+    }
   },
   "notFound": {
     "title": "Esta página no existe",
     "description": "La dirección no corresponde a ninguna sección del barrio.",
     "back": "Volver al inicio"
+  },
+  "a11yRail": {
+    "label": "Accesibilidad",
+    "open": "Abrir opciones de accesibilidad",
+    "close": "Cerrar opciones de accesibilidad",
+    "decrease": "Reducir tamaño de letra",
+    "increase": "Aumentar tamaño de letra",
+    "reset": "Restablecer accesibilidad",
+    "contrast": "Alto contraste",
+    "motion": "Reducir movimiento",
+    "scale": "Tamaño de letra: {{value}} %"
+  },
+  "whatsapp": {
+    "label": "Escribir a Marie por WhatsApp (se abre en una pestaña nueva)",
+    "tooltip": "Escríbele a Marie",
+    "message": "Hola Marie, estoy visitando la plataforma de reconocimiento del barrio El Tintal.",
+    "cta": "Escribir por WhatsApp",
+    "newTab": "(se abre en una pestaña nueva)"
+  },
+  "footer": {
+    "label": "Pie de página",
+    "modules": "Módulos del barrio",
+    "location": "Ubicación",
+    "locationLines": [
+      "Barrio El Tintal",
+      "Localidad de Kennedy",
+      "Bogotá D.C., Colombia"
+    ],
+    "faq": "Preguntas frecuentes",
+    "seeAllFaq": "Ver todas las preguntas",
+    "academic": "Proyecto académico",
+    "rights": "© 2026 Marie Anne Lopez Poveda"
+  },
+  "creator": {
+    "title": "Perfil de la Creadora",
+    "name": "Marie Anne Lopez Poveda",
+    "profile": "Bachiller con énfasis agroindustrial y estudiante de Ingeniería Catastral y Geodesia, residente de Funza (Cundinamarca).",
+    "avatarAlt": "Mini Marie, la versión en pixel art de Marie",
+    "phone": "+57 313 259 6937"
+  },
+  "faq": {
+    "intro": "Respuestas sobre El Tintal, los datos geoespaciales, los mapas y el proyecto.",
+    "items": {
+      "q1": {
+        "q": "¿Qué es Reconoce tu Barrio: El Tintal?",
+        "a": "Es una plataforma web académica para conocer los lugares, la historia y los datos del barrio El Tintal: 14 módulos con mapa, lista, fotos y calificaciones."
+      },
+      "q2": {
+        "q": "¿Dónde queda El Tintal?",
+        "a": "En el occidente de Bogotá D.C., dentro de la Localidad de Kennedy. Lo atraviesan vías principales como la Avenida Ciudad de Cali y la Avenida de las Américas."
+      },
+      "q3": {
+        "q": "¿De dónde salen los datos?",
+        "a": "De fuentes abiertas: OpenStreetMap (consultado con Overpass y Nominatim), el portal de datos abiertos de Bogotá y datos.gov.co. Cada registro guarda su fuente y si fue verificado."
+      },
+      "q4": {
+        "q": "¿Qué significan “por verificar” y “dato de ejemplo”?",
+        "a": "“Por verificar” marca información que no se pudo confirmar en una fuente pública. “Dato de ejemplo” marca registros de demostración que no describen un lugar real."
+      },
+      "q5": {
+        "q": "¿Qué sistema de coordenadas usan los mapas?",
+        "a": "WGS84 (EPSG:4326), el mismo del GPS: latitud y longitud en grados decimales. Las áreas se muestran en metros cuadrados."
+      },
+      "q6": {
+        "q": "¿Cómo uso los mapas?",
+        "a": "Arrastra para moverte, usa la rueda o los gestos para acercarte y selecciona un marcador para abrir la ficha del lugar. Todo funciona también con teclado."
+      },
+      "q7": {
+        "q": "¿Por qué el módulo de robos no muestra datos personales?",
+        "a": "Solo usa datos agregados y anónimos por franja horaria y modalidad, para informar sin exponer a nadie ni estigmatizar lugares."
+      },
+      "q8": {
+        "q": "¿Puedo agregar o calificar lugares?",
+        "a": "Cualquier visitante puede consultar y calificar. Crear, editar o eliminar registros requiere iniciar sesión con una cuenta de administración."
+      },
+      "q9": {
+        "q": "¿Cómo cambio el idioma o el tamaño de la letra?",
+        "a": "El selector ES/EN está en la barra superior. La barra de accesibilidad, a la derecha, cambia el tamaño de letra, activa el alto contraste y reduce el movimiento."
+      },
+      "q10": {
+        "q": "¿Quién creó el proyecto y cómo la contacto?",
+        "a": "Marie Anne Lopez Poveda, estudiante de Ingeniería Catastral y Geodesia. Puedes escribirle por WhatsApp con el botón de la esquina inferior derecha."
+      }
+    }
   }
 }

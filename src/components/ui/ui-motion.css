@@ -45,9 +45,46 @@
   animation: ui-shimmer 900ms ease-in-out infinite alternate;
 }
 
+/* Pulso del botón de WhatsApp: anillo que se expande y se desvanece. */
+@keyframes ui-pulse {
+  from {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  to {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+}
+
+.ui-whatsapp::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border: 2px solid var(--interactive-active);
+  pointer-events: none;
+  animation: ui-pulse 2400ms var(--ease-emphasis) infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ui-skeleton {
     animation: none;
     background-color: var(--skeleton-base);
   }
+
+  .ui-whatsapp::after {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+:root.reduce-motion .ui-skeleton {
+  animation: none;
+  background-color: var(--skeleton-base);
+}
+
+:root.reduce-motion .ui-whatsapp::after {
+  animation: none;
+  opacity: 0;
 }
