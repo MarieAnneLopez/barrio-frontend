@@ -3,6 +3,7 @@ import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 import { useEffect, useState, type RefObject } from 'react';
 import { loadBaseMap } from './baseMapData';
 import { buildBaseStyle } from './baseStyle';
+import { useLoadingStore } from '../../store/loadingStore';
 
 // MapLibre 6 calcula la URL de su worker con import.meta.url en tiempo de ejecución;
 // Vite no la ve al empaquetar. Se emite como asset (?url) y se declara (setWorkerUrl).
@@ -22,6 +23,9 @@ export function useMapInstance(container: RefObject<HTMLDivElement | null>, atte
   useEffect(() => {
     let cancelled = false;
     let instance: MapLibreMap | null = null;
+    // Etapa real para la LoadingRunnerBar: estilo y capas del mapa hasta su evento 'load'.
+    const loading = useLoadingStore.getState();
+    let task: number | null = null;
     loadBaseMap().then(
       (data) => {
         if (cancelled || !container.current) return;
@@ -36,7 +40,10 @@ export function useMapInstance(container: RefObject<HTMLDivElement | null>, atte
           dragRotate: false,
         });
         instance.addControl(new NavigationControl({ showCompass: false }), 'top-right');
+        task = loading.begin();
+        loading.update(task, 0.5);
         instance.on('load', () => {
+          if (task !== null) loading.end(task);
           if (cancelled || !instance) return;
           // El contenedor puede terminar de medirse después de crear el mapa (chunk
           // diferido, CSS): se reajusta y se vuelve a encuadrar todo El Tintal.
@@ -52,6 +59,7 @@ export function useMapInstance(container: RefObject<HTMLDivElement | null>, atte
     );
     return () => {
       cancelled = true;
+      if (task !== null) loading.end(task);
       instance?.remove();
       setMap(null);
       setStatus('loading');

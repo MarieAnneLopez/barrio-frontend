@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
+import { LoadingRunnerBar } from '../components/avatar/LoadingRunnerBar';
 import { WelcomeChoreography } from '../components/avatar/WelcomeChoreography';
 import { ChatWidget } from '../components/chat/ChatWidget';
 import { AccessibilityRail } from '../components/layout/AccessibilityRail';
@@ -55,6 +56,7 @@ export function AppShell() {
   return (
     <div className="min-h-dvh">
       <SkipLink target={MAIN_ID} />
+      <LoadingRunnerBar />
       <Header
         menuOpen={drawerOpen}
         onToggleMenu={() => setDrawerOpen((open) => !open)}

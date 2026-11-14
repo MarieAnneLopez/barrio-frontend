@@ -2,6 +2,7 @@ import { lazy, Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/ui/Button';
 import { Skeleton } from '../../components/ui/Skeleton';
+import { LoadingTask } from '../../components/avatar/LoadingTask';
 import type { ModuleItem } from '../../lib/apiTypes';
 import type { CategoryConfig } from '../../lib/categoryConfig';
 import { AuthGuard } from '../auth/AuthGuard';
@@ -60,7 +61,7 @@ export function ModuleDetailView({ category, initialOpenId = null }: { category:
         />
       </div>
       <div className="min-h-[420px] lg:sticky lg:top-24 lg:h-[calc(100dvh-8rem)]">
-        <Suspense fallback={<Skeleton className="h-[420px] w-full" />}>
+        <Suspense fallback={<><LoadingTask /><Skeleton className="h-[420px] w-full" /></>}>
           <ThematicMap
             slug={slug}
             label={t('modules.map', { name })}

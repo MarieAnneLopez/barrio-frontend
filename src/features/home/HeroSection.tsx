@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/ui/Button';
 import { Skeleton } from '../../components/ui/Skeleton';
+import { LoadingTask } from '../../components/avatar/LoadingTask';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { useA11yStore } from '../../store/a11yStore';
 import { useTintalData } from '../../three/useTintalData';
@@ -51,7 +52,7 @@ export function HeroSection() {
         <Skeleton className="h-full w-full" />
       ) : (
         <>
-          <Suspense fallback={<Skeleton className="h-full w-full" />}>
+          <Suspense fallback={<><LoadingTask /><Skeleton className="h-full w-full" /></>}>
             <TintalScene data={state.data} active={visible} reducedMotion={reducedMotion} />
           </Suspense>
           <HeroHud />

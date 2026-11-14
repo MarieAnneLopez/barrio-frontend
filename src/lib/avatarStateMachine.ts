@@ -10,7 +10,9 @@ export type AvatarState =
   | 'jump'
   | 'sad'
   | 'alert'
-  | 'sleep';
+  | 'sleep'
+  /** Solo en la LoadingRunnerBar (H24): walk_right ↔ idle_2; ninguna transición lleva aquí. */
+  | 'run';
 
 export type AvatarEvent =
   | { type: 'GREET' }
@@ -39,6 +41,7 @@ export const AVATAR_STATES: Record<AvatarState, StateSpec> = {
   sad: { frames: [1], frameMs: 1600, holdMs: 1600 },
   alert: { frames: [2], frameMs: 1200, holdMs: 1200 },
   sleep: { frames: [1], frameMs: 1100, holdMs: null },
+  run: { frames: [4, 2], frameMs: 150, holdMs: null },
 };
 
 export function transition(state: AvatarState, event: AvatarEvent): AvatarState {

@@ -3,6 +3,7 @@ import { cleanup } from '@testing-library/react';
 import { afterEach, beforeEach, vi } from 'vitest';
 import '../i18n/i18n';
 import { useAuthStore } from '../store/authStore';
+import { useLoadingStore } from '../store/loadingStore';
 import { useWelcomeStore } from '../store/welcomeStore';
 
 // La bienvenida se abre en la primera visita de la sesión: en las pruebas del
@@ -13,6 +14,7 @@ beforeEach(() => {
   window.sessionStorage.setItem('mini-marie:welcome-seen', 'true');
   useWelcomeStore.setState({ open: false });
   useAuthStore.setState({ status: 'checking', user: null, dialogOpen: false });
+  useLoadingStore.setState({ tasks: {} });
 });
 
 // jsdom no tiene WebGL: MapLibre se sustituye por un doble con el mismo contrato.

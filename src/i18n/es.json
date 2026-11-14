@@ -594,5 +594,8 @@
       "VALIDATION_ERROR": "Revisa los datos del formulario.",
       "NETWORK_ERROR": "No se pudo conectar con el servidor."
     }
+  },
+  "loading": {
+    "label": "Cargando"
   }
 }

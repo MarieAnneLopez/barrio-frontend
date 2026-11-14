@@ -1,4 +1,7 @@
 // Cliente HTTP de la API (/api/v1). En desarrollo Vite redirige /api al backend.
+// Cada petición informa su avance real a la LoadingRunnerBar (lib/loadingTracker).
+import { readJson, track } from './loadingTracker';
+
 const BASE_URL = (import.meta.env.VITE_API_URL as string | undefined) ?? '/api/v1';
 const TIMEOUT_MS = 15_000;
 
@@ -39,35 +42,42 @@ async function toApiError(response: Response): Promise<ApiError> {
 export async function apiGet<T>(path: string, params?: QueryParams, signal?: AbortSignal): Promise<T> {
   const timeout = AbortSignal.timeout(TIMEOUT_MS);
   const combined = signal ? AbortSignal.any([signal, timeout]) : timeout;
-  let response: Response;
+  const tracker = track(path);
   try {
-    response = await fetch(buildUrl(path, params), {
-      headers: { Accept: 'application/json' },
-      signal: combined,
-    });
-  } catch (error) {
-    if (signal?.aborted) throw error;
-    throw new ApiError(0, 'NETWORK_ERROR', 'No se pudo conectar con el servidor');
+    let response: Response;
+    try {
+      response = await fetch(buildUrl(path, params), { headers: { Accept: 'application/json' }, signal: combined });
+    } catch (error) {
+      if (signal?.aborted) throw error;
+      throw new ApiError(0, 'NETWORK_ERROR', 'No se pudo conectar con el servidor');
+    }
+    if (!response.ok) throw await toApiError(response);
+    return await readJson<T>(response, tracker);
+  } finally {
+    tracker.done();
   }
-  if (!response.ok) throw await toApiError(response);
-  return (await response.json()) as T;
 }
 
 export type WriteMethod = 'POST' | 'PATCH' | 'DELETE';
 
 /** Escritura JSON (crear, editar, borrar); 204 devuelve undefined. */
 export async function apiSend<T>(method: WriteMethod, path: string, body?: unknown): Promise<T | undefined> {
-  let response: Response;
+  const tracker = track(path);
   try {
-    const init: RequestInit = { method, headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(TIMEOUT_MS) };
-    if (body !== undefined) {
-      init.headers = { Accept: 'application/json', 'Content-Type': 'application/json' };
-      init.body = JSON.stringify(body);
+    let response: Response;
+    try {
+      const init: RequestInit = { method, headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(TIMEOUT_MS) };
+      if (body !== undefined) {
+        init.headers = { Accept: 'application/json', 'Content-Type': 'application/json' };
+        init.body = JSON.stringify(body);
+      }
+      response = await fetch(buildUrl(path), init);
+    } catch {
+      throw new ApiError(0, 'NETWORK_ERROR', 'No se pudo conectar con el servidor');
     }
-    response = await fetch(buildUrl(path), init);
-  } catch {
-    throw new ApiError(0, 'NETWORK_ERROR', 'No se pudo conectar con el servidor');
+    if (!response.ok) throw await toApiError(response);
+    return response.status === 204 ? undefined : await readJson<T>(response, tracker);
+  } finally {
+    tracker.done();
   }
-  if (!response.ok) throw await toApiError(response);
-  return response.status === 204 ? undefined : ((await response.json()) as T);
 }

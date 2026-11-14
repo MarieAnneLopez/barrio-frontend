@@ -594,5 +594,8 @@
       "VALIDATION_ERROR": "Check the form fields.",
       "NETWORK_ERROR": "Could not reach the server."
     }
+  },
+  "loading": {
+    "label": "Loading"
   }
 }
