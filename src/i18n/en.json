@@ -521,16 +521,17 @@
   "history": {
     "timeline": "Timeline",
     "unverified": "To be verified",
+    "press": "Press",
     "flag": {
       "title": "Flag of the Kennedy Locality",
       "alt": "Flag of Kennedy: three equal horizontal stripes, yellow on top, white in the middle and green at the bottom.",
-      "design": "Three horizontal stripes of equal height:",
+      "design": "Three horizontal stripes of equal height. The colors yellow, white and green are confirmed by Local Decree 13 of 2021 of the Kennedy Local Mayor's Office (article 3); the stripe layout comes from Wikimedia Commons.",
       "stripes": {
         "yellow": "Yellow, on top.",
         "white": "White, in the middle.",
         "green": "Green, at the bottom."
       },
-      "note": "the design comes from Wikimedia Commons, which cites an archived page of the Kennedy Local Mayor's Office. We found neither the official act adopting the flag nor an official explanation of its colors, so we give no heraldic interpretation."
+      "note": "we found neither the official act adopting the flag nor an official explanation of its colors, so we give no heraldic interpretation."
     },
     "indicators": {
       "title": "Kennedy and El Tintal in numbers",
@@ -548,9 +549,10 @@
     },
     "sources": {
       "title": "Sources",
-      "consulted": "Sources consulted on {{date}}. Milestones without an official source are marked “To be verified”.",
+      "consulted": "Sources consulted on {{date}}. Milestones that come from the press are marked “Press”; those with neither an official nor a press source, “To be verified”.",
       "type": {
         "oficial": "Official District source",
+        "prensa": "Press",
         "enciclopedia": "Encyclopedia",
         "comunitaria": "Community archive"
       }

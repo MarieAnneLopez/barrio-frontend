@@ -2,6 +2,7 @@ import type { Historia } from '../lib/apiTypes';
 import { page } from './moduleFixtures';
 
 const OFICIAL = 'https://bogota.gov.co/mi-ciudad/localidades/kennedy/historia-del-poblamiento-de-kennedy';
+const PRENSA = 'https://www.portafolio.co/economia/infraestructura/el-dorado-60-anos';
 const WIKI = 'https://es.wikipedia.org/w/index.php?title=Kennedy_(Bogot%C3%A1)&oldid=176260200';
 
 const hito = (id: number, anio: number, titulo: string, verified: boolean, ref: string) => ({
@@ -11,12 +12,14 @@ const hito = (id: number, anio: number, titulo: string, verified: boolean, ref: 
 export const HISTORIA: Historia = {
   consultado: '2026-11-14',
   hitos: [
+    hito(2, 1959, 'Cierra el aeropuerto de Techo', false, PRENSA),
     hito(4, 1963, 'De Techo a Ciudad Kennedy', true, OFICIAL),
     hito(5, 1967, 'El Concejo ratifica el nombre', true, OFICIAL),
-    hito(7, 1992, 'Kennedy se vuelve localidad', false, WIKI),
+    hito(9, 2006, 'La biblioteca lleva el nombre de Manuel Zapata Olivella', false, WIKI),
   ],
   fuentes: [
     { url: OFICIAL, titulo: 'Historia del poblamiento de Kennedy', entidad: 'Portal Bogotá', tipo: 'oficial', nota: null },
+    { url: PRENSA, titulo: 'El Dorado cumplió 60 años', entidad: 'Portafolio', tipo: 'prensa', nota: null },
     { url: WIKI, titulo: 'Kennedy (Bogotá)', entidad: 'Wikipedia', tipo: 'enciclopedia', nota: 'No se usan sus fechas.' },
   ],
 };

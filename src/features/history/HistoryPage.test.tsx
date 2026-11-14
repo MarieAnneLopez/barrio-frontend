@@ -19,16 +19,19 @@ afterEach(async () => {
 const timeline = () => screen.findByRole('list', { name: 'Línea de tiempo' });
 
 describe('Historia Local', () => {
-  it('muestra los hitos en orden, con fuente y «Por verificar» donde no hay fuente oficial', async () => {
+  it('muestra los hitos en orden, con fuente, «Prensa» y «Por verificar» donde no hay fuente oficial', async () => {
     mockApi(historyRoutes());
     renderRoute('/historia');
 
     const items = within(await timeline()).getAllByRole('listitem');
     expect(items.map((li) => within(li).getByRole('heading').textContent)).toEqual([
-      'De Techo a Ciudad Kennedy', 'El Concejo ratifica el nombre', 'Kennedy se vuelve localidad',
+      'Cierra el aeropuerto de Techo', 'De Techo a Ciudad Kennedy', 'El Concejo ratifica el nombre',
+      'La biblioteca lleva el nombre de Manuel Zapata Olivella',
     ]);
-    const [first, , last] = items as [HTMLElement, HTMLElement, HTMLElement];
-    expect(within(first).queryByText('Por verificar')).not.toBeInTheDocument();
+    const [press, first, , last] = items as [HTMLElement, HTMLElement, HTMLElement, HTMLElement];
+    expect(within(press).getByText('Prensa')).toBeInTheDocument();
+    expect(within(press).queryByText('Por verificar')).not.toBeInTheDocument();
+    expect(within(first).queryByText(/Por verificar|Prensa/)).not.toBeInTheDocument();
     expect(within(first).getByRole('link', { name: 'bogota.gov.co' })).toHaveAttribute(
       'href', expect.stringContaining('historia-del-poblamiento-de-kennedy'),
     );
@@ -46,7 +49,7 @@ describe('Historia Local', () => {
     expect(within(fuentes).getByText('No se usan sus fechas.')).toBeInTheDocument();
   });
 
-  it('bandera local con nota «por verificar», cifras y mapa de ubicación', async () => {
+  it('bandera local citando el decreto, con nota «por verificar», cifras y mapa', async () => {
     mockApi(historyRoutes());
     renderRoute('/historia');
 
@@ -54,6 +57,7 @@ describe('Historia Local', () => {
       'src', '/assets/flags/bandera_kennedy.svg',
     );
     expect(screen.getByRole('note')).toHaveTextContent(/no damos una interpretación heráldica/);
+    expect(screen.getByRole('link', { name: 'redjurista.com' })).toHaveAttribute('href', expect.stringContaining('0013_2021'));
     const cifras = screen.getByRole('region', { name: 'Kennedy y El Tintal en cifras' });
     expect(await within(cifras).findByText('1.104.934', { selector: '.sr-only' })).toBeInTheDocument();
     expect(within(cifras).getByText('38,21', { selector: '.sr-only' })).toBeInTheDocument();
@@ -67,15 +71,16 @@ describe('Historia Local', () => {
     renderRoute('/historia');
 
     const items = within(await screen.findByRole('list', { name: 'Timeline' })).getAllByRole('listitem');
-    expect(within(items[0] as HTMLElement).getByRole('heading')).toHaveTextContent('From Techo to Ciudad Kennedy');
-    expect(within(items[2] as HTMLElement).getByText('To be verified')).toBeInTheDocument();
+    expect(within(items[1] as HTMLElement).getByRole('heading')).toHaveTextContent('From Techo to Ciudad Kennedy');
+    expect(within(items[0] as HTMLElement).getByText('Press')).toBeInTheDocument();
+    expect(within(items[3] as HTMLElement).getByText('To be verified')).toBeInTheDocument();
   });
 
   it('con movimiento activo anima sin ocultar el contenido de forma permanente', async () => {
     useA11yStore.setState({ reducedMotion: false });
     mockApi(historyRoutes());
     const { unmount } = renderRoute('/historia');
-    expect(within(await timeline()).getAllByRole('listitem')).toHaveLength(3);
+    expect(within(await timeline()).getAllByRole('listitem')).toHaveLength(4);
     unmount();
   });
 

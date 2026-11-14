@@ -1,11 +1,15 @@
 import { useTranslation } from 'react-i18next';
+import { SourceLinks } from './SourceLinks';
 
 export const FLAG_URL = '/assets/flags/bandera_kennedy.svg';
+const DECRETO = 'https://www.redjurista.com/Compilaciones2018/tablas_GacetasBogota/2021/12/7314/d_alcakennedy_0013_2021.pdf';
+const COMMONS = 'https://commons.wikimedia.org/wiki/File:Bandera_de_kennedy_(bogot%C3%A1).png';
 
 /**
- * Bandera de la Localidad de Kennedy (D55): diseño según Wikimedia Commons.
- * No hay fuente oficial de su adopción ni del significado de los colores, así
- * que se dice «por verificar» y no se inventa una explicación heráldica.
+ * Bandera de la Localidad de Kennedy (D56): los colores los confirma el
+ * Decreto Local 13 de 2021 (art. 3) y el dibujo viene de Wikimedia Commons.
+ * No hay fuente oficial de su adopción ni del significado de los colores:
+ * eso queda «por verificar» y no se inventa una explicación heráldica.
  */
 export function KennedyFlag() {
   const { t } = useTranslation();
@@ -22,6 +26,9 @@ export function KennedyFlag() {
       />
       <div className="flex max-w-prose flex-col gap-3">
         <p className="m-0 text-fg-secondary">{t('history.flag.design')}</p>
+        <p className="m-0 text-step--1">
+          <SourceLinks refs={`${DECRETO} | ${COMMONS}`} />
+        </p>
         <ul className="m-0 flex flex-col gap-1 pl-5 text-fg-secondary">
           {stripes.map((stripe) => (
             <li key={stripe}>{t(`history.flag.stripes.${stripe}`)}</li>

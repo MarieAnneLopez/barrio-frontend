@@ -76,7 +76,7 @@ export interface Fuente {
   url: string;
   titulo: string;
   entidad: string;
-  tipo: 'oficial' | 'enciclopedia' | 'comunitaria';
+  tipo: 'oficial' | 'prensa' | 'enciclopedia' | 'comunitaria';
   nota: string | null;
 }
 

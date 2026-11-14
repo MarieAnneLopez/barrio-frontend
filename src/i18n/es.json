@@ -521,16 +521,17 @@
   "history": {
     "timeline": "Línea de tiempo",
     "unverified": "Por verificar",
+    "press": "Prensa",
     "flag": {
       "title": "Bandera de la Localidad de Kennedy",
       "alt": "Bandera de Kennedy: tres franjas horizontales iguales, amarilla arriba, blanca en el centro y verde abajo.",
-      "design": "Tres franjas horizontales del mismo alto:",
+      "design": "Tres franjas horizontales del mismo alto. Los colores amarillo, blanco y verde los confirma el Decreto Local 13 de 2021 de la Alcaldía Local de Kennedy (artículo 3); el dibujo de las franjas viene de Wikimedia Commons.",
       "stripes": {
         "yellow": "Amarilla, arriba.",
         "white": "Blanca, en el centro.",
         "green": "Verde, abajo."
       },
-      "note": "el diseño viene de Wikimedia Commons, que cita una página archivada de la Alcaldía Local de Kennedy. No encontramos el acto oficial que adopta la bandera ni la explicación oficial del significado de sus colores, así que no damos una interpretación heráldica."
+      "note": "no encontramos el acto oficial que adopta la bandera ni la explicación oficial del significado de sus colores, así que no damos una interpretación heráldica."
     },
     "indicators": {
       "title": "Kennedy y El Tintal en cifras",
@@ -548,9 +549,10 @@
     },
     "sources": {
       "title": "Fuentes",
-      "consulted": "Fuentes consultadas el {{date}}. Los hitos sin fuente oficial se marcan «Por verificar».",
+      "consulted": "Fuentes consultadas el {{date}}. Los hitos que vienen de un medio se marcan «Prensa»; los que no tienen fuente oficial ni de prensa, «Por verificar».",
       "type": {
         "oficial": "Fuente oficial del Distrito",
+        "prensa": "Prensa",
         "enciclopedia": "Enciclopedia",
         "comunitaria": "Archivo comunitario"
       }

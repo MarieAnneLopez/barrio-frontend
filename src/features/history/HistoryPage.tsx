@@ -36,7 +36,7 @@ export function HistoryPage() {
             <Button variant="secondary" size="sm" onClick={historia.retry}>{t('modules.retry')}</Button>
           </div>
         ) : null}
-        {historia.status === 'success' ? <Timeline hitos={historia.data.hitos} /> : null}
+        {historia.status === 'success' ? <Timeline hitos={historia.data.hitos} fuentes={historia.data.fuentes} /> : null}
       </Section>
       <Section id="historia-bandera" title={t('history.flag.title')}>
         <KennedyFlag />
