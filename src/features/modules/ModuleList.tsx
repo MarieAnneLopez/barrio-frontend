@@ -1,0 +1,59 @@
+import { useTranslation } from 'react-i18next';
+import { Button } from '../../components/ui/Button';
+import { Skeleton } from '../../components/ui/Skeleton';
+import type { ApiState } from '../../hooks/useApi';
+import type { ModuleItem, Page } from '../../lib/apiTypes';
+import { ItemCard } from './ItemCard';
+import { Pagination } from './Pagination';
+
+interface ModuleListProps {
+  list: ApiState<Page<ModuleItem>> & { retry: () => void };
+  notLoaded: boolean;
+  searching: boolean;
+  summary: readonly string[];
+  selectedId: number | null;
+  onSelect: (id: number) => void;
+  onPage: (page: number) => void;
+}
+
+/** Lista con sus estados: cargando, error, módulo sin datos, vacío y resultados. */
+export function ModuleList({ list, notLoaded, searching, summary, selectedId, onSelect, onPage }: ModuleListProps) {
+  const { t } = useTranslation();
+
+  if (notLoaded) {
+    return <p className="m-0 rounded-md border border-dashed border-line p-6 text-fg-secondary">{t('modules.notLoaded')}</p>;
+  }
+  if (list.status === 'loading') return <Skeleton className="h-24 w-full" lines={3} />;
+  if (list.status === 'error') {
+    return (
+      <div role="alert" className="flex flex-col items-start gap-3 rounded-md border border-error p-6">
+        <p className="m-0 text-fg">{t('modules.error')}</p>
+        <Button variant="secondary" size="sm" onClick={list.retry}>
+          {t('modules.retry')}
+        </Button>
+      </div>
+    );
+  }
+  const page = list.data;
+  if (page.total === 0) {
+    return (
+      <p className="m-0 rounded-md border border-dashed border-line p-6 text-fg-secondary">
+        {searching ? t('modules.empty') : t('modules.emptyModule')}
+      </p>
+    );
+  }
+  return (
+    <div className="flex flex-col gap-4">
+      <h2 className="sr-only">{t('modules.list')}</h2>
+      <p className="m-0 font-mono text-step--1 text-fg-muted" aria-live="polite">
+        {t('modules.results', { count: page.total })}
+      </p>
+      <ul aria-label={t('modules.list')} className="m-0 flex list-none flex-col gap-3 p-0">
+        {page.items.map((item) => (
+          <ItemCard key={item.id} item={item} summary={summary} selected={item.id === selectedId} onShowOnMap={onSelect} />
+        ))}
+      </ul>
+      <Pagination page={page.page} pages={page.pages} onChange={onPage} />
+    </div>
+  );
+}

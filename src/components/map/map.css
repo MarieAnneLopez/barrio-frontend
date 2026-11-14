@@ -1,0 +1,80 @@
+/* Mapa temático: contenedor, marcadores emoji y controles en la paleta. */
+.thematic-map {
+  position: relative;
+  min-height: 360px;
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-lg);
+  background-color: var(--bg-primary);
+}
+
+/* maplibre-gl.css declara .maplibregl-map { position: relative } y se carga después:
+   este selector (más específico) asegura que el mapa ocupe todo el contenedor. */
+.thematic-map .maplibregl-map {
+  position: absolute;
+  inset: 0;
+}
+
+.map-marker {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--accent-soft);
+  border-radius: 9999px;
+  background-color: var(--bg-surface);
+  font-size: 1.125rem;
+  cursor: pointer;
+  transition:
+    transform var(--dur-1) var(--ease-emphasis),
+    border-color var(--dur-2) ease,
+    box-shadow var(--dur-2) ease;
+}
+
+.map-marker[data-verified='false'] {
+  border-style: dashed;
+}
+
+.map-marker[data-selected='true'] {
+  border-color: var(--interactive-active);
+  box-shadow: var(--glow-active);
+  transform: scale(1.12);
+}
+
+.map-marker:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .map-marker:hover {
+    border-color: var(--interactive-active);
+  }
+}
+
+.thematic-map .maplibregl-ctrl-group {
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-surface);
+}
+
+.thematic-map .maplibregl-ctrl-group button + button {
+  border-top-color: var(--border-subtle);
+}
+
+.thematic-map .maplibregl-ctrl-icon {
+  filter: invert(1);
+}
+
+.thematic-map .maplibregl-ctrl-attrib {
+  background-color: var(--overlay);
+  color: var(--text-secondary);
+}
+
+.thematic-map .maplibregl-ctrl-attrib a {
+  color: var(--text-secondary);
+}
+
+:root.reduce-motion .map-marker {
+  transition: none;
+}

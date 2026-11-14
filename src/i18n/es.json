@@ -197,5 +197,49 @@
         "a": "Marie Anne Lopez Poveda, estudiante de Ingeniería Catastral y Geodesia. Puedes escribirle por WhatsApp con el botón de la esquina inferior derecha."
       }
     }
+  },
+  "modules": {
+    "search": "Buscar en este módulo",
+    "searchHint": "Nombre, dirección u otro dato",
+    "searchButton": "Buscar",
+    "results_one": "{{count}} resultado",
+    "results_other": "{{count}} resultados",
+    "list": "Lista de lugares",
+    "map": "Mapa de {{name}}",
+    "empty": "No hay lugares que coincidan con la búsqueda.",
+    "emptyModule": "Este módulo todavía no tiene lugares registrados.",
+    "notLoaded": "Los datos de este módulo se cargan en la siguiente fase del proyecto.",
+    "error": "No se pudieron cargar los datos.",
+    "mapError": "No se pudo cargar el mapa base.",
+    "retry": "Reintentar",
+    "showOnMap": "Ver en el mapa",
+    "selected": "Seleccionado en el mapa",
+    "verified": "Verificado",
+    "unverified": "Por verificar",
+    "sample": "Dato de ejemplo",
+    "source": "Fuente",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "pageOf": "Página {{page}} de {{pages}}",
+    "pagination": "Paginación"
+  },
+  "fields": {
+    "tipo": "Tipo",
+    "caracter": "Carácter",
+    "direccion": "Dirección",
+    "telefono": "Teléfono",
+    "jornadas": "Jornadas",
+    "niveles": "Niveles"
+  },
+  "values": {
+    "tipo": {
+      "jardin": "Jardín infantil",
+      "colegio": "Colegio",
+      "universidad": "Universidad"
+    },
+    "caracter": {
+      "publico": "Público",
+      "privado": "Privado"
+    }
   }
 }

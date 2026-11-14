@@ -197,5 +197,49 @@
         "a": "Marie Anne Lopez Poveda, a Cadastral and Geodesy Engineering student. You can message her on WhatsApp with the button in the bottom-right corner."
       }
     }
+  },
+  "modules": {
+    "search": "Search this module",
+    "searchHint": "Name, address or other detail",
+    "searchButton": "Search",
+    "results_one": "{{count}} result",
+    "results_other": "{{count}} results",
+    "list": "List of places",
+    "map": "Map of {{name}}",
+    "empty": "No places match your search.",
+    "emptyModule": "This module has no registered places yet.",
+    "notLoaded": "Data for this module is loaded in the next project phase.",
+    "error": "The data could not be loaded.",
+    "mapError": "The base map could not be loaded.",
+    "retry": "Try again",
+    "showOnMap": "Show on map",
+    "selected": "Selected on the map",
+    "verified": "Verified",
+    "unverified": "To be verified",
+    "sample": "Sample data",
+    "source": "Source",
+    "previous": "Previous",
+    "next": "Next",
+    "pageOf": "Page {{page}} of {{pages}}",
+    "pagination": "Pagination"
+  },
+  "fields": {
+    "tipo": "Type",
+    "caracter": "Ownership",
+    "direccion": "Address",
+    "telefono": "Phone",
+    "jornadas": "Schedules",
+    "niveles": "Levels"
+  },
+  "values": {
+    "tipo": {
+      "jardin": "Kindergarten",
+      "colegio": "School",
+      "universidad": "University"
+    },
+    "caracter": {
+      "publico": "Public",
+      "privado": "Private"
+    }
   }
 }
