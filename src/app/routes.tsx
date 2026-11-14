@@ -5,6 +5,7 @@ import { CreatorPage } from '../features/pages/CreatorPage';
 import { FaqPage } from '../features/pages/FaqPage';
 import { HomePage } from '../features/pages/HomePage';
 import { NotFoundPage } from '../features/pages/NotFoundPage';
+import { RankingsPage } from '../features/ranking/RankingsPage';
 import { SectionPage } from '../features/pages/SectionPage';
 import { SECTION_PAGES } from '../lib/navigation';
 import { AppShell } from './AppShell';
@@ -13,6 +14,7 @@ import { AppShell } from './AppShell';
 const DEDICATED: Record<string, ReactNode> = {
   faq: <FaqPage />,
   creator: <CreatorPage />,
+  ranking: <RankingsPage />,
 };
 
 /** Árbol de rutas: compartido por la app (BrowserRouter) y las pruebas (MemoryRouter). */

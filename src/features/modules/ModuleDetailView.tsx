@@ -15,13 +15,13 @@ import { useModuleData, type Filters } from './useModuleData';
 const ThematicMap = lazy(() => import('../../components/map/ThematicMap'));
 
 /** Vista dual del módulo (§11.3): lista filtrable + mapa temático + ficha de detalle. */
-export function ModuleDetailView({ category }: { category: CategoryConfig }) {
+export function ModuleDetailView({ category, initialOpenId = null }: { category: CategoryConfig; initialOpenId?: number | null }) {
   const { t } = useTranslation();
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState<Filters>({});
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [openId, setOpenId] = useState<number | null>(null);
+  const [openId, setOpenId] = useState<number | null>(initialOpenId);
   // Formulario: cerrado (null), crear (undefined) o editar un registro.
   const [editing, setEditing] = useState<ModuleItem | undefined | null>(null);
   const { slug } = category;

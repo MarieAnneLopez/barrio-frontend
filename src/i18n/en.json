@@ -509,5 +509,12 @@
     "delete": "Delete",
     "confirm": "Yes, delete",
     "confirmDelete": "Delete “{{name}}”? Its photos and ratings are deleted too."
+  },
+  "ranking": {
+    "category": "Category",
+    "all": "All categories",
+    "list": "Top-rated places",
+    "empty": "No rated places in this category yet.",
+    "position": "Rank {{position}}"
   }
 }

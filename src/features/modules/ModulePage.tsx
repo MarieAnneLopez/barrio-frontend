@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { findCategory } from '../../lib/categoryConfig';
 import { NotFoundPage } from '../pages/NotFoundPage';
 import { PageHeader } from '../pages/PageHeader';
@@ -9,7 +9,10 @@ import { ModuleDetailView } from './ModuleDetailView';
 export function ModulePage() {
   const { t } = useTranslation();
   const { slug } = useParams();
+  const [params] = useSearchParams();
   const category = findCategory(slug);
+  // ?lugar=ID abre la ficha de ese lugar (enlaces del ranking).
+  const lugar = Number(params.get('lugar'));
   if (!category) return <NotFoundPage />;
 
   return (
@@ -20,7 +23,7 @@ export function ModulePage() {
         title={t(`categories.${category.slug}.name`)}
         description={t(`categories.${category.slug}.description`)}
       />
-      <ModuleDetailView key={category.slug} category={category} />
+      <ModuleDetailView key={category.slug} category={category} initialOpenId={lugar > 0 ? lugar : null} />
     </div>
   );
 }

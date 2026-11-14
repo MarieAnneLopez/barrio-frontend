@@ -509,5 +509,12 @@
     "delete": "Eliminar",
     "confirm": "Sí, eliminar",
     "confirmDelete": "¿Eliminar «{{name}}»? También se borran sus fotos y calificaciones."
+  },
+  "ranking": {
+    "category": "Categoría",
+    "all": "Todas las categorías",
+    "list": "Lugares mejor calificados",
+    "empty": "Todavía no hay lugares calificados en esta categoría.",
+    "position": "Puesto {{position}}"
   }
 }
