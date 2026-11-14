@@ -1,10 +1,12 @@
 import { Marker, type Map as MapLibreMap } from 'maplibre-gl';
 import { useEffect, useRef } from 'react';
 import type { ModuleFeatures } from '../../lib/apiTypes';
+import { labelOf } from '../../lib/moduleFields';
 import { createEmojiMarker, setMarkerSelected } from './EmojiMarker';
 
 interface Options {
   map: MapLibreMap | null;
+  slug: string;
   features: ModuleFeatures | undefined;
   emoji: string;
   selectedId: number | null;
@@ -13,7 +15,7 @@ interface Options {
 }
 
 /** Un marcador emoji por punto; el seleccionado se resalta y la cámara va hacia él. */
-export function useMarkers({ map, features, emoji, selectedId, onSelect, reducedMotion }: Options) {
+export function useMarkers({ map, slug, features, emoji, selectedId, onSelect, reducedMotion }: Options) {
   const markers = useRef(new Map<number, Marker>());
   const select = useRef(onSelect);
   useEffect(() => {
@@ -25,9 +27,9 @@ export function useMarkers({ map, features, emoji, selectedId, onSelect, reduced
     if (!map || !features) return undefined;
     for (const feature of features.features) {
       if (feature.geometry?.type !== 'Point') continue;
-      const { id, nombre, verified } = feature.properties;
+      const { id, verified } = feature.properties;
       const element = createEmojiMarker(
-        { emoji, label: String(nombre ?? id), verified },
+        { emoji, label: labelOf(feature.properties, slug), verified },
         () => select.current(id),
       );
       const [lon, lat] = feature.geometry.coordinates as [number, number];
@@ -37,7 +39,7 @@ export function useMarkers({ map, features, emoji, selectedId, onSelect, reduced
       current.forEach((marker) => marker.remove());
       current.clear();
     };
-  }, [map, features, emoji]);
+  }, [map, slug, features, emoji]);
 
   useEffect(() => {
     markers.current.forEach((marker, id) => setMarkerSelected(marker.getElement(), id === selectedId));

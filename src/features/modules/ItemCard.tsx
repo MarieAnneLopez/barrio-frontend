@@ -1,20 +1,22 @@
 import { useTranslation } from 'react-i18next';
 import type { ModuleItem } from '../../lib/apiTypes';
+import { labelOf, moduleFields } from '../../lib/moduleFields';
+import { displayValue, hasValue } from './displayValue';
 import { VerifiedBadge } from './VerifiedBadge';
 
 interface ItemCardProps {
+  slug: string;
   item: ModuleItem;
-  summary: readonly string[];
   selected: boolean;
   onShowOnMap: (id: number) => void;
+  onOpen: (id: number) => void;
 }
 
-/** Tarjeta de un lugar: nombre, datos clave, estado de verificación y enlace al mapa. */
-export function ItemCard({ item, summary, selected, onShowOnMap }: ItemCardProps) {
-  const { t } = useTranslation();
-  const rows = summary.filter((field) => item[field] !== null && item[field] !== undefined && item[field] !== '');
-  const display = (field: string) =>
-    t(`values.${field}.${String(item[field])}`, { defaultValue: String(item[field]) });
+/** Tarjeta de un lugar: nombre, datos clave, estado de verificación, mapa y detalle. */
+export function ItemCard({ slug, item, selected, onShowOnMap, onOpen }: ItemCardProps) {
+  const { t, i18n } = useTranslation();
+  const rows = moduleFields(slug).summary.filter((field) => hasValue(item[field]));
+  const name = labelOf(item, slug);
 
   return (
     <li
@@ -23,7 +25,7 @@ export function ItemCard({ item, summary, selected, onShowOnMap }: ItemCardProps
       }`}
     >
       <div className="flex flex-wrap items-start justify-between gap-2">
-        <h3 className="m-0 text-step-0 text-fg">{item.nombre ?? `#${item.id}`}</h3>
+        <h3 className="m-0 text-step-0 text-fg">{name}</h3>
         <VerifiedBadge item={item} />
       </div>
       {rows.length ? (
@@ -31,21 +33,33 @@ export function ItemCard({ item, summary, selected, onShowOnMap }: ItemCardProps
           {rows.map((field) => (
             <div key={field} className="contents">
               <dt className="text-fg-muted">{t(`fields.${field}`)}</dt>
-              <dd className="m-0 text-fg-secondary">{display(field)}</dd>
+              <dd className="m-0 break-words text-fg-secondary">
+                {displayValue(t, slug, field, item[field], i18n.language)}
+              </dd>
             </div>
           ))}
         </dl>
       ) : null}
-      {item.geometry ? (
+      <div className="flex flex-wrap gap-2">
         <button
           type="button"
-          aria-pressed={selected}
-          onClick={() => onShowOnMap(item.id)}
-          className="ui-pressable ui-btn--ghost self-start rounded-sm border border-transparent px-2 py-1 text-step--1 text-accent underline underline-offset-4"
+          onClick={() => onOpen(item.id)}
+          className="ui-pressable ui-btn--ghost rounded-sm border border-line px-2 py-1 text-step--1 text-fg"
         >
-          {selected ? t('modules.selected') : t('modules.showOnMap')}
+          {t('modules.detail')}{' '}
+          <span className="sr-only">{t('modules.detailOf', { name })}</span>
         </button>
-      ) : null}
+        {item.geometry ? (
+          <button
+            type="button"
+            aria-pressed={selected}
+            onClick={() => onShowOnMap(item.id)}
+            className="ui-pressable ui-btn--ghost rounded-sm border border-transparent px-2 py-1 text-step--1 text-accent underline underline-offset-4"
+          >
+            {selected ? t('modules.selected') : t('modules.showOnMap')}
+          </button>
+        ) : null}
+      </div>
     </li>
   );
 }

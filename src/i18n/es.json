@@ -221,7 +221,16 @@
     "previous": "Anterior",
     "next": "Siguiente",
     "pageOf": "Página {{page}} de {{pages}}",
-    "pagination": "Paginación"
+    "pagination": "Paginación",
+    "detail": "Ver detalle",
+    "detailOf": "de {{name}}",
+    "filters": "Filtrar",
+    "all": "Todos",
+    "sourceType": {
+      "osm": "OpenStreetMap",
+      "datos_abiertos": "Datos abiertos de Bogotá",
+      "seed": "Dato de ejemplo"
+    }
   },
   "fields": {
     "tipo": "Tipo",
@@ -229,17 +238,102 @@
     "direccion": "Dirección",
     "telefono": "Teléfono",
     "jornadas": "Jornadas",
-    "niveles": "Niveles"
+    "niveles": "Niveles",
+    "nombre": "Nombre",
+    "deportes": "Deportes",
+    "superficie": "Superficie",
+    "iluminacion": "Iluminación",
+    "horario": "Horario",
+    "acceso": "Acceso",
+    "codigo": "Código",
+    "operador": "Operador",
+    "estado": "Estado",
+    "fecha_instalacion": "Fecha de instalación",
+    "area_m2": "Área (m²)",
+    "arborizacion": "Arborización",
+    "matricula_inmobiliaria": "Código de lote catastral",
+    "area_lote_m2": "Área del lote (m²)",
+    "area_construida_m2": "Área construida (m²)",
+    "pisos": "Pisos",
+    "uso": "Uso",
+    "avaluo_cop": "Avalúo (COP)",
+    "estrato": "Estrato",
+    "nombre_via": "Vía",
+    "tipo_via": "Tipo de vía",
+    "material": "Material",
+    "ultima_intervencion": "Última intervención",
+    "reportes_ciudadanos": "Reportes ciudadanos",
+    "lineas": "Rutas",
+    "especialidad": "Especialidad",
+    "rango_precios": "Rango de precios",
+    "fecha": "Mes",
+    "franja_horaria": "Franja horaria",
+    "modalidad": "Modalidad",
+    "fuente": "Fuente del dato",
+    "cantidad": "Reportes",
+    "nombre_localidad": "Localidad",
+    "bandera_url": "Bandera (ruta local)",
+    "historia": "Historia",
+    "poblacion": "Población (proyección)",
+    "superficie_km2": "Superficie (km²)",
+    "alcaldia_local": "Alcaldía local",
+    "retos": "Retos",
+    "telefono_24_7": "Teléfono 24/7",
+    "servicios": "Servicios"
   },
   "values": {
     "tipo": {
       "jardin": "Jardín infantil",
       "colegio": "Colegio",
-      "universidad": "Universidad"
+      "universidad": "Universidad",
+      "policial": "Policial",
+      "comunitaria": "Comunitaria",
+      "privada": "Privada",
+      "parque": "Parque",
+      "alameda": "Alameda",
+      "troncal": "Troncal TransMilenio",
+      "alimentador": "Alimentador",
+      "sitp": "SITP zonal",
+      "cai": "CAI",
+      "hospital": "Hospital",
+      "urgencias": "Urgencias"
     },
     "caracter": {
       "publico": "Público",
       "privado": "Privado"
+    },
+    "acceso": {
+      "libre": "Libre",
+      "restringido": "Restringido",
+      "pago": "Con pago"
+    },
+    "estado": {
+      "activa": "Activa",
+      "inactiva": "Inactiva",
+      "mantenimiento": "En mantenimiento",
+      "bueno": "Bueno",
+      "regular": "Regular",
+      "malo": "Malo"
+    },
+    "arborizacion": {
+      "alta": "Alta",
+      "media": "Media",
+      "baja": "Baja"
+    },
+    "franja_horaria": {
+      "madrugada": "Madrugada",
+      "manana": "Mañana",
+      "tarde": "Tarde",
+      "noche": "Noche"
+    },
+    "iluminacion": {
+      "true": "Sí",
+      "false": "No"
+    },
+    "zonas-verdes": {
+      "tipo": {
+        "jardin": "Jardín"
+      }
     }
   },
   "hero": {

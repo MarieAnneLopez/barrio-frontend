@@ -221,25 +221,119 @@
     "previous": "Previous",
     "next": "Next",
     "pageOf": "Page {{page}} of {{pages}}",
-    "pagination": "Pagination"
+    "pagination": "Pagination",
+    "detail": "View details",
+    "detailOf": "of {{name}}",
+    "filters": "Filter",
+    "all": "All",
+    "sourceType": {
+      "osm": "OpenStreetMap",
+      "datos_abiertos": "Bogotá open data",
+      "seed": "Sample data"
+    }
   },
   "fields": {
     "tipo": "Type",
-    "caracter": "Ownership",
+    "caracter": "Sector",
     "direccion": "Address",
     "telefono": "Phone",
-    "jornadas": "Schedules",
-    "niveles": "Levels"
+    "jornadas": "School shifts",
+    "niveles": "Levels",
+    "nombre": "Name",
+    "deportes": "Sports",
+    "superficie": "Surface",
+    "iluminacion": "Lighting",
+    "horario": "Opening hours",
+    "acceso": "Access",
+    "codigo": "Code",
+    "operador": "Operator",
+    "estado": "Condition",
+    "fecha_instalacion": "Installation date",
+    "area_m2": "Area (m²)",
+    "arborizacion": "Tree cover",
+    "matricula_inmobiliaria": "Cadastral lot code",
+    "area_lote_m2": "Lot area (m²)",
+    "area_construida_m2": "Built area (m²)",
+    "pisos": "Floors",
+    "uso": "Land use",
+    "avaluo_cop": "Assessed value (COP)",
+    "estrato": "Socioeconomic stratum",
+    "nombre_via": "Street",
+    "tipo_via": "Street type",
+    "material": "Material",
+    "ultima_intervencion": "Last roadwork",
+    "reportes_ciudadanos": "Citizen reports",
+    "lineas": "Routes",
+    "especialidad": "Specialty",
+    "rango_precios": "Price range",
+    "fecha": "Month",
+    "franja_horaria": "Time of day",
+    "modalidad": "Type of theft",
+    "fuente": "Data source",
+    "cantidad": "Reports",
+    "nombre_localidad": "Locality",
+    "bandera_url": "Flag (local path)",
+    "historia": "History",
+    "poblacion": "Population (projection)",
+    "superficie_km2": "Area (km²)",
+    "alcaldia_local": "Local mayor's office",
+    "retos": "Challenges",
+    "telefono_24_7": "24/7 phone",
+    "servicios": "Services"
   },
   "values": {
     "tipo": {
       "jardin": "Kindergarten",
       "colegio": "School",
-      "universidad": "University"
+      "universidad": "University",
+      "policial": "Police",
+      "comunitaria": "Community",
+      "privada": "Private",
+      "parque": "Park",
+      "alameda": "Tree-lined walk",
+      "troncal": "TransMilenio trunk",
+      "alimentador": "Feeder",
+      "sitp": "SITP zonal",
+      "cai": "Police post (CAI)",
+      "hospital": "Hospital",
+      "urgencias": "Emergency room"
     },
     "caracter": {
       "publico": "Public",
       "privado": "Private"
+    },
+    "acceso": {
+      "libre": "Free",
+      "restringido": "Restricted",
+      "pago": "Paid"
+    },
+    "estado": {
+      "activa": "Active",
+      "inactiva": "Inactive",
+      "mantenimiento": "Under maintenance",
+      "bueno": "Good",
+      "regular": "Fair",
+      "malo": "Poor"
+    },
+    "arborizacion": {
+      "alta": "High",
+      "media": "Medium",
+      "baja": "Low"
+    },
+    "franja_horaria": {
+      "madrugada": "Early morning",
+      "manana": "Morning",
+      "tarde": "Afternoon",
+      "noche": "Night"
+    },
+    "iluminacion": {
+      "true": "Yes",
+      "false": "No"
+    },
+    "zonas-verdes": {
+      "tipo": {
+        "jardin": "Garden"
+      }
     }
   },
   "hero": {

@@ -9,18 +9,11 @@ export interface CategoryConfig {
   slug: string;
   emoji: string;
   geometry: Geometry;
-  /** Campos que la tarjeta de la lista muestra bajo el nombre (claves fields.* / values.*). */
-  summary?: readonly string[];
 }
+// Los campos de cada módulo (tarjeta, filtros, formulario) viven en moduleFields.json.
 
 export const CATEGORIES: readonly CategoryConfig[] = [
-  {
-    id: 1,
-    slug: 'centros-educativos',
-    emoji: '🎓',
-    geometry: 'POINT',
-    summary: ['tipo', 'caracter', 'direccion', 'telefono'],
-  },
+  { id: 1, slug: 'centros-educativos', emoji: '🎓', geometry: 'POINT' },
   { id: 2, slug: 'escenarios-deportivos', emoji: '⚽', geometry: 'POLYGON' },
   { id: 3, slug: 'camaras-seguridad', emoji: '📹', geometry: 'POINT' },
   { id: 4, slug: 'zonas-verdes', emoji: '🌳', geometry: 'POLYGON' },

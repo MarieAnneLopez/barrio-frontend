@@ -19,10 +19,11 @@ export function useApi<T>(path: string | null, params?: QueryParams) {
 
   useEffect(() => {
     // path y params se leen de `key` para que el efecto dependa solo de valores estables.
-    const [currentPath, currentParams] = JSON.parse(key) as [string | null, QueryParams | undefined];
+    // JSON convierte params ausentes en null: se normaliza a undefined.
+    const [currentPath, currentParams] = JSON.parse(key) as [string | null, QueryParams | null];
     if (currentPath === null) return undefined;
     const controller = new AbortController();
-    apiGet<T>(currentPath, currentParams, controller.signal).then(
+    apiGet<T>(currentPath, currentParams ?? undefined, controller.signal).then(
       (data) => setState({ key, value: { status: 'success', data, error: undefined } }),
       (error: unknown) => {
         if (controller.signal.aborted) return;

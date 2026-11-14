@@ -7,17 +7,19 @@ import { ItemCard } from './ItemCard';
 import { Pagination } from './Pagination';
 
 interface ModuleListProps {
+  slug: string;
   list: ApiState<Page<ModuleItem>> & { retry: () => void };
   notLoaded: boolean;
   searching: boolean;
-  summary: readonly string[];
   selectedId: number | null;
   onSelect: (id: number) => void;
+  onOpen: (id: number) => void;
   onPage: (page: number) => void;
 }
 
 /** Lista con sus estados: cargando, error, módulo sin datos, vacío y resultados. */
-export function ModuleList({ list, notLoaded, searching, summary, selectedId, onSelect, onPage }: ModuleListProps) {
+export function ModuleList(props: ModuleListProps) {
+  const { slug, list, notLoaded, searching, selectedId, onSelect, onOpen, onPage } = props;
   const { t } = useTranslation();
 
   if (notLoaded) {
@@ -50,7 +52,14 @@ export function ModuleList({ list, notLoaded, searching, summary, selectedId, on
       </p>
       <ul aria-label={t('modules.list')} className="m-0 flex list-none flex-col gap-3 p-0">
         {page.items.map((item) => (
-          <ItemCard key={item.id} item={item} summary={summary} selected={item.id === selectedId} onShowOnMap={onSelect} />
+          <ItemCard
+            key={item.id}
+            slug={slug}
+            item={item}
+            selected={item.id === selectedId}
+            onShowOnMap={onSelect}
+            onOpen={onOpen}
+          />
         ))}
       </ul>
       <Pagination page={page.page} pages={page.pages} onChange={onPage} />

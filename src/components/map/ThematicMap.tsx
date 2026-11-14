@@ -8,8 +8,11 @@ import { Button } from '../ui/Button';
 import { Skeleton } from '../ui/Skeleton';
 import { useMapInstance } from './useMapInstance';
 import { useMarkers } from './useMarkers';
+import { useShapes } from './useShapes';
 
 export interface ThematicMapProps {
+  /** Módulo: da el nombre visible de cada marcador. */
+  slug: string;
   /** Nombre accesible de la región del mapa. */
   label: string;
   features: ModuleFeatures | undefined;
@@ -19,13 +22,14 @@ export interface ThematicMapProps {
 }
 
 /** Mapa temático MapLibre sobre el mapa base local de El Tintal (D5). */
-export default function ThematicMap({ label, features, emoji, selectedId, onSelect }: ThematicMapProps) {
+export default function ThematicMap({ slug, label, features, emoji, selectedId, onSelect }: ThematicMapProps) {
   const { t } = useTranslation();
   const container = useRef<HTMLDivElement>(null);
   const [attempt, setAttempt] = useState(0);
   const { map, status } = useMapInstance(container, attempt);
   const reducedMotion = useA11yStore((s) => s.reducedMotion);
-  useMarkers({ map, features, emoji, selectedId, onSelect, reducedMotion });
+  useMarkers({ map, slug, features, emoji, selectedId, onSelect, reducedMotion });
+  useShapes({ map, features, selectedId, onSelect, reducedMotion });
 
   return (
     <section aria-label={label} className="thematic-map h-[420px] lg:h-full">

@@ -1,0 +1,666 @@
+{
+  "centros-educativos": {
+    "label": "nombre",
+    "summary": [
+      "tipo",
+      "caracter",
+      "direccion",
+      "telefono"
+    ],
+    "fields": [
+      {
+        "name": "nombre",
+        "kind": "text",
+        "required": true,
+        "max": 200
+      },
+      {
+        "name": "tipo",
+        "kind": "enum",
+        "options": [
+          "jardin",
+          "colegio",
+          "universidad"
+        ],
+        "required": true,
+        "filter": true
+      },
+      {
+        "name": "caracter",
+        "kind": "enum",
+        "options": [
+          "publico",
+          "privado"
+        ],
+        "required": true,
+        "filter": true
+      },
+      {
+        "name": "direccion",
+        "kind": "text",
+        "required": false,
+        "max": 200
+      },
+      {
+        "name": "jornadas",
+        "kind": "text",
+        "required": false,
+        "max": 200
+      },
+      {
+        "name": "niveles",
+        "kind": "text",
+        "required": false,
+        "max": 300
+      },
+      {
+        "name": "telefono",
+        "kind": "tel",
+        "max": 30,
+        "required": false
+      }
+    ]
+  },
+  "escenarios-deportivos": {
+    "label": "nombre",
+    "summary": [
+      "deportes",
+      "superficie",
+      "acceso"
+    ],
+    "fields": [
+      {
+        "name": "nombre",
+        "kind": "text",
+        "required": true,
+        "max": 200
+      },
+      {
+        "name": "deportes",
+        "kind": "text",
+        "required": true,
+        "max": 300
+      },
+      {
+        "name": "superficie",
+        "kind": "text",
+        "required": false,
+        "max": 120
+      },
+      {
+        "name": "iluminacion",
+        "kind": "boolean",
+        "filter": true,
+        "required": false
+      },
+      {
+        "name": "horario",
+        "kind": "text",
+        "required": false,
+        "max": 120
+      },
+      {
+        "name": "acceso",
+        "kind": "enum",
+        "options": [
+          "libre",
+          "restringido",
+          "pago"
+        ],
+        "required": false,
+        "filter": true
+      }
+    ]
+  },
+  "camaras-seguridad": {
+    "label": "codigo",
+    "summary": [
+      "tipo",
+      "operador",
+      "estado"
+    ],
+    "fields": [
+      {
+        "name": "codigo",
+        "kind": "text",
+        "required": true,
+        "max": 40
+      },
+      {
+        "name": "tipo",
+        "kind": "enum",
+        "options": [
+          "policial",
+          "comunitaria",
+          "privada"
+        ],
+        "required": true,
+        "filter": true
+      },
+      {
+        "name": "operador",
+        "kind": "text",
+        "required": false,
+        "max": 120
+      },
+      {
+        "name": "estado",
+        "kind": "enum",
+        "options": [
+          "activa",
+          "inactiva",
+          "mantenimiento"
+        ],
+        "required": false,
+        "filter": true
+      },
+      {
+        "name": "fecha_instalacion",
+        "kind": "date",
+        "required": false
+      }
+    ]
+  },
+  "zonas-verdes": {
+    "label": "nombre",
+    "summary": [
+      "tipo",
+      "area_m2",
+      "estado"
+    ],
+    "fields": [
+      {
+        "name": "nombre",
+        "kind": "text",
+        "required": true,
+        "max": 200
+      },
+      {
+        "name": "area_m2",
+        "kind": "number",
+        "min": 0,
+        "required": false
+      },
+      {
+        "name": "tipo",
+        "kind": "enum",
+        "options": [
+          "parque",
+          "alameda",
+          "jardin"
+        ],
+        "required": true,
+        "filter": true
+      },
+      {
+        "name": "arborizacion",
+        "kind": "enum",
+        "options": [
+          "alta",
+          "media",
+          "baja"
+        ],
+        "required": false,
+        "filter": true
+      },
+      {
+        "name": "estado",
+        "kind": "enum",
+        "options": [
+          "bueno",
+          "regular",
+          "malo"
+        ],
+        "required": false,
+        "filter": true
+      }
+    ]
+  },
+  "datos-catastrales": {
+    "label": "matricula_inmobiliaria",
+    "summary": [
+      "estrato",
+      "area_lote_m2",
+      "uso"
+    ],
+    "fields": [
+      {
+        "name": "matricula_inmobiliaria",
+        "kind": "text",
+        "required": true,
+        "max": 40,
+        "pattern": "^[0-9A-Za-z-]+$"
+      },
+      {
+        "name": "direccion",
+        "kind": "text",
+        "required": false,
+        "max": 200
+      },
+      {
+        "name": "area_lote_m2",
+        "kind": "number",
+        "min": 0,
+        "required": false
+      },
+      {
+        "name": "area_construida_m2",
+        "kind": "number",
+        "min": 0,
+        "required": false
+      },
+      {
+        "name": "pisos",
+        "kind": "integer",
+        "min": 0,
+        "max": 100,
+        "required": false
+      },
+      {
+        "name": "uso",
+        "kind": "text",
+        "required": false,
+        "max": 40
+      },
+      {
+        "name": "avaluo_cop",
+        "kind": "integer",
+        "min": 0,
+        "required": false
+      },
+      {
+        "name": "estrato",
+        "kind": "enum",
+        "options": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6"
+        ],
+        "required": false,
+        "filter": true
+      }
+    ]
+  },
+  "estado-calles": {
+    "label": "nombre_via",
+    "summary": [
+      "tipo_via",
+      "material",
+      "estado"
+    ],
+    "fields": [
+      {
+        "name": "nombre_via",
+        "kind": "text",
+        "required": true,
+        "max": 200
+      },
+      {
+        "name": "tipo_via",
+        "kind": "text",
+        "required": false,
+        "max": 40
+      },
+      {
+        "name": "material",
+        "kind": "text",
+        "required": false,
+        "max": 40
+      },
+      {
+        "name": "estado",
+        "kind": "enum",
+        "options": [
+          "bueno",
+          "regular",
+          "malo"
+        ],
+        "required": false,
+        "filter": true
+      },
+      {
+        "name": "ultima_intervencion",
+        "kind": "date",
+        "required": false
+      },
+      {
+        "name": "reportes_ciudadanos",
+        "kind": "integer",
+        "min": 0,
+        "required": false
+      }
+    ]
+  },
+  "estaciones-transporte": {
+    "label": "nombre",
+    "summary": [
+      "tipo",
+      "lineas",
+      "direccion"
+    ],
+    "fields": [
+      {
+        "name": "nombre",
+        "kind": "text",
+        "required": true,
+        "max": 200
+      },
+      {
+        "name": "tipo",
+        "kind": "enum",
+        "options": [
+          "troncal",
+          "alimentador",
+          "sitp"
+        ],
+        "required": true,
+        "filter": true
+      },
+      {
+        "name": "lineas",
+        "kind": "textarea",
+        "max": 500,
+        "required": false
+      },
+      {
+        "name": "direccion",
+        "kind": "text",
+        "required": false,
+        "max": 200
+      }
+    ]
+  },
+  "sitios-comida": {
+    "label": "nombre",
+    "summary": [
+      "especialidad",
+      "horario",
+      "rango_precios"
+    ],
+    "fields": [
+      {
+        "name": "nombre",
+        "kind": "text",
+        "required": true,
+        "max": 200
+      },
+      {
+        "name": "especialidad",
+        "kind": "text",
+        "required": false,
+        "max": 120
+      },
+      {
+        "name": "direccion",
+        "kind": "text",
+        "required": false,
+        "max": 200
+      },
+      {
+        "name": "horario",
+        "kind": "text",
+        "required": false,
+        "max": 120
+      },
+      {
+        "name": "rango_precios",
+        "kind": "enum",
+        "options": [
+          "$",
+          "$$",
+          "$$$"
+        ],
+        "required": false,
+        "filter": true
+      }
+    ]
+  },
+  "librerias": {
+    "label": "nombre",
+    "summary": [
+      "especialidad",
+      "direccion",
+      "horario"
+    ],
+    "fields": [
+      {
+        "name": "nombre",
+        "kind": "text",
+        "required": true,
+        "max": 200
+      },
+      {
+        "name": "direccion",
+        "kind": "text",
+        "required": false,
+        "max": 200
+      },
+      {
+        "name": "horario",
+        "kind": "text",
+        "required": false,
+        "max": 120
+      },
+      {
+        "name": "especialidad",
+        "kind": "text",
+        "required": false,
+        "max": 120
+      }
+    ]
+  },
+  "robos": {
+    "label": "modalidad",
+    "summary": [
+      "fecha",
+      "cantidad",
+      "fuente"
+    ],
+    "fields": [
+      {
+        "name": "fecha",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "franja_horaria",
+        "kind": "enum",
+        "options": [
+          "madrugada",
+          "manana",
+          "tarde",
+          "noche"
+        ],
+        "required": false,
+        "filter": true
+      },
+      {
+        "name": "modalidad",
+        "kind": "text",
+        "required": true,
+        "max": 60,
+        "filter": true,
+        "options": [
+          "Hurto efectuado",
+          "Atraco / hurto en proceso",
+          "Hurto en proceso"
+        ]
+      },
+      {
+        "name": "fuente",
+        "kind": "text",
+        "required": true,
+        "max": 200
+      },
+      {
+        "name": "cantidad",
+        "kind": "integer",
+        "min": 0,
+        "required": false
+      }
+    ]
+  },
+  "localidad": {
+    "label": "nombre_localidad",
+    "summary": [
+      "poblacion",
+      "superficie_km2",
+      "alcaldia_local"
+    ],
+    "fields": [
+      {
+        "name": "nombre_localidad",
+        "kind": "text",
+        "required": true,
+        "max": 120
+      },
+      {
+        "name": "bandera_url",
+        "kind": "text",
+        "required": false,
+        "max": 300,
+        "pattern": "^/[A-Za-z0-9_./-]+$"
+      },
+      {
+        "name": "historia",
+        "kind": "textarea",
+        "max": 8000,
+        "required": false
+      },
+      {
+        "name": "poblacion",
+        "kind": "integer",
+        "min": 0,
+        "required": false
+      },
+      {
+        "name": "superficie_km2",
+        "kind": "number",
+        "min": 0,
+        "required": false
+      },
+      {
+        "name": "alcaldia_local",
+        "kind": "text",
+        "required": false,
+        "max": 200
+      },
+      {
+        "name": "retos",
+        "kind": "textarea",
+        "max": 8000,
+        "required": false
+      }
+    ]
+  },
+  "atencion-inmediata": {
+    "label": "nombre",
+    "summary": [
+      "tipo",
+      "direccion",
+      "telefono_24_7"
+    ],
+    "fields": [
+      {
+        "name": "nombre",
+        "kind": "text",
+        "required": true,
+        "max": 200
+      },
+      {
+        "name": "tipo",
+        "kind": "enum",
+        "options": [
+          "cai",
+          "hospital",
+          "urgencias"
+        ],
+        "required": true,
+        "filter": true
+      },
+      {
+        "name": "direccion",
+        "kind": "text",
+        "required": false,
+        "max": 200
+      },
+      {
+        "name": "telefono_24_7",
+        "kind": "tel",
+        "max": 30,
+        "required": false
+      }
+    ]
+  },
+  "veterinarias": {
+    "label": "nombre",
+    "summary": [
+      "servicios",
+      "direccion",
+      "horario"
+    ],
+    "fields": [
+      {
+        "name": "nombre",
+        "kind": "text",
+        "required": true,
+        "max": 200
+      },
+      {
+        "name": "servicios",
+        "kind": "textarea",
+        "max": 500,
+        "required": false
+      },
+      {
+        "name": "direccion",
+        "kind": "text",
+        "required": false,
+        "max": 200
+      },
+      {
+        "name": "horario",
+        "kind": "text",
+        "required": false,
+        "max": 120
+      }
+    ]
+  },
+  "barberias": {
+    "label": "nombre",
+    "summary": [
+      "servicios",
+      "direccion",
+      "horario"
+    ],
+    "fields": [
+      {
+        "name": "nombre",
+        "kind": "text",
+        "required": true,
+        "max": 200
+      },
+      {
+        "name": "direccion",
+        "kind": "text",
+        "required": false,
+        "max": 200
+      },
+      {
+        "name": "horario",
+        "kind": "text",
+        "required": false,
+        "max": 120
+      },
+      {
+        "name": "servicios",
+        "kind": "textarea",
+        "max": 500,
+        "required": false
+      }
+    ]
+  }
+}
