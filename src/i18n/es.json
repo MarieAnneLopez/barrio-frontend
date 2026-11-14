@@ -241,5 +241,33 @@
       "publico": "Público",
       "privado": "Privado"
     }
+  },
+  "hero": {
+    "label": "Maqueta 3D de El Tintal",
+    "description": "Modelo 3D con las manzanas, vías, parques y edificios de OpenStreetMap. Arrastra el puntero para mirar alrededor y elige un lugar para ver su ficha.",
+    "eyebrow": "El Tintal · Kennedy",
+    "coords": "4,653° N · 74,157° O",
+    "pause": "Pausar la órbita",
+    "play": "Reanudar la órbita",
+    "building": "Edificio",
+    "buildingKind": {
+      "school": "colegio",
+      "apartments": "apartamentos",
+      "yes": "sin clasificar",
+      "construction": "en construcción",
+      "commercial": "comercial",
+      "retail": "comercial",
+      "house": "casa",
+      "industrial": "industrial"
+    },
+    "levels_one": "{{count}} piso",
+    "levels_other": "{{count}} pisos",
+    "area": "{{value}} m² de planta",
+    "hint": "Pasa el puntero sobre un edificio para ver sus datos.",
+    "placeCard": "Lugar seleccionado",
+    "openModule": "Ver en {{module}}",
+    "closePlace": "Cerrar ficha",
+    "error": "No se pudo cargar la maqueta 3D.",
+    "source": "Datos © OpenStreetMap (ODbL)"
   }
 }

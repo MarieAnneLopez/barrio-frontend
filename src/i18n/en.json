@@ -241,5 +241,33 @@
       "publico": "Public",
       "privado": "Private"
     }
+  },
+  "hero": {
+    "label": "3D model of El Tintal",
+    "description": "3D model with the blocks, roads, parks and buildings from OpenStreetMap. Move the pointer to look around and pick a place to see its card.",
+    "eyebrow": "El Tintal · Kennedy",
+    "coords": "4.653° N · 74.157° W",
+    "pause": "Pause the orbit",
+    "play": "Resume the orbit",
+    "building": "Building",
+    "buildingKind": {
+      "school": "school",
+      "apartments": "apartments",
+      "yes": "unclassified",
+      "construction": "under construction",
+      "commercial": "commercial",
+      "retail": "commercial",
+      "house": "house",
+      "industrial": "industrial"
+    },
+    "levels_one": "{{count}} floor",
+    "levels_other": "{{count}} floors",
+    "area": "{{value}} m² footprint",
+    "hint": "Hover over a building to see its data.",
+    "placeCard": "Selected place",
+    "openModule": "View in {{module}}",
+    "closePlace": "Close card",
+    "error": "The 3D model could not be loaded.",
+    "source": "Data © OpenStreetMap (ODbL)"
   }
 }

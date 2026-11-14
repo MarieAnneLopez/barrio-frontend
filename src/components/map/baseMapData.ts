@@ -25,6 +25,11 @@ async function fetchAll(): Promise<BaseMapData> {
   return { polygon: polygon as BarrioPolygon, layers };
 }
 
+/** Olvida los datos cacheados (aísla las pruebas entre sí). */
+export function clearBaseMapCache(): void {
+  cache = null;
+}
+
 export function loadBaseMap(): Promise<BaseMapData> {
   cache ??= fetchAll().catch((error: unknown) => {
     cache = null; // un fallo de red no queda cacheado: el siguiente intento vuelve a pedir
