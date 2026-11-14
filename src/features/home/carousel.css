@@ -1,0 +1,53 @@
+/* Carrusel: fundido entre fotos y Ken Burns sutil (solo transform/opacity). */
+.carousel-slide {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--dur-5) var(--ease-emphasis),
+    visibility 0s linear var(--dur-5);
+}
+
+.carousel-slide[data-active='true'] {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity var(--dur-5) var(--ease-emphasis);
+}
+
+@keyframes carousel-kenburns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.06);
+  }
+}
+
+.carousel-slide[data-active='true'] .carousel-photo {
+  animation: carousel-kenburns 7s linear forwards;
+}
+
+.carousel-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background-color: var(--border-strong);
+  transition:
+    transform var(--dur-2) var(--ease-emphasis),
+    background-color var(--dur-2) ease;
+}
+
+/* aria-current está en el botón que envuelve al punto. */
+[aria-current='true'] > .carousel-dot {
+  background-color: var(--interactive-active);
+  transform: scale(1.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-slide[data-active='true'] .carousel-photo {
+    animation: none;
+  }
+}
+
+:root.reduce-motion .carousel-slide[data-active='true'] .carousel-photo {
+  animation: none;
+}

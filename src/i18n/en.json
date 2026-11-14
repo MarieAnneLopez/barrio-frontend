@@ -269,5 +269,53 @@
     "closePlace": "Close card",
     "error": "The 3D model could not be loaded.",
     "source": "Data © OpenStreetMap (ODbL)"
+  },
+  "carousel": {
+    "label": "Photos of the El Tintal area",
+    "slide": "Photo",
+    "of": "{{current}} of {{total}}",
+    "previous": "Previous photo",
+    "next": "Next photo",
+    "pause": "Pause the photos",
+    "play": "Play the photos",
+    "goTo": "Show photo {{n}}",
+    "credit": "Photo: {{author}}",
+    "license": "{{license}} license",
+    "source": "View on Wikimedia Commons",
+    "photos": {
+      "biblioteca-exterior": {
+        "alt": "White facade of the El Tintal Public Library with round windows, palm trees and a brick plaza.",
+        "caption": "El Tintal Public Library Manuel Zapata Olivella"
+      },
+      "vista-desde-biblioteca": {
+        "alt": "Library terrace at sunset, with El Tintal apartment towers in the background.",
+        "caption": "View from the library towards the neighborhood"
+      },
+      "biblioteca-interior": {
+        "alt": "Library reading room with a skylight, bookshelves and red chairs.",
+        "caption": "Inside the El Tintal Library"
+      },
+      "biblioteca-fachada": {
+        "alt": "Library facade with its stepped volumes, palm trees and a strip of lawn.",
+        "caption": "Library facade"
+      },
+      "biblioteca-entrada": {
+        "alt": "Side of the library with an open plaza, street lamps and benches.",
+        "caption": "Library plaza"
+      },
+      "tintal-plaza": {
+        "alt": "Aerial view of the Tintal Plaza shopping center surrounded by housing complexes, green areas and an avenue.",
+        "caption": "Tintal Plaza from above"
+      },
+      "hacienda-el-tintal": {
+        "alt": "White two-story republican-style house behind a wall with graffiti and palm trees.",
+        "caption": "El Tintal Hacienda house"
+      },
+      "avenida-el-tintal": {
+        "alt": "El Tintal Avenue with cars driving under a cloudy sky.",
+        "caption": "El Tintal Avenue, Patio Bonito area (neighboring)"
+      }
+    },
+    "roledescription": "carousel"
   }
 }

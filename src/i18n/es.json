@@ -269,5 +269,53 @@
     "closePlace": "Cerrar ficha",
     "error": "No se pudo cargar la maqueta 3D.",
     "source": "Datos © OpenStreetMap (ODbL)"
+  },
+  "carousel": {
+    "label": "Fotografías del entorno de El Tintal",
+    "slide": "Foto",
+    "of": "{{current}} de {{total}}",
+    "previous": "Foto anterior",
+    "next": "Foto siguiente",
+    "pause": "Pausar las fotos",
+    "play": "Reproducir las fotos",
+    "goTo": "Mostrar la foto {{n}}",
+    "credit": "Foto: {{author}}",
+    "license": "Licencia {{license}}",
+    "source": "Ver en Wikimedia Commons",
+    "photos": {
+      "biblioteca-exterior": {
+        "alt": "Fachada blanca de la Biblioteca Pública El Tintal con ventanas redondas, palmas y una plaza de ladrillo.",
+        "caption": "Biblioteca Pública El Tintal Manuel Zapata Olivella"
+      },
+      "vista-desde-biblioteca": {
+        "alt": "Terraza de la biblioteca al atardecer, con las torres de apartamentos de El Tintal al fondo.",
+        "caption": "Vista desde la biblioteca hacia el barrio"
+      },
+      "biblioteca-interior": {
+        "alt": "Sala de lectura de la biblioteca con claraboya, estanterías de libros y sillas rojas.",
+        "caption": "Interior de la Biblioteca El Tintal"
+      },
+      "biblioteca-fachada": {
+        "alt": "Fachada de la biblioteca con sus volúmenes escalonados, palmas y una franja de césped.",
+        "caption": "Fachada de la biblioteca"
+      },
+      "biblioteca-entrada": {
+        "alt": "Costado de la biblioteca con una plaza abierta, faroles y bancas.",
+        "caption": "Plaza de la biblioteca"
+      },
+      "tintal-plaza": {
+        "alt": "Vista aérea del centro comercial Tintal Plaza rodeado de conjuntos residenciales, zonas verdes y una avenida.",
+        "caption": "Tintal Plaza desde el aire"
+      },
+      "hacienda-el-tintal": {
+        "alt": "Casona blanca de dos pisos de estilo republicano, detrás de un muro con grafiti y palmas.",
+        "caption": "Casa de la Hacienda El Tintal"
+      },
+      "avenida-el-tintal": {
+        "alt": "Avenida El Tintal con carros circulando bajo un cielo nublado.",
+        "caption": "Avenida El Tintal, sector Patio Bonito (entorno vecino)"
+      }
+    },
+    "roledescription": "carrusel"
   }
 }

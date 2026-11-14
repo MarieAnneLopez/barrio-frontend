@@ -1,0 +1,74 @@
+[
+  {
+    "id": "biblioteca-exterior",
+    "width": 1280,
+    "height": 960,
+    "author": "ArmandoCasitasS",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Biblioteca_El_Tintal.jpg"
+  },
+  {
+    "id": "vista-desde-biblioteca",
+    "width": 1280,
+    "height": 960,
+    "author": "ArmandoCasitasS",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Vista_desde_la_Biblioteca_P%C3%BAblica_El_Tintal_%27Manuel_Zapata_Olivella%27_y_parte_del_barrio_El_Tintal,_en_la_localidad_de_Kennedy,_Bogot%C3%A1_D.C.,_Colombia..jpg"
+  },
+  {
+    "id": "biblioteca-interior",
+    "width": 1280,
+    "height": 960,
+    "author": "ArmandoCasitasS",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Fotograf%C3%ADa_del_interior_de_la_Biblioteca_P%C3%BAblica_El_Tintal.jpg"
+  },
+  {
+    "id": "biblioteca-fachada",
+    "width": 1280,
+    "height": 768,
+    "author": "Baiji",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Biblioteca_Tintal.jpg"
+  },
+  {
+    "id": "biblioteca-entrada",
+    "width": 1280,
+    "height": 960,
+    "author": "Baiji",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:El_Tintal.jpg"
+  },
+  {
+    "id": "tintal-plaza",
+    "width": 1280,
+    "height": 853,
+    "author": "Aidanwjns",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Galeriia-tintal-plaza-01.jpg"
+  },
+  {
+    "id": "hacienda-el-tintal",
+    "width": 1280,
+    "height": 960,
+    "author": "Baiji",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Hacienda_El_Tintal.jpg"
+  },
+  {
+    "id": "avenida-el-tintal",
+    "width": 1280,
+    "height": 960,
+    "author": "Botas Kiritobi",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Avenida_El_Tintal_Patio_Bonito.jpg"
+  }
+]
