@@ -34,6 +34,14 @@ describe('Header e idioma', () => {
     );
     expect(screen.getByRole('main')).toHaveAttribute('id', 'contenido');
   });
+
+  it('los nombres accesibles contienen el texto visible (WCAG 2.5.3)', () => {
+    renderRoute('/');
+    const home = screen.getByRole('link', { name: /^El Tintal\s*Kennedy · Bogotá D\.C\., ir al inicio$/ });
+    expect(home).not.toHaveAttribute('aria-label');
+    const rail = screen.getByRole('complementary', { name: 'Accesibilidad' });
+    for (const button of rail.querySelectorAll('button')) expect(button.textContent?.trim()).toBe('');
+  });
 });
 
 describe('Rutas', () => {

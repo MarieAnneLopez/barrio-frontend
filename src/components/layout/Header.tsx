@@ -30,7 +30,6 @@ export function Header({ menuOpen, onToggleMenu, sidebarId }: HeaderProps) {
       </button>
       <Link
         to="/"
-        aria-label={t('header.home')}
         className="flex min-w-0 flex-col rounded-sm leading-tight no-underline"
       >
         <span className="truncate font-display text-step-1 font-bold text-fg">
@@ -39,6 +38,8 @@ export function Header({ menuOpen, onToggleMenu, sidebarId }: HeaderProps) {
         <span className="truncate font-mono text-step--1 tracking-[0.08em] text-fg-muted uppercase sm:tracking-[0.16em]">
           {t('app.location')}
         </span>
+        {/* El nombre accesible empieza por el texto visible (WCAG 2.5.3). */}
+        <span className="sr-only">{t('header.home')}</span>
       </Link>
       <div className="ml-auto flex items-center gap-2">
         <Tooltip content={t('welcome.replay')} side="bottom">
