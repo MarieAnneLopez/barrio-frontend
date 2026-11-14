@@ -4,6 +4,7 @@ import { Button } from '../../components/ui/Button';
 import { Skeleton } from '../../components/ui/Skeleton';
 import type { ModuleItem } from '../../lib/apiTypes';
 import type { CategoryConfig } from '../../lib/categoryConfig';
+import { AuthGuard } from '../auth/AuthGuard';
 import { CrudFormModal } from './CrudFormModal';
 import { ItemDetailModal } from './ItemDetailModal';
 import { ModuleFilters } from './ModuleFilters';
@@ -40,9 +41,11 @@ export function ModuleDetailView({ category, initialOpenId = null }: { category:
       <div className="flex flex-col gap-6">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <ModuleSearch onSearch={(q) => refine({ query: q })} disabled={notLoaded} />
-          <Button variant="secondary" onClick={() => setEditing(undefined)} disabled={notLoaded}>
-            {t('forms.add')}
-          </Button>
+          <AuthGuard role="admin">
+            <Button variant="secondary" onClick={() => setEditing(undefined)} disabled={notLoaded}>
+              {t('forms.add')}
+            </Button>
+          </AuthGuard>
         </div>
         <ModuleFilters slug={slug} value={filters} onChange={(f) => refine({ filters: f })} disabled={notLoaded} />
         <ModuleList

@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { AccountButton } from '../../features/auth/AccountButton';
 import { useWelcomeStore } from '../../store/welcomeStore';
 import { Tooltip } from '../ui/Tooltip';
 import { LanguageSwitcher } from './LanguageSwitcher';
@@ -12,7 +13,7 @@ interface HeaderProps {
   sidebarId: string;
 }
 
-/** Barra superior: menú (móvil), marca y selector de idioma. */
+/** Barra superior: menú (móvil), marca, sesión y selector de idioma. */
 export function Header({ menuOpen, onToggleMenu, sidebarId }: HeaderProps) {
   const { t } = useTranslation();
   const replay = useWelcomeStore((s) => s.replay);
@@ -52,6 +53,7 @@ export function Header({ menuOpen, onToggleMenu, sidebarId }: HeaderProps) {
             <NavIcon name="replay" />
           </button>
         </Tooltip>
+        <AccountButton />
         <LanguageSwitcher />
       </div>
     </header>

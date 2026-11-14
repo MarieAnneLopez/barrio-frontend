@@ -4,6 +4,7 @@ import { Skeleton } from '../../components/ui/Skeleton';
 import { useApi } from '../../hooks/useApi';
 import type { ModuleItem } from '../../lib/apiTypes';
 import { labelOf, moduleFields } from '../../lib/moduleFields';
+import { AuthGuard } from '../auth/AuthGuard';
 import { displayValue, hasValue } from './displayValue';
 import { Gallery } from './Gallery';
 import { ItemActions } from './ItemActions';
@@ -54,7 +55,9 @@ export function ItemDetailModal({ slug, itemId, onClose, onEdit, onDeleted }: It
           <SourceLine item={data} />
           <Gallery slug={slug} itemId={data.id} place={title} />
           <RatingPanel slug={slug} itemId={data.id} />
-          <ItemActions path={`/${slug}/${data.id}`} name={title} onEdit={() => onEdit(data)} onDeleted={onDeleted} />
+          <AuthGuard role="admin">
+            <ItemActions path={`/${slug}/${data.id}`} name={title} onEdit={() => onEdit(data)} onDeleted={onDeleted} />
+          </AuthGuard>
         </div>
       ) : null}
     </Modal>

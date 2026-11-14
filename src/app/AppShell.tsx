@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { WelcomeChoreography } from '../components/avatar/WelcomeChoreography';
 import { ChatWidget } from '../components/chat/ChatWidget';
@@ -9,6 +9,8 @@ import { Sidebar } from '../components/layout/Sidebar';
 import { SkipLink } from '../components/layout/SkipLink';
 import { WhatsAppFloat } from '../components/layout/WhatsAppFloat';
 import { useFocusTrap } from '../components/ui/useFocusTrap';
+import { restoreSession } from '../features/auth/authApi';
+import { LoginModal } from '../features/auth/LoginModal';
 import { useApplyA11y } from '../hooks/useApplyA11y';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { usePersistentFlag } from '../hooks/usePersistentFlag';
@@ -23,6 +25,11 @@ const MAIN_ID = 'contenido';
  */
 export function AppShell() {
   useApplyA11y();
+  useEffect(() => {
+    const controller = new AbortController();
+    void restoreSession(controller.signal);
+    return () => controller.abort();
+  }, []);
   const isDesktop = useMediaQuery('(min-width: 768px)');
   const [collapsed, setCollapsed] = usePersistentFlag('sidebar-collapsed', false);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -80,6 +87,7 @@ export function AppShell() {
       <ChatWidget />
       <WhatsAppFloat />
       <WelcomeChoreography />
+      <LoginModal />
     </div>
   );
 }

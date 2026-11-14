@@ -48,7 +48,7 @@
     "faq": "Respuestas a las dudas más comunes sobre la plataforma y el barrio.",
     "creator": "Quién creó esta plataforma y cómo contactarla.",
     "help": "Cómo usar la plataforma: navegación, accesibilidad, idioma y contacto.",
-    "access": "Inicia sesión para crear, editar o calificar lugares."
+    "access": "Inicia sesión o crea una cuenta de visitante para calificar lugares."
   },
   "categories": {
     "module": "Módulo {{id}}",
@@ -503,7 +503,8 @@
     "needAdmin": "Para crear, editar o eliminar necesitas una cuenta de administración.",
     "errors": {
       "CONFLICT": "Ya existe un registro con ese código.",
-      "VALIDATION_ERROR": "La API rechazó algún dato: revisa el formulario."
+      "VALIDATION_ERROR": "La API rechazó algún dato: revisa el formulario.",
+      "FORBIDDEN": "Esta acción es solo para la cuenta de administración."
     },
     "add": "Agregar lugar",
     "edit": "Editar",
@@ -556,6 +557,40 @@
         "enciclopedia": "Enciclopedia",
         "comunitaria": "Archivo comunitario"
       }
+    }
+  },
+  "auth": {
+    "title": "Iniciar sesión",
+    "description": "Con una cuenta puedes calificar lugares; la de administración también crea, edita y elimina.",
+    "mode": "Elige una opción",
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "createAccount": "Crear cuenta",
+    "loginHint": "Usa el correo y la contraseña de tu cuenta.",
+    "registerHint": "Las cuentas nuevas son de visitante: permiten calificar lugares.",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "passwordHint": "De 8 a 72 caracteres.",
+    "account": "Tu cuenta",
+    "role": "Rol",
+    "roles": {
+      "admin": "Administración",
+      "visitante": "Visitante"
+    },
+    "permissions": {
+      "admin": "Puedes crear, editar y eliminar lugares en los 14 módulos, gestionar fotos y calificar.",
+      "visitante": "Puedes consultar todo y calificar lugares. Crear, editar o eliminar es solo para administración."
+    },
+    "errors": {
+      "email": "Escribe un correo válido",
+      "passwordMin": "Mínimo 8 caracteres",
+      "passwordMax": "Máximo 72 bytes (las tildes y la ñ cuentan doble)",
+      "INVALID_CREDENTIALS": "Correo o contraseña incorrectos.",
+      "EMAIL_TAKEN": "Ya existe una cuenta con ese correo.",
+      "TOO_MANY_ATTEMPTS": "Demasiados intentos. Espera unos minutos y vuelve a probar.",
+      "VALIDATION_ERROR": "Revisa los datos del formulario.",
+      "NETWORK_ERROR": "No se pudo conectar con el servidor."
     }
   }
 }

@@ -2,6 +2,8 @@
 import type { ModuleItem, Photo, RatingSummary } from '../lib/apiTypes';
 import type { MockResponse } from './mockApi';
 import { BASE_MAP, page } from './moduleFixtures';
+import type { Usuario } from '../features/auth/authApi';
+import { sessionAs, VISITANTE } from './authFixtures';
 
 export const BARBERIA: ModuleItem = {
   id: 3, nombre: 'Barbería Kings', servicios: 'Corte, barba', direccion: null, horario: null,
@@ -22,9 +24,11 @@ export const SUMMARY: RatingSummary = {
 const features = { body: { type: 'FeatureCollection', features: [] } };
 
 /** Rutas de la barbería; `ratings` decide qué responde el POST de calificaciones. */
-export function barberiaRoutes(ratings: (init?: RequestInit) => MockResponse, photos: Photo[] = PHOTOS) {
+export function barberiaRoutes(ratings: (init?: RequestInit) => MockResponse, photos: Photo[] = PHOTOS,
+  user: Usuario | null = VISITANTE) {
   return {
     ...BASE_MAP,
+    ...sessionAs(user),
     '/barberias': page([BARBERIA]),
     '/barberias/geojson': features,
     '/barberias/3': { body: BARBERIA },

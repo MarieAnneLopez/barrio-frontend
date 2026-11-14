@@ -48,7 +48,7 @@
     "faq": "Answers to the most common questions about the platform and the neighborhood.",
     "creator": "Who created this platform and how to contact her.",
     "help": "How to use the platform: navigation, accessibility, language and contact.",
-    "access": "Sign in to create, edit or rate places."
+    "access": "Sign in or create a visitor account to rate places."
   },
   "categories": {
     "module": "Module {{id}}",
@@ -503,7 +503,8 @@
     "needAdmin": "Creating, editing or deleting requires an admin account.",
     "errors": {
       "CONFLICT": "A record with that code already exists.",
-      "VALIDATION_ERROR": "The API rejected some data: check the form."
+      "VALIDATION_ERROR": "The API rejected some data: check the form.",
+      "FORBIDDEN": "This action is for the admin account only."
     },
     "add": "Add place",
     "edit": "Edit",
@@ -556,6 +557,40 @@
         "enciclopedia": "Encyclopedia",
         "comunitaria": "Community archive"
       }
+    }
+  },
+  "auth": {
+    "title": "Sign in",
+    "description": "With an account you can rate places; the admin account can also create, edit and delete.",
+    "mode": "Choose an option",
+    "login": "Sign in",
+    "logout": "Sign out",
+    "createAccount": "Create account",
+    "loginHint": "Use your account's email and password.",
+    "registerHint": "New accounts are visitor accounts: they can rate places.",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "passwordHint": "8 to 72 characters.",
+    "account": "Your account",
+    "role": "Role",
+    "roles": {
+      "admin": "Administrator",
+      "visitante": "Visitor"
+    },
+    "permissions": {
+      "admin": "You can create, edit and delete places in all 14 modules, manage photos and rate.",
+      "visitante": "You can browse everything and rate places. Creating, editing or deleting is for administrators only."
+    },
+    "errors": {
+      "email": "Enter a valid email",
+      "passwordMin": "At least 8 characters",
+      "passwordMax": "At most 72 bytes (accented letters count double)",
+      "INVALID_CREDENTIALS": "Incorrect email or password.",
+      "EMAIL_TAKEN": "An account with that email already exists.",
+      "TOO_MANY_ATTEMPTS": "Too many attempts. Wait a few minutes and try again.",
+      "VALIDATION_ERROR": "Check the form fields.",
+      "NETWORK_ERROR": "Could not reach the server."
     }
   }
 }

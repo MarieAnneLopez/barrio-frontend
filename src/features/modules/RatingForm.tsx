@@ -2,11 +2,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { StarsInput } from '../../components/ui/StarsInput';
 import { ApiError, apiSend } from '../../lib/apiClient';
+import { useAuthStore } from '../../store/authStore';
 import { ratingSchema, toPayload, type RatingInput, type RatingOutput } from './ratingSchema';
 
 interface RatingFormProps {
@@ -14,9 +14,9 @@ interface RatingFormProps {
   onRated: () => void;
 }
 
-type Status = { kind: 'idle' } | { kind: 'done' } | { kind: 'auth' } | { kind: 'error'; message: string };
+type Status = { kind: 'idle' } | { kind: 'done' } | { kind: 'error'; message: string };
 
-/** Formulario de reseña validado con zod; sin sesión, ofrece iniciarla. */
+/** Formulario de reseña validado con zod; si la sesión vence (401), pide iniciarla de nuevo. */
 export function RatingForm({ path, onRated }: RatingFormProps) {
   const { t } = useTranslation();
   const [status, setStatus] = useState<Status>({ kind: 'idle' });
@@ -33,7 +33,7 @@ export function RatingForm({ path, onRated }: RatingFormProps) {
       setStatus({ kind: 'done' });
       onRated();
     } catch (error) {
-      if (error instanceof ApiError && error.status === 401) setStatus({ kind: 'auth' });
+      if (error instanceof ApiError && error.status === 401) useAuthStore.getState().expire();
       else setStatus({ kind: 'error', message: error instanceof Error ? error.message : String(error) });
     }
   };
@@ -56,12 +56,6 @@ export function RatingForm({ path, onRated }: RatingFormProps) {
       <p aria-live="polite" className="m-0 text-step--1 text-fg-secondary">
         {status.kind === 'done' ? t('ratings.thanks') : null}
         {status.kind === 'error' ? status.message : null}
-        {status.kind === 'auth' ? (
-          <>
-            {t('ratings.needLogin')}{' '}
-            <Link to="/acceso" className="text-accent underline underline-offset-4">{t('ratings.login')}</Link>
-          </>
-        ) : null}
       </p>
     </form>
   );

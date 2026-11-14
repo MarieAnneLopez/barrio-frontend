@@ -1,6 +1,7 @@
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
+import { ADMIN } from '../../test/authFixtures';
 import { BARBERIA, barberiaRoutes } from '../../test/engagementFixtures';
 import { callsTo, mockApi, type MockResponse } from '../../test/mockApi';
 import { page } from '../../test/moduleFixtures';
@@ -14,7 +15,7 @@ function writableRoutes(sent: Sent[], answer: MockResponse = { status: 201, body
     sent.push({ method: init?.method, path: url.pathname, body: init?.body ? JSON.parse(String(init.body)) : undefined });
     return answer;
   };
-  const routes = barberiaRoutes(() => ({ body: {} }));
+  const routes = barberiaRoutes(() => ({ body: {} }), undefined, ADMIN);
   return {
     ...routes,
     '/barberias': (url: URL, init?: RequestInit) => (init?.method ? record(url, init) : page([BARBERIA])),
@@ -51,7 +52,7 @@ describe('Crear, editar y eliminar', () => {
     expect(callsTo(fetchMock, '/barberias').length).toBeGreaterThanOrEqual(3);
   });
 
-  it('sin sesión de administración (401) lo explica y ofrece iniciarla', async () => {
+  it('si la sesión vence (401) abre el diálogo para iniciarla de nuevo', async () => {
     mockApi(writableRoutes([], { status: 401, body: { error: { code: 'AUTH_REQUIRED', message: 'x' } } }));
     renderRoute('/categorias/barberias');
     await userEvent.click(await screen.findByRole('button', { name: 'Agregar lugar' }));
@@ -62,7 +63,8 @@ describe('Crear, editar y eliminar', () => {
     await userEvent.type(within(form).getByLabelText('Latitud *'), '4.65');
     await userEvent.click(within(form).getByRole('button', { name: 'Crear' }));
 
-    expect(await within(form).findByText(/necesitas una cuenta de administración/)).toBeInTheDocument();
+    expect(await screen.findByRole('dialog', { name: 'Iniciar sesión' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Agregar lugar' })).not.toBeInTheDocument();
   });
 
   it('edita desde la ficha con los datos precargados y elimina con confirmación', async () => {

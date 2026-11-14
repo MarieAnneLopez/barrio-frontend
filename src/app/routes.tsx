@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import type { RouteObject } from 'react-router-dom';
+import { AccessPage } from '../features/auth/AccessPage';
 import { ModulePage } from '../features/modules/ModulePage';
 import { CreatorPage } from '../features/pages/CreatorPage';
 import { FaqPage } from '../features/pages/FaqPage';
@@ -17,6 +18,7 @@ const DEDICATED: Record<string, ReactNode> = {
   creator: <CreatorPage />,
   ranking: <RankingsPage />,
   history: <HistoryPage />,
+  access: <AccessPage />,
 };
 
 /** Árbol de rutas: compartido por la app (BrowserRouter) y las pruebas (MemoryRouter). */

@@ -1,6 +1,7 @@
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
+import { AUTH_REQUIRED } from '../../test/authFixtures';
 import { barberiaRoutes } from '../../test/engagementFixtures';
 import { mockApi } from '../../test/mockApi';
 import { renderRoute, setViewport } from '../../test/renderRoute';
@@ -43,14 +44,24 @@ describe('Calificaciones en la ficha', () => {
     expect(sent).toEqual({ estrellas: 4.5, comentario: 'Excelente', autor_nombre: null });
   });
 
-  it('sin sesión (401) ofrece iniciar sesión', async () => {
-    mockApi(barberiaRoutes(() => ({ status: 401, body: { error: { code: 'AUTH_REQUIRED', message: 'x' } } })));
+  it('sin sesión pide iniciarla en lugar del formulario', async () => {
+    mockApi(barberiaRoutes(() => AUTH_REQUIRED, undefined, null));
+    const dialog = await openDetail();
+
+    expect(await within(dialog).findByText(/Para calificar necesitas iniciar sesión/)).toBeInTheDocument();
+    expect(within(dialog).queryByRole('button', { name: 'Enviar calificación' })).not.toBeInTheDocument();
+    await userEvent.click(within(dialog).getByRole('button', { name: 'Iniciar sesión' }));
+    expect(await screen.findByRole('dialog', { name: 'Iniciar sesión' })).toBeInTheDocument();
+  });
+
+  it('si la sesión vence (401) al calificar abre el diálogo', async () => {
+    mockApi(barberiaRoutes(() => AUTH_REQUIRED));
     const dialog = await openDetail();
 
     await userEvent.click(await within(dialog).findByRole('radio', { name: '5 estrellas' }));
     await userEvent.click(within(dialog).getByRole('button', { name: 'Enviar calificación' }));
 
-    expect(await within(dialog).findByRole('link', { name: 'Iniciar sesión' })).toHaveAttribute('href', '/acceso');
+    expect(await screen.findByRole('dialog', { name: 'Iniciar sesión' })).toBeInTheDocument();
   });
 });
 
