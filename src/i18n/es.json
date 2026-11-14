@@ -42,7 +42,7 @@
   },
   "pages": {
     "map": "Maqueta 3D de El Tintal con sus manzanas, vías y parques, y marcadores de los lugares del barrio.",
-    "history": "Historia del barrio El Tintal y de la Localidad de Kennedy, desde las haciendas de la sabana hasta hoy.",
+    "history": "Historia del barrio El Tintal y de la Localidad de Kennedy, de Ciudad Techo a hoy, con la fuente de cada dato.",
     "ranking": "Lugares del barrio ordenados por la calificación de sus visitantes, en general y por categoría.",
     "gallery": "Fotografías del entorno de El Tintal con su autor y licencia.",
     "faq": "Respuestas a las dudas más comunes sobre la plataforma y el barrio.",
@@ -517,5 +517,43 @@
     "list": "Lugares mejor calificados",
     "empty": "Todavía no hay lugares calificados en esta categoría.",
     "position": "Puesto {{position}}"
+  },
+  "history": {
+    "timeline": "Línea de tiempo",
+    "unverified": "Por verificar",
+    "flag": {
+      "title": "Bandera de la Localidad de Kennedy",
+      "alt": "Bandera de Kennedy: tres franjas horizontales iguales, amarilla arriba, blanca en el centro y verde abajo.",
+      "design": "Tres franjas horizontales del mismo alto:",
+      "stripes": {
+        "yellow": "Amarilla, arriba.",
+        "white": "Blanca, en el centro.",
+        "green": "Verde, abajo."
+      },
+      "note": "el diseño viene de Wikimedia Commons, que cita una página archivada de la Alcaldía Local de Kennedy. No encontramos el acto oficial que adopta la bandera ni la explicación oficial del significado de sus colores, así que no damos una interpretación heráldica."
+    },
+    "indicators": {
+      "title": "Kennedy y El Tintal en cifras",
+      "population": "Habitantes de Kennedy (proyección 2026)",
+      "area": "Superficie de Kennedy (km²)",
+      "lots": "Lotes catastrales en El Tintal",
+      "greenAreas": "Parques y zonas verdes en El Tintal",
+      "note": "Población: proyección de la Secretaría Distrital de Salud. Superficie: calculada del límite de la localidad en OpenStreetMap. Lotes y zonas verdes: registros de esta plataforma."
+    },
+    "locator": {
+      "title": "Ubicación dentro de Kennedy",
+      "label": "Mapa de la Localidad de Kennedy con el barrio El Tintal resaltado al noroccidente.",
+      "kennedy": "Localidad de Kennedy",
+      "tintal": "El Tintal (UPZ 78 y 79)"
+    },
+    "sources": {
+      "title": "Fuentes",
+      "consulted": "Fuentes consultadas el {{date}}. Los hitos sin fuente oficial se marcan «Por verificar».",
+      "type": {
+        "oficial": "Fuente oficial del Distrito",
+        "enciclopedia": "Enciclopedia",
+        "comunitaria": "Archivo comunitario"
+      }
+    }
   }
 }

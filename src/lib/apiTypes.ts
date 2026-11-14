@@ -60,3 +60,28 @@ export interface RankingEntry {
   promedio: number;
   total: number;
 }
+
+/** Hito de la línea de tiempo (GET /historia); verified=false = «por verificar». */
+export interface Hito {
+  id: number;
+  anio: number;
+  orden: number;
+  titulo: string;
+  descripcion: string;
+  source_ref: string | null;
+  verified: boolean;
+}
+
+export interface Fuente {
+  url: string;
+  titulo: string;
+  entidad: string;
+  tipo: 'oficial' | 'enciclopedia' | 'comunitaria';
+  nota: string | null;
+}
+
+export interface Historia {
+  consultado: string;
+  hitos: Hito[];
+  fuentes: Fuente[];
+}

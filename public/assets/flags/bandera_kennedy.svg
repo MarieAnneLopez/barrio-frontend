@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9 6" width="900" height="600" role="img" aria-labelledby="titulo">
+  <title id="titulo">Bandera de la Localidad de Kennedy: franjas horizontales amarilla, blanca y verde (por verificar)</title>
+  <!-- Diseño según Wikimedia Commons: Bandera_de_kennedy_(bogotá).png y Flag_of_Kennedy_(bogotá).svg (D55). -->
+  <rect width="9" height="2" y="0" fill="#FCDF28"/>
+  <rect width="9" height="2" y="2" fill="#FFFFFF"/>
+  <rect width="9" height="2" y="4" fill="#00AB41"/>
+</svg>

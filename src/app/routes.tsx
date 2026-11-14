@@ -3,6 +3,7 @@ import type { RouteObject } from 'react-router-dom';
 import { ModulePage } from '../features/modules/ModulePage';
 import { CreatorPage } from '../features/pages/CreatorPage';
 import { FaqPage } from '../features/pages/FaqPage';
+import { HistoryPage } from '../features/history/HistoryPage';
 import { HomePage } from '../features/pages/HomePage';
 import { NotFoundPage } from '../features/pages/NotFoundPage';
 import { RankingsPage } from '../features/ranking/RankingsPage';
@@ -15,6 +16,7 @@ const DEDICATED: Record<string, ReactNode> = {
   faq: <FaqPage />,
   creator: <CreatorPage />,
   ranking: <RankingsPage />,
+  history: <HistoryPage />,
 };
 
 /** Árbol de rutas: compartido por la app (BrowserRouter) y las pruebas (MemoryRouter). */

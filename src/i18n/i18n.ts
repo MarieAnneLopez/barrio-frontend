@@ -1,6 +1,7 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { readPref, writePref } from '../lib/storage';
+import content from './content.en.json';
 import en from './en.json';
 import es from './es.json';
 
@@ -20,7 +21,9 @@ export function storedLanguage(): Language {
 }
 
 void i18n.use(initReactI18next).init({
-  resources: { es: { translation: es }, en: { translation: en } },
+  // "content": traducciones al inglés de textos que llegan de la API en español
+  // (hitos de la historia); en español se usa el texto de la API tal cual.
+  resources: { es: { translation: es }, en: { translation: en, content } },
   lng: storedLanguage(),
   fallbackLng: DEFAULT_LANGUAGE,
   supportedLngs: SUPPORTED_LANGUAGES,

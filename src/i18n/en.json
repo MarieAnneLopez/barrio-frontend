@@ -42,7 +42,7 @@
   },
   "pages": {
     "map": "3D model of El Tintal with its blocks, roads and parks, plus markers for places in the neighborhood.",
-    "history": "History of the El Tintal neighborhood and the Kennedy locality, from the savanna haciendas to today.",
+    "history": "History of the El Tintal neighborhood and the Kennedy Locality, from Ciudad Techo to today, with the source of every fact.",
     "ranking": "Neighborhood places sorted by visitor ratings, overall and by category.",
     "gallery": "Photos of the El Tintal area with their author and license.",
     "faq": "Answers to the most common questions about the platform and the neighborhood.",
@@ -517,5 +517,43 @@
     "list": "Top-rated places",
     "empty": "No rated places in this category yet.",
     "position": "Rank {{position}}"
+  },
+  "history": {
+    "timeline": "Timeline",
+    "unverified": "To be verified",
+    "flag": {
+      "title": "Flag of the Kennedy Locality",
+      "alt": "Flag of Kennedy: three equal horizontal stripes, yellow on top, white in the middle and green at the bottom.",
+      "design": "Three horizontal stripes of equal height:",
+      "stripes": {
+        "yellow": "Yellow, on top.",
+        "white": "White, in the middle.",
+        "green": "Green, at the bottom."
+      },
+      "note": "the design comes from Wikimedia Commons, which cites an archived page of the Kennedy Local Mayor's Office. We found neither the official act adopting the flag nor an official explanation of its colors, so we give no heraldic interpretation."
+    },
+    "indicators": {
+      "title": "Kennedy and El Tintal in numbers",
+      "population": "Kennedy residents (2026 projection)",
+      "area": "Area of Kennedy (km²)",
+      "lots": "Cadastral lots in El Tintal",
+      "greenAreas": "Parks and green areas in El Tintal",
+      "note": "Population: projection by the District Health Department. Area: computed from the locality boundary in OpenStreetMap. Lots and green areas: records on this platform."
+    },
+    "locator": {
+      "title": "Location within Kennedy",
+      "label": "Map of the Kennedy Locality with the El Tintal neighborhood highlighted in the northwest.",
+      "kennedy": "Kennedy Locality",
+      "tintal": "El Tintal (UPZ 78 and 79)"
+    },
+    "sources": {
+      "title": "Sources",
+      "consulted": "Sources consulted on {{date}}. Milestones without an official source are marked “To be verified”.",
+      "type": {
+        "oficial": "Official District source",
+        "enciclopedia": "Encyclopedia",
+        "comunitaria": "Community archive"
+      }
+    }
   }
 }
