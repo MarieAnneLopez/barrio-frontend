@@ -6,6 +6,7 @@ import type { ModuleItem } from '../../lib/apiTypes';
 import { labelOf, moduleFields } from '../../lib/moduleFields';
 import { displayValue, hasValue } from './displayValue';
 import { Gallery } from './Gallery';
+import { ItemActions } from './ItemActions';
 import { RatingPanel } from './RatingPanel';
 import { SourceLine } from './SourceLine';
 import { VerifiedBadge } from './VerifiedBadge';
@@ -14,10 +15,12 @@ interface ItemDetailModalProps {
   slug: string;
   itemId: number | null;
   onClose: () => void;
+  onEdit: (item: ModuleItem) => void;
+  onDeleted: () => void;
 }
 
 /** Ficha completa de un lugar: campos, verificación, fuente, galería y calificaciones. */
-export function ItemDetailModal({ slug, itemId, onClose }: ItemDetailModalProps) {
+export function ItemDetailModal({ slug, itemId, onClose, onEdit, onDeleted }: ItemDetailModalProps) {
   const { t, i18n } = useTranslation();
   const item = useApi<ModuleItem>(itemId === null ? null : `/${slug}/${itemId}`);
   const data = item.status === 'success' ? item.data : undefined;
@@ -49,6 +52,7 @@ export function ItemDetailModal({ slug, itemId, onClose }: ItemDetailModalProps)
           <SourceLine item={data} />
           <Gallery slug={slug} itemId={data.id} place={title} />
           <RatingPanel slug={slug} itemId={data.id} />
+          <ItemActions path={`/${slug}/${data.id}`} name={title} onEdit={() => onEdit(data)} onDeleted={onDeleted} />
         </div>
       ) : null}
     </Modal>

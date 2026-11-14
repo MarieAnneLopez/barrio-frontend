@@ -279,7 +279,8 @@
     "alcaldia_local": "Local mayor's office",
     "retos": "Challenges",
     "telefono_24_7": "24/7 phone",
-    "servicios": "Services"
+    "servicios": "Services",
+    "geometry": "Geometry (GeoJSON)"
   },
   "values": {
     "tipo": {
@@ -478,6 +479,35 @@
     "position": "{{current}} of {{total}}"
   },
   "forms": {
-    "max": "{{max}} characters at most"
+    "max": "{{max}} characters at most",
+    "required": "This field is required",
+    "pattern": "Invalid format",
+    "option": "Choose an option from the list",
+    "number": "Enter a number",
+    "integer": "Enter a whole number",
+    "min": "Minimum {{min}}",
+    "maxValue": "Maximum {{max}}",
+    "date": "Use a valid date",
+    "insideTintal": "Must fall inside El Tintal",
+    "geojson": "Paste a valid GeoJSON geometry",
+    "none": "No data",
+    "createTitle": "Add place",
+    "editTitle": "Edit place",
+    "requiredHint": "Fields marked * are required.",
+    "lon": "Longitude *",
+    "lat": "Latitude *",
+    "cancel": "Cancel",
+    "create": "Create",
+    "save": "Save changes",
+    "needAdmin": "Creating, editing or deleting requires an admin account.",
+    "errors": {
+      "CONFLICT": "A record with that code already exists.",
+      "VALIDATION_ERROR": "The API rejected some data: check the form."
+    },
+    "add": "Add place",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Yes, delete",
+    "confirmDelete": "Delete “{{name}}”? Its photos and ratings are deleted too."
   }
 }

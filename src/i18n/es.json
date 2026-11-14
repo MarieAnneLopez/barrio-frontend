@@ -279,7 +279,8 @@
     "alcaldia_local": "Alcaldía local",
     "retos": "Retos",
     "telefono_24_7": "Teléfono 24/7",
-    "servicios": "Servicios"
+    "servicios": "Servicios",
+    "geometry": "Geometría (GeoJSON)"
   },
   "values": {
     "tipo": {
@@ -478,6 +479,35 @@
     "position": "{{current}} de {{total}}"
   },
   "forms": {
-    "max": "Máximo {{max}} caracteres"
+    "max": "Máximo {{max}} caracteres",
+    "required": "Este campo es obligatorio",
+    "pattern": "Formato no válido",
+    "option": "Elige una opción de la lista",
+    "number": "Escribe un número",
+    "integer": "Escribe un número entero",
+    "min": "Mínimo {{min}}",
+    "maxValue": "Máximo {{max}}",
+    "date": "Usa una fecha válida",
+    "insideTintal": "Debe quedar dentro de El Tintal",
+    "geojson": "Pega una geometría GeoJSON válida",
+    "none": "Sin dato",
+    "createTitle": "Agregar lugar",
+    "editTitle": "Editar lugar",
+    "requiredHint": "Los campos con * son obligatorios.",
+    "lon": "Longitud *",
+    "lat": "Latitud *",
+    "cancel": "Cancelar",
+    "create": "Crear",
+    "save": "Guardar cambios",
+    "needAdmin": "Para crear, editar o eliminar necesitas una cuenta de administración.",
+    "errors": {
+      "CONFLICT": "Ya existe un registro con ese código.",
+      "VALIDATION_ERROR": "La API rechazó algún dato: revisa el formulario."
+    },
+    "add": "Agregar lugar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "confirm": "Sí, eliminar",
+    "confirmDelete": "¿Eliminar «{{name}}»? También se borran sus fotos y calificaciones."
   }
 }

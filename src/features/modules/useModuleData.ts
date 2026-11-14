@@ -13,5 +13,9 @@ export function useModuleData(slug: string, page: number, q: string, filters: Fi
   const features = useApi<ModuleFeatures>(`/${slug}/geojson`, { q, sort, ...filters });
   // 404 del endpoint del módulo = módulo aún no habilitado en la API (no es un fallo).
   const notLoaded = list.status === 'error' && list.error.status === 404;
-  return { list, features, notLoaded };
+  const refresh = () => {
+    list.retry();
+    features.retry();
+  };
+  return { list, features, notLoaded, refresh };
 }
