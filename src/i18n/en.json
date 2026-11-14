@@ -423,7 +423,7 @@
   },
   "chat": {
     "title": "Mini Marie",
-    "subtitle": "El Tintal assistant · local answers",
+    "subtitle": "El Tintal assistant · neighborhood data",
     "launcherOpen": "Open chat with Mini Marie",
     "launcherClose": "Close chat with Mini Marie",
     "close": "Close chat",
@@ -450,8 +450,10 @@
       "theft": "Let's go to {{name}}. These reports are for prevention, not alarm. In an emergency call 123.",
       "map": "The 3D map shows El Tintal's blocks, roads and parks with the places of each module.",
       "history": "Local History tells the story of El Tintal and the Kennedy district.",
-      "fallback": "For now I answer from a local repertoire: I can take you to the 14 modules, the 3D map, the history or Marie's contact. Soon I'll answer with the neighborhood's data."
-    }
+      "fallback": "Without a connection to the server I answer from a local repertoire: I can take you to the 14 modules, the 3D map, the history or Marie's contact."
+    },
+    "thinking": "Mini Marie is looking through the neighborhood data…",
+    "offline": "No connection to the server: answer from the local repertoire."
   },
   "ratings": {
     "title": "Ratings",

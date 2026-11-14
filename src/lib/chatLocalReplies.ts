@@ -1,6 +1,6 @@
-// Respuestas locales de Mini Marie mientras no existe /api/v1/chat (H13).
+// Respuestas locales de Mini Marie (H13). Desde H23 el chat usa /api/v1/chat
+// y este repertorio queda como respaldo cuando el servidor no responde.
 // Devuelven claves i18n, no textos: así cambian de idioma con la interfaz.
-// En H22 el ModelProvider del backend reemplaza este módulo.
 import { categoryPath } from './categoryConfig';
 
 export interface ChatAction {

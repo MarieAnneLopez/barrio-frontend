@@ -6,6 +6,7 @@ import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { Modal } from '../../components/ui/Modal';
 import { ApiError, apiSend } from '../../lib/apiClient';
+import { useAvatarStore } from '../../store/avatarStore';
 import type { ModuleItem } from '../../lib/apiTypes';
 import type { CategoryConfig } from '../../lib/categoryConfig';
 import { moduleFields } from '../../lib/moduleFields';
@@ -44,6 +45,7 @@ export function CrudFormModal({ category, item, open, onClose, onSaved }: CrudFo
       const body = toPayload(values, fields, geometry);
       if (creating) await apiSend('POST', `/${slug}`, body);
       else await apiSend('PATCH', `/${slug}/${item.id}`, body);
+      useAvatarStore.getState().dispatch({ type: 'CELEBRATE' });
       onSaved();
     } catch (error) {
       setFailure(error instanceof ApiError ? error : new ApiError(0, 'UNKNOWN', String(error)));

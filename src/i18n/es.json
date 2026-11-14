@@ -423,7 +423,7 @@
   },
   "chat": {
     "title": "Mini Marie",
-    "subtitle": "Asistente de El Tintal · respuestas locales",
+    "subtitle": "Asistente de El Tintal · datos del barrio",
     "launcherOpen": "Abrir chat con Mini Marie",
     "launcherClose": "Cerrar chat con Mini Marie",
     "close": "Cerrar chat",
@@ -450,8 +450,10 @@
       "theft": "Te llevo a {{name}}. Son reportes para prevenir, no para alarmarte. En una emergencia llama al 123.",
       "map": "El mapa 3D muestra las manzanas, vías y parques de El Tintal con los lugares de cada módulo.",
       "history": "En Historia Local está el recorrido de El Tintal y de la Localidad de Kennedy.",
-      "fallback": "Por ahora respondo con un repertorio local: puedo llevarte a los 14 módulos, al mapa 3D, a la historia o al contacto de Marie. Pronto responderé con los datos del barrio."
-    }
+      "fallback": "Sin conexión con el servidor respondo con un repertorio local: puedo llevarte a los 14 módulos, al mapa 3D, a la historia o al contacto de Marie."
+    },
+    "thinking": "Mini Marie está buscando en los datos del barrio…",
+    "offline": "Sin conexión con el servidor: respuesta del repertorio local."
   },
   "ratings": {
     "title": "Calificaciones",

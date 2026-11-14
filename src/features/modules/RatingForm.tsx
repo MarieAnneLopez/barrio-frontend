@@ -7,6 +7,7 @@ import { Input } from '../../components/ui/Input';
 import { StarsInput } from '../../components/ui/StarsInput';
 import { ApiError, apiSend } from '../../lib/apiClient';
 import { useAuthStore } from '../../store/authStore';
+import { useAvatarStore } from '../../store/avatarStore';
 import { ratingSchema, toPayload, type RatingInput, type RatingOutput } from './ratingSchema';
 
 interface RatingFormProps {
@@ -31,10 +32,14 @@ export function RatingForm({ path, onRated }: RatingFormProps) {
       await apiSend('POST', path, toPayload(values));
       reset({ comentario: '', autor_nombre: '' });
       setStatus({ kind: 'done' });
+      useAvatarStore.getState().dispatch({ type: 'CELEBRATE' });
       onRated();
     } catch (error) {
       if (error instanceof ApiError && error.status === 401) useAuthStore.getState().expire();
-      else setStatus({ kind: 'error', message: error instanceof Error ? error.message : String(error) });
+      else {
+        setStatus({ kind: 'error', message: error instanceof Error ? error.message : String(error) });
+        useAvatarStore.getState().dispatch({ type: 'ERROR' });
+      }
     }
   };
 

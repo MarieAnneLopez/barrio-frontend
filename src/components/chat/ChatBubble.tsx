@@ -13,6 +13,11 @@ interface ChatBubbleProps {
   onNavigate: () => void;
 }
 
+interface QuickAction {
+  to: string;
+  label: string;
+}
+
 /** Traduce los parámetros guardados como claves (módulo, sección). */
 function resolveParams(t: TFunction, params: LocalReply['params'] = {}) {
   const values: Record<string, string> = { ...params };
@@ -32,37 +37,46 @@ export function ChatBubble({ message, animate, onNavigate }: ChatBubbleProps) {
       </div>
     );
   }
-  return <MarieBubble reply={message.reply} animate={animate} onNavigate={onNavigate} />;
+  if ('remote' in message) {
+    // El texto viene del servidor y se muestra como texto (React lo escapa): nunca como HTML.
+    const actions = message.remote.acciones.map((a) => ({ to: a.ruta, label: a.etiqueta }));
+    return <MarieBubble text={message.remote.texto} actions={actions} animate={animate} onNavigate={onNavigate} />;
+  }
+  const { reply } = message;
+  const actions = reply.action ? [{ to: reply.action.to, label: t(reply.action.labelKey) }] : [];
+  return (
+    <MarieBubble text={t(reply.key, resolveParams(t, reply.params))} actions={actions} animate={animate}
+      onNavigate={onNavigate} note={message.offline ? t('chat.offline') : undefined} />
+  );
 }
 
 interface MarieBubbleProps {
-  reply: LocalReply;
+  text: string;
+  actions: QuickAction[];
   animate: boolean;
   onNavigate: () => void;
+  note?: string | undefined;
 }
 
-function MarieBubble({ reply, animate, onNavigate }: MarieBubbleProps) {
+function MarieBubble({ text, actions, animate, onNavigate, note }: MarieBubbleProps) {
   const { t } = useTranslation();
-  const text = t(reply.key, resolveParams(t, reply.params));
   const shown = useTypewriter(text, animate);
   const typing = shown.length < text.length;
 
   return (
     <div className="chat-msg pixel-bubble max-w-[90%] self-start text-step--1">
-      <span className="sr-only">
-        {t('chat.title')}: {text}
-      </span>
-      <p aria-hidden="true" className="whitespace-pre-line">
-        {shown}
-      </p>
-      {reply.action && !typing ? (
-        <Link
-          to={reply.action.to}
-          onClick={onNavigate}
-          className="chat-action ui-pressable mt-2 inline-flex min-h-9 items-center rounded-md border border-line-strong px-3 text-step--1 text-accent no-underline"
-        >
-          {t('chat.go', { place: t(reply.action.labelKey) })}
-        </Link>
+      <span className="sr-only">{t('chat.title')}: {text}</span>
+      <p aria-hidden="true" className="whitespace-pre-line">{shown}</p>
+      {note && !typing ? <p className="mt-1 text-step--2 text-fg-muted">{note}</p> : null}
+      {!typing && actions.length ? (
+        <div className="mt-2 flex flex-wrap gap-2">
+          {actions.map((action) => (
+            <Link key={action.to} to={action.to} onClick={onNavigate}
+              className="chat-action ui-pressable inline-flex min-h-9 items-center rounded-md border border-line-strong px-3 text-step--1 text-accent no-underline">
+              {t('chat.go', { place: action.label })}
+            </Link>
+          ))}
+        </div>
       ) : null}
     </div>
   );

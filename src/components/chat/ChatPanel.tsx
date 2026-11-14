@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { useAvatarStore } from '../../store/avatarStore';
 import { useChatStore } from '../../store/chatStore';
@@ -7,8 +8,7 @@ import { AvatarSprite } from '../avatar/AvatarSprite';
 import { NavIcon } from '../layout/NavIcon';
 import { ChatBubble } from './ChatBubble';
 import { ChatInput } from './ChatInput';
-
-const SUGGESTIONS = ['q1', 'q2', 'q3', 'q4'] as const;
+import { ChatSuggestions } from './ChatSuggestions';
 
 interface ChatPanelProps {
   id: string;
@@ -20,9 +20,12 @@ interface ChatPanelProps {
 
 /** Panel del chat sobre --bg-surface (legible sobre cualquier fondo): cabecera pixel, conversación, sugerencias y campo. */
 export function ChatPanel({ id, titleId, inputRef, onClose, onNavigate }: ChatPanelProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { pathname } = useLocation();
   const messages = useChatStore((s) => s.messages);
-  const send = useChatStore((s) => s.send);
+  const pending = useChatStore((s) => s.pending);
+  const sendToStore = useChatStore((s) => s.send);
+  const send = (text: string) => void sendToStore(text, { idioma: i18n.language === 'en' ? 'en' : 'es', ruta: pathname });
   const avatar = useAvatarStore((s) => s.state);
   const reduced = useReducedMotion();
   const log = useRef<HTMLDivElement>(null);
@@ -32,7 +35,7 @@ export function ChatPanel({ id, titleId, inputRef, onClose, onNavigate }: ChatPa
   useEffect(() => {
     const node = log.current;
     if (node) node.scrollTop = node.scrollHeight;
-  }, [messages]);
+  }, [messages, pending]);
 
   return (
     <section
@@ -76,18 +79,10 @@ export function ChatPanel({ id, titleId, inputRef, onClose, onNavigate }: ChatPa
           />
         ))}
       </div>
-      <div role="group" aria-label={t('chat.suggestions')} className="flex gap-2 overflow-x-auto px-3 pb-2">
-        {SUGGESTIONS.map((key) => (
-          <button
-            key={key}
-            type="button"
-            onClick={() => send(t(`chat.suggested.${key}`))}
-            className="ui-pressable shrink-0 rounded-full border border-line-strong px-3 py-1.5 text-step--2 text-fg-secondary"
-          >
-            {t(`chat.suggested.${key}`)}
-          </button>
-        ))}
-      </div>
+      <p aria-live="polite" className="m-0 min-h-5 px-4 pb-1 text-step--2 text-fg-muted">
+        {pending ? t('chat.thinking') : ''}
+      </p>
+      <ChatSuggestions onPick={send} />
       <ChatInput onSend={send} inputRef={inputRef} />
     </section>
   );

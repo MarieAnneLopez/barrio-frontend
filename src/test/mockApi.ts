@@ -5,7 +5,7 @@ export interface MockResponse {
   body: unknown;
 }
 
-type Route = MockResponse | ((url: URL, init?: RequestInit) => MockResponse);
+type Route = MockResponse | ((url: URL, init?: RequestInit) => MockResponse | Promise<MockResponse>);
 
 /**
  * Sustituye fetch: cada ruta (pathname sin /api/v1) devuelve una respuesta fija
@@ -15,8 +15,9 @@ export function mockApi(routes: Record<string, Route>) {
   const fetchMock = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
     const url = new URL(String(input), 'http://localhost');
     const route = routes[url.pathname.replace(/^\/api\/v1/, '')];
+    // Una ruta puede responder tarde (promesa) para probar estados de espera.
     const result: MockResponse = typeof route === 'function'
-      ? route(url, init)
+      ? await route(url, init)
       : route ?? { status: 404, body: { error: { code: 'NOT_FOUND', message: 'Not Found' } } };
     return new Response(JSON.stringify(result.body), {
       status: result.status ?? 200,
