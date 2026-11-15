@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react';
 import { beforeEach, describe, expect, it } from 'vitest';
@@ -6,6 +6,7 @@ import { useA11yStore } from '../../store/a11yStore';
 import { useChatStore } from '../../store/chatStore';
 import { mockApi } from '../../test/mockApi';
 import { renderRoute, setViewport } from '../../test/renderRoute';
+import { SectionPage } from './SectionPage';
 
 beforeEach(() => {
   setViewport(true);
@@ -16,14 +17,10 @@ beforeEach(() => {
 });
 
 describe('Secciones en construcción y límite del chat (D62)', () => {
-  it.each([
-    ['/galeria', 'cada módulo muestra la galería', 'Ir a Zonas Verdes'],
-  ])('%s dice que está en construcción y lleva a lo que ya existe', async (path, text, link) => {
-    mockApi({});
-    renderRoute(path);
-    expect(await screen.findByText('En construcción')).toBeInTheDocument();
-    expect(screen.getByText(new RegExp(text))).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: link })).toBeInTheDocument();
+  it('una sección sin página propia dice que está en construcción', () => {
+    render(<SectionPage section="gallery" />);
+    expect(screen.getByText('En construcción')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'Galería General' })).toBeInTheDocument();
   });
 
   it('si el servidor limita los mensajes, el chat lo dice sin inventar respuesta', async () => {

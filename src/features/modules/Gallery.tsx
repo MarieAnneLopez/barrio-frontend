@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useApi } from '../../hooks/useApi';
 import type { Photo } from '../../lib/apiTypes';
+import { photoSet } from '../../lib/photoUrls';
 import { GalleryLightbox } from './GalleryLightbox';
 
 /** Miniaturas de las fotos locales del lugar; cada una abre el visor. */
@@ -26,7 +27,7 @@ export function Gallery({ slug, itemId, place }: { slug: string; itemId: number;
                 onClick={() => setOpen(index)}
                 className="ui-pressable block w-full overflow-hidden rounded-md border border-line"
               >
-                <img src={photo.url} alt={photo.alt_text} loading="lazy" className="aspect-square w-full object-cover" />
+                <img {...photoSet(photo.url)} sizes="160px" alt={photo.alt_text} loading="lazy" className="aspect-square w-full object-cover" />
                 <span className="sr-only">{t('gallery.open', { place })}</span>
               </button>
             </li>

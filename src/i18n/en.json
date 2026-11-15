@@ -602,8 +602,7 @@
   },
   "construction": {
     "badge": "Under construction",
-    "notice": "This section is under construction.",
-    "gallery": "Meanwhile, each module shows the gallery of its places in their detail view."
+    "notice": "This section is under construction."
   },
   "help": {
     "sections": {
@@ -642,5 +641,12 @@
     "thematic": "Thematic maps",
     "thematicIntro": "Each module has its own map with places marked by their emoji, filters and a detail view for every site.",
     "note": "Blocks, streets, parks and buildings from OpenStreetMap (ODbL). Here El Tintal is UPZ 78 plus UPZ 79 (662 ha): an operational definition, not an official administrative unit."
+  },
+  "galleryPage": {
+    "note": "Only real photos from Wikimedia Commons with a free license, stored on the platform with their author and license. Places without a free photo show none: no photos are made up.",
+    "places": "Neighborhood places",
+    "module": "See in {{module}}",
+    "views": "Views of the neighborhood",
+    "empty": "There are no photos of places yet."
   }
 }

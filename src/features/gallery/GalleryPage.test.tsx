@@ -1,0 +1,63 @@
+import { screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { beforeEach, describe, expect, it } from 'vitest';
+import type { GalleryPhoto } from '../../lib/apiTypes';
+import { mockApi } from '../../test/mockApi';
+import { renderRoute, setViewport } from '../../test/renderRoute';
+
+const COMMONS = 'https://commons.wikimedia.org/wiki/File:Campus.jpg';
+const photo = (id: number, url: string, nombre: string, extra: Partial<GalleryPhoto> = {}): GalleryPhoto => ({
+  id, url, alt_text: `Foto ${id} de ${nombre}`, orden: id, autor: 'Futbolero', licencia: 'CC BY-SA 4.0',
+  source_ref: COMMONS, categoria_slug: 'estaciones-transporte', objeto_id: 85, nombre, ...extra,
+});
+const PHOTOS = [
+  photo(1, '/assets/photos/lugares/campus-tagaste-1280.webp', 'Universidad Agustiniana'),
+  photo(2, '/assets/photos/carrusel/biblioteca-exterior-1280.webp', 'Biblioteca El Tintal',
+    { objeto_id: 112, autor: 'ArmandoCasitasS', licencia: 'CC BY 4.0' }),
+];
+const body = (items: GalleryPhoto[]) => ({ body: { items, total: items.length, page: 1, size: 100, pages: 1 } });
+
+beforeEach(() => setViewport(true));
+
+describe('Galería General (/galeria, D66)', () => {
+  it('agrupa las fotos por lugar con autor, licencia, fuente y enlace al módulo', async () => {
+    mockApi({ '/fotos': body(PHOTOS) });
+    const { container } = renderRoute('/galeria');
+    expect(await screen.findByRole('heading', { level: 1, name: 'Galería General' })).toBeInTheDocument();
+    expect(screen.queryByText('En construcción')).not.toBeInTheDocument();
+    const place = await screen.findByRole('region', { name: 'Universidad Agustiniana' });
+    expect(within(place).getByRole('img', { name: 'Foto 1 de Universidad Agustiniana' }))
+      .toHaveAttribute('src', '/assets/photos/lugares/campus-tagaste-640.webp');
+    expect(within(place).getByText('Foto: Futbolero')).toBeInTheDocument();
+    expect(within(place).getByRole('link', { name: 'Licencia CC BY-SA 4.0' }))
+      .toHaveAttribute('href', 'https://creativecommons.org/licenses/by-sa/4.0');
+    expect(within(place).getByRole('link', { name: 'Ver en Wikimedia Commons' })).toHaveAttribute('href', COMMONS);
+    expect(within(place).getByRole('link', { name: /Ver en Estaciones/ }))
+      .toHaveAttribute('href', '/categorias/estaciones-transporte');
+
+    const views = screen.getByRole('region', { name: 'Vistas del barrio' });
+    expect(within(views).getAllByRole('img')).toHaveLength(7); // la de la biblioteca ya está en su lugar
+    const { default: axe } = await import('axe-core');
+    const result = await axe.run(container, { rules: { 'color-contrast': { enabled: false } } });
+    expect(result.violations.map((v) => `${v.id}: ${v.nodes.length}`)).toEqual([]);
+  });
+
+  it('abre el visor de la foto con su crédito', async () => {
+    mockApi({ '/fotos': body(PHOTOS) });
+    renderRoute('/galeria');
+    await userEvent.click(await screen.findByRole('button', { name: /Ampliar foto de Biblioteca El Tintal/ }));
+    const dialog = await screen.findByRole('dialog', { name: 'Biblioteca El Tintal' });
+    expect(within(dialog).getByText(/Autor: ArmandoCasitasS · CC BY 4.0/)).toBeInTheDocument();
+  });
+
+  it('sin fotos de lugares lo dice, y si la API falla deja reintentar', async () => {
+    mockApi({ '/fotos': body([]) });
+    const first = renderRoute('/galeria');
+    expect(await screen.findByText('Todavía no hay fotos de lugares.')).toBeInTheDocument();
+    first.unmount();
+    mockApi({ '/fotos': { status: 500, body: { error: { code: 'X', message: 'x' } } } });
+    renderRoute('/galeria');
+    expect(await screen.findByRole('alert')).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Vistas del barrio' })).toBeInTheDocument();
+  });
+});

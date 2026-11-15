@@ -51,6 +51,15 @@ export interface Photo {
   orden: number;
   autor: string | null;
   licencia: string | null;
+  /** Página de origen (Wikimedia Commons) cuando la hay. */
+  source_ref?: string | null;
+}
+
+/** Foto de la Galería General con su lugar (D66). */
+export interface GalleryPhoto extends Photo {
+  categoria_slug: string;
+  objeto_id: number;
+  nombre: string;
 }
 
 export interface RankingEntry {
