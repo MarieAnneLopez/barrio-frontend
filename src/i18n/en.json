@@ -616,7 +616,9 @@
     }
   },
   "loading": {
-    "label": "Loading"
+    "label": "Loading",
+    "screen": "Loading El Tintal…",
+    "runner": "Mini Marie running"
   },
   "construction": {
     "badge": "Under construction",

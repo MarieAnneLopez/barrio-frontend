@@ -1,4 +1,4 @@
-/* Bienvenida: velo, avatares en anillo, letrero pixel "Hola" y confeti de la paleta (D6, D68). */
+/* Bienvenida: velo, Mini Marie asomadas, letrero pixel "Hola" y confeti de la paleta (D6, D68, H33). */
 .welcome-backdrop {
   position: absolute;
   inset: 0;
@@ -8,15 +8,50 @@
   backdrop-filter: blur(6px);
 }
 
-/* La ranura coloca (left/top + translate); GSAP anima solo el avatar interior,
-   así sus x/y no pisan el translate de colocación. */
-.welcome-slot {
+/* Mini Marie que se asoman (H33): la ranura las deja medio fuera del borde e
+   inclinadas; GSAP mueve solo el cuerpo interior, así no pisa esa colocación. */
+.welcome-peek {
   position: absolute;
-  transform: translate(-50%, -100%);
+  line-height: 0;
+  pointer-events: none;
 }
 
-.welcome-avatar {
+.welcome-peek[data-edge='left'] {
+  left: 0;
+  bottom: 6%;
+  transform: translateX(-30%) rotate(9deg);
+  transform-origin: 0 100%;
+}
+
+.welcome-peek[data-edge='right'] {
+  right: 0;
+  bottom: 12%;
+  transform: translateX(16%) rotate(-8deg);
+  transform-origin: 100% 100%;
+}
+
+/* La de abajo solo saca la cabeza: no tapa el letrero ni el botón. */
+.welcome-peek[data-edge='bottom'] {
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 64%);
+}
+
+.welcome-peek__body {
   display: block;
+}
+
+/* Móvil: más hacia los bordes y abajo, lejos del letrero y del botón. */
+@media (max-width: 640px) {
+  .welcome-peek[data-edge='left'] {
+    bottom: -2%;
+    transform: translateX(-36%) rotate(9deg);
+  }
+
+  .welcome-peek[data-edge='right'] {
+    bottom: 0;
+    transform: translateX(34%) rotate(-8deg);
+  }
 }
 
 .welcome-sign {

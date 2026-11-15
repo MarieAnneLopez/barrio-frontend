@@ -68,7 +68,7 @@ describe('Progreso real de las cargas (H24)', () => {
     const bar = screen.getByRole('progressbar', { name: 'Cargando' });
     expect(bar).toHaveAttribute('aria-valuenow', '60');
     expect(bar).toHaveClass('pointer-events-none');
-    expect(bar.querySelector('.avatar')).toHaveAttribute('data-state', 'run');
+    expect(bar.querySelector('.sequence')).toHaveAttribute('data-sequence', 'run');
     expect(bar.querySelector<HTMLElement>('.loading-bar__fill')?.style.transform).toBe('scaleX(0.6)');
   });
 });

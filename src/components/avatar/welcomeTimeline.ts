@@ -1,13 +1,13 @@
-// Coreografía de la bienvenida (§11.4.3) con GSAP. Principal: el letrero "Hola";
-// apoyo: las 8 Mini Marie (casi simultáneas) y el botón; decoración: confeti.
+// Coreografía de la bienvenida (§11.4.3, H33) con GSAP. Principal: el letrero "Hola";
+// apoyo: las Mini Marie que se asoman desde los bordes y el botón; decoración: confeti.
+// Solo transform y opacity.
 import gsap from 'gsap';
+import { peekStart, type PeekEdge } from './welcomeGeometry';
 
-/** Desfases pequeños y distintos: "simultáneas" sin sonar a metrónomo. */
-const AVATAR_OFFSETS = [0, 0.04, 0.02, 0.06, 0.01, 0.05, 0.03, 0.045];
+/** Desfases cortos y distintos: llegan casi juntas, sin sonar a metrónomo. */
+const PEEK_OFFSETS = [0, 0.07, 0.12];
 
 export interface WelcomeGeometry {
-  /** Vector desde fuera de la pantalla hasta la posición final de cada avatar. */
-  avatarStarts: readonly { x: number; y: number }[];
   confettiTargets: readonly { x: number; y: number }[];
 }
 
@@ -15,25 +15,25 @@ export function playWelcome(root: HTMLElement, geometry: WelcomeGeometry, reduce
   const q = gsap.utils.selector(root);
   const tl = gsap.timeline();
   if (reduced) {
-    // Movimiento reducido: todo aparece junto, solo con opacidad.
+    // Movimiento reducido: todo aparece junto, solo con opacidad; las poses quedan fijas.
     tl.fromTo(root, { opacity: 0 }, { opacity: 1, duration: 0.2, ease: 'power1.out' });
     tl.set(q('.welcome-confetti'), { opacity: 0 }, 0);
     return tl;
   }
   tl.fromTo(q('.welcome-backdrop'), { opacity: 0 }, { opacity: 1, duration: 0.24, ease: 'power2.out' }, 0);
-  q('.welcome-avatar').forEach((element, i) => {
-    const start = geometry.avatarStarts[i] ?? { x: 0, y: 0 };
+  q('.welcome-peek__body').forEach((element, i) => {
+    const start = peekStart((element.dataset.edge ?? 'left') as PeekEdge);
     tl.fromTo(
       element,
-      { x: start.x, y: start.y, opacity: 0 },
-      { x: 0, y: 0, opacity: 1, duration: 0.9, ease: 'elastic.out(1, 0.6)' },
-      AVATAR_OFFSETS[i] ?? 0,
+      { ...start, opacity: 0 },
+      { xPercent: 0, yPercent: 0, opacity: 1, duration: 0.7, ease: 'back.out(1.4)' },
+      PEEK_OFFSETS[i] ?? 0,
     );
   });
   tl.fromTo(
     q('.welcome-letter'),
-    { opacity: 0, scale: 0.6, filter: 'blur(8px)' },
-    { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 0.6, ease: 'elastic.out(1, 0.55)', stagger: 0.08 },
+    { opacity: 0, scale: 0.6 },
+    { opacity: 1, scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.55)', stagger: 0.08 },
     0.12,
   );
   tl.fromTo(q('.welcome-cta'), { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, 0.45);

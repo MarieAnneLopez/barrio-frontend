@@ -1,0 +1,65 @@
+/* Pantalla de carga (H33): solo transform y opacity. */
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6, 1.5rem);
+  transition: opacity var(--dur-3) ease-out; /* = SCREEN_LEAVE_MS (240 ms) */
+}
+
+.loading-screen[data-leaving] {
+  opacity: 0;
+}
+
+.loading-screen__stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(100%, 720px);
+  overflow: hidden;
+}
+
+/* Suelo: franja de adoquines que pasa hacia la izquierda; ella corre en su sitio. */
+.loading-screen__ground {
+  width: calc(100% + 64px);
+  height: 16px;
+  align-self: flex-start;
+  background-color: var(--palette-vino);
+  background-image: repeating-linear-gradient(90deg, var(--palette-rosa) 0 28px, transparent 28px 32px);
+  background-size: 64px 6px;
+  background-repeat: repeat-x;
+  background-position: 0 0;
+  animation: loading-ground 720ms linear infinite; /* = una zancada (8 × 90 ms) */
+}
+
+@keyframes loading-ground {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-64px);
+  }
+}
+
+.loading-screen__text {
+  margin: 0;
+  padding: 0.5rem 1rem;
+  font-family: var(--ff-pixel);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #fff;
+  background-color: var(--palette-vino); /* blanco sobre vino: 11,44:1 */
+}
+
+/* Movimiento reducido: pose fija y suelo quieto; el fundido de salida se mantiene. */
+@media (prefers-reduced-motion: reduce) {
+  .loading-screen__ground {
+    animation: none;
+  }
+}
+
+:root.reduce-motion .loading-screen__ground {
+  animation: none;
+}

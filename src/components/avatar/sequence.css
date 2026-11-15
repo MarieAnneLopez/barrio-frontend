@@ -1,0 +1,39 @@
+/* SequenceSprite (H33): ventana de un cuadro; la tira se desliza con transform. */
+.sequence {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.sequence__strip {
+  display: block;
+  height: 100%;
+  max-width: none;
+  user-select: none;
+}
+
+.sequence[data-playing] .sequence__strip {
+  animation-name: sequence-play;
+  animation-iteration-count: infinite;
+}
+
+@keyframes sequence-play {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* Respaldo si el sistema pide menos movimiento antes de que React lo lea. */
+@media (prefers-reduced-motion: reduce) {
+  .sequence[data-playing] .sequence__strip {
+    animation: none;
+  }
+}
+
+:root.reduce-motion .sequence[data-playing] .sequence__strip {
+  animation: none;
+}

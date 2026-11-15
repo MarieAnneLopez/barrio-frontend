@@ -616,7 +616,9 @@
     }
   },
   "loading": {
-    "label": "Cargando"
+    "label": "Cargando",
+    "screen": "Cargando El Tintal…",
+    "runner": "Mini Marie corriendo"
   },
   "construction": {
     "badge": "En construcción",

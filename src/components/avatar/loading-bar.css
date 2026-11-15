@@ -36,19 +36,6 @@
   left: 0;
 }
 
-/* Estado run del avatar (solo aquí): frame_4 ↔ frame_2 cada 150 ms con el mismo rebote del paso. */
-.avatar[data-state='run'] .avatar__frame:not([data-alt-frame]) {
-  animation: avatar-swap 300ms infinite;
-}
-
-.avatar[data-state='run'] .avatar__frame[data-alt-frame] {
-  animation: avatar-swap 300ms -150ms infinite;
-}
-
-.avatar[data-state='run'] .avatar__body {
-  animation: avatar-step 150ms ease-in-out infinite alternate;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .loading-bar,
   .loading-bar__fill,

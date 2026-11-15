@@ -1,44 +1,37 @@
-// Posiciones de la bienvenida: 8 Mini Marie desde los 8 puntos cardinales del
-// viewport hasta un anillo seguro alrededor del letrero (sin taparlo).
+// Posiciones de la bienvenida (H33): Mini Marie grandes que se asoman desde los
+// bordes de la pantalla y saludan con los 7 cuadros que dibujó Marie.
 import type { WelcomeGeometry } from './welcomeTimeline';
 
-/** Dirección de cada punto: 4 esquinas, 2 laterales y centro arriba/abajo. */
-export const WELCOME_SLOTS = [
-  { id: 'sup-izq', dx: -1, dy: -1 },
-  { id: 'sup-centro', dx: 0, dy: -1 },
-  { id: 'sup-der', dx: 1, dy: -1 },
-  { id: 'centro-der', dx: 1, dy: 0 },
-  { id: 'inf-der', dx: 1, dy: 1 },
-  { id: 'inf-centro', dx: 0, dy: 1 },
-  { id: 'inf-izq', dx: -1, dy: 1 },
-  { id: 'centro-izq', dx: -1, dy: 0 },
-] as const;
+export type PeekEdge = 'left' | 'right' | 'bottom';
 
-const RING_X = 0.36; // fracción del ancho desde el centro
-const RING_Y = 0.32; // fracción del alto desde el centro
-const CONFETTI = 28;
+/**
+ * pose: cuadro fijo con movimiento reducido (índice desde 0; 2 = brazo arriba).
+ * phase: desfase dentro del saludo (0–1), para que no se muevan al unísono.
+ * mobile: en pantallas estrechas solo se asoman las de los lados.
+ */
+export const PEEK_SLOTS = [
+  { id: 'izquierda', edge: 'left', pose: 2, phase: 0, mobile: true },
+  { id: 'derecha', edge: 'right', pose: 3, phase: 0.35, mobile: true },
+  { id: 'abajo', edge: 'bottom', pose: 4, phase: 0.6, mobile: false },
+] as const satisfies readonly { id: string; edge: PeekEdge; pose: number; phase: number; mobile: boolean }[];
 
-/** Posición final de cada avatar en % del contenedor (para left/top). */
-export function slotPosition(dx: number, dy: number): { left: string; top: string } {
-  const corner = dx !== 0 && dy !== 0 ? 0.85 : 1; // las esquinas, un poco hacia dentro
-  return {
-    left: `${50 + dx * RING_X * 100 * corner}%`,
-    top: `${50 + dy * RING_Y * 100 * corner}%`,
-  };
+/** Desde dónde entra cada una, en % de su propio tamaño (xPercent / yPercent de GSAP). */
+export function peekStart(edge: PeekEdge): { xPercent: number; yPercent: number } {
+  if (edge === 'left') return { xPercent: -95, yPercent: 0 };
+  if (edge === 'right') return { xPercent: 95, yPercent: 0 };
+  return { xPercent: 0, yPercent: 70 };
 }
 
+const CONFETTI = 28;
+
 export function welcomeGeometry(width: number, height: number): WelcomeGeometry {
-  const avatarStarts = WELCOME_SLOTS.map(({ dx, dy }) => ({
-    x: dx * width * 0.7,
-    y: (dy === 0 ? 0.15 : dy) * height * 0.7,
-  }));
   const reach = Math.min(width, height) * 0.38;
   const confettiTargets = Array.from({ length: CONFETTI }, (_, i) => {
     const angle = (i / CONFETTI) * Math.PI * 2 + (i % 3) * 0.09;
     const distance = reach * (0.55 + ((i * 37) % 45) / 100);
     return { x: Math.cos(angle) * distance, y: Math.sin(angle) * distance };
   });
-  return { avatarStarts, confettiTargets };
+  return { confettiTargets };
 }
 
 export const CONFETTI_COUNT = CONFETTI;

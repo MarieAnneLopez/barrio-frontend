@@ -1,0 +1,33 @@
+[
+  {
+    "name": "run",
+    "frames": 8,
+    "width": 196,
+    "height": 420,
+    "source": "corriendo.jpeg",
+    "seamCrossed": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "name": "wave",
+    "frames": 7,
+    "width": 327,
+    "height": 640,
+    "source": "saludando.jpeg",
+    "seamCrossed": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+]
