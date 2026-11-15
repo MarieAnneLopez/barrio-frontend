@@ -1,0 +1,59 @@
+/* Vista previa que lleva a Google Maps: mapa propio con la paleta D68, sin animación. */
+.maps-preview {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border: 2px solid var(--border-ink);
+  text-decoration: none;
+}
+
+.maps-preview__ground {
+  fill: var(--palette-piedra);
+}
+
+.maps-preview__parks {
+  fill: var(--palette-rosa);
+  fill-opacity: 0.55;
+}
+
+.maps-preview__blocks {
+  fill: var(--palette-ladrillo);
+  fill-opacity: 0.35;
+  stroke: var(--palette-ladrillo);
+  stroke-opacity: 0.5;
+  stroke-width: 0.6;
+}
+
+.maps-preview__roads {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.maps-preview__place {
+  fill: var(--palette-rosa);
+  fill-opacity: 0.6;
+  stroke: var(--palette-vino);
+  stroke-width: 3;
+}
+
+.maps-preview__pin {
+  fill: var(--palette-vino);
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+/* Placa del enlace: blanco sobre vino (11,44:1). */
+.maps-preview__label {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  padding: 0.25rem 0.625rem;
+  font-weight: 700;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: #fff;
+  background-color: var(--palette-vino);
+}

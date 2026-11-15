@@ -241,6 +241,13 @@
       "windows": "Usa Ctrl + rueda para acercar el mapa",
       "mac": "Usa ⌘ + rueda para acercar el mapa",
       "mobile": "Usa dos dedos para mover el mapa"
+    },
+    "maps": {
+      "section": "Ubicación en Google Maps",
+      "cta": "Ver en Google Maps",
+      "streetView": "Abrir Street View",
+      "newTab": "(se abre en una pestaña nueva)",
+      "attribution": "Vista previa: mapa de la plataforma con datos © OpenStreetMap."
     }
   },
   "fields": {

@@ -241,6 +241,13 @@
       "windows": "Use Ctrl + scroll to zoom the map",
       "mac": "Use ⌘ + scroll to zoom the map",
       "mobile": "Use two fingers to move the map"
+    },
+    "maps": {
+      "section": "Location on Google Maps",
+      "cta": "View on Google Maps",
+      "streetView": "Open Street View",
+      "newTab": "(opens in a new tab)",
+      "attribution": "Preview: the platform's own map with data © OpenStreetMap."
     }
   },
   "fields": {

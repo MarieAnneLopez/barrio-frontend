@@ -8,6 +8,7 @@ import { AuthGuard } from '../auth/AuthGuard';
 import { displayValue, hasValue } from './displayValue';
 import { Gallery } from './Gallery';
 import { ItemActions } from './ItemActions';
+import { MapsPreview } from './MapsPreview';
 import { RatingPanel } from './RatingPanel';
 import { SourceLine } from './SourceLine';
 import { VerifiedBadge } from './VerifiedBadge';
@@ -53,6 +54,7 @@ export function ItemDetailModal({ slug, itemId, onClose, onEdit, onDeleted }: It
               ))}
           </dl>
           <SourceLine item={data} />
+          <MapsPreview place={title} geometry={data.geometry} />
           <Gallery slug={slug} itemId={data.id} place={title} />
           <RatingPanel slug={slug} itemId={data.id} />
           <AuthGuard role="admin">
