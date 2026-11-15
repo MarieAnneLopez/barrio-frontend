@@ -252,7 +252,7 @@
     "fecha_instalacion": "Installation date",
     "area_m2": "Area (m²)",
     "arborizacion": "Tree cover",
-    "matricula_inmobiliaria": "Cadastral lot code",
+    "codigo_lote": "Cadastral lot code",
     "area_lote_m2": "Lot area (m²)",
     "area_construida_m2": "Built area (m²)",
     "pisos": "Floors",

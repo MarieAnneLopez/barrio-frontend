@@ -217,7 +217,7 @@
     ]
   },
   "datos-catastrales": {
-    "label": "matricula_inmobiliaria",
+    "label": "codigo_lote",
     "summary": [
       "estrato",
       "area_lote_m2",
@@ -225,7 +225,7 @@
     ],
     "fields": [
       {
-        "name": "matricula_inmobiliaria",
+        "name": "codigo_lote",
         "kind": "text",
         "required": true,
         "max": 40,

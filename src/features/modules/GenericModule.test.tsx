@@ -9,7 +9,7 @@ import { renderRoute, setViewport } from '../../test/renderRoute';
 
 const ring = [[-74.155, 4.643], [-74.154, 4.643], [-74.154, 4.644], [-74.155, 4.643]];
 const LOTE: ModuleItem = {
-  id: 7, matricula_inmobiliaria: '004601001001', estrato: 2, area_lote_m2: 48, uso: null,
+  id: 7, codigo_lote: '004601001001', estrato: 2, area_lote_m2: 48, uso: null,
   source_type: 'datos_abiertos', verified: true,
   source_ref: 'https://datosabiertos.bogota.gov.co/dataset/lote#LOTCODIGO=004601001001',
   geometry: { type: 'Polygon', coordinates: [ring] },

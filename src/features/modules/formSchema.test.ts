@@ -31,11 +31,11 @@ describe('buildFormSchema', () => {
     const base = Object.fromEntries(fields.map((f) => [f.name, '']));
     const schema = buildFormSchema(fields, 'POLYGON', false, t);
     const result = schema.safeParse({
-      ...base, matricula_inmobiliaria: '50C 1', pisos: '2.5', estrato: '7', area_lote_m2: '-3', geometry: '{nope',
+      ...base, codigo_lote: '50C 1', pisos: '2.5', estrato: '7', area_lote_m2: '-3', geometry: '{nope',
     });
 
     expect(issues(result)).toMatchObject({
-      matricula_inmobiliaria: 'Formato no válido', pisos: 'Escribe un número entero',
+      codigo_lote: 'Formato no válido', pisos: 'Escribe un número entero',
       estrato: 'Elige una opción de la lista', area_lote_m2: 'Mínimo 0', geometry: 'Pega una geometría GeoJSON válida',
     });
   });
@@ -55,7 +55,7 @@ describe('toPayload', () => {
   });
 
   it('estrato viaja como número y el punto como GeoJSON', () => {
-    const lot = toPayload({ matricula_inmobiliaria: '1', estrato: '2', pisos: '3' },
+    const lot = toPayload({ codigo_lote: '1', estrato: '2', pisos: '3' },
       moduleFields('datos-catastrales').fields, 'POLYGON');
     const shop = toPayload({ nombre: 'X', lon: '-74,155', lat: '4.643' }, moduleFields('barberias').fields, 'POINT');
 
