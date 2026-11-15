@@ -472,7 +472,8 @@
       "limit": "You've reached the message limit for now. Wait a few minutes and ask me again."
     },
     "thinking": "Mini Marie is looking through the neighborhood data…",
-    "offline": "No connection to the server: answer from the local repertoire."
+    "offline": "No connection to the server: answer from the local repertoire.",
+    "privacy": "Mini Marie writes with Gemini, Google's AI: don't share personal data."
   },
   "ratings": {
     "title": "Ratings",

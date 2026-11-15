@@ -472,7 +472,8 @@
       "limit": "Llegaste al límite de mensajes por ahora. Espera unos minutos y vuelve a preguntarme."
     },
     "thinking": "Mini Marie está buscando en los datos del barrio…",
-    "offline": "Sin conexión con el servidor: respuesta del repertorio local."
+    "offline": "Sin conexión con el servidor: respuesta del repertorio local.",
+    "privacy": "Mini Marie redacta con Gemini, la IA de Google: no escribas datos personales."
   },
   "ratings": {
     "title": "Calificaciones",

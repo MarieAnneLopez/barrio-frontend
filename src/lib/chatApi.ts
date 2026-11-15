@@ -1,4 +1,4 @@
-import { apiSend } from './apiClient';
+import { apiGet, apiSend } from './apiClient';
 
 /** Respuesta de POST /api/v1/chat (ModelProvider del backend, H22). Llega ya en el idioma pedido. */
 export interface RemoteReply {
@@ -22,4 +22,17 @@ export async function askMarie(mensaje: string, context: ChatContext): Promise<R
   const reply = await apiSend<RemoteReply>('POST', '/chat', { mensaje, ...context });
   if (!reply) throw new Error('Respuesta vacía del chat');
   return reply;
+}
+
+/** GET /api/v1/chat/estado (H36): proveedor externo que recibe los mensajes, o null. */
+export interface ChatStatus {
+  proveedor: 'gemini' | 'claude' | null;
+}
+
+let status: Promise<ChatStatus> | null = null;
+
+/** Una sola consulta por carga de la página; si falla, se asume sin proveedor externo. */
+export function chatStatus(): Promise<ChatStatus> {
+  status ??= apiGet<ChatStatus>('/chat/estado').catch(() => ({ proveedor: null }));
+  return status;
 }

@@ -8,6 +8,7 @@ import { AvatarSprite } from '../avatar/AvatarSprite';
 import { NavIcon } from '../layout/NavIcon';
 import { ChatBubble } from './ChatBubble';
 import { ChatInput } from './ChatInput';
+import { ChatPrivacyNotice } from './ChatPrivacyNotice';
 import { ChatSuggestions } from './ChatSuggestions';
 
 interface ChatPanelProps {
@@ -83,6 +84,7 @@ export function ChatPanel({ id, titleId, inputRef, onClose, onNavigate }: ChatPa
         {pending ? t('chat.thinking') : ''}
       </p>
       <ChatSuggestions onPick={send} />
+      <ChatPrivacyNotice />
       <ChatInput onSend={send} inputRef={inputRef} />
     </section>
   );
