@@ -15,6 +15,13 @@ export default defineConfig({
     channel: process.env.E2E_CHANNEL ?? 'msedge',
     viewport: { width: 1440, height: 900 },
   },
+  // G (H37): español e inglés, escritorio (1440) y celular (390).
+  projects: [
+    { name: 'es-1440', metadata: { lang: 'es' }, use: { viewport: { width: 1440, height: 900 } } },
+    { name: 'en-1440', metadata: { lang: 'en' }, use: { viewport: { width: 1440, height: 900 } } },
+    { name: 'es-390', metadata: { lang: 'es' }, use: { viewport: { width: 390, height: 844 }, hasTouch: true } },
+    { name: 'en-390', metadata: { lang: 'en' }, use: { viewport: { width: 390, height: 844 }, hasTouch: true } },
+  ],
   webServer: {
     command: `npm run build && npx vite preview --port ${PORT} --strictPort`,
     url: `http://localhost:${PORT}`,

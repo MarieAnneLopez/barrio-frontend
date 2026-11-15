@@ -22,16 +22,22 @@ async function go(page: Page, path: string) {
   await settle(page);
 }
 
-test('todas las rutas: entrar, salir, recargar y volver sin errores', async ({ page }) => {
+test('todas las rutas: entrar, salir, recargar y volver sin errores', async ({ page }, testInfo) => {
+  // G (H37): cada proyecto fija idioma y ancho (es/en × 390/1440 px).
+  const lang = (testInfo.project.metadata.lang as string | undefined) ?? 'es';
   const errors: string[] = [];
   let step = 'inicio';
   page.on('pageerror', (e) => errors.push(`${step} · pageerror · ${e.message}`));
   page.on('console', (m) => {
     if (m.type() === 'error') errors.push(`${step} · console · ${m.text().slice(0, 200)}`);
   });
-  await page.addInitScript(() => sessionStorage.setItem('mini-marie:welcome-seen', 'true'));
+  await page.addInitScript((l) => {
+    sessionStorage.setItem('mini-marie:welcome-seen', 'true');
+    localStorage.setItem('mini-marie:lang', l);
+  }, lang);
   await page.goto('/');
   await settle(page);
+  await expect(page.locator('html')).toHaveAttribute('lang', lang);
 
   for (const route of ROUTES) {
     step = `entrar ${route}`;
