@@ -3,7 +3,7 @@ import './map.css';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ModuleFeatures } from '../../lib/apiTypes';
-import { useA11yStore } from '../../store/a11yStore';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { Button } from '../ui/Button';
 import { Skeleton } from '../ui/Skeleton';
 import { useMapInstance } from './useMapInstance';
@@ -27,7 +27,7 @@ export default function ThematicMap({ slug, label, features, emoji, selectedId, 
   const container = useRef<HTMLDivElement>(null);
   const [attempt, setAttempt] = useState(0);
   const { map, status } = useMapInstance(container, attempt);
-  const reducedMotion = useA11yStore((s) => s.reducedMotion);
+  const reducedMotion = useReducedMotion(); // barra de accesibilidad o sistema (H30)
   useMarkers({ map, slug, features, emoji, selectedId, onSelect, reducedMotion });
   useShapes({ map, features, selectedId, onSelect, reducedMotion });
 

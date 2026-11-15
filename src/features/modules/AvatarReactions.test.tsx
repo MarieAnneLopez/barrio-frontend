@@ -23,10 +23,14 @@ async function openDetail() {
 }
 
 describe('Reacciones de Mini Marie a las acciones (H23)', () => {
-  it('salta de alegría al guardar una calificación', async () => {
+  it('salta de alegría al guardar 4,5 estrellas o más (§11.4.2), no con menos', async () => {
     mockApi(barberiaRoutes(() => ({ status: 201, body: {} })));
     const dialog = await openDetail();
     await userEvent.click(await within(dialog).findByRole('radio', { name: '4 estrellas' }));
+    await userEvent.click(within(dialog).getByRole('button', { name: 'Enviar calificación' }));
+    await within(dialog).findByText('¡Gracias! Tu calificación quedó registrada.');
+    expect(avatar()).not.toBe('jump');
+    await userEvent.click(within(dialog).getByRole('radio', { name: '4,5 estrellas' }));
     await userEvent.click(within(dialog).getByRole('button', { name: 'Enviar calificación' }));
     await waitFor(() => expect(avatar()).toBe('jump'));
   });

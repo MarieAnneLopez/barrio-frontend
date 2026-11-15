@@ -32,7 +32,8 @@ export function RatingForm({ path, onRated }: RatingFormProps) {
       await apiSend('POST', path, toPayload(values));
       reset({ comentario: '', autor_nombre: '' });
       setStatus({ kind: 'done' });
-      useAvatarStore.getState().dispatch({ type: 'CELEBRATE' });
+      // §11.4.2: salta de alegría con 4,5 estrellas o más.
+      if (values.estrellas >= 4.5) useAvatarStore.getState().dispatch({ type: 'CELEBRATE' });
       onRated();
     } catch (error) {
       if (error instanceof ApiError && error.status === 401) useAuthStore.getState().expire();

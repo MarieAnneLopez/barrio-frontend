@@ -10,7 +10,7 @@ beforeEach(() => {
 
 describe('Mapa 3D (/mapa)', () => {
   it('tiene página propia con la maqueta y los 14 mapas temáticos', async () => {
-    const { router } = renderRoute('/mapa');
+    const { router, container } = renderRoute('/mapa');
     expect(await screen.findByRole('heading', { level: 1, name: 'Mapa 3D' })).toBeInTheDocument();
     expect(screen.queryByText('En construcción')).not.toBeInTheDocument();
     expect(screen.getByRole('region', { name: 'Maqueta 3D de El Tintal' })).toBeInTheDocument();
@@ -20,5 +20,8 @@ describe('Mapa 3D (/mapa)', () => {
     expect(links[0]).toHaveAttribute('href', '/categorias/centros-educativos');
     expect(screen.getByText(/no una unidad administrativa oficial/)).toBeInTheDocument();
     expect(router.state.location.pathname).toBe('/mapa');
+    const { default: axe } = await import('axe-core');
+    const result = await axe.run(container, { rules: { 'color-contrast': { enabled: false } } });
+    expect(result.violations.map((v) => `${v.id}: ${v.nodes.length}`)).toEqual([]);
   });
 });

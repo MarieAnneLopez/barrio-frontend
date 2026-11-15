@@ -27,6 +27,8 @@
   --font-body: var(--ff-body);
   --font-mono: var(--ff-mono);
   --font-pixel: var(--ff-pixel);
+  /* Texto mínimo del chat (fechas, notas); sin él Tailwind no generaba text-step--2 (H30). */
+  --text-step--2: clamp(0.75rem, 0.73rem + 0.08vw, 0.8125rem);
   --text-step--1: var(--step--1);
   --text-step-0: var(--step-0);
   --text-step-1: var(--step-1);

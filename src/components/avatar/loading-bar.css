@@ -1,7 +1,7 @@
 /* LoadingRunnerBar (H24): solo transform y opacity; avance lineal (es progreso, no una entrada). */
 .loading-bar {
   height: 36px;
-  transition: opacity var(--dur-2, 180ms) ease-out;
+  transition: opacity var(--dur-3) ease-out; /* = FINISH_MS (240 ms) */
 }
 
 .loading-bar[data-finishing] {

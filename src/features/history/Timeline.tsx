@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Fuente, Hito } from '../../lib/apiTypes';
-import { useA11yStore } from '../../store/a11yStore';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { SourceLinks } from './SourceLinks';
 import { useScrollReveal } from './useScrollReveal';
 
@@ -17,7 +17,7 @@ export function Timeline({ hitos, fuentes }: { hitos: Hito[]; fuentes: Fuente[] 
   const { t } = useTranslation();
   const press = new Set(fuentes.flatMap((f) => (f.tipo === 'prensa' && f.url ? [f.url] : [])));
   const root = useRef<HTMLOListElement>(null);
-  const reduced = useA11yStore((s) => s.reducedMotion);
+  const reduced = useReducedMotion(); // barra de accesibilidad o sistema (H30)
   useScrollReveal(root, hitos.length > 0, reduced);
 
   return (

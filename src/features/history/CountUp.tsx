@@ -1,6 +1,6 @@
 import gsap from 'gsap';
 import { useLayoutEffect, useRef } from 'react';
-import { useA11yStore } from '../../store/a11yStore';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 
 interface CountUpProps {
   value: number;
@@ -15,7 +15,7 @@ interface CountUpProps {
  */
 export function CountUp({ value, format, decimals = 0 }: CountUpProps) {
   const visible = useRef<HTMLSpanElement>(null);
-  const reduced = useA11yStore((s) => s.reducedMotion);
+  const reduced = useReducedMotion(); // barra de accesibilidad o sistema (H30)
 
   useLayoutEffect(() => {
     const node = visible.current;
