@@ -503,7 +503,7 @@
   },
   "gallery": {
     "title": "Gallery",
-    "empty": "This place has no photos yet.",
+    "empty": "No licensed photo yet: this place doesn't have a free photo that shows it.",
     "open": "Enlarge photo of {{place}}",
     "author": "Author: {{author}}",
     "previous": "Previous",

@@ -90,7 +90,7 @@ describe('Galería y visor', () => {
   it('sin fotos lo dice y la ficha no tiene violaciones de axe', async () => {
     mockApi(barberiaRoutes(() => ({ body: {} }), []));
     const empty = await openDetail();
-    expect(await within(empty).findByText('Este lugar todavía no tiene fotos.')).toBeInTheDocument();
+    expect(await within(empty).findByText(/^Sin foto con licencia todavía/)).toBeInTheDocument();
     const { default: axe } = await import('axe-core');
     const result = await axe.run(empty, { rules: { 'color-contrast': { enabled: false } } });
     expect(result.violations.map((v) => `${v.id}: ${v.nodes.length}`)).toEqual([]);

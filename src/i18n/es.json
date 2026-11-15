@@ -503,7 +503,7 @@
   },
   "gallery": {
     "title": "Galería",
-    "empty": "Este lugar todavía no tiene fotos.",
+    "empty": "Sin foto con licencia todavía: este lugar aún no tiene una foto libre que lo muestre.",
     "open": "Ampliar foto de {{place}}",
     "author": "Autor: {{author}}",
     "previous": "Anterior",
