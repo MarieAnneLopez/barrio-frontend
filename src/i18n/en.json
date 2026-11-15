@@ -603,7 +603,6 @@
   "construction": {
     "badge": "Under construction",
     "notice": "This section is under construction.",
-    "map": "The neighborhood's 3D model is already on the Home page; this dedicated view arrives at the end of Phase 3.",
     "gallery": "Meanwhile, each module shows the gallery of its places in their detail view."
   },
   "help": {
@@ -637,5 +636,11 @@
         "body": "The green WhatsApp button at the bottom right writes directly to Marie Anne Lopez Poveda, the creator. Her details are in the Creator Profile."
       }
     }
+  },
+  "mapPage": {
+    "explore": "Drag the pointer to look around, hover a building to see its data and use «Pause the orbit» if you prefer a still camera. With reduced motion the camera doesn't rotate on its own.",
+    "thematic": "Thematic maps",
+    "thematicIntro": "Each module has its own map with places marked by their emoji, filters and a detail view for every site.",
+    "note": "Blocks, streets, parks and buildings from OpenStreetMap (ODbL). Here El Tintal is UPZ 78 plus UPZ 79 (662 ha): an operational definition, not an official administrative unit."
   }
 }

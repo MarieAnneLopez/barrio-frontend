@@ -603,7 +603,6 @@
   "construction": {
     "badge": "En construcción",
     "notice": "Esta sección está en construcción.",
-    "map": "La maqueta 3D del barrio ya está en el Inicio; esta vista dedicada llega al final de la Fase 3.",
     "gallery": "Mientras tanto, cada módulo muestra la galería de sus lugares en su ficha."
   },
   "help": {
@@ -637,5 +636,11 @@
         "body": "El botón verde de WhatsApp, abajo a la derecha, escribe directamente a Marie Anne Lopez Poveda, la creadora. Sus datos están en el Perfil de la Creadora."
       }
     }
+  },
+  "mapPage": {
+    "explore": "Arrastra el puntero para mirar alrededor, pasa el puntero sobre un edificio para ver sus datos y usa «Pausar la órbita» si prefieres que la cámara quede quieta. Con movimiento reducido la cámara no gira sola.",
+    "thematic": "Mapas temáticos",
+    "thematicIntro": "Cada módulo tiene su propio mapa con los lugares marcados con su emoji, filtros y la ficha de cada sitio.",
+    "note": "Manzanas, vías, parques y edificios de OpenStreetMap (ODbL). El Tintal es aquí la suma de las UPZ 78 y 79 (662 ha): una definición operativa, no una unidad administrativa oficial."
   }
 }

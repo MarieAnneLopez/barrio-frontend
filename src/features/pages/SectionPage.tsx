@@ -4,7 +4,6 @@ import { PageHeader } from './PageHeader';
 
 /** Dónde está hoy el contenido de cada sección en construcción (D62). */
 const MEANWHILE: Record<string, { to: string; label: string }> = {
-  map: { to: '/', label: 'nav.home' },
   gallery: { to: '/categorias/zonas-verdes', label: 'categories.zonas-verdes.name' },
 };
 

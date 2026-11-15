@@ -1,10 +1,13 @@
 import '@testing-library/jest-dom/vitest';
-import { cleanup } from '@testing-library/react';
+import { cleanup, configure } from '@testing-library/react';
 import { afterEach, beforeEach, vi } from 'vitest';
 import '../i18n/i18n';
 import { useAuthStore } from '../store/authStore';
 import { useLoadingStore } from '../store/loadingStore';
 import { useWelcomeStore } from '../store/welcomeStore';
+
+// Rutas en diferido (H27): con la suite en paralelo un chunk puede tardar más de 1 s en jsdom.
+configure({ asyncUtilTimeout: 3000 });
 
 // La bienvenida se abre en la primera visita de la sesión: en las pruebas del
 // resto de la app se da por vista; sus propias pruebas la vuelven a habilitar.
