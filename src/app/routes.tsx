@@ -4,6 +4,7 @@ import { HistoryPage } from '../features/history/HistoryPage';
 import { HomePage } from '../features/pages/HomePage';
 import { SECTION_PAGES } from '../lib/navigation';
 import { AppShell } from './AppShell';
+import { RouteError } from './RouteError';
 
 /* eslint-disable react-refresh/only-export-components -- archivo de configuración de rutas, no de componentes */
 // Code-splitting por ruta (H27): Inicio e Historia van en el chunk inicial (Historia en
@@ -37,14 +38,21 @@ export const routes: RouteObject[] = [
   {
     path: '/',
     element: <AppShell />,
+    errorElement: <RouteError />,
     children: [
-      { index: true, element: <HomePage /> },
-      ...SECTION_PAGES.map((item) => ({
-        path: item.path.slice(1),
-        element: DEDICATED[item.key] ?? <SectionPage section={item.key} />,
-      })),
-      { path: 'categorias/:slug', element: <ModulePage /> },
-      { path: '*', element: <NotFoundPage /> },
+      {
+        // Ruta sin path: un error en cualquier página se muestra dentro del shell (H31).
+        errorElement: <RouteError inShell />,
+        children: [
+          { index: true, element: <HomePage /> },
+          ...SECTION_PAGES.map((item) => ({
+            path: item.path.slice(1),
+            element: DEDICATED[item.key] ?? <SectionPage section={item.key} />,
+          })),
+          { path: 'categorias/:slug', element: <ModulePage /> },
+          { path: '*', element: <NotFoundPage /> },
+        ],
+      },
     ],
   },
 ];

@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 import type { ModuleFeatures } from '../../lib/apiTypes';
 import { labelOf } from '../../lib/moduleFields';
 import { createEmojiMarker, setMarkerSelected } from './EmojiMarker';
+import { isMapAlive } from './mapCleanup';
 
 interface Options {
   map: MapLibreMap | null;
@@ -44,7 +45,7 @@ export function useMarkers({ map, slug, features, emoji, selectedId, onSelect, r
   useEffect(() => {
     markers.current.forEach((marker, id) => setMarkerSelected(marker.getElement(), id === selectedId));
     const selected = selectedId === null ? undefined : markers.current.get(selectedId);
-    if (!map || !selected) return;
+    if (!map || !selected || !isMapAlive(map)) return;
     const center = selected.getLngLat();
     const zoom = Math.max(map.getZoom(), 16);
     if (reducedMotion) map.jumpTo({ center, zoom });

@@ -648,5 +648,10 @@
     "module": "See in {{module}}",
     "views": "Views of the neighborhood",
     "empty": "There are no photos of places yet."
+  },
+  "routeError": {
+    "title": "Something went wrong showing this section",
+    "description": "It is not your fault. Reload the page to try again; if it happens again, go back to the home page.",
+    "reload": "Reload the page"
   }
 }

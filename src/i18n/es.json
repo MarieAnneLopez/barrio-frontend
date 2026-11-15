@@ -648,5 +648,10 @@
     "module": "Ver en {{module}}",
     "views": "Vistas del barrio",
     "empty": "Todavía no hay fotos de lugares."
+  },
+  "routeError": {
+    "title": "Algo salió mal al mostrar esta sección",
+    "description": "No es tu culpa. Recarga la página para intentarlo de nuevo; si vuelve a pasar, vuelve al inicio.",
+    "reload": "Recargar la página"
   }
 }

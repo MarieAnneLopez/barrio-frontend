@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 import type { ModuleFeatures } from '../../lib/apiTypes';
 import { paletteColor } from '../../lib/cssToken';
 import { geometryBounds } from './geometryBounds';
+import { isMapAlive, removeLayersAndSource } from './mapCleanup';
 
 export const SHAPES_SOURCE = 'modulo-figuras';
 export const FILL_LAYER = 'modulo-relleno';
@@ -59,9 +60,8 @@ export function useShapes({ map, features, selectedId, onSelect, reducedMotion }
         map.off('click', layer, click);
         map.off('mouseenter', layer, pointer);
         map.off('mouseleave', layer, reset);
-        if (map.getLayer(layer)) map.removeLayer(layer);
       }
-      map.removeSource(SHAPES_SOURCE);
+      removeLayersAndSource(map, [FILL_LAYER, LINE_LAYER], SHAPES_SOURCE);
     };
   }, [map, features]);
 
@@ -73,7 +73,7 @@ export function useShapes({ map, features, selectedId, onSelect, reducedMotion }
     const bounds = geometryBounds(target.geometry);
     if (bounds) map.fitBounds(bounds, { padding: 48, maxZoom: 18, animate: !reducedMotion });
     return () => {
-      if (map.getLayer(FILL_LAYER)) {
+      if (isMapAlive(map) && map.getSource(SHAPES_SOURCE)) {
         map.setFeatureState({ source: SHAPES_SOURCE, id: selectedId as number }, { selected: false });
       }
     };

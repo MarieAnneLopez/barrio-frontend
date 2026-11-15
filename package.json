@@ -16,7 +16,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "check:lines": "node scripts/check_line_length.mjs",
-    "sprite": "node scripts/slice_spritesheet.mjs"
+    "sprite": "node scripts/slice_spritesheet.mjs",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "@fontsource/inter": "5.3.0",

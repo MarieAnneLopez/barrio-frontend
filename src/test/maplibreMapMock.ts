@@ -9,6 +9,8 @@ export class Map {
   readonly options: Record<string, unknown>;
   zoom = 14;
   camera: { center?: unknown; zoom?: number; animated?: boolean; bounds?: unknown } = {};
+  /** Como en maplibre-gl: remove() o perder el contexto WebGL lo deja en null. */
+  style: object | null = {};
   readonly sources: Record<string, unknown> = {};
   readonly layers: string[] = [];
   readonly featureState: Record<string, { selected?: boolean }> = {};
@@ -45,6 +47,7 @@ export class Map {
   }
 
   removeSource(id: string): this {
+    if (!this.style) throw new TypeError("Cannot read properties of undefined (reading 'removeSource')");
     Reflect.deleteProperty(this.sources, id);
     return this;
   }
@@ -55,11 +58,13 @@ export class Map {
   }
 
   removeLayer(id: string): this {
+    if (!this.style) throw new TypeError("Cannot read properties of undefined (reading 'removeLayer')");
     this.layers.splice(this.layers.indexOf(id), 1);
     return this;
   }
 
-  getLayer = (id: string): unknown => (this.layers.includes(id) ? { id } : undefined);
+  getLayer = (id: string): unknown => (this.style && this.layers.includes(id) ? { id } : undefined);
+  getSource = (id: string): unknown => (this.style ? this.sources[id] : undefined);
 
   setFeatureState(target: { id: number }, state: { selected?: boolean }): this {
     this.featureState[String(target.id)] = state;
@@ -87,6 +92,7 @@ export class Map {
   }
 
   remove(): void {
+    this.style = null;
     this.container.replaceChildren();
   }
 }
