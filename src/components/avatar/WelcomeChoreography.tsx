@@ -16,7 +16,10 @@ const AUTO_CLOSE_MS = 3800;
 /** Bienvenida (§11.4.3, D6, D11): 8 Mini Marie saludando y el letrero "Hola". */
 export function WelcomeChoreography() {
   const { t } = useTranslation();
-  const { open, openIfFirstVisit, close } = useWelcomeStore();
+  // Selectores por campo: solo se vuelve a pintar si cambia lo que usa (H29).
+  const open = useWelcomeStore((s) => s.open);
+  const openIfFirstVisit = useWelcomeStore((s) => s.openIfFirstVisit);
+  const close = useWelcomeStore((s) => s.close);
   const root = useRef<HTMLDivElement>(null);
   const closing = useRef(false);
   const mobile = useMediaQuery('(max-width: 640px)', false);
