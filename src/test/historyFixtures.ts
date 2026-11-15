@@ -20,6 +20,7 @@ export const HISTORIA: Historia = {
   fuentes: [
     { url: OFICIAL, titulo: 'Historia del poblamiento de Kennedy', entidad: 'Portal Bogotá', tipo: 'oficial', nota: null },
     { url: PRENSA, titulo: 'El Dorado cumplió 60 años', entidad: 'Portafolio', tipo: 'prensa', nota: null },
+    { url: null, titulo: 'Área de las UPZ 78 y 79', entidad: 'SDP, 2012, vía Catastro Bogotá', tipo: 'oficial', nota: null },
     { url: WIKI, titulo: 'Kennedy (Bogotá)', entidad: 'Wikipedia', tipo: 'enciclopedia', nota: 'No se usan sus fechas.' },
   ],
 };

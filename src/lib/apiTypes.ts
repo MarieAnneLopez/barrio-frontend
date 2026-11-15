@@ -73,7 +73,8 @@ export interface Hito {
 }
 
 export interface Fuente {
-  url: string;
+  /** null: documento citado sin enlace (D63). */
+  url: string | null;
   titulo: string;
   entidad: string;
   tipo: 'oficial' | 'prensa' | 'enciclopedia' | 'comunitaria';

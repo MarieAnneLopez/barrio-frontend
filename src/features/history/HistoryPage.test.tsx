@@ -45,8 +45,10 @@ describe('Historia Local', () => {
     const fuentes = await screen.findByRole('region', { name: 'Fuentes' });
     expect(within(fuentes).getByText(/14 de noviembre de 2026/)).toBeInTheDocument();
     expect(within(fuentes).getByRole('link', { name: 'Historia del poblamiento de Kennedy' })).toBeInTheDocument();
-    expect(within(fuentes).getByText(/Fuente oficial del Distrito/)).toBeInTheDocument();
+    expect(within(fuentes).getAllByText(/Fuente oficial del Distrito/)).toHaveLength(2);
     expect(within(fuentes).getByText('No se usan sus fechas.')).toBeInTheDocument();
+    expect(within(fuentes).getByText('Área de las UPZ 78 y 79').tagName).toBe('SPAN');
+    expect(screen.getByText(/no una unidad administrativa oficial\. El Portal Américas queda fuera/)).toBeInTheDocument();
   });
 
   it('bandera local citando el decreto, con nota «por verificar», cifras y mapa', async () => {

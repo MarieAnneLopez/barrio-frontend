@@ -15,7 +15,7 @@ function badgeOf(hito: Hito, press: Set<string>) {
 /** Línea de tiempo vertical (§11.3.1) con ScrollTrigger; cada hito muestra su fuente. */
 export function Timeline({ hitos, fuentes }: { hitos: Hito[]; fuentes: Fuente[] }) {
   const { t } = useTranslation();
-  const press = new Set(fuentes.filter((f) => f.tipo === 'prensa').map((f) => f.url));
+  const press = new Set(fuentes.flatMap((f) => (f.tipo === 'prensa' && f.url ? [f.url] : [])));
   const root = useRef<HTMLOListElement>(null);
   const reduced = useA11yStore((s) => s.reducedMotion);
   useScrollReveal(root, hitos.length > 0, reduced);

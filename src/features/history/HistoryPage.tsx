@@ -53,6 +53,7 @@ export function HistoryPage() {
         ) : (
           <Skeleton className="h-64 w-full max-w-md" />
         )}
+        <p className="m-0 max-w-prose text-step--1 text-fg-secondary">{t('history.locator.definition')}</p>
       </Section>
       {historia.status === 'success' ? (
         <Section id="historia-fuentes" title={t('history.sources.title')}>
