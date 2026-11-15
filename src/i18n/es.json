@@ -235,6 +235,12 @@
       "osm": "OpenStreetMap",
       "datos_abiertos": "Datos abiertos de Bogotá",
       "seed": "Dato de ejemplo"
+    },
+    "recenter": "Recentrar el mapa en El Tintal",
+    "gestures": {
+      "windows": "Usa Ctrl + rueda para acercar el mapa",
+      "mac": "Usa ⌘ + rueda para acercar el mapa",
+      "mobile": "Usa dos dedos para mover el mapa"
     }
   },
   "fields": {
@@ -363,12 +369,20 @@
     "levels_one": "{{count}} piso",
     "levels_other": "{{count}} pisos",
     "area": "{{value}} m² de planta",
-    "hint": "Pasa el puntero sobre un edificio para ver sus datos.",
+    "hint": "Arrastra para mover, usa la rueda para acercar y el botón derecho para girar. Pasa el puntero sobre un edificio o elige un lugar para ver su ficha.",
     "placeCard": "Lugar seleccionado",
     "openModule": "Ver en {{module}}",
     "closePlace": "Cerrar ficha",
     "error": "No se pudo cargar la maqueta 3D.",
-    "source": "Datos © OpenStreetMap (ODbL)"
+    "source": "Datos © OpenStreetMap (ODbL)",
+    "legend": {
+      "title": "Leyenda y filtro",
+      "noData": "sin datos",
+      "visible": "(visible en la maqueta)",
+      "hidden": "(oculta)"
+    },
+    "recenter": "Recentrar",
+    "touchHint": "Usa dos dedos para acercar o girar la maqueta; con un dedo sigues bajando por la página."
   },
   "carousel": {
     "label": "Fotografías del entorno de El Tintal",

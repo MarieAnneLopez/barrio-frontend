@@ -19,6 +19,7 @@ export function PerfProbe() {
     const host = gl.domElement.closest<HTMLElement>('[data-hero]');
     if (host) {
       host.dataset.triangles = String(gl.info.render.triangles);
+      host.dataset.points = String(gl.info.render.points); // H34: sprites de lugares + partículas
       host.dataset.frameMs = ((acc.current.seconds / acc.current.frames) * 1000).toFixed(2);
     }
     acc.current = { frames: 0, seconds: 0 };

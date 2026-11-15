@@ -7,6 +7,7 @@ import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { useA11yStore } from '../../store/a11yStore';
 import { useTintalData } from '../../three/useTintalData';
 import { HeroHud } from './HeroHud';
+import { HeroLegend } from './HeroLegend';
 
 // three + r3f se cargan aparte: el resto del sitio no paga su peso.
 const TintalScene = lazy(() => import('../../three/TintalScene'));
@@ -59,6 +60,7 @@ export function HeroSection({ variant = 'hero' }: { variant?: 'hero' | 'page' })
             <TintalScene data={state.data} active={visible} reducedMotion={reducedMotion} />
           </Suspense>
           <HeroHud />
+          <HeroLegend defaultOpen={variant === 'page'} />
         </>
       )}
     </section>

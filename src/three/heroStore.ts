@@ -23,7 +23,16 @@ interface HeroState {
   interacting: boolean;
   hovered: HoveredBuilding | null;
   selected: HeroPlace | null;
+  /** Categorías ocultas con el filtro de la leyenda (H34). */
+  hidden: string[];
+  /** Lugares que la escena dibujó por categoría (se compara con la base de datos). */
+  drawn: Record<string, number>;
+  /** Cambia cada vez que se pulsa «Recentrar»: la cámara vuelve al encuadre inicial. */
+  recenterTick: number;
   togglePaused: () => void;
+  recenter: () => void;
+  toggleCategory: (slug: string) => void;
+  setDrawn: (drawn: Record<string, number>) => void;
   setInteracting: (value: boolean) => void;
   setHovered: (value: HoveredBuilding | null) => void;
   select: (place: HeroPlace | null) => void;
@@ -34,7 +43,14 @@ export const useHeroStore = create<HeroState>()((set) => ({
   interacting: false,
   hovered: null,
   selected: null,
+  hidden: [],
+  drawn: {},
+  recenterTick: 0,
   togglePaused: () => set((s) => ({ paused: !s.paused })),
+  recenter: () => set((s) => ({ selected: null, recenterTick: s.recenterTick + 1 })),
+  toggleCategory: (slug) =>
+    set((s) => ({ hidden: s.hidden.includes(slug) ? s.hidden.filter((x) => x !== slug) : [...s.hidden, slug] })),
+  setDrawn: (drawn) => set({ drawn }),
   setInteracting: (interacting) => set({ interacting }),
   setHovered: (hovered) => set({ hovered }),
   select: (selected) => set({ selected }),

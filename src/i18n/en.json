@@ -235,6 +235,12 @@
       "osm": "OpenStreetMap",
       "datos_abiertos": "Bogotá open data",
       "seed": "Sample data"
+    },
+    "recenter": "Recenter the map on El Tintal",
+    "gestures": {
+      "windows": "Use Ctrl + scroll to zoom the map",
+      "mac": "Use ⌘ + scroll to zoom the map",
+      "mobile": "Use two fingers to move the map"
     }
   },
   "fields": {
@@ -363,12 +369,20 @@
     "levels_one": "{{count}} floor",
     "levels_other": "{{count}} floors",
     "area": "{{value}} m² footprint",
-    "hint": "Hover over a building to see its data.",
+    "hint": "Drag to move, use the wheel to zoom and the right button to rotate. Hover over a building or pick a place to see its details.",
     "placeCard": "Selected place",
     "openModule": "View in {{module}}",
     "closePlace": "Close card",
     "error": "The 3D model could not be loaded.",
-    "source": "Data © OpenStreetMap (ODbL)"
+    "source": "Data © OpenStreetMap (ODbL)",
+    "legend": {
+      "title": "Legend and filter",
+      "noData": "no data",
+      "visible": "(shown on the model)",
+      "hidden": "(hidden)"
+    },
+    "recenter": "Recenter",
+    "touchHint": "Use two fingers to zoom or rotate the model; one finger keeps scrolling the page."
   },
   "carousel": {
     "label": "Photos of the El Tintal area",

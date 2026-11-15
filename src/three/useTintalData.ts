@@ -1,20 +1,25 @@
-import type { FeatureCollection, Point } from 'geojson';
 import { useEffect, useState } from 'react';
 import { loadBaseMap, type BaseMapData } from '../components/map/baseMapData';
 import { apiGet } from '../lib/apiClient';
-import type { ModuleItem } from '../lib/apiTypes';
+import { CATEGORIES } from '../lib/categoryConfig';
+import type { ModuleCollection } from './categoryLayers';
+
+export interface CategoryData {
+  slug: string;
+  emoji: string;
+  /** null si la API de ese módulo falló: la leyenda lo dice y el resto se dibuja. */
+  collection: ModuleCollection | null;
+}
 
 export interface TintalData {
   base: BaseMapData;
-  /** Lugares para los billboards (por ahora el módulo con datos: Centros Educativos). */
-  places: FeatureCollection<Point, ModuleItem>;
+  /** Los 14 módulos (H34, D69): antes solo se pedía Centros Educativos. */
+  categories: CategoryData[];
 }
 
 type State = { status: 'loading' } | { status: 'ready'; data: TintalData } | { status: 'error' };
 
-const EMPTY: FeatureCollection<Point, ModuleItem> = { type: 'FeatureCollection', features: [] };
-
-/** Mapa base + lugares; si los lugares fallan, la maqueta igual se muestra. */
+/** Mapa base + lugares de los 14 módulos en paralelo; si un módulo falla, la maqueta igual se muestra. */
 export function useTintalData(attempt: number): State {
   const [state, setState] = useState<{ attempt: number; value: State }>({
     attempt: -1,
@@ -23,10 +28,17 @@ export function useTintalData(attempt: number): State {
 
   useEffect(() => {
     let cancelled = false;
-    const places = apiGet<FeatureCollection<Point, ModuleItem>>('/centros-educativos/geojson').catch(() => EMPTY);
-    Promise.all([loadBaseMap(), places]).then(
-      ([base, placesData]) => {
-        if (!cancelled) setState({ attempt, value: { status: 'ready', data: { base, places: placesData } } });
+    const categories = Promise.all(
+      CATEGORIES.map(({ slug, emoji }) =>
+        apiGet<ModuleCollection>(`/${slug}/geojson`).then(
+          (collection) => ({ slug, emoji, collection }),
+          () => ({ slug, emoji, collection: null }),
+        ),
+      ),
+    );
+    Promise.all([loadBaseMap(), categories]).then(
+      ([base, data]) => {
+        if (!cancelled) setState({ attempt, value: { status: 'ready', data: { base, categories: data } } });
       },
       () => {
         if (!cancelled) setState({ attempt, value: { status: 'error' } });

@@ -1,8 +1,9 @@
 import { Map as MapLibreMap, NavigationControl, setWorkerUrl } from 'maplibre-gl';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
-import { useEffect, useState, type RefObject } from 'react';
+import { useEffect, useRef, useState, type RefObject } from 'react';
 import { loadBaseMap } from './baseMapData';
 import { buildBaseStyle } from './baseStyle';
+import { RecenterControl } from './RecenterControl';
 import { useLoadingStore } from '../../store/loadingStore';
 
 // MapLibre 6 calcula la URL de su worker con import.meta.url en tiempo de ejecución;
@@ -15,10 +16,25 @@ type Status = 'loading' | 'ready' | 'error';
 // Fuera del polígono no hay capas, así que el mapa sigue mostrando solo El Tintal (D5).
 const PAD = 0.04;
 
+/** Textos del mapa en el idioma activo y preferencia de movimiento (H34). */
+export interface MapUiOptions {
+  recenter: string;
+  gestures: { windows: string; mac: string; mobile: string };
+  reducedMotion: boolean;
+}
+
 /** Crea el mapa base de El Tintal (D5): bounds = bbox del polígono, sin teselas externas. */
-export function useMapInstance(container: RefObject<HTMLDivElement | null>, attempt: number) {
+export function useMapInstance(
+  container: RefObject<HTMLDivElement | null>,
+  attempt: number,
+  ui: MapUiOptions,
+) {
   const [map, setMap] = useState<MapLibreMap | null>(null);
   const [status, setStatus] = useState<Status>('loading');
+  const uiRef = useRef(ui);
+  useEffect(() => {
+    uiRef.current = ui;
+  });
 
   useEffect(() => {
     let cancelled = false;
@@ -38,8 +54,20 @@ export function useMapInstance(container: RefObject<HTMLDivElement | null>, atte
           maxBounds: [w - PAD, s - PAD, e + PAD, n + PAD],
           attributionControl: { compact: true, customAttribution: '© OpenStreetMap (ODbL)' },
           dragRotate: false,
+          // Táctil: dos dedos mueven el mapa y uno sigue desplazando la página (no atrapa el
+          // scroll). Con ratón: arrastre y rueda libres, sin teclas extra.
+          cooperativeGestures: window.matchMedia?.('(pointer: coarse)').matches ?? false,
+          locale: {
+            'CooperativeGesturesHandler.WindowsHelpText': uiRef.current.gestures.windows,
+            'CooperativeGesturesHandler.MacHelpText': uiRef.current.gestures.mac,
+            'CooperativeGesturesHandler.MobileHelpText': uiRef.current.gestures.mobile,
+          },
         });
         instance.addControl(new NavigationControl({ showCompass: false }), 'top-right');
+        instance.addControl(
+          new RecenterControl([w, s, e, n], uiRef.current.recenter, () => !uiRef.current.reducedMotion),
+          'top-right',
+        );
         task = loading.begin();
         loading.update(task, 0.5);
         instance.on('load', () => {

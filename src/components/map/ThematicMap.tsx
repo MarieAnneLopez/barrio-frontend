@@ -26,8 +26,12 @@ export default function ThematicMap({ slug, label, features, emoji, selectedId, 
   const { t } = useTranslation();
   const container = useRef<HTMLDivElement>(null);
   const [attempt, setAttempt] = useState(0);
-  const { map, status } = useMapInstance(container, attempt);
   const reducedMotion = useReducedMotion(); // barra de accesibilidad o sistema (H30)
+  const { map, status } = useMapInstance(container, attempt, {
+    recenter: t('modules.recenter'),
+    gestures: { windows: t('modules.gestures.windows'), mac: t('modules.gestures.mac'), mobile: t('modules.gestures.mobile') },
+    reducedMotion,
+  });
   useMarkers({ map, slug, features, emoji, selectedId, onSelect, reducedMotion });
   useShapes({ map, features, selectedId, onSelect, reducedMotion });
 

@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Button } from '../../components/ui/Button';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { categoryPath } from '../../lib/categoryConfig';
 import { useHeroStore } from '../../three/heroStore';
 
@@ -10,7 +11,8 @@ const panel = 'glass rounded-md px-3 py-2';
 /** HUD de la maqueta (ref. visual 1): vidrio en bordes y esquinas, nunca al centro. */
 export function HeroHud() {
   const { t, i18n } = useTranslation();
-  const { paused, hovered, selected, togglePaused, select } = useHeroStore();
+  const { paused, hovered, selected, togglePaused, select, recenter } = useHeroStore();
+  const touch = useMediaQuery('(pointer: coarse)', false);
   const numbers = new Intl.NumberFormat(i18n.language);
 
   return (
@@ -19,7 +21,10 @@ export function HeroHud() {
         <p className={`m-0 ${label}`}>{t('hero.eyebrow')}</p>
         <p className="m-0 font-mono text-step--1 text-fg-secondary">{t('hero.coords')}</p>
       </div>
-      <div className="absolute top-4 right-4 z-30">
+      <div className="absolute top-4 right-4 z-30 flex flex-wrap justify-end gap-2">
+        <Button variant="secondary" size="sm" onClick={recenter}>
+          {t('hero.recenter')}
+        </Button>
         <Button variant="secondary" size="sm" aria-pressed={paused} onClick={togglePaused}>
           {paused ? t('hero.play') : t('hero.pause')}
         </Button>
@@ -32,7 +37,7 @@ export function HeroHud() {
             {t('hero.levels', { count: hovered.levels })} · {t('hero.area', { value: numbers.format(Math.round(hovered.areaM2)) })}
           </p>
         ) : (
-          <p className="m-0 text-step--1 text-fg-secondary">{t('hero.hint')}</p>
+          <p className="m-0 text-step--1 text-fg-secondary">{t(touch ? 'hero.touchHint' : 'hero.hint')}</p>
         )}
         <p className={`m-0 mt-1 ${label}`}>{t('hero.source')}</p>
       </div>

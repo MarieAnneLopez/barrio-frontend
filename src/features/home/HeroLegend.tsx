@@ -1,0 +1,63 @@
+import { useId, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { CATEGORIES } from '../../lib/categoryConfig';
+import { useHeroStore } from '../../three/heroStore';
+import { cssColorOf, DEFAULT_SHAPE, SHAPE_STYLE } from '../../three/shapeStyle';
+
+/**
+ * Leyenda y filtro de la maqueta (H34): las 14 categorías con su símbolo y los lugares
+ * que la escena dibujó; cada una se puede ocultar. Es HTML real: teclado y lector de pantalla.
+ */
+export function HeroLegend({ defaultOpen = false }: { defaultOpen?: boolean }) {
+  const { t, i18n } = useTranslation();
+  const listId = useId();
+  const [open, setOpen] = useState(defaultOpen);
+  const { hidden, drawn, toggleCategory } = useHeroStore();
+  const numbers = new Intl.NumberFormat(i18n.language);
+
+  return (
+    <div className="brick-card absolute top-24 left-4 z-30 flex max-h-[calc(100%-8rem)] w-[min(18rem,calc(100%-2rem))] flex-col">
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-controls={listId}
+        onClick={() => setOpen((v) => !v)}
+        className="ui-pressable ui-btn--ghost flex min-h-11 items-center justify-between gap-2 border-2 border-transparent px-3 text-step--1 font-semibold text-fg"
+      >
+        {t('hero.legend.title')}
+        <span aria-hidden="true">{open ? '−' : '+'}</span>
+      </button>
+      <ul id={listId} hidden={!open} aria-label={t('hero.legend.title')} className="m-0 flex list-none flex-col gap-1 overflow-y-auto p-2 pt-0">
+        {CATEGORIES.map(({ slug, emoji, geometry }) => {
+          const shown = !hidden.includes(slug);
+          const count = drawn[slug];
+          const name = t(`categories.${slug}.name`);
+          return (
+            <li key={slug} data-slug={slug} data-drawn={count ?? ''}>
+              <button
+                type="button"
+                aria-pressed={shown}
+                onClick={() => toggleCategory(slug)}
+                className={`ui-pressable flex min-h-11 w-full items-center gap-2 rounded-sm border-2 px-2 text-left text-step--1 ${
+                  shown ? 'border-ink bg-stone text-on-stone' : 'ui-btn--ghost border-transparent text-fg line-through'
+                }`}
+              >
+                {geometry === 'POINT' ? (
+                  <span aria-hidden="true" className="w-5 text-center">{emoji}</span>
+                ) : (
+                  <span aria-hidden="true" className="h-2 w-5 shrink-0 border border-ink"
+                    style={{ backgroundColor: cssColorOf(SHAPE_STYLE[slug] ?? DEFAULT_SHAPE) }} />
+                )}
+                <span className="min-w-0 flex-1">{name}</span>
+                <span className="font-mono">
+                  {count === undefined ? t('hero.legend.noData') : numbers.format(count)}
+                </span>
+                <span className="sr-only">{shown ? t('hero.legend.visible') : t('hero.legend.hidden')}</span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
