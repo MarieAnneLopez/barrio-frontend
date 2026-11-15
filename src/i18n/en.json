@@ -438,7 +438,8 @@
         "caption": "El Tintal Avenue, Patio Bonito area (neighboring)"
       }
     },
-    "roledescription": "carousel"
+    "roledescription": "carousel",
+    "sourceMapillary": "View on Mapillary"
   },
   "welcome": {
     "dialog": "Welcome from Mini Marie",
@@ -682,5 +683,13 @@
     "title": "Something went wrong showing this section",
     "description": "It is not your fault. Reload the page to try again; if it happens again, go back to the home page.",
     "reload": "Reload the page"
+  },
+  "credits": {
+    "title": "Photo credits",
+    "description": "Every photo on the platform, with its place, author, free license and the page holding the original.",
+    "changes": "Photos come from Wikimedia Commons and Mapillary (CC BY-SA 4.0). The only change made is size and format (WebP), so they load fast; the content is the original.",
+    "count_one": "{{count}} photo",
+    "count_other": "{{count}} photos",
+    "link": "Photo credits"
   }
 }

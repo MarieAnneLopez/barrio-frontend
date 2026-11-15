@@ -20,7 +20,20 @@ export function licenseUrl(license: string | null): string | null {
   return license ? (LICENSES[license] ?? null) : null;
 }
 
-/** Solo las páginas de Wikimedia Commons se enlazan como fuente de una foto. */
-export function commonsPage(ref: string | null | undefined): string | null {
-  return ref?.startsWith('https://commons.wikimedia.org/wiki/File:') ? ref : null;
+const COMMONS = 'https://commons.wikimedia.org/wiki/File:';
+const MAPILLARY = 'https://www.mapillary.com/app/?pKey=';
+
+/** Página de origen de la foto: Wikimedia Commons (D66) o Mapillary (H35); otras no se enlazan. */
+export function sourcePage(ref: string | null | undefined): string | null {
+  return ref?.startsWith(COMMONS) || ref?.startsWith(MAPILLARY) ? ref : null;
+}
+
+/** Perfil del autor en Mapillary (su formato de atribución lo enlaza); null fuera de Mapillary. */
+export function authorPage(ref: string | null | undefined, author: string | null): string | null {
+  return author && ref?.startsWith(MAPILLARY) ? `https://www.mapillary.com/app/user/${encodeURIComponent(author)}` : null;
+}
+
+/** Texto alternativo en el idioma de la interfaz (H35: ES y EN). */
+export function photoAlt(photo: { alt_text: string; alt_text_en?: string | null }, lang: string): string {
+  return lang === 'en' && photo.alt_text_en ? photo.alt_text_en : photo.alt_text;
 }

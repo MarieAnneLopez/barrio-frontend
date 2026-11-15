@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { commonsPage, licenseUrl } from '../../lib/photoUrls';
+import { authorPage, licenseUrl, sourcePage } from '../../lib/photoUrls';
 
 interface PhotoCreditProps {
   author: string | null;
@@ -8,25 +8,25 @@ interface PhotoCreditProps {
 }
 
 const LINK = 'text-fg-secondary underline underline-offset-2';
+const external = { target: '_blank', rel: 'noopener noreferrer', className: LINK } as const;
 
-/** Autor, licencia (con su texto legal) y página de origen en Commons, siempre visibles. */
+/**
+ * Autor (con su perfil en Mapillary), licencia (con su texto legal) y página de origen
+ * (Commons o Mapillary), siempre visibles: es la atribución que piden CC BY y CC BY-SA.
+ */
 export function PhotoCredit({ author, license, source }: PhotoCreditProps) {
   const { t } = useTranslation();
   const legal = licenseUrl(license);
-  const page = commonsPage(source);
+  const page = sourcePage(source);
+  const profile = authorPage(source, author);
   return (
     <p className="m-0 flex flex-wrap gap-x-3 font-mono text-[0.75rem] text-fg-secondary">
-      {author ? <span>{t('carousel.credit', { author })}</span> : null}
-      {license && legal ? (
-        <a href={legal} target="_blank" rel="noopener noreferrer" className={LINK}>
-          {t('carousel.license', { license })}
-        </a>
-      ) : null}
+      {author && profile ? <a href={profile} {...external}>{t('carousel.credit', { author })}</a> : null}
+      {author && !profile ? <span>{t('carousel.credit', { author })}</span> : null}
+      {license && legal ? <a href={legal} {...external}>{t('carousel.license', { license })}</a> : null}
       {license && !legal ? <span>{t('carousel.license', { license })}</span> : null}
       {page ? (
-        <a href={page} target="_blank" rel="noopener noreferrer" className={LINK}>
-          {t('carousel.source')}
-        </a>
+        <a href={page} {...external}>{t(profile ? 'carousel.sourceMapillary' : 'carousel.source')}</a>
       ) : null}
     </p>
   );

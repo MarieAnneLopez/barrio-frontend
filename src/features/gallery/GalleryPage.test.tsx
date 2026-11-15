@@ -47,7 +47,8 @@ describe('Galería General (/galeria, D66)', () => {
     renderRoute('/galeria');
     await userEvent.click(await screen.findByRole('button', { name: /Ampliar foto de Biblioteca El Tintal/ }));
     const dialog = await screen.findByRole('dialog', { name: 'Biblioteca El Tintal' });
-    expect(within(dialog).getByText(/Autor: ArmandoCasitasS · CC BY 4.0/)).toBeInTheDocument();
+    expect(within(dialog).getByText('Foto: ArmandoCasitasS')).toBeInTheDocument();
+    expect(within(dialog).getByRole('link', { name: 'Licencia CC BY 4.0' })).toBeInTheDocument();
   });
 
   it('sin fotos de lugares lo dice, y si la API falla deja reintentar', async () => {

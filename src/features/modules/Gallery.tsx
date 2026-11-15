@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useApi } from '../../hooks/useApi';
 import type { Photo } from '../../lib/apiTypes';
-import { photoSet } from '../../lib/photoUrls';
+import { photoAlt, photoSet } from '../../lib/photoUrls';
 import { GalleryLightbox } from './GalleryLightbox';
 
 /** Miniaturas de las fotos locales del lugar; cada una abre el visor. */
 export function Gallery({ slug, itemId, place }: { slug: string; itemId: number; place: string }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const photos = useApi<Photo[]>(`/${slug}/${itemId}/fotos`);
   const [open, setOpen] = useState<number | null>(null);
   const list = photos.status === 'success' ? photos.data : [];
@@ -27,7 +27,7 @@ export function Gallery({ slug, itemId, place }: { slug: string; itemId: number;
                 onClick={() => setOpen(index)}
                 className="ui-pressable block w-full overflow-hidden rounded-md border border-line"
               >
-                <img {...photoSet(photo.url)} sizes="160px" alt={photo.alt_text} loading="lazy" className="aspect-square w-full object-cover" />
+                <img {...photoSet(photo.url)} sizes="160px" alt={photoAlt(photo, i18n.language)} loading="lazy" className="aspect-square w-full object-cover" />
                 <span className="sr-only">{t('gallery.open', { place })}</span>
               </button>
             </li>

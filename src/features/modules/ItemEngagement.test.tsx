@@ -73,7 +73,8 @@ describe('Galería y visor', () => {
 
     await userEvent.click(thumbs[0] as HTMLElement);
     const viewer = (await screen.findAllByRole('dialog', { name: 'Barbería Kings' })).at(-1) as HTMLElement;
-    expect(within(viewer).getByText('Autor: Ana · CC BY 4.0')).toBeInTheDocument();
+    expect(within(viewer).getByText('Foto: Ana')).toBeInTheDocument();
+    expect(within(viewer).getByRole('link', { name: 'Licencia CC BY 4.0' })).toHaveAttribute('rel', 'noopener noreferrer');
 
     await userEvent.keyboard('{ArrowRight}');
     expect(within(viewer).getByText('2 de 2')).toBeInTheDocument();

@@ -14,6 +14,9 @@ const AccessPage = lazy(() => import('../features/auth/AccessPage').then((m) => 
 const ModulePage = lazy(() => import('../features/modules/ModulePage').then((m) => ({ default: m.ModulePage })));
 const CreatorPage = lazy(() => import('../features/pages/CreatorPage').then((m) => ({ default: m.CreatorPage })));
 const GalleryPage = lazy(() => import('../features/gallery/GalleryPage').then((m) => ({ default: m.GalleryPage })));
+const PhotoCreditsPage = lazy(() =>
+  import('../features/gallery/PhotoCreditsPage').then((m) => ({ default: m.PhotoCreditsPage })),
+);
 const HelpPage = lazy(() => import('../features/pages/HelpPage').then((m) => ({ default: m.HelpPage })));
 const MapPage = lazy(() => import('../features/map/MapPage').then((m) => ({ default: m.MapPage })));
 const FaqPage = lazy(() => import('../features/pages/FaqPage').then((m) => ({ default: m.FaqPage })));
@@ -50,6 +53,7 @@ export const routes: RouteObject[] = [
             element: DEDICATED[item.key] ?? <SectionPage section={item.key} />,
           })),
           { path: 'categorias/:slug', element: <ModulePage /> },
+          { path: 'creditos-fotos', element: <PhotoCreditsPage /> },
           { path: '*', element: <NotFoundPage /> },
         ],
       },

@@ -438,7 +438,8 @@
         "caption": "Avenida El Tintal, sector Patio Bonito (entorno vecino)"
       }
     },
-    "roledescription": "carrusel"
+    "roledescription": "carrusel",
+    "sourceMapillary": "Ver en Mapillary"
   },
   "welcome": {
     "dialog": "Bienvenida de Mini Marie",
@@ -682,5 +683,13 @@
     "title": "Algo salió mal al mostrar esta sección",
     "description": "No es tu culpa. Recarga la página para intentarlo de nuevo; si vuelve a pasar, vuelve al inicio.",
     "reload": "Recargar la página"
+  },
+  "credits": {
+    "title": "Créditos de fotos",
+    "description": "Cada foto de la plataforma, con su lugar, su autor, su licencia libre y la página donde está el original.",
+    "changes": "Las fotos vienen de Wikimedia Commons y de Mapillary (CC BY-SA 4.0). El único cambio que se les hizo es el tamaño y el formato (WebP), para que carguen rápido; el contenido es el original.",
+    "count_one": "{{count}} foto",
+    "count_other": "{{count}} fotos",
+    "link": "Créditos de fotos"
   }
 }

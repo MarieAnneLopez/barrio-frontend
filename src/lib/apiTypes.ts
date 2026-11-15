@@ -51,11 +51,11 @@ export interface Photo {
   id: number;
   url: string;
   alt_text: string;
+  alt_text_en?: string | null;
   orden: number;
   autor: string | null;
   licencia: string | null;
-  /** Página de origen (Wikimedia Commons) cuando la hay. */
-  source_ref?: string | null;
+  source_ref?: string | null; // página de origen: Wikimedia Commons o Mapillary
 }
 
 /** Foto de la Galería General con su lugar (D66). */

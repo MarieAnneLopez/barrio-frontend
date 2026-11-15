@@ -67,6 +67,7 @@ export function Footer() {
       <p className="mt-10 mb-0 flex flex-wrap gap-x-4 font-mono text-step--1 text-fg-muted">
         <span>{t('footer.rights')}</span>
         <span>{t('footer.academic')}</span>
+        <Link to="/creditos-fotos" className="text-fg-secondary underline underline-offset-4">{t('credits.link')}</Link>
       </p>
     </footer>
   );

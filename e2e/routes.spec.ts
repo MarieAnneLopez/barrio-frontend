@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 
 // H31: ninguna ruta puede dejar errores sin capturar ni errores de consola, al entrar,
 // salir navegando dentro del sitio, recargar o volver atrás.
-const SECTIONS = ['/', '/mapa', '/historia', '/ranking', '/galeria', '/preguntas', '/creadora', '/ayuda', '/acceso'];
+const SECTIONS = ['/', '/mapa', '/historia', '/ranking', '/galeria', '/preguntas', '/creadora', '/ayuda', '/acceso', '/creditos-fotos'];
 const SLUGS = ['centros-educativos', 'escenarios-deportivos', 'camaras-seguridad', 'zonas-verdes', 'datos-catastrales',
   'estado-calles', 'estaciones-transporte', 'sitios-comida', 'librerias', 'robos', 'localidad', 'atencion-inmediata',
   'veterinarias', 'barberias'];

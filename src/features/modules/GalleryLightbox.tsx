@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
 import type { Photo } from '../../lib/apiTypes';
+import { photoAlt } from '../../lib/photoUrls';
+import { PhotoCredit } from '../gallery/PhotoCredit';
 
 interface GalleryLightboxProps {
   photos: Photo[];
@@ -17,7 +19,7 @@ interface GalleryLightboxProps {
  * izquierda/derecha o botones para navegar, Escape cierra, pie con autor y licencia.
  */
 export function GalleryLightbox({ photos, index, onIndex, place }: GalleryLightboxProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const total = photos.length;
   const photo = index === null ? undefined : photos[index];
   const go = (step: number) => index !== null && onIndex((index + step + total) % total);
@@ -36,14 +38,10 @@ export function GalleryLightbox({ photos, index, onIndex, place }: GalleryLightb
     <Modal open={photo !== undefined} onClose={() => onIndex(null)} title={place} wide>
       {photo ? (
         <figure className="m-0 flex flex-col gap-3">
-          <img key={photo.id} src={photo.url} alt={photo.alt_text} className="ui-lightbox-img max-h-[60dvh] w-full rounded-md object-contain" />
+          <img key={photo.id} src={photo.url} alt={photoAlt(photo, i18n.language)} className="ui-lightbox-img max-h-[60dvh] w-full rounded-md object-contain" />
           <figcaption className="text-step--1 text-fg-secondary">
-            {photo.alt_text}
-            {photo.autor || photo.licencia ? (
-              <span className="block text-fg-muted">
-                {[photo.autor && t('gallery.author', { author: photo.autor }), photo.licencia].filter(Boolean).join(' · ')}
-              </span>
-            ) : null}
+            {photoAlt(photo, i18n.language)}
+            <PhotoCredit author={photo.autor} license={photo.licencia} source={photo.source_ref} />
           </figcaption>
           {total > 1 ? (
             <div className="flex items-center justify-between gap-3">

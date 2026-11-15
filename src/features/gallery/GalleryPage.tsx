@@ -2,10 +2,9 @@ import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/ui/Button';
 import { Skeleton } from '../../components/ui/Skeleton';
-import { useApi } from '../../hooks/useApi';
+import { useAllPhotos } from '../../hooks/useAllPhotos';
 import { useBatchReveal } from '../../hooks/useBatchReveal';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
-import type { GalleryPhoto, Page } from '../../lib/apiTypes';
 import { PageHeader } from '../pages/PageHeader';
 import { groupByPlace, neighborhoodViews } from './groupPhotos';
 import { NeighborhoodViews } from './NeighborhoodViews';
@@ -14,8 +13,8 @@ import { PlaceGallery } from './PlaceGallery';
 /** Galería General (D66): fotos reales de Commons de los lugares y vistas del barrio. */
 export function GalleryPage() {
   const { t } = useTranslation();
-  const photos = useApi<Page<GalleryPhoto>>('/fotos', { size: 100 });
-  const list = photos.status === 'success' ? photos.data.items : [];
+  const photos = useAllPhotos(); // H35: con Mapillary son más de 100
+  const list = photos.items;
   const groups = groupByPlace(list);
   const root = useRef<HTMLDivElement>(null);
   useBatchReveal(root, photos.status !== 'loading', useReducedMotion());
