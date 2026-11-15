@@ -1,7 +1,7 @@
 import { useLoadingStore } from '../store/loadingStore';
 
 /**
- * Etapas reales de una petición para la LoadingRunnerBar (H24): enviada (10 %),
+ * Etapas reales de una petición para la pantalla de carga (H24, H33): enviada (10 %),
  * cabeceras recibidas (35 %) y cuerpo leído por partes según Content-Length
  * (35–100 %). Sin Content-Length el cuerpo se lee de una vez.
  */

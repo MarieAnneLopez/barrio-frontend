@@ -39,7 +39,7 @@ export function useMapInstance(
   useEffect(() => {
     let cancelled = false;
     let instance: MapLibreMap | null = null;
-    // Etapa real para la LoadingRunnerBar: estilo y capas del mapa hasta su evento 'load'.
+    // Carga real para la pantalla de carga: estilo y capas del mapa hasta su evento 'load'.
     const loading = useLoadingStore.getState();
     let task: number | null = null;
     loadBaseMap().then(

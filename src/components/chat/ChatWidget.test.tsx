@@ -83,7 +83,7 @@ describe('Chat de Mini Marie', () => {
     renderRoute('/');
     act(() => vi.advanceTimersByTime(INACTIVE_MS));
     expect(avatarState()).toBe('sleep');
-    expect(document.querySelector('.avatar__zzz')).toBeInTheDocument();
+    expect(document.querySelector('.chat-avatar .sequence[data-sequence="wave"]')).toBeInTheDocument(); // siempre saluda
 
     fireEvent.keyDown(window, { key: 'a' });
     expect(avatarState()).toBe('idle');

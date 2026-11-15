@@ -19,8 +19,9 @@ export function remainingVisible(shownAt: number, now: number, min = SCREEN_MIN_
 type Phase = 'shown' | 'leaving' | 'hidden';
 
 /**
- * Visible en el arranque (hasta que la red queda en silencio) y mientras baja el
- * código de una página; nunca menos de 700 ms; al terminar se desvanece.
+ * Visible en toda carga (pedido de Marie): el arranque, el código de una página y cada
+ * petición de datos (el chat no cuenta: tiene su «pensando…»); nunca menos de 700 ms;
+ * al terminar se desvanece.
  */
 export function useLoadingScreen(): { visible: boolean; leaving: boolean } {
   const apiActive = loadingSnapshot(useLoadingStore((s) => s.tasks)).active;
@@ -28,7 +29,7 @@ export function useLoadingScreen(): { visible: boolean; leaving: boolean } {
   const [booting, setBooting] = useState(true);
   const [phase, setPhase] = useState<Phase>('shown');
   const shownAt = useRef(0);
-  const wanted = booting || lazy;
+  const wanted = booting || lazy || apiActive;
 
   if (wanted && phase !== 'shown') setPhase('shown');
 

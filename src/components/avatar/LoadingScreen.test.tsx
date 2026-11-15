@@ -51,4 +51,18 @@ describe('Pantalla de carga completa (H33)', () => {
     act(() => void vi.advanceTimersByTime(SCREEN_LEAVE_MS));
     expect(status()).toBeNull();
   });
+
+  it('aparece en toda petición de datos, no solo al arrancar (pedido de Marie)', () => {
+    render(<LoadingScreen />);
+    for (const ms of [200, 600, SCREEN_LEAVE_MS]) act(() => void vi.advanceTimersByTime(ms)); // arranque
+    expect(status()).toBeNull();
+
+    let id = 0;
+    act(() => void (id = useLoadingStore.getState().begin()));
+    expect(status()).toBeInTheDocument();
+    act(() => useLoadingStore.getState().end(id));
+    act(() => void vi.advanceTimersByTime(700));
+    act(() => void vi.advanceTimersByTime(SCREEN_LEAVE_MS));
+    expect(status()).toBeNull();
+  });
 });

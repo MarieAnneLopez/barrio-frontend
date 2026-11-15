@@ -1,5 +1,5 @@
 // Cliente HTTP de la API (/api/v1). En desarrollo Vite redirige /api al backend.
-// Cada petición informa su avance real a la LoadingRunnerBar (lib/loadingTracker).
+// Cada petición informa su avance real a la pantalla de carga (lib/loadingTracker).
 import { readJson, track } from './loadingTracker';
 
 const BASE_URL = (import.meta.env.VITE_API_URL as string | undefined) ?? '/api/v1';
