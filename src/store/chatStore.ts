@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { ApiError } from '../lib/apiClient';
 import type { AvatarEvent } from '../lib/avatarStateMachine';
 import { askMarie, type ChatContext, type RemoteReply } from '../lib/chatApi';
 import { localReply, type LocalReply } from '../lib/chatLocalReplies';
@@ -58,10 +59,15 @@ export const useChatStore = create<ChatStore>()((set, get) => ({
       const remote = await askMarie(clean, context);
       message = { id: nextId++, from: 'marie', remote };
       react(REACTION[remote.expresion]);
-    } catch {
-      const reply = localReply(clean);
-      message = { id: nextId++, from: 'marie', reply, offline: true };
-      react(reply.alert ? 'ALERT' : 'GREET');
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 429) {
+        // Límite de mensajes del servidor (D62): se dice, no se inventa una respuesta.
+        message = { id: nextId++, from: 'marie', reply: { key: 'chat.replies.limit' } };
+      } else {
+        const reply = localReply(clean);
+        message = { id: nextId++, from: 'marie', reply, offline: true };
+        react(reply.alert ? 'ALERT' : 'GREET');
+      }
     }
     set((s) => ({ pending: false, messages: [...s.messages, message] }));
   },

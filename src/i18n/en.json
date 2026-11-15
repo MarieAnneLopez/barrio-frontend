@@ -450,7 +450,8 @@
       "theft": "Let's go to {{name}}. These reports are for prevention, not alarm. In an emergency call 123.",
       "map": "The 3D map shows El Tintal's blocks, roads and parks with the places of each module.",
       "history": "Local History tells the story of El Tintal and the Kennedy district.",
-      "fallback": "Without a connection to the server I answer from a local repertoire: I can take you to the 14 modules, the 3D map, the history or Marie's contact."
+      "fallback": "Without a connection to the server I answer from a local repertoire: I can take you to the 14 modules, the 3D map, the history or Marie's contact.",
+      "limit": "You've reached the message limit for now. Wait a few minutes and ask me again."
     },
     "thinking": "Mini Marie is looking through the neighborhood data…",
     "offline": "No connection to the server: answer from the local repertoire."
@@ -597,5 +598,12 @@
   },
   "loading": {
     "label": "Loading"
+  },
+  "construction": {
+    "badge": "Under construction",
+    "notice": "This section is under construction.",
+    "map": "The neighborhood's 3D model is already on the Home page; this dedicated view arrives at the end of Phase 3.",
+    "gallery": "Meanwhile, each module shows the gallery of its places in their detail view.",
+    "help": "Meanwhile, check the FAQ or ask Mini Marie in the chat."
   }
 }
