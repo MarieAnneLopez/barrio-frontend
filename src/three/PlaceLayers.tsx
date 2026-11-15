@@ -1,6 +1,6 @@
 import type { ThreeEvent } from '@react-three/fiber';
-import { useEffect, useMemo } from 'react';
-import { BufferAttribute, BufferGeometry, Color, Points } from 'three';
+import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+import { BufferAttribute, BufferGeometry, Color, LineSegments, Points } from 'three';
 import { paletteColor } from '../lib/cssToken';
 import { emojiTexture } from './emojiTexture';
 import { useHeroStore } from './heroStore';
@@ -51,10 +51,18 @@ function PlaceShapes({ layer, visible }: { layer: CategoryLayer; visible: boolea
   const geometry = useGeometry(layer.positions);
   const style = SHAPE_STYLE[layer.slug] ?? DEFAULT_SHAPE;
   const color = useMemo(() => (style.token === 'blanco' ? new Color(1, 1, 1) : new Color(paletteColor(style.token))), [style]);
+  const lines = useRef<LineSegments>(null);
+  // El guion necesita la distancia acumulada de cada vértice (D79: trazo además del color).
+  useLayoutEffect(() => void (style.dash && lines.current?.computeLineDistances()), [geometry, style]);
   return (
-    <lineSegments geometry={geometry} visible={visible} raycast={noRaycast}
-      userData={{ slug: layer.slug, drawn: layer.drawn }}>
-      <lineBasicMaterial color={color} transparent opacity={style.opacity} depthWrite={false} />
+    <lineSegments ref={lines} geometry={geometry} visible={visible} raycast={noRaycast}
+      userData={{ slug: layer.slug, drawn: layer.drawn, dash: style.dash }}>
+      {style.dash ? (
+        <lineDashedMaterial color={color} transparent opacity={style.opacity} depthWrite={false}
+          dashSize={style.dash[0]} gapSize={style.dash[1]} />
+      ) : (
+        <lineBasicMaterial color={color} transparent opacity={style.opacity} depthWrite={false} />
+      )}
     </lineSegments>
   );
 }

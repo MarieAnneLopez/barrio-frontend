@@ -8,6 +8,7 @@ import { isMapAlive, removeLayersAndSource } from './mapCleanup';
 export const SHAPES_SOURCE = 'modulo-figuras';
 export const FILL_LAYER = 'modulo-relleno';
 export const LINE_LAYER = 'modulo-borde';
+export const CASING_LAYER = 'modulo-borde-blanco';
 
 interface Options {
   map: MapLibreMap | null;
@@ -30,19 +31,24 @@ export function useShapes({ map, features, selectedId, onSelect, reducedMotion }
     if (!map || !features) return undefined;
     const shapes = features.features.filter((f) => f.geometry && f.geometry.type !== 'Point');
     if (!shapes.length) return undefined;
-    const fill = paletteColor('principal');
-    const edge = paletteColor('oscuro');
+    // D79: la categoría va en oscuro con borde blanco: 4,90 contra el suelo claro y 8,40 contra la
+    // base lavanda; el blanco la separa además de todo lo demás (no solo el color la distingue).
+    const ink = paletteColor('oscuro');
     map.addSource(SHAPES_SOURCE, { type: 'geojson', data: { type: 'FeatureCollection', features: shapes } });
     map.addLayer({
       id: FILL_LAYER,
       type: 'fill',
       source: SHAPES_SOURCE,
       filter: ['in', ['geometry-type'], ['literal', ['Polygon', 'MultiPolygon']]],
-      paint: { 'fill-color': fill, 'fill-opacity': ['case', selected, 0.6, 0.28] },
+      paint: { 'fill-color': ink, 'fill-opacity': ['case', selected, 0.7, 0.45] },
+    });
+    map.addLayer({
+      id: CASING_LAYER, type: 'line', source: SHAPES_SOURCE,
+      paint: { 'line-color': '#ffffff', 'line-width': ['case', selected, 8, 5] },
     });
     map.addLayer({
       id: LINE_LAYER, type: 'line', source: SHAPES_SOURCE,
-      paint: { 'line-color': ['case', selected, edge, fill], 'line-width': ['case', selected, 4, 2] },
+      paint: { 'line-color': ink, 'line-width': ['case', selected, 5, 3] },
     });
     const click = (event: MapLayerMouseEvent) => {
       const id = event.features?.[0]?.id;
@@ -61,7 +67,7 @@ export function useShapes({ map, features, selectedId, onSelect, reducedMotion }
         map.off('mouseenter', layer, pointer);
         map.off('mouseleave', layer, reset);
       }
-      removeLayersAndSource(map, [FILL_LAYER, LINE_LAYER], SHAPES_SOURCE);
+      removeLayersAndSource(map, [FILL_LAYER, LINE_LAYER, CASING_LAYER], SHAPES_SOURCE);
     };
   }, [map, features]);
 

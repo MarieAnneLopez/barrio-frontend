@@ -2,7 +2,8 @@ import { useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CATEGORIES } from '../../lib/categoryConfig';
 import { useHeroStore } from '../../three/heroStore';
-import { cssColorOf, DEFAULT_SHAPE, SHAPE_STYLE } from '../../three/shapeStyle';
+import { DEFAULT_SHAPE, SHAPE_STYLE } from '../../three/shapeStyle';
+import { ShapeSwatch } from './ShapeSwatch';
 
 /**
  * Leyenda y filtro de la maqueta (H34): las 14 categorías con su símbolo y los lugares
@@ -45,8 +46,7 @@ export function HeroLegend({ defaultOpen = false }: { defaultOpen?: boolean }) {
                 {geometry === 'POINT' ? (
                   <span aria-hidden="true" className="w-5 text-center">{emoji}</span>
                 ) : (
-                  <span aria-hidden="true" className="h-2 w-5 shrink-0 border border-ink"
-                    style={{ backgroundColor: cssColorOf(SHAPE_STYLE[slug] ?? DEFAULT_SHAPE) }} />
+                  <ShapeSwatch style={SHAPE_STYLE[slug] ?? DEFAULT_SHAPE} />
                 )}
                 <span className="min-w-0 flex-1">{name}</span>
                 <span className="font-mono">

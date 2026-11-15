@@ -10,7 +10,8 @@ type LayerSpec = StyleSpec['layers'][number];
 const MAJOR_ROADS = ['motorway', 'trunk', 'primary', 'secondary', 'tertiary'];
 
 function layers(): LayerSpec[] {
-  // §9 de DISENO-V2 (D79): suelo claro, manzanas oscuro, parques lavanda, vías blancas, borde principal.
+  // §9 de DISENO-V2 (D79): base clara y tranquila (suelo claro, manzanas, edificios y parques en
+  // lavanda, vías blancas) para que la capa del módulo, oscura con borde blanco, resalte.
   const claro = paletteColor('claro');
   const oscuro = paletteColor('oscuro');
   const lavanda = paletteColor('lavanda');
@@ -19,9 +20,9 @@ function layers(): LayerSpec[] {
   return [
     { id: 'fondo', type: 'background', paint: { 'background-color': oscuro } },
     { id: 'tintal-area', type: 'fill', source: 'tintal', paint: { 'fill-color': claro, 'fill-opacity': 1 } },
-    { id: 'manzanas', type: 'fill', source: 'manzanas', paint: { 'fill-color': oscuro, 'fill-opacity': 0.7, 'fill-outline-color': oscuro } },
+    { id: 'manzanas', type: 'fill', source: 'manzanas', paint: { 'fill-color': lavanda, 'fill-opacity': 0.55, 'fill-outline-color': lavanda } },
     { id: 'parques', type: 'fill', source: 'parques', paint: { 'fill-color': lavanda, 'fill-opacity': 0.6 } },
-    { id: 'edificios', type: 'fill', source: 'edificios', paint: { 'fill-color': principal, 'fill-opacity': 0.75 } },
+    { id: 'edificios', type: 'fill', source: 'edificios', paint: { 'fill-color': lavanda, 'fill-opacity': 0.9 } },
     {
       id: 'vias',
       type: 'line',
