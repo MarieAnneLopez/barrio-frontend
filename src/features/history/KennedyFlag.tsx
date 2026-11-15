@@ -24,7 +24,7 @@ export function KennedyFlag() {
         height={200}
         className="h-auto w-full max-w-[300px] rounded-sm border border-line-strong"
       />
-      <div className="flex max-w-prose flex-col gap-3">
+      <div className="band-text flex max-w-prose flex-col gap-3">
         <p className="m-0 text-fg-secondary">{t('history.flag.design')}</p>
         <p className="m-0 text-step--1">
           <SourceLinks refs={`${DECRETO} | ${COMMONS}`} />

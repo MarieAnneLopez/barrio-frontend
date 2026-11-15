@@ -9,7 +9,7 @@
     opacity var(--dur-2) ease;
 }
 
-/* Pulsar = el ladrillo se acomoda: baja 2 px y su sombra se acorta (D68). */
+/* Pulsar = el bloque se acomoda: baja 2 px y su sombra se acorta (D68). */
 .ui-pressable:active:not([aria-disabled='true']) {
   transform: translate(var(--press-shift), var(--press-shift)) scale(var(--press-scale));
 }

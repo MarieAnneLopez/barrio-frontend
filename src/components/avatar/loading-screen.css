@@ -26,8 +26,8 @@
   width: calc(100% + 64px);
   height: 16px;
   align-self: flex-start;
-  background-color: var(--palette-vino);
-  background-image: repeating-linear-gradient(90deg, var(--palette-rosa) 0 28px, transparent 28px 32px);
+  background-color: var(--palette-oscuro);
+  background-image: repeating-linear-gradient(90deg, var(--palette-lavanda) 0 28px, transparent 28px 32px);
   background-size: 64px 6px;
   background-repeat: repeat-x;
   background-position: 0 0;
@@ -50,7 +50,7 @@
   font-size: 0.875rem;
   line-height: 1.6;
   color: #fff;
-  background-color: var(--palette-vino); /* blanco sobre vino: 11,44:1 */
+  background-color: var(--palette-oscuro); /* blanco sobre oscuro: 12,25:1 */
 }
 
 /* Movimiento reducido: pose fija y suelo quieto; el fundido de salida se mantiene. */

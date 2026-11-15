@@ -4,7 +4,7 @@ import { paletteColor } from '../lib/cssToken';
 const SIZE = 64;
 
 /**
- * Placa del marcador (DISENO-V2 §9): círculo piedra con aro vino y el emoji del
+ * Placa del marcador (DISENO-V2 §9): círculo claro con aro oscuro y el emoji del
  * módulo, hecha en un canvas local (sin imágenes externas).
  */
 export function emojiTexture(emoji: string): CanvasTexture {
@@ -15,10 +15,10 @@ export function emojiTexture(emoji: string): CanvasTexture {
   if (ctx) {
     ctx.beginPath();
     ctx.arc(SIZE / 2, SIZE / 2, SIZE / 2 - 4, 0, Math.PI * 2);
-    ctx.fillStyle = paletteColor('piedra');
+    ctx.fillStyle = paletteColor('claro');
     ctx.fill();
     ctx.lineWidth = 4;
-    ctx.strokeStyle = paletteColor('vino');
+    ctx.strokeStyle = paletteColor('oscuro');
     ctx.stroke();
     ctx.font = `${SIZE * 0.5}px system-ui, "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
     ctx.textAlign = 'center';

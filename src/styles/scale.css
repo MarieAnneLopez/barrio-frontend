@@ -47,9 +47,9 @@
   --disabled-opacity: 0.45;
   /* Sombras duras, sin desenfoque: ladrillos apilados */
   --shadow-deep: 4px 4px 0 rgb(0 0 0 / 0.35);
-  --shadow-brick: 4px 4px 0 var(--palette-vino);
-  --shadow-brick-pressed: 2px 2px 0 var(--palette-vino);
-  --glow-active: 0 0 0 2px var(--palette-vino);
+  --shadow-brick: 4px 4px 0 var(--palette-oscuro);
+  --shadow-brick-pressed: 2px 2px 0 var(--palette-oscuro);
+  --glow-active: 0 0 0 2px var(--palette-oscuro);
 }
 
 html {

@@ -3,7 +3,7 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 50% 50%, rgb(180 68 70 / 0.55), transparent 60%),
+    radial-gradient(circle at 50% 50%, rgb(175 80 229 / 0.55), transparent 60%),
     var(--overlay);
   backdrop-filter: blur(6px);
 }
@@ -60,8 +60,8 @@
   line-height: 1.1;
   color: var(--text-primary);
   text-shadow:
-    4px 4px 0 var(--palette-vino),
-    -2px -2px 0 var(--palette-rosa);
+    4px 4px 0 var(--palette-oscuro),
+    -2px -2px 0 var(--palette-lavanda);
   letter-spacing: 0.08em;
 }
 
@@ -76,13 +76,13 @@
   width: 8px;
   height: 8px;
   opacity: 0;
-  background-color: var(--palette-piedra);
+  background-color: var(--palette-claro);
 }
 
 .welcome-confetti:nth-child(3n) {
-  background-color: var(--palette-rosa);
+  background-color: var(--palette-lavanda);
 }
 
 .welcome-confetti:nth-child(3n + 1) {
-  background-color: var(--palette-vino);
+  background-color: var(--palette-oscuro);
 }

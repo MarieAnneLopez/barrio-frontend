@@ -22,7 +22,7 @@ export function GalleryPage() {
   return (
     <div ref={root} className="flex flex-col gap-10">
       <PageHeader title={t('nav.gallery')} description={t('pages.gallery')} />
-      <p className="m-0 max-w-3xl text-step-0 text-fg-secondary">{t('galleryPage.note')}</p>
+      <p className="band-text m-0 max-w-3xl text-step-0 text-fg-secondary">{t('galleryPage.note')}</p>
       <section aria-labelledby="gallery-places" className="flex flex-col gap-6">
         <h2 id="gallery-places" className="m-0 text-step-2 text-fg">{t('galleryPage.places')}</h2>
         {photos.status === 'loading' ? <Skeleton className="h-48 w-full" lines={3} /> : null}

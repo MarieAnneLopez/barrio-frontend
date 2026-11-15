@@ -10,18 +10,18 @@ type LayerSpec = StyleSpec['layers'][number];
 const MAJOR_ROADS = ['motorway', 'trunk', 'primary', 'secondary', 'tertiary'];
 
 function layers(): LayerSpec[] {
-  // §9 de DISENO-V2: suelo piedra, manzanas vino, parques rosa, vías blancas, borde ladrillo.
-  const piedra = paletteColor('piedra');
-  const vino = paletteColor('vino');
-  const rosa = paletteColor('rosa');
-  const ladrillo = paletteColor('ladrillo');
+  // §9 de DISENO-V2 (D79): suelo claro, manzanas oscuro, parques lavanda, vías blancas, borde principal.
+  const claro = paletteColor('claro');
+  const oscuro = paletteColor('oscuro');
+  const lavanda = paletteColor('lavanda');
+  const principal = paletteColor('principal');
   const blanco = '#ffffff';
   return [
-    { id: 'fondo', type: 'background', paint: { 'background-color': vino } },
-    { id: 'tintal-area', type: 'fill', source: 'tintal', paint: { 'fill-color': piedra, 'fill-opacity': 1 } },
-    { id: 'manzanas', type: 'fill', source: 'manzanas', paint: { 'fill-color': vino, 'fill-opacity': 0.7, 'fill-outline-color': vino } },
-    { id: 'parques', type: 'fill', source: 'parques', paint: { 'fill-color': rosa, 'fill-opacity': 0.6 } },
-    { id: 'edificios', type: 'fill', source: 'edificios', paint: { 'fill-color': ladrillo, 'fill-opacity': 0.75 } },
+    { id: 'fondo', type: 'background', paint: { 'background-color': oscuro } },
+    { id: 'tintal-area', type: 'fill', source: 'tintal', paint: { 'fill-color': claro, 'fill-opacity': 1 } },
+    { id: 'manzanas', type: 'fill', source: 'manzanas', paint: { 'fill-color': oscuro, 'fill-opacity': 0.7, 'fill-outline-color': oscuro } },
+    { id: 'parques', type: 'fill', source: 'parques', paint: { 'fill-color': lavanda, 'fill-opacity': 0.6 } },
+    { id: 'edificios', type: 'fill', source: 'edificios', paint: { 'fill-color': principal, 'fill-opacity': 0.75 } },
     {
       id: 'vias',
       type: 'line',
@@ -36,7 +36,7 @@ function layers(): LayerSpec[] {
       id: 'tintal-borde',
       type: 'line',
       source: 'tintal',
-      paint: { 'line-color': ladrillo, 'line-width': 3, 'line-dasharray': [2, 1.5] },
+      paint: { 'line-color': principal, 'line-width': 3, 'line-dasharray': [2, 1.5] },
     },
   ];
 }

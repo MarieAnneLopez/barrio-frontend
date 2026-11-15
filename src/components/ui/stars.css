@@ -1,13 +1,13 @@
-/* Estrellas (D13, D68): relleno rosa con borde piedra (3,90 sobre ladrillo, 8,20 sobre vino). Sin amarillo. */
+/* Estrellas (D13, D79): relleno lavanda con borde claro (íconos ≥ 3:1 sobre oscuro). Sin amarillo. */
 .stars-empty {
   fill: transparent;
-  stroke: var(--palette-piedra);
+  stroke: var(--palette-claro);
   stroke-width: 1.2;
 }
 
 .stars-full {
-  fill: var(--palette-rosa);
-  stroke: var(--palette-piedra);
+  fill: var(--palette-lavanda);
+  stroke: var(--palette-claro);
   stroke-width: 1.2;
 }
 

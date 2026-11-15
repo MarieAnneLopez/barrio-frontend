@@ -3,6 +3,7 @@
 :root.high-contrast {
   --bg-primary: #000000;
   --bg-surface: #000000;
+  --bg-nav: #000000;
   --text-primary: #ffffff;
   --text-secondary: #ffffff;
   --text-muted: #ffffff;

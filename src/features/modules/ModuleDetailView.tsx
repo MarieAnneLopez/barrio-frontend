@@ -39,7 +39,7 @@ export function ModuleDetailView({ category, initialOpenId = null }: { category:
 
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
-      <div className="flex flex-col gap-6">
+      <div className="band-text flex flex-col gap-6">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <ModuleSearch onSearch={(q) => refine({ query: q })} disabled={notLoaded} />
           <AuthGuard role="admin">

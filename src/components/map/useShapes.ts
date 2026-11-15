@@ -30,8 +30,8 @@ export function useShapes({ map, features, selectedId, onSelect, reducedMotion }
     if (!map || !features) return undefined;
     const shapes = features.features.filter((f) => f.geometry && f.geometry.type !== 'Point');
     if (!shapes.length) return undefined;
-    const fill = paletteColor('ladrillo');
-    const edge = paletteColor('vino');
+    const fill = paletteColor('principal');
+    const edge = paletteColor('oscuro');
     map.addSource(SHAPES_SOURCE, { type: 'geojson', data: { type: 'FeatureCollection', features: shapes } });
     map.addLayer({
       id: FILL_LAYER,

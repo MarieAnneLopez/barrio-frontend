@@ -17,10 +17,10 @@ export interface SceneColors {
 
 export function readSceneColors(): SceneColors {
   return {
-    fondo: new Color(paletteColor('vino')),
-    base: new Color(paletteColor('ladrillo')),
-    linea: new Color(paletteColor('piedra')),
-    alto: new Color(paletteColor('rosa')),
-    realce: new Color(paletteColor('rosa')),
+    fondo: new Color(paletteColor('oscuro')),
+    base: new Color(paletteColor('principal')),
+    linea: new Color(paletteColor('claro')),
+    alto: new Color(paletteColor('lavanda')),
+    realce: new Color(paletteColor('lavanda')),
   };
 }

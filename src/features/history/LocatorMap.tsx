@@ -23,15 +23,15 @@ export function LocatorMap({ kennedy, tintal }: LocatorMapProps) {
         className="w-full max-w-md"
       >
         <path d={svgPath(kennedy, project)} className="fill-surface stroke-line-strong" strokeWidth={1.5} />
-        <path d={svgPath(tintal, project)} className="fill-accent/40 stroke-accent" strokeWidth={2} />
+        <path d={svgPath(tintal, project)} className="fill-pink/60 stroke-pink" strokeWidth={2} />
       </svg>
-      <figcaption className="flex flex-wrap gap-4 text-step--1 text-fg-secondary">
+      <figcaption className="band-text flex flex-wrap gap-4 text-step--1 text-fg-secondary">
         <span className="flex items-center gap-2">
           <span aria-hidden="true" className="inline-block size-3 rounded-sm border border-line-strong bg-surface" />
           {t('history.locator.kennedy')}
         </span>
         <span className="flex items-center gap-2">
-          <span aria-hidden="true" className="inline-block size-3 rounded-sm border border-accent bg-accent/40" />
+          <span aria-hidden="true" className="inline-block size-3 rounded-sm border border-ink bg-pink" />
           {t('history.locator.tintal')}
         </span>
       </figcaption>

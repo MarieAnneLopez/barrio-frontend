@@ -8,14 +8,14 @@ export interface ShapeStyle {
 }
 
 export const SHAPE_STYLE: Record<string, ShapeStyle> = {
-  'datos-catastrales': { token: 'piedra', opacity: 0.4 },
+  'datos-catastrales': { token: 'claro', opacity: 0.4 },
   'estado-calles': { token: 'blanco', opacity: 0.9 },
-  'zonas-verdes': { token: 'rosa', opacity: 1 },
-  'escenarios-deportivos': { token: 'piedra', opacity: 1 },
-  localidad: { token: 'rosa', opacity: 0.85 },
+  'zonas-verdes': { token: 'lavanda', opacity: 1 },
+  'escenarios-deportivos': { token: 'claro', opacity: 1 },
+  localidad: { token: 'lavanda', opacity: 0.85 },
 };
 
-export const DEFAULT_SHAPE: ShapeStyle = { token: 'piedra', opacity: 0.8 };
+export const DEFAULT_SHAPE: ShapeStyle = { token: 'claro', opacity: 0.8 };
 
 /** Valor CSS del token (para la muestra de color de la leyenda). */
 export function cssColorOf(style: ShapeStyle): string {

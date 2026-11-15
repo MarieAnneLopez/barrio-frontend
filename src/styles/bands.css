@@ -1,0 +1,39 @@
+/* Bandas de texto (D79). Sobre el fondo principal (#af50e5) no cabe texto normal
+   (blanco 4,12; oscuro 2,98): el texto suelto de las páginas va en una banda lavanda
+   con texto oscuro (8,40). Dentro, los tokens de texto pasan a oscuro (las utilidades
+   de Tailwind los leen directo: @theme inline); una superficie oscura dentro vuelve a blanco. */
+.band-text {
+  background-color: var(--bg-accent);
+  border: 2px solid var(--border-ink);
+  border-radius: var(--r-sm);
+  padding: 1rem 1.25rem;
+  --text-primary: var(--text-on-accent); /* oscuro; en alto contraste lo ajusta contrast.css */
+  --text-secondary: var(--text-on-accent);
+  --text-muted: var(--text-on-accent);
+  --accent-soft: var(--text-on-accent);
+  --border-subtle: var(--border-ink);
+  --border-strong: var(--border-ink);
+  color: var(--text-primary);
+}
+
+.band-text .bg-surface,
+.band-text .bg-glass,
+.band-text .brick-card {
+  --text-primary: #ffffff;
+  --text-secondary: rgb(255 255 255 / 0.94);
+  --text-muted: rgb(255 255 255 / 0.9);
+  --accent-soft: #ffffff;
+  --border-subtle: rgb(255 255 255 / 0.22);
+  --border-strong: rgb(255 255 255 / 0.6);
+  color: var(--text-primary);
+}
+
+/* Barra lateral (D79): fondo principal; cada ítem del menú lleva su banda intensa
+   (blanco 6,86) y al pasar el puntero, oscura (12,25). El activo sigue en lavanda. */
+.brick-bond--nav .ui-btn--ghost:not(.ui-nav-active) {
+  background-color: var(--bg-nav);
+}
+
+.brick-bond--nav .ui-btn--ghost:not(.ui-nav-active):hover {
+  background-color: var(--bg-surface);
+}

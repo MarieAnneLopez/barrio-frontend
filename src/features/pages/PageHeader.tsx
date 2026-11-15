@@ -12,7 +12,7 @@ interface PageHeaderProps {
 
 /**
  * Encabezado de página: un solo h1 por ruta y título del documento. Es la «placa»
- * rosa de la v2 (D68): texto vino (5,16), borde y sombra de ladrillo.
+ * lavanda (D79): texto oscuro (8,40), borde y sombra oscuros.
  */
 export function PageHeader({ title, description, eyebrow, emoji }: PageHeaderProps) {
   const { t } = useTranslation();

@@ -4,6 +4,7 @@
 @import './contrast.css';
 @import './pixel.css';
 @import './brick.css';
+@import './bands.css';
 @import '../components/ui/ui.css';
 @import '../components/ui/ui-motion.css';
 
