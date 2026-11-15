@@ -16,7 +16,7 @@ export function WhatsAppFloat({ raised = false }: WhatsAppFloatProps) {
   const { t } = useTranslation();
   return (
     <div
-      className={`fixed right-4 z-40 transition-transform duration-[var(--dur-3)] ease-out md:right-6 ${
+      className={`fixed right-4 z-40 transition-transform duration-[var(--dur-3)] ease-[var(--ease-emphasis)] md:right-6 ${
         raised ? '-translate-y-24' : ''
       } bottom-4 md:bottom-6`}
     >

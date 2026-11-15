@@ -17,19 +17,31 @@ const POSITION: Record<Side, string> = {
   right: 'left-full top-1/2 ml-2 -translate-y-1/2 origin-left',
 };
 
-/** Tooltip accesible por hover y teclado; Escape lo cierra. Escala desde su disparador. */
+/** Si otro tooltip se cerró hace menos de esto, el siguiente abre al instante (grupo «caliente», H26). */
+export const WARM_MS = 300;
+let lastClosedAt = -Infinity;
+
+/**
+ * Tooltip accesible por hover y teclado; Escape lo cierra. Escala desde su disparador.
+ * Al recorrer botones vecinos (barra de accesibilidad, menú plegado) solo el primero
+ * espera: los demás aparecen sin demora ni transición.
+ */
 export function Tooltip({ content, side = 'top', delay = 400, children }: TooltipProps) {
   const id = useId();
   const [open, setOpen] = useState(false);
+  const [instant, setInstant] = useState(false);
   const timer = useRef<number | undefined>(undefined);
   useEffect(() => () => window.clearTimeout(timer.current), []);
 
   const show = (wait: number) => {
     window.clearTimeout(timer.current);
-    timer.current = window.setTimeout(() => setOpen(true), wait);
+    const warm = performance.now() - lastClosedAt < WARM_MS;
+    setInstant(warm);
+    timer.current = window.setTimeout(() => setOpen(true), warm ? 0 : wait);
   };
   const hide = () => {
     window.clearTimeout(timer.current);
+    if (open) lastClosedAt = performance.now();
     setOpen(false);
   };
 
@@ -47,7 +59,7 @@ export function Tooltip({ content, side = 'top', delay = 400, children }: Toolti
         id={id}
         role="tooltip"
         data-open={open}
-        className={`pointer-events-none absolute z-50 whitespace-nowrap rounded-sm border border-line bg-surface px-2 py-1 text-step--1 text-fg shadow-[var(--shadow-deep)] transition-[opacity,transform] duration-[var(--dur-2)] ease-out ${POSITION[side]} ${open ? 'scale-100 opacity-100' : 'invisible scale-[0.97] opacity-0'}`}
+        className={`pointer-events-none absolute z-50 whitespace-nowrap rounded-sm border border-line bg-surface px-2 py-1 text-step--1 text-fg shadow-[var(--shadow-deep)] transition-[opacity,transform] ease-[var(--ease-emphasis)] ${instant ? 'duration-0' : 'duration-[var(--dur-2)]'} ${POSITION[side]} ${open ? 'scale-100 opacity-100' : 'invisible scale-[0.97] opacity-0'}`}
       >
         {content}
       </span>

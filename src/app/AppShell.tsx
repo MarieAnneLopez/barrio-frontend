@@ -49,7 +49,7 @@ export function AppShell() {
   const sidebarCollapsed = isDesktop && collapsed;
   const asideClasses = isDesktop
     ? `sticky top-16 h-[calc(100dvh-4rem)] shrink-0 ${sidebarCollapsed ? 'w-[72px]' : 'w-[260px]'}`
-    : `fixed top-16 bottom-0 left-0 z-40 w-[280px] max-w-[85vw] transition-[transform,visibility] duration-[var(--dur-3)] ease-out ${
+    : `fixed top-16 bottom-0 left-0 z-40 w-[280px] max-w-[85vw] transition-[transform,visibility] duration-[var(--dur-3)] ease-[var(--ease-drawer)] ${
         drawerOpen ? 'visible translate-x-0' : 'invisible -translate-x-full'
       }`;
 

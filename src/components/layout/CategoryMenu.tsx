@@ -55,7 +55,7 @@ export function CategoryMenu({ collapsed, onRequestExpand }: CategoryMenuProps) 
         <NavIcon
           name="chevron"
           size={16}
-          className={`text-accent transition-transform duration-[var(--dur-2)] ease-out ${expanded ? 'rotate-180' : ''}`}
+          className={`text-accent transition-transform duration-[var(--dur-2)] ease-[var(--ease-emphasis)] ${expanded ? 'rotate-180' : ''}`}
         />
       )}
     </button>
