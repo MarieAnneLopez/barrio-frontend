@@ -604,7 +604,38 @@
     "badge": "En construcción",
     "notice": "Esta sección está en construcción.",
     "map": "La maqueta 3D del barrio ya está en el Inicio; esta vista dedicada llega al final de la Fase 3.",
-    "gallery": "Mientras tanto, cada módulo muestra la galería de sus lugares en su ficha.",
-    "help": "Mientras tanto, revisa las Preguntas Frecuentes o pregúntale a Mini Marie en el chat."
+    "gallery": "Mientras tanto, cada módulo muestra la galería de sus lugares en su ficha."
+  },
+  "help": {
+    "sections": {
+      "navigate": {
+        "title": "Navegar por el barrio",
+        "body": "En la barra lateral están el Inicio, la Historia Local y «Categorías», que abre los 14 módulos. Cada módulo tiene un mapa con sus lugares, una lista con búsqueda y filtros, y una ficha por lugar con fotos, calificaciones y la fuente de cada dato. En el celular, la barra lateral se abre con el botón de menú."
+      },
+      "accessibility": {
+        "title": "Accesibilidad",
+        "body": "La barra del costado derecho agranda o achica la letra (de 90 % a 125 %), activa el alto contraste y reduce el movimiento. Toda la plataforma se usa con teclado: Tab avanza, Mayús+Tab retrocede, Enter abre y Escape cierra ventanas, el chat y los avisos. El primer Tab ofrece «Saltar al contenido principal»."
+      },
+      "language": {
+        "title": "Idioma",
+        "body": "Arriba a la derecha puedes cambiar entre español (ES) e inglés (EN). Se guarda para tu próxima visita."
+      },
+      "chat": {
+        "title": "Mini Marie, la asistente",
+        "body": "El botón con Mini Marie, junto al de WhatsApp, abre el chat. Puedes preguntar por cualquiera de los 14 módulos («¿Qué colegios hay?»), el lugar mejor calificado, lo que queda cerca, cuántos registros hay, la historia o cómo contactar a Marie. Responde con los datos de la plataforma y te lleva a la sección con un botón."
+      },
+      "account": {
+        "title": "Cuentas y permisos",
+        "body": "Sin cuenta puedes consultar todo. Con una cuenta de visitante, que creas en «Acceso / Sesión», puedes calificar lugares con estrellas. Solo la cuenta de administración crea, edita y elimina lugares y fotos."
+      },
+      "data": {
+        "title": "De dónde salen los datos",
+        "body": "Los datos vienen de OpenStreetMap y de Datos Abiertos de Bogotá, y cada uno muestra su fuente. «Por verificar» marca lo que no se pudo confirmar en una fuente oficial, «Prensa» lo que viene de un medio y «dato de ejemplo» los registros de muestra de módulos sin una fuente abierta. El Tintal es aquí la suma de las UPZ 78 y 79 (662 ha): una definición operativa, no una unidad administrativa oficial."
+      },
+      "contact": {
+        "title": "Contacto",
+        "body": "El botón verde de WhatsApp, abajo a la derecha, escribe directamente a Marie Anne Lopez Poveda, la creadora. Sus datos están en el Perfil de la Creadora."
+      }
+    }
   }
 }

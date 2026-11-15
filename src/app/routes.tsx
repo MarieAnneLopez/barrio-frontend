@@ -12,6 +12,7 @@ import { AppShell } from './AppShell';
 const AccessPage = lazy(() => import('../features/auth/AccessPage').then((m) => ({ default: m.AccessPage })));
 const ModulePage = lazy(() => import('../features/modules/ModulePage').then((m) => ({ default: m.ModulePage })));
 const CreatorPage = lazy(() => import('../features/pages/CreatorPage').then((m) => ({ default: m.CreatorPage })));
+const HelpPage = lazy(() => import('../features/pages/HelpPage').then((m) => ({ default: m.HelpPage })));
 const FaqPage = lazy(() => import('../features/pages/FaqPage').then((m) => ({ default: m.FaqPage })));
 const NotFoundPage = lazy(() => import('../features/pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage })));
 const RankingsPage = lazy(() => import('../features/ranking/RankingsPage').then((m) => ({ default: m.RankingsPage })));
@@ -24,6 +25,7 @@ const DEDICATED: Record<string, ReactNode> = {
   ranking: <RankingsPage />,
   history: <HistoryPage />,
   access: <AccessPage />,
+  help: <HelpPage />,
 };
 
 /** Árbol de rutas: compartido por la app (BrowserRouter) y las pruebas (MemoryRouter). */

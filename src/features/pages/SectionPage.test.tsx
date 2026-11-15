@@ -19,7 +19,6 @@ describe('Secciones en construcción y límite del chat (D62)', () => {
   it.each([
     ['/mapa', 'La maqueta 3D del barrio ya está en el Inicio', 'Ir a Inicio'],
     ['/galeria', 'cada módulo muestra la galería', 'Ir a Zonas Verdes'],
-    ['/ayuda', 'revisa las Preguntas Frecuentes', 'Ir a Preguntas Frecuentes'],
   ])('%s dice que está en construcción y lleva a lo que ya existe', async (path, text, link) => {
     mockApi({});
     renderRoute(path);

@@ -6,7 +6,6 @@ import { PageHeader } from './PageHeader';
 const MEANWHILE: Record<string, { to: string; label: string }> = {
   map: { to: '/', label: 'nav.home' },
   gallery: { to: '/categorias/zonas-verdes', label: 'categories.zonas-verdes.name' },
-  help: { to: '/preguntas', label: 'nav.faq' },
 };
 
 /** Sección del Sidebar que todavía no tiene su página propia: lo dice y lleva a lo que ya existe. */

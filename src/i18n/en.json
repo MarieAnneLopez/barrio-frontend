@@ -604,7 +604,38 @@
     "badge": "Under construction",
     "notice": "This section is under construction.",
     "map": "The neighborhood's 3D model is already on the Home page; this dedicated view arrives at the end of Phase 3.",
-    "gallery": "Meanwhile, each module shows the gallery of its places in their detail view.",
-    "help": "Meanwhile, check the FAQ or ask Mini Marie in the chat."
+    "gallery": "Meanwhile, each module shows the gallery of its places in their detail view."
+  },
+  "help": {
+    "sections": {
+      "navigate": {
+        "title": "Getting around",
+        "body": "The sidebar has Home, Local History and «Categories», which opens the 14 modules. Each module has a map of its places, a list with search and filters, and a detail view per place with photos, ratings and the source of every data point. On a phone, open the sidebar with the menu button."
+      },
+      "accessibility": {
+        "title": "Accessibility",
+        "body": "The bar on the right side makes the text larger or smaller (90 % to 125 %), turns on high contrast and reduces motion. The whole platform works with a keyboard: Tab moves forward, Shift+Tab back, Enter opens and Escape closes dialogs, the chat and notices. The first Tab offers «Skip to main content»."
+      },
+      "language": {
+        "title": "Language",
+        "body": "At the top right you can switch between Spanish (ES) and English (EN). It is remembered for your next visit."
+      },
+      "chat": {
+        "title": "Mini Marie, the assistant",
+        "body": "The button with Mini Marie, next to the WhatsApp one, opens the chat. Ask about any of the 14 modules («What schools are there?»), the best-rated place, what's nearby, how many records there are, the history or how to contact Marie. It answers with the platform's data and takes you to the section with a button."
+      },
+      "account": {
+        "title": "Accounts and permissions",
+        "body": "Without an account you can browse everything. With a visitor account, created in «Access / Session», you can rate places with stars. Only the admin account creates, edits and deletes places and photos."
+      },
+      "data": {
+        "title": "Where the data comes from",
+        "body": "Data comes from OpenStreetMap and Bogotá Open Data, and each item shows its source. «To be verified» marks what couldn't be confirmed by an official source, «Press» what comes from the media, and «sample data» the example records of modules without an open source. Here El Tintal is UPZ 78 plus UPZ 79 (662 ha): an operational definition, not an official administrative unit."
+      },
+      "contact": {
+        "title": "Contact",
+        "body": "The green WhatsApp button at the bottom right writes directly to Marie Anne Lopez Poveda, the creator. Her details are in the Creator Profile."
+      }
+    }
   }
 }
