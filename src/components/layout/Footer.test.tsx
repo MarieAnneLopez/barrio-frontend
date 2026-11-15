@@ -41,12 +41,12 @@ describe('Footer', () => {
     }
   });
 
-  it('no duplica bloques en /preguntas ni en /creadora', () => {
+  it('no duplica bloques en /preguntas ni en /creadora', async () => {
     const { unmount } = renderRoute('/preguntas');
-    expect(screen.getAllByRole('button', { name: FAQ_TITLE })).toHaveLength(1);
+    expect(await screen.findAllByRole('button', { name: FAQ_TITLE })).toHaveLength(1);
     unmount();
     renderRoute('/creadora');
-    expect(screen.getAllByRole('heading', { name: 'Marie Anne Lopez Poveda' })).toHaveLength(1);
+    expect(await screen.findAllByRole('heading', { name: 'Marie Anne Lopez Poveda' })).toHaveLength(1);
   });
 });
 

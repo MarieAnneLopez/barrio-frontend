@@ -71,11 +71,11 @@ describe('Chat de Mini Marie', () => {
   it('camina hacia la sección nueva y se alerta en el módulo de robos', async () => {
     const { router } = renderRoute('/preguntas');
     await act(() => router.navigate('/mapa'));
-    expect(avatarState()).toBe('walk_left');
+    await waitFor(() => expect(avatarState()).toBe('walk_left'));
     await act(() => router.navigate('/ayuda'));
-    expect(avatarState()).toBe('walk_right');
+    await waitFor(() => expect(avatarState()).toBe('walk_right'));
     await act(() => router.navigate('/categorias/robos'));
-    expect(avatarState()).toBe('alert');
+    await waitFor(() => expect(avatarState()).toBe('alert'));
   });
 
   it('se duerme tras 45 s sin actividad y despierta al usarla', () => {

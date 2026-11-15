@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { LoadingRunnerBar } from '../components/avatar/LoadingRunnerBar';
+import { LoadingTask } from '../components/avatar/LoadingTask';
 import { WelcomeChoreography } from '../components/avatar/WelcomeChoreography';
 import { ChatWidget } from '../components/chat/ChatWidget';
 import { AccessibilityRail } from '../components/layout/AccessibilityRail';
@@ -80,7 +81,9 @@ export function AppShell() {
         </aside>
         <div className="flex min-w-0 flex-1 flex-col">
           <main id={MAIN_ID} tabIndex={-1} className="flex-1 px-4 py-8 md:pr-24 md:pl-10">
-            <Outlet />
+            <Suspense fallback={<LoadingTask />}>
+              <Outlet />
+            </Suspense>
           </main>
           <Footer />
         </div>

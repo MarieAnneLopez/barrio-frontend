@@ -59,9 +59,9 @@ describe('Sidebar', () => {
     expect(screen.getByRole('list', { name: '14 módulos del barrio' })).toBeVisible();
   });
 
-  it('en un módulo, el submenú aparece abierto con el módulo activo', () => {
+  it('en un módulo, el submenú aparece abierto con el módulo activo', async () => {
     renderRoute('/categorias/robos');
-    expect(screen.getByRole('heading', { level: 1, name: 'Datos sobre Robos' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { level: 1, name: 'Datos sobre Robos' })).toBeInTheDocument();
     const list = screen.getByRole('list', { name: '14 módulos del barrio' });
     expect(within(list).getByRole('link', { name: 'Datos sobre Robos' })).toHaveAttribute(
       'aria-current',

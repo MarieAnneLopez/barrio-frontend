@@ -45,14 +45,14 @@ describe('Header e idioma', () => {
 });
 
 describe('Rutas', () => {
-  it('muestra 404 para rutas y módulos inexistentes', () => {
+  it('muestra 404 para rutas y módulos inexistentes', async () => {
     renderRoute('/no-existe');
-    expect(screen.getByRole('heading', { level: 1, name: 'Esta página no existe' })).toBeVisible();
+    expect(await screen.findByRole('heading', { level: 1, name: 'Esta página no existe' })).toBeVisible();
   });
 
-  it('un slug de módulo desconocido también da 404', () => {
+  it('un slug de módulo desconocido también da 404', async () => {
     renderRoute('/categorias/no-existe');
-    expect(screen.getByRole('heading', { level: 1, name: 'Esta página no existe' })).toBeVisible();
+    expect(await screen.findByRole('heading', { level: 1, name: 'Esta página no existe' })).toBeVisible();
   });
 });
 
