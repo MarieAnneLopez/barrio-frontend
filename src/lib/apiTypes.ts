@@ -12,9 +12,12 @@ export interface Page<T> {
 /** Campos comunes de cualquier registro de módulo (auditoría + geometría). */
 export interface ModuleItem {
   id: number;
-  source_type: 'osm' | 'datos_abiertos' | 'seed';
+  source_type: 'osm' | 'datos_abiertos' | 'seed' | 'sitio_oficial';
   source_ref: string | null;
   verified: boolean;
+  descripcion_es?: string | null; // H35: descripción verificada (ES/EN) y publicación
+  descripcion_en?: string | null;
+  publicado?: boolean;
   geometry: Geometry | null;
   nombre?: string;
   [field: string]: unknown;

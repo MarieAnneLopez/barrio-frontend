@@ -13,6 +13,9 @@ import { RatingPanel } from './RatingPanel';
 import { SourceLine } from './SourceLine';
 import { VerifiedBadge } from './VerifiedBadge';
 
+/** Descripción verificada (H35) en el idioma de la interfaz. */
+const description = (item: ModuleItem, lang: string) => (lang === 'en' ? item.descripcion_en : item.descripcion_es);
+
 interface ItemDetailModalProps {
   slug: string;
   itemId: number | null;
@@ -41,6 +44,9 @@ export function ItemDetailModal({ slug, itemId, onClose, onEdit, onDeleted }: It
           <div className="self-start">
             <VerifiedBadge item={data} />
           </div>
+          {description(data, i18n.language) ? (
+            <p className="m-0 text-step--1 text-fg">{description(data, i18n.language)}</p>
+          ) : null}
           <dl className="m-0 grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-step--1">
             {moduleFields(slug)
               .fields.filter((f) => hasValue(data[f.name]))

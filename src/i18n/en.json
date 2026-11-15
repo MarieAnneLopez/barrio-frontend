@@ -234,7 +234,8 @@
     "sourceType": {
       "osm": "OpenStreetMap",
       "datos_abiertos": "Bogotá open data",
-      "seed": "Sample data"
+      "seed": "Sample data",
+      "sitio_oficial": "Establishment's official website"
     },
     "recenter": "Recenter the map on El Tintal",
     "gestures": {

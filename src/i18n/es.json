@@ -234,7 +234,8 @@
     "sourceType": {
       "osm": "OpenStreetMap",
       "datos_abiertos": "Datos abiertos de Bogotá",
-      "seed": "Dato de ejemplo"
+      "seed": "Dato de ejemplo",
+      "sitio_oficial": "Sitio oficial del establecimiento"
     },
     "recenter": "Recentrar el mapa en El Tintal",
     "gestures": {
