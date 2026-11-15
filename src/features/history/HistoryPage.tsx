@@ -31,7 +31,7 @@ export function HistoryPage() {
       <Section id="historia-linea" title={t('history.timeline')}>
         {historia.status === 'loading' ? <Skeleton className="h-40 w-full" lines={5} /> : null}
         {historia.status === 'error' ? (
-          <div role="alert" className="flex flex-col items-start gap-3 rounded-md border border-error p-6">
+          <div role="alert" className="flex flex-col items-start gap-3 rounded-sm border-2 border-error bg-surface p-6">
             <p className="m-0 text-fg">{t('modules.error')}</p>
             <Button variant="secondary" size="sm" onClick={historia.retry}>{t('modules.retry')}</Button>
           </div>

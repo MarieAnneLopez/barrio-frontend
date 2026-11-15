@@ -34,7 +34,7 @@ export function KennedyFlag() {
             <li key={stripe}>{t(`history.flag.stripes.${stripe}`)}</li>
           ))}
         </ul>
-        <p role="note" className="m-0 rounded-md border border-warning p-3 text-step--1 text-fg">
+        <p role="note" className="m-0 rounded-sm border-2 border-warning bg-surface p-3 text-step--1 text-fg">
           <span className="font-medium text-warning">{t('history.unverified')}: </span>
           {t('history.flag.note')}
         </p>

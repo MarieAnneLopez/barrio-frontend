@@ -11,7 +11,7 @@ export function NeighborhoodViews({ photos }: { photos: CarouselPhoto[] }) {
       <h2 id="gallery-views" className="m-0 text-step-2 text-fg">{t('galleryPage.views')}</h2>
       <ul className="m-0 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3">
         {photos.map((photo) => (
-          <li key={photo.id}>
+          <li key={photo.id} data-reveal>
             <figure className="m-0 flex flex-col gap-2">
               <img
                 {...photoSources(photo.id)}
@@ -21,7 +21,7 @@ export function NeighborhoodViews({ photos }: { photos: CarouselPhoto[] }) {
                 alt={t(`carousel.photos.${photo.id}.alt`)}
                 loading="lazy"
                 decoding="async"
-                className="aspect-[4/3] w-full rounded-md border border-line object-cover"
+                className="px-corners aspect-[4/3] w-full object-cover"
               />
               <figcaption className="flex flex-col gap-1">
                 <span className="text-step--1 text-fg">{t(`carousel.photos.${photo.id}.caption`)}</span>

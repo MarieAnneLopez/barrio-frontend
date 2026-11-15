@@ -1,21 +1,26 @@
-// Colores de la escena desde la paleta del design system (ref. visual 1 de PLAN_MAESTRO).
+// Colores de la escena 3D desde la paleta v2 (docs/DISENO-V2.md §9), por rol.
 import { Color } from 'three';
 import { paletteColor } from '../lib/cssToken';
 
 export interface SceneColors {
-  ink: Color;
-  navy: Color;
-  sky: Color;
-  cobalt: Color;
-  azure: Color;
+  /** Fondo y niebla. */
+  fondo: Color;
+  /** Suelo y base de los edificios. */
+  base: Color;
+  /** Bordes, luces y partículas. */
+  linea: Color;
+  /** Remate alto de los edificios. */
+  alto: Color;
+  /** Realces: parques, vías y selección. */
+  realce: Color;
 }
 
 export function readSceneColors(): SceneColors {
   return {
-    ink: new Color(paletteColor('ink')),
-    navy: new Color(paletteColor('navy')),
-    sky: new Color(paletteColor('sky')),
-    cobalt: new Color(paletteColor('cobalt')),
-    azure: new Color(paletteColor('azure')),
+    fondo: new Color(paletteColor('vino')),
+    base: new Color(paletteColor('ladrillo')),
+    linea: new Color(paletteColor('piedra')),
+    alto: new Color(paletteColor('rosa')),
+    realce: new Color(paletteColor('rosa')),
   };
 }

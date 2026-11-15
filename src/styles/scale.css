@@ -1,0 +1,75 @@
+/* Escalas del design system v2 (docs/DISENO-V2.md): tipografía, espacio, radios,
+   sombras y movimiento. Los colores viven solo en tokens.css. */
+:root {
+  /* Tipografía: escala fluida ligada a --font-scale (barra de accesibilidad) */
+  --font-scale: 1;
+  --ff-display: 'Space Grotesk', system-ui, sans-serif;
+  --ff-body: 'Inter', system-ui, sans-serif;
+  --ff-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --ff-pixel: 'Press Start 2P', monospace;
+  --step--1: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+  --step-0: clamp(1rem, 0.97rem + 0.15vw, 1.0625rem);
+  --step-1: clamp(1.1875rem, 1.12rem + 0.35vw, 1.375rem);
+  --step-2: clamp(1.4375rem, 1.3rem + 0.7vw, 1.875rem);
+  --step-3: clamp(1.75rem, 1.5rem + 1.25vw, 2.625rem);
+  --step-4: clamp(2.125rem, 1.7rem + 2.1vw, 3.5rem);
+  --step-5: clamp(2.75rem, 2rem + 3.2vw, 4.5rem);
+
+  /* Espaciado 4/8/12/16/24/32/48/64 */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+
+  /* Radios */
+  --r-sm: 2px;
+  --r-md: 4px;
+  --r-lg: 8px;
+  --px: 4px; /* paso de las esquinas de píxel */
+
+  /* Movimiento */
+  --dur-1: 120ms;
+  --dur-2: 180ms;
+  --dur-3: 240ms;
+  --dur-4: 320ms;
+  --dur-5: 480ms;
+  --ease-emphasis: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1); /* cajón móvil, tipo iOS (H26) */
+  --spring-stiffness: 260;
+  --spring-damping: 24;
+  --press-scale: 1;
+  --press-shift: 2px;
+  --disabled-opacity: 0.45;
+  /* Sombras duras, sin desenfoque: ladrillos apilados */
+  --shadow-deep: 4px 4px 0 rgb(0 0 0 / 0.35);
+  --shadow-brick: 4px 4px 0 var(--palette-vino);
+  --shadow-brick-pressed: 2px 2px 0 var(--palette-vino);
+  --glow-active: 0 0 0 2px var(--palette-vino);
+}
+
+html {
+  font-size: calc(100% * var(--font-scale));
+}
+
+/* Movimiento reducido (sistema o toggle manual): sin desplazamientos ni
+   escalas; se conservan fundidos cortos de opacidad y color. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --press-scale: 1;
+    --press-shift: 0px;
+    --dur-4: 120ms;
+    --dur-5: 120ms;
+  }
+}
+
+:root.reduce-motion {
+  --press-scale: 1;
+  --press-shift: 0px;
+  --dur-4: 120ms;
+  --dur-5: 120ms;
+}

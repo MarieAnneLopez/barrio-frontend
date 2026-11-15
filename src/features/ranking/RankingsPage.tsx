@@ -28,7 +28,7 @@ export function RankingsPage() {
           id={selectId}
           value={slug}
           onChange={(e) => setSlug(e.target.value)}
-          className="ui-field min-h-11 rounded-md border border-line bg-surface px-3 text-step-0 text-fg"
+          className="ui-field min-h-11 rounded-sm border-2 border-ink bg-stone px-3 text-step-0 text-on-stone"
         >
           <option value="">{t('ranking.all')}</option>
           {CATEGORIES.map((c) => (
@@ -40,7 +40,7 @@ export function RankingsPage() {
       </div>
       {ranking.status === 'loading' ? <Skeleton className="h-24 w-full" lines={4} /> : null}
       {ranking.status === 'error' ? (
-        <div role="alert" className="flex flex-col items-start gap-3 rounded-md border border-error p-6">
+        <div role="alert" className="flex flex-col items-start gap-3 rounded-sm border-2 border-error bg-surface p-6">
           <p className="m-0 text-fg">{t('modules.error')}</p>
           <Button variant="secondary" size="sm" onClick={ranking.retry}>{t('modules.retry')}</Button>
         </div>

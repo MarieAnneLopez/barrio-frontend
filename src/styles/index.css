@@ -1,7 +1,9 @@
 @import 'tailwindcss';
 @import './tokens.css';
+@import './scale.css';
 @import './contrast.css';
 @import './pixel.css';
+@import './brick.css';
 @import '../components/ui/ui.css';
 @import '../components/ui/ui-motion.css';
 
@@ -9,6 +11,12 @@
 @theme inline {
   --color-bg: var(--bg-primary);
   --color-surface: var(--bg-surface);
+  --color-pink: var(--bg-accent);
+  --color-stone: var(--bg-soft);
+  --color-on-pink: var(--text-on-accent);
+  --color-on-stone: var(--text-on-soft);
+  --color-highlight: var(--text-highlight);
+  --color-ink: var(--border-ink);
   --color-accent: var(--accent-soft);
   --color-interactive: var(--interactive-primary);
   --color-interactive-hover: var(--interactive-hover);
@@ -35,6 +43,7 @@
   --text-step-2: var(--step-2);
   --text-step-3: var(--step-3);
   --text-step-4: var(--step-4);
+  --text-step-5: var(--step-5);
   --radius-sm: var(--r-sm);
   --radius-md: var(--r-md);
   --radius-lg: var(--r-lg);
@@ -60,17 +69,20 @@ h1,
 h2,
 h3 {
   font-family: var(--ff-display);
-  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
   text-wrap: balance;
 }
 
+/* Foco doble (D68): blanco por fuera y vino por dentro, visible en las 4 superficies. */
 :focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--focus-ring-inner);
 }
 
 .glass {
   background-color: var(--glass-fill);
-  backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--border-subtle);
+  border: 2px solid var(--border-ink);
 }

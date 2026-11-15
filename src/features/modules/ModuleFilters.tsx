@@ -40,7 +40,7 @@ export function ModuleFilters({ slug, value, onChange, disabled }: ModuleFilters
               id={id}
               value={value[field.name] ?? ''}
               onChange={(e) => set(field.name, e.target.value)}
-              className="ui-input rounded-sm border border-line bg-surface px-2 py-2 text-step--1 text-fg"
+              className="ui-field min-h-11 rounded-sm border-2 border-ink bg-stone px-2 py-2 text-step--1 text-on-stone"
             >
               <option value="">{t('modules.all')}</option>
               {options.map((option) => (

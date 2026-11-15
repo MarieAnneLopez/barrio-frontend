@@ -1,12 +1,14 @@
-/* Estrellas de calificación (D13): relleno azure, borde sky. Sin amarillo. */
+/* Estrellas (D13, D68): relleno rosa con borde piedra (3,90 sobre ladrillo, 8,20 sobre vino). Sin amarillo. */
 .stars-empty {
   fill: transparent;
-  stroke: var(--palette-sky);
+  stroke: var(--palette-piedra);
   stroke-width: 1.2;
 }
 
 .stars-full {
-  fill: var(--palette-azure);
+  fill: var(--palette-rosa);
+  stroke: var(--palette-piedra);
+  stroke-width: 1.2;
 }
 
 /* El radio cubre su mitad de estrella pero no se ve; el foco se ve en la estrella. */

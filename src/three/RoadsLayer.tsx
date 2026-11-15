@@ -33,13 +33,13 @@ export function RoadsLayer({ features, project, colors }: Props) {
   return (
     <group>
       <mesh geometry={geometries.edge}>
-        <meshBasicMaterial color={colors.azure} side={DoubleSide} transparent opacity={0.85} />
+        <meshBasicMaterial color={colors.realce} side={DoubleSide} transparent opacity={0.85} />
       </mesh>
       <mesh geometry={geometries.core}>
-        <meshBasicMaterial color={colors.ink} side={DoubleSide} />
+        <meshBasicMaterial color={colors.fondo} side={DoubleSide} />
       </mesh>
       <mesh geometry={geometries.local}>
-        <meshBasicMaterial color={colors.sky} side={DoubleSide} transparent opacity={0.28} />
+        <meshBasicMaterial color={colors.linea} side={DoubleSide} transparent opacity={0.28} />
       </mesh>
     </group>
   );

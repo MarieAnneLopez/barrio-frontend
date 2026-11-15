@@ -20,9 +20,9 @@ function paintByHeight(geometry: BufferGeometry, colors: SceneColors): void {
   geometry.computeBoundingBox();
   const top = Math.max(1, geometry.boundingBox?.max.y ?? 1);
   const values = new Float32Array(position.count * 3);
-  const mix = colors.navy.clone();
+  const mix = colors.base.clone();
   for (let i = 0; i < position.count; i++) {
-    mix.copy(colors.navy).lerp(colors.cobalt, Math.min(1, position.getY(i) / top));
+    mix.copy(colors.base).lerp(colors.alto, Math.min(1, position.getY(i) / top));
     values.set([mix.r, mix.g, mix.b], i * 3);
   }
   geometry.setAttribute('color', new Float32BufferAttribute(values, 3));
@@ -76,11 +76,11 @@ export function BuildingsLayer({ features, project, colors }: Props) {
         <meshStandardMaterial vertexColors roughness={0.55} metalness={0.15} />
       </mesh>
       <lineSegments geometry={edges}>
-        <lineBasicMaterial color={colors.sky} transparent opacity={0.55} />
+        <lineBasicMaterial color={colors.linea} transparent opacity={0.55} />
       </lineSegments>
       {highlight ? (
         <mesh geometry={highlight}>
-          <meshStandardMaterial color={colors.azure} emissive={colors.azure} emissiveIntensity={0.6} transparent opacity={0.85} />
+          <meshStandardMaterial color={colors.realce} emissive={colors.realce} emissiveIntensity={0.6} transparent opacity={0.85} />
         </mesh>
       ) : null}
     </group>

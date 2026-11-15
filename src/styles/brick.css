@@ -1,0 +1,81 @@
+/* Rasgos propios de la v2 «Ladrillo y píxel» (docs/DISENO-V2.md §1 y §4). */
+
+/* Aparejo de ladrillo: hiladas de 48 × 24 px con juntas vino; solo en bandas grandes. */
+.brick-bond {
+  background-color: var(--bg-primary);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='24'%3E%3Cpath d='M0 1H48M0 13H48M1 1V13M25 13V25' stroke='rgb(100,36,47)' stroke-opacity='0.32' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+  background-size: 48px 24px;
+}
+
+.brick-bond--vino {
+  background-color: var(--bg-surface);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='24'%3E%3Cpath d='M0 1H48M0 13H48M1 1V13M25 13V25' stroke='rgb(0,0,0)' stroke-opacity='0.22' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+  background-size: 48px 24px;
+}
+
+/* Esquinas escalonadas de píxel (fotos y placas sin sombra: clip-path recorta sombras). */
+.px-corners {
+  clip-path: polygon(
+    0 var(--px), var(--px) var(--px), var(--px) 0,
+    calc(100% - var(--px)) 0, calc(100% - var(--px)) var(--px), 100% var(--px),
+    100% calc(100% - var(--px)), calc(100% - var(--px)) calc(100% - var(--px)), calc(100% - var(--px)) 100%,
+    var(--px) 100%, var(--px) calc(100% - var(--px)), 0 calc(100% - var(--px))
+  );
+}
+
+/* Etiqueta superior con la letra de Mini Marie (nunca en párrafos). Sin mayúsculas
+   forzadas: Press Start 2P no trae mayúsculas con tilde (Ó, Á). */
+.eyebrow {
+  font-family: var(--ff-pixel);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  letter-spacing: 0.04em;
+}
+
+/* Tarjeta de ladrillo: vino, borde y sombra dura (sin desenfoque). */
+.brick-card {
+  background-color: var(--bg-surface);
+  border: 2px solid var(--border-ink);
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow-deep);
+}
+
+/* Banda rosa de realce: texto vino (5,16). */
+.band-rosa {
+  background-color: var(--bg-accent);
+  color: var(--text-on-accent);
+}
+
+/* Banda piedra: texto vino (8,20). */
+.band-piedra {
+  background-color: var(--bg-soft);
+  color: var(--text-on-soft);
+}
+
+/* Entrada de la placa de cada página (líder único, D68): 200 ms, 6 px; reducido = solo opacidad. */
+@keyframes plate-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@keyframes plate-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.plate-enter {
+  animation: plate-enter 200ms var(--ease-emphasis) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plate-enter {
+    animation-name: plate-fade;
+  }
+}
+
+:root.reduce-motion .plate-enter {
+  animation-name: plate-fade;
+}

@@ -22,9 +22,9 @@ export function SidebarLink({ to, label, icon, collapsed, end = false }: Sidebar
       to={to}
       end={end}
       className={({ isActive }) =>
-        `ui-pressable ui-btn--ghost relative flex min-h-11 items-center gap-3 rounded-md border border-transparent px-3 text-step--1 no-underline ${
+        `ui-pressable ui-btn--ghost relative flex min-h-11 items-center gap-3 rounded-sm border-2 border-transparent px-3 text-step--1 no-underline ${
           collapsed ? 'justify-center' : ''
-        } ${isActive ? 'bg-glass font-semibold text-fg shadow-[var(--glow-active)]' : 'text-fg-secondary'}`
+        } ${isActive ? 'ui-nav-active bg-pink font-semibold text-on-pink' : 'text-fg'}`
       }
     >
       {({ isActive }) => (
@@ -32,7 +32,7 @@ export function SidebarLink({ to, label, icon, collapsed, end = false }: Sidebar
           {isActive ? (
             <span
               aria-hidden="true"
-              className="absolute top-2 bottom-2 left-0 w-1 rounded-full bg-active"
+              className="absolute top-1/2 left-1 size-2 -translate-y-1/2 bg-ink"
             />
           ) : null}
           <span aria-hidden="true" className="inline-flex w-6 justify-center text-step-0">

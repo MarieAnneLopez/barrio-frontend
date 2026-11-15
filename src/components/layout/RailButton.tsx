@@ -27,10 +27,10 @@ export function RailButton({
         aria-controls={controls}
         disabled={disabled}
         onClick={onClick}
-        className={`ui-pressable inline-flex size-11 items-center justify-center rounded-md border font-display text-step--1 font-bold ${
+        className={`ui-pressable inline-flex size-11 items-center justify-center rounded-sm border-2 font-display text-step--1 font-bold ${
           pressed || expanded
-            ? 'border-interactive bg-interactive text-on-interactive'
-            : 'ui-btn--ghost border-transparent text-fg'
+            ? 'border-ink bg-surface text-fg'
+            : 'ui-btn--ghost border-transparent text-on-stone'
         }`}
       >
         {children}

@@ -13,9 +13,9 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const VARIANT: Record<Variant, string> = {
-  primary: 'ui-btn--primary bg-interactive text-on-interactive border-interactive',
-  secondary: 'ui-btn--secondary bg-surface text-fg border-line-strong',
-  ghost: 'ui-btn--ghost bg-transparent text-fg-secondary border-transparent',
+  primary: 'ui-btn--primary bg-interactive text-on-interactive border-ink',
+  secondary: 'ui-btn--secondary bg-stone text-on-stone border-ink',
+  ghost: 'ui-btn--ghost bg-transparent text-fg border-transparent',
 };
 
 const SIZE: Record<Size, string> = {
@@ -38,7 +38,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       aria-disabled={inactive || undefined}
       aria-busy={loading || undefined}
       onClick={inactive ? undefined : onClick}
-      className={`ui-pressable inline-flex select-none items-center justify-center rounded-md border font-medium ${VARIANT[variant]} ${SIZE[size]} ${className}`}
+      className={`ui-pressable inline-flex select-none items-center justify-center rounded-sm border-2 font-semibold ${VARIANT[variant]} ${SIZE[size]} ${className}`}
     >
       {loading ? <Spinner size={16} label={null} /> : icon}
       {children}

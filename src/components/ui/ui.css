@@ -1,16 +1,27 @@
 /* Estados compartidos de los controles (§10): hover, focus-visible,
-   active/pressed, disabled y loading. Solo transform/opacity/color. */
+   active/pressed, disabled y loading. Solo transform/opacity/color.
+   La sombra dura cambia sin transición (box-shadow repinta cada cuadro, H32). */
 .ui-pressable {
   transition:
     transform var(--dur-1) var(--ease-emphasis),
     background-color var(--dur-2) ease,
     border-color var(--dur-2) ease,
-    box-shadow var(--dur-2) ease,
     opacity var(--dur-2) ease;
 }
 
+/* Pulsar = el ladrillo se acomoda: baja 2 px y su sombra se acorta (D68). */
 .ui-pressable:active:not([aria-disabled='true']) {
-  transform: scale(var(--press-scale));
+  transform: translate(var(--press-shift), var(--press-shift)) scale(var(--press-scale));
+}
+
+.ui-btn--primary,
+.ui-btn--secondary {
+  box-shadow: var(--shadow-brick);
+}
+
+.ui-btn--primary:active:not([aria-disabled='true']),
+.ui-btn--secondary:active:not([aria-disabled='true']) {
+  box-shadow: var(--shadow-brick-pressed);
 }
 
 .ui-pressable:disabled,
@@ -26,17 +37,18 @@
 @media (hover: hover) and (pointer: fine) {
   .ui-btn--primary:hover {
     background-color: var(--interactive-hover);
-    box-shadow: var(--glow-active);
   }
 
-  .ui-btn--secondary:hover,
+  .ui-btn--secondary:hover {
+    background-color: var(--interactive-primary);
+  }
+
   .ui-btn--ghost:hover {
-    border-color: var(--interactive-active);
-    background-color: var(--glass-fill);
+    background-color: var(--hairline);
   }
 
   .ui-field:hover {
-    border-color: var(--border-strong);
+    border-color: var(--focus-ring-inner);
   }
 }
 
@@ -45,9 +57,9 @@
 }
 
 .ui-field:focus-visible {
-  outline: none;
-  border-color: var(--focus-ring);
-  box-shadow: 0 0 0 2px var(--focus-ring);
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--focus-ring-inner);
 }
 
 .ui-field[aria-invalid='true'] {
@@ -57,4 +69,16 @@
 .ui-field:disabled {
   opacity: var(--disabled-opacity);
   pointer-events: none;
+}
+
+/* Ítem activo del menú: rosa con borde vino; el ghost hover no lo apaga. */
+.ui-nav-active,
+.ui-nav-active:hover {
+  border-color: var(--border-ink);
+  background-color: var(--bg-accent);
+}
+
+/* Dentro de superficies vino la sombra vino no se vería: sombra dura negra al 35 %. */
+:is(.bg-surface, .glass, .brick-card) :is(.ui-btn--primary, .ui-btn--secondary) {
+  box-shadow: var(--shadow-deep);
 }

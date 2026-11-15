@@ -30,19 +30,19 @@ export function useShapes({ map, features, selectedId, onSelect, reducedMotion }
     if (!map || !features) return undefined;
     const shapes = features.features.filter((f) => f.geometry && f.geometry.type !== 'Point');
     if (!shapes.length) return undefined;
-    const azure = paletteColor('azure');
-    const sky = paletteColor('sky');
+    const fill = paletteColor('ladrillo');
+    const edge = paletteColor('vino');
     map.addSource(SHAPES_SOURCE, { type: 'geojson', data: { type: 'FeatureCollection', features: shapes } });
     map.addLayer({
       id: FILL_LAYER,
       type: 'fill',
       source: SHAPES_SOURCE,
       filter: ['in', ['geometry-type'], ['literal', ['Polygon', 'MultiPolygon']]],
-      paint: { 'fill-color': azure, 'fill-opacity': ['case', selected, 0.6, 0.28] },
+      paint: { 'fill-color': fill, 'fill-opacity': ['case', selected, 0.6, 0.28] },
     });
     map.addLayer({
       id: LINE_LAYER, type: 'line', source: SHAPES_SOURCE,
-      paint: { 'line-color': ['case', selected, sky, azure], 'line-width': ['case', selected, 4, 2] },
+      paint: { 'line-color': ['case', selected, edge, fill], 'line-width': ['case', selected, 4, 2] },
     });
     const click = (event: MapLayerMouseEvent) => {
       const id = event.features?.[0]?.id;

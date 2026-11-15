@@ -10,24 +10,25 @@ type LayerSpec = StyleSpec['layers'][number];
 const MAJOR_ROADS = ['motorway', 'trunk', 'primary', 'secondary', 'tertiary'];
 
 function layers(): LayerSpec[] {
-  const ink = paletteColor('ink');
-  const navy = paletteColor('navy');
-  const sky = paletteColor('sky');
-  const cobalt = paletteColor('cobalt');
-  const azure = paletteColor('azure');
+  // §9 de DISENO-V2: suelo piedra, manzanas vino, parques rosa, vías blancas, borde ladrillo.
+  const piedra = paletteColor('piedra');
+  const vino = paletteColor('vino');
+  const rosa = paletteColor('rosa');
+  const ladrillo = paletteColor('ladrillo');
+  const blanco = '#ffffff';
   return [
-    { id: 'fondo', type: 'background', paint: { 'background-color': ink } },
-    { id: 'tintal-area', type: 'fill', source: 'tintal', paint: { 'fill-color': navy, 'fill-opacity': 0.55 } },
-    { id: 'manzanas', type: 'fill', source: 'manzanas', paint: { 'fill-color': navy, 'fill-outline-color': sky } },
-    { id: 'parques', type: 'fill', source: 'parques', paint: { 'fill-color': azure, 'fill-opacity': 0.16 } },
-    { id: 'edificios', type: 'fill', source: 'edificios', paint: { 'fill-color': cobalt, 'fill-opacity': 0.55 } },
+    { id: 'fondo', type: 'background', paint: { 'background-color': vino } },
+    { id: 'tintal-area', type: 'fill', source: 'tintal', paint: { 'fill-color': piedra, 'fill-opacity': 1 } },
+    { id: 'manzanas', type: 'fill', source: 'manzanas', paint: { 'fill-color': vino, 'fill-opacity': 0.7, 'fill-outline-color': vino } },
+    { id: 'parques', type: 'fill', source: 'parques', paint: { 'fill-color': rosa, 'fill-opacity': 0.6 } },
+    { id: 'edificios', type: 'fill', source: 'edificios', paint: { 'fill-color': ladrillo, 'fill-opacity': 0.75 } },
     {
       id: 'vias',
       type: 'line',
       source: 'vias',
       paint: {
-        'line-color': sky,
-        'line-opacity': ['match', ['get', 'kind'], MAJOR_ROADS, 0.55, 0.22],
+        'line-color': blanco,
+        'line-opacity': ['match', ['get', 'kind'], MAJOR_ROADS, 0.95, 0.7],
         'line-width': ['match', ['get', 'kind'], MAJOR_ROADS, 2.4, 0.8],
       },
     },
@@ -35,7 +36,7 @@ function layers(): LayerSpec[] {
       id: 'tintal-borde',
       type: 'line',
       source: 'tintal',
-      paint: { 'line-color': sky, 'line-width': 2, 'line-dasharray': [2, 1.5] },
+      paint: { 'line-color': ladrillo, 'line-width': 3, 'line-dasharray': [2, 1.5] },
     },
   ];
 }

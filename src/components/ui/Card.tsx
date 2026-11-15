@@ -4,10 +4,10 @@ interface CardProps extends HTMLAttributes<HTMLElement> {
   as?: 'article' | 'section' | 'div';
 }
 
-/** Superficie de vidrio oscuro (§10): fondo translúcido, blur y borde tenue. */
+/** Tarjeta de ladrillo (D68): vino, borde y sombra dura sin desenfoque. */
 export function Card({ as: Tag = 'article', className = '', children, ...rest }: CardProps) {
   return (
-    <Tag {...rest} className={`glass rounded-lg p-6 shadow-[var(--shadow-deep)] ${className}`}>
+    <Tag {...rest} className={`brick-card p-6 ${className}`}>
       {children}
     </Tag>
   );

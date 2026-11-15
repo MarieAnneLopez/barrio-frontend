@@ -145,7 +145,11 @@
     "faq": "Frequently asked questions",
     "seeAllFaq": "See all questions",
     "academic": "Academic project",
-    "rights": "© 2026 Marie Anne Lopez Poveda"
+    "rights": "© 2026 Marie Anne Lopez Poveda",
+    "contact": "Write to Marie",
+    "contactText": "Do you have a fact about the neighborhood, a photo or a correction? Write to Marie.",
+    "instagram": "Instagram @marieane_lop",
+    "newTab": "(opens in a new tab)"
   },
   "creator": {
     "title": "About the Creator",

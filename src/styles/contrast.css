@@ -7,19 +7,29 @@
   --text-secondary: #ffffff;
   --text-muted: #ffffff;
   --accent-soft: #ffffff;
-  --interactive-primary: var(--palette-cobalt);
-  --interactive-hover: #000000;
-  --text-on-interactive: #ffffff;
-  --border-subtle: var(--palette-sky);
+  --bg-accent: #000000;
+  --bg-soft: #000000;
+  --text-on-accent: #ffffff;
+  --text-on-soft: #ffffff;
+  --text-highlight: #ffffff;
+  --interactive-primary: #ffffff;
+  --interactive-hover: #ffffff;
+  --interactive-active: #ffffff;
+  --text-on-interactive: #000000;
+  --border-ink: #ffffff;
+  --focus-ring-inner: #000000;
+  --border-subtle: #ffffff;
   --border-strong: #ffffff;
   --glass-fill: #000000;
   --glass-blur: 0px;
-  --hairline: var(--palette-sky);
+  --hairline: #ffffff;
   --focus-ring: #ffffff;
   --overlay: rgb(0 0 0 / 0.9);
   --skeleton-base: rgb(255 255 255 / 0.2);
   --skeleton-shine: rgb(255 255 255 / 0.35);
   --shadow-deep: none;
+  --shadow-brick: none;
+  --shadow-brick-pressed: none;
   --glow-active: 0 0 0 2px #ffffff;
 }
 

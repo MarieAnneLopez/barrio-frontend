@@ -25,12 +25,12 @@ export function PlaceGallery({ group }: { group: PlaceGroup }) {
       </div>
       <ul className="m-0 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3">
         {group.photos.map((photo, index) => (
-          <li key={photo.id}>
+          <li key={photo.id} data-reveal>
             <figure className="m-0 flex flex-col gap-2">
               <button
                 type="button"
                 onClick={() => setOpen(index)}
-                className="ui-pressable block w-full overflow-hidden rounded-md border border-line"
+                className="ui-pressable px-corners block w-full overflow-hidden"
               >
                 <img
                   {...photoSet(photo.url)}

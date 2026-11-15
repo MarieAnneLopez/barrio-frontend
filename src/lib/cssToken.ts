@@ -1,6 +1,6 @@
 // Lee los colores del design system en tiempo de ejecución (para MapLibre y three),
 // así el mapa sigue la paleta, el alto contraste y nunca lleva colores sueltos.
-export type PaletteToken = 'ink' | 'navy' | 'sky' | 'cobalt' | 'azure';
+export type PaletteToken = 'ladrillo' | 'vino' | 'rosa' | 'piedra';
 
 export function cssVar(name: string, fallback = ''): string {
   if (typeof document === 'undefined') return fallback;

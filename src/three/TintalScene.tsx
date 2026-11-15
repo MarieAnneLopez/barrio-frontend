@@ -48,11 +48,11 @@ export default function TintalScene({ data, active, reducedMotion }: Props) {
       onPointerEnter={() => setInteracting(true)}
       onPointerLeave={() => setInteracting(false)}
     >
-      <color attach="background" args={[colors.ink]} />
-      <fog attach="fog" args={[colors.ink, radius * 0.9, radius * 3]} />
+      <color attach="background" args={[colors.fondo]} />
+      <fog attach="fog" args={[colors.fondo, radius * 0.9, radius * 3]} />
       <ambientLight intensity={0.35} />
-      <directionalLight position={[-radius, radius * 1.4, radius * 0.6]} intensity={1.1} color={colors.sky} />
-      <directionalLight position={[radius, radius * 0.4, -radius]} intensity={0.9} color={colors.sky} />
+      <directionalLight position={[-radius, radius * 1.4, radius * 0.6]} intensity={1.1} color={colors.linea} />
+      <directionalLight position={[radius, radius * 0.4, -radius]} intensity={0.9} color={colors.linea} />
       <GroundLayer base={base} project={project} colors={colors} />
       <RoadsLayer features={base.layers.vias.features} project={project} colors={colors} />
       <BuildingsLayer

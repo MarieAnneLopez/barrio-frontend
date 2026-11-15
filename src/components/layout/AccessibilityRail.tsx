@@ -36,7 +36,7 @@ export function AccessibilityRail() {
   return (
     <aside
       aria-label={t('a11yRail.label')}
-      className="glass fixed top-1/2 right-0 z-40 flex -translate-y-1/2 flex-col items-center gap-1 rounded-l-lg border-r-0 bg-surface p-1"
+      className="fixed right-0 bottom-24 z-40 flex flex-col items-center gap-1 rounded-l-sm md:top-1/2 md:bottom-auto md:-translate-y-1/2 border-2 border-r-0 border-ink bg-stone p-1 shadow-[var(--shadow-deep)]"
     >
       {isDesktop ? null : (
         <RailButton
@@ -53,7 +53,7 @@ export function AccessibilityRail() {
           disabled={a11y.scaleIndex === 0}>
           <Icon d={ICON.smaller} />
         </RailButton>
-        <p role="status" className="m-0 font-mono text-[0.75rem] tracking-tight whitespace-nowrap text-fg-secondary">
+        <p role="status" className="m-0 font-mono text-[0.75rem] tracking-tight whitespace-nowrap text-on-stone">
           <span aria-hidden="true">{percent}%</span>
           <span className="sr-only">{t('a11yRail.scale', { value: percent })}</span>
         </p>

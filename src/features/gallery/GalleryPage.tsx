@@ -1,7 +1,10 @@
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/ui/Button';
 import { Skeleton } from '../../components/ui/Skeleton';
 import { useApi } from '../../hooks/useApi';
+import { useBatchReveal } from '../../hooks/useBatchReveal';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 import type { GalleryPhoto, Page } from '../../lib/apiTypes';
 import { PageHeader } from '../pages/PageHeader';
 import { groupByPlace, neighborhoodViews } from './groupPhotos';
@@ -14,16 +17,18 @@ export function GalleryPage() {
   const photos = useApi<Page<GalleryPhoto>>('/fotos', { size: 100 });
   const list = photos.status === 'success' ? photos.data.items : [];
   const groups = groupByPlace(list);
+  const root = useRef<HTMLDivElement>(null);
+  useBatchReveal(root, photos.status !== 'loading', useReducedMotion());
 
   return (
-    <div className="flex flex-col gap-10">
+    <div ref={root} className="flex flex-col gap-10">
       <PageHeader title={t('nav.gallery')} description={t('pages.gallery')} />
       <p className="m-0 max-w-3xl text-step-0 text-fg-secondary">{t('galleryPage.note')}</p>
       <section aria-labelledby="gallery-places" className="flex flex-col gap-6">
         <h2 id="gallery-places" className="m-0 text-step-2 text-fg">{t('galleryPage.places')}</h2>
         {photos.status === 'loading' ? <Skeleton className="h-48 w-full" lines={3} /> : null}
         {photos.status === 'error' ? (
-          <div role="alert" className="flex flex-col items-start gap-3 rounded-md border border-error p-6">
+          <div role="alert" className="flex flex-col items-start gap-3 rounded-sm border-2 border-error bg-surface p-6">
             <p className="m-0 text-fg">{t('modules.error')}</p>
             <Button variant="secondary" size="sm" onClick={photos.retry}>{t('modules.retry')}</Button>
           </div>

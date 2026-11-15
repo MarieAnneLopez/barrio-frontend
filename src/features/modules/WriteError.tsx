@@ -19,7 +19,7 @@ export function WriteError({ error }: { error: ApiError | null }) {
   }, [expired, error]);
   if (!error) return null;
   return (
-    <p role="alert" className="m-0 rounded-md border border-error p-3 text-step--1 text-fg">
+    <p role="alert" className="m-0 rounded-sm border-2 border-error bg-surface p-3 text-step--1 text-fg">
       {expired ? (
         <LoginPrompt message={t('forms.needAdmin')} />
       ) : (

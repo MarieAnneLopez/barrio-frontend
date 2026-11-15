@@ -16,15 +16,15 @@ const tokensCss = readFileSync(join(srcDir, 'styles', 'tokens.css'), 'utf8');
 const contrastCss = readFileSync(join(srcDir, 'styles', 'contrast.css'), 'utf8');
 
 const ALLOWED = new Set([
-  '0b131e', '0b1e38', '8ab4f8', '1d4ed8', '3b82f6', // paleta oficial
+  'b44446', '64242f', 'fc8f8f', 'dfd9d8', // paleta v2 «Ladrillo y píxel» (D68)
   'ffffff', '000000', // blanco y negro
-  '34d399', 'fbbf24', 'f87171', // estados semánticos
+  '86efac', 'fdba74', 'fca5a5', // estados semánticos (claros, sobre vino)
 ]);
 const ALLOWED_RGB = new Set(
   [...ALLOWED].map((h) => [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16)).join(' ')),
 );
 
-describe('paleta estricta', () => {
+describe('paleta estricta (v2, D68)', () => {
   it('lee de verdad los estilos', () => {
     expect(sources('.css').length).toBeGreaterThanOrEqual(4);
     expect(tokensCss).toContain('--bg-primary');
@@ -60,6 +60,12 @@ const TEXT_PAIRS: [string, string][] = [
   ['--text-muted', '--bg-surface'],
   ['--text-on-interactive', '--interactive-primary'],
   ['--text-on-interactive', '--interactive-hover'],
+  ['--text-on-interactive', '--interactive-active'],
+  ['--text-on-accent', '--bg-accent'],
+  ['--text-on-soft', '--bg-soft'],
+  ['--text-highlight', '--bg-surface'],
+  ['--accent-soft', '--bg-primary'],
+  ['--accent-soft', '--bg-surface'],
   ['--state-success', '--bg-surface'],
   ['--state-warning', '--bg-surface'],
   ['--state-error', '--bg-surface'],
@@ -76,8 +82,11 @@ describe.each([
     expect(contrastRatio(fg, opaqueBg)).toBeGreaterThanOrEqual(4.5);
   });
 
-  it('el anillo de foco se distingue del fondo (≥ 3:1)', () => {
-    const ring = resolveColor('var(--focus-ring)', vars);
-    expect(contrastRatio(ring, resolveColor('var(--bg-primary)', vars))).toBeGreaterThanOrEqual(3);
-  });
+  it.each(['--bg-primary', '--bg-surface', '--bg-accent', '--bg-soft'])(
+    'el anillo de foco doble se distingue sobre %s (≥ 3:1)', (bgVar) => {
+      const bg = resolveColor(`var(${bgVar})`, vars);
+      const best = Math.max(...['--focus-ring', '--focus-ring-inner'].map(
+        (ring) => contrastRatio(resolveColor(`var(${ring})`, vars), bg)));
+      expect(best).toBeGreaterThanOrEqual(3);
+    });
 });
