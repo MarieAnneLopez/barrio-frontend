@@ -25,7 +25,16 @@ describe('Logo del encabezado (D82, D86)', () => {
       [denser(2.01), '/assets/brand/marie-logo-96.png'], // 32 px × 3
       [denser(1.01), '/assets/brand/marie-logo-64.png'], // 32 px × 2
     ]);
-    expect(logo().className).toMatch(/\bsize-8\b.*\bsm:size-12\b/);
+  });
+
+  it('la caja del dibujo mide 32 o 48 px exactos: la línea va por fuera y no depende del tamaño de letra', () => {
+    render(<BrandLogo />);
+    const classes = logo().className.split(/\s+/);
+    // box-content: con border-box la línea se comía 2 px y el dibujo de 32 px se pintaba a 30.
+    expect(classes).toEqual(expect.arrayContaining(['box-content', 'size-[32px]', 'min-[640px]:size-[48px]']));
+    // En px y no en rem: el control de tamaño de letra no debe escalar un dibujo de píxel.
+    expect(classes.filter((name) => /^(?:sm:)?size-\d+$/.test(name))).toEqual([]);
+    expect(logo().querySelector('img')?.className).toBe('size-full');
   });
 
   it('va en un círculo con línea de 1 px, sin borde grueso ni sombra', () => {
