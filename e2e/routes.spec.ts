@@ -1,7 +1,8 @@
 import { expect, test, type Page } from '@playwright/test';
 
 // H31: ninguna ruta puede dejar errores sin capturar ni errores de consola, al entrar,
-// salir navegando dentro del sitio, recargar o volver atrás.
+// salir navegando dentro del sitio, recargar o volver atrás. Tampoco puede desbordar la
+// pantalla en horizontal (interfaz elegante, D84).
 const SECTIONS = ['/', '/mapa', '/historia', '/ranking', '/galeria', '/preguntas', '/creadora', '/ayuda', '/acceso', '/creditos-fotos'];
 const SLUGS = ['centros-educativos', 'escenarios-deportivos', 'camaras-seguridad', 'zonas-verdes', 'datos-catastrales',
   'estado-calles', 'estaciones-transporte', 'sitios-comida', 'librerias', 'robos', 'localidad', 'atencion-inmediata',
@@ -23,7 +24,7 @@ async function go(page: Page, path: string) {
 }
 
 test('todas las rutas: entrar, salir, recargar y volver sin errores', async ({ page }, testInfo) => {
-  // G (H37): cada proyecto fija idioma y ancho (es/en × 390/1440 px).
+  // G (H37): cada proyecto fija idioma y ancho (es/en × 390/1440 px, y es a 768 px).
   const lang = (testInfo.project.metadata.lang as string | undefined) ?? 'es';
   const errors: string[] = [];
   let step = 'inicio';
@@ -43,6 +44,8 @@ test('todas las rutas: entrar, salir, recargar y volver sin errores', async ({ p
     step = `entrar ${route}`;
     await go(page, route);
     await expect(page.getByText('Unexpected Application Error')).toHaveCount(0);
+    const extra = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    if (extra > 0) errors.push(`${step} · desborde horizontal de ${extra} px`);
     step = `salir de ${route}`;
     await go(page, '/historia');
     step = `recargar ${route}`;

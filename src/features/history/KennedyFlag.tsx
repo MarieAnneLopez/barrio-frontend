@@ -10,13 +10,15 @@ const COMMONS = 'https://commons.wikimedia.org/wiki/File:Bandera_de_kennedy_(bog
  * Decreto Local 13 de 2021 (art. 3) y el dibujo viene de Wikimedia Commons.
  * No hay fuente oficial de su adopción ni del significado de los colores:
  * eso queda «por verificar» y no se inventa una explicación heráldica.
+ * En fila solo desde 1024 px: a 768 px, junto al menú lateral, el texto no cabía al
+ * lado de la bandera y la página desbordaba 44 px.
  */
 export function KennedyFlag() {
   const { t } = useTranslation();
   const stripes = ['yellow', 'white', 'green'] as const;
 
   return (
-    <div className="flex flex-col gap-4 md:flex-row md:items-start">
+    <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
       <img
         src={FLAG_URL}
         alt={t('history.flag.alt')}
@@ -24,7 +26,7 @@ export function KennedyFlag() {
         height={200}
         className="h-auto w-full max-w-[300px] rounded-sm border border-line-strong"
       />
-      <div className="band-text flex max-w-prose flex-col gap-3">
+      <div className="band-text flex max-w-prose min-w-0 flex-col gap-3 break-words">
         <p className="m-0 text-fg-secondary">{t('history.flag.design')}</p>
         <p className="m-0 text-step--1">
           <SourceLinks refs={`${DECRETO} | ${COMMONS}`} />
