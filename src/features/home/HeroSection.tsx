@@ -7,6 +7,7 @@ import { useA11yStore } from '../../store/a11yStore';
 import { useTintalData } from '../../three/useTintalData';
 import { HeroHud } from './HeroHud';
 import { HeroLegend } from './HeroLegend';
+import { SittingMarie } from './SittingMarie';
 
 // three + r3f se cargan aparte: el resto del sitio no paga su peso.
 const TintalScene = lazy(() => import('../../three/TintalScene'));
@@ -33,27 +34,31 @@ export function HeroSection({ variant = 'hero' }: { variant?: 'hero' | 'page' })
   }, []);
 
   return (
-    <section
-      ref={section}
-      data-hero
-      aria-label={t('hero.label')}
-      aria-describedby="hero-descripcion"
-      className={`relative -mx-4 ${variant === 'page' ? 'h-[calc(100dvh-12rem)] min-h-[480px]' : 'h-[72vh] min-h-[420px] md:h-[78vh]'} overflow-hidden rounded-none border-y-[10px] border-stone bg-surface md:mx-0 md:rounded-sm md:border-[12px] md:shadow-[0_0_0_2px_var(--border-ink),6px_6px_0_2px_var(--border-ink)]`}
-    >
-      <p id="hero-descripcion" className="sr-only">
-        {t('hero.description')}
-      </p>
-      {state.status === 'loading' ? (
-        <Skeleton className="h-full w-full" />
-      ) : (
-        <>
-          <Suspense fallback={<><LoadingTask /><Skeleton className="h-full w-full" /></>}>
-            <TintalScene data={state.data} active={visible} reducedMotion={reducedMotion} />
-          </Suspense>
-          <HeroHud />
-          <HeroLegend defaultOpen={variant === 'page'} />
-        </>
-      )}
-    </section>
+    // El recuadro recorta su contenido (overflow-hidden): la sentada va afuera, sobre su borde (D82).
+    <div className="relative">
+      <section
+        ref={section}
+        data-hero
+        aria-label={t('hero.label')}
+        aria-describedby="hero-descripcion"
+        className={`relative -mx-4 ${variant === 'page' ? 'h-[calc(100dvh-12rem)] min-h-[480px]' : 'h-[72vh] min-h-[420px] md:h-[78vh]'} overflow-hidden rounded-none border-y-[10px] border-stone bg-surface md:mx-0 md:rounded-sm md:border-[12px] md:shadow-[0_0_0_2px_var(--border-ink),6px_6px_0_2px_var(--border-ink)]`}
+      >
+        <p id="hero-descripcion" className="sr-only">
+          {t('hero.description')}
+        </p>
+        {state.status === 'loading' ? (
+          <Skeleton className="h-full w-full" />
+        ) : (
+          <>
+            <Suspense fallback={<><LoadingTask /><Skeleton className="h-full w-full" /></>}>
+              <TintalScene data={state.data} active={visible} reducedMotion={reducedMotion} />
+            </Suspense>
+            <HeroHud />
+            <HeroLegend defaultOpen={variant === 'page'} />
+          </>
+        )}
+      </section>
+      <SittingMarie />
+    </div>
   );
 }
