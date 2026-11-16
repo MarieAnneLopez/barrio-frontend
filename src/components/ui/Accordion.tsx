@@ -28,7 +28,7 @@ export function Accordion({ items, multiple = false, headingLevel = 3 }: Accordi
     });
 
   return (
-    <div className="divide-y divide-line rounded-lg border border-line bg-surface">
+    <div className="divide-y divide-line rounded-sm border border-line">
       {items.map((item) => {
         const expanded = open.has(item.id);
         const buttonId = `${baseId}-${item.id}-button`;

@@ -6,7 +6,7 @@ export function AuthError({ error }: { error: ApiError | null }) {
   const { t } = useTranslation();
   if (!error) return null;
   return (
-    <p role="alert" className="m-0 rounded-sm border-2 border-error bg-surface p-3 text-step--1 text-fg">
+    <p role="alert" className="m-0 rounded-sm border border-error bg-surface p-3 text-step--1 text-fg">
       {t(`auth.errors.${error.code}`, { defaultValue: error.message })}
     </p>
   );

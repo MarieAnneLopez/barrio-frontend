@@ -42,7 +42,7 @@ export function HeroSection({ variant = 'hero' }: { variant?: 'hero' | 'page' })
         data-hero
         aria-label={t('hero.label')}
         aria-describedby="hero-descripcion"
-        className={`relative -mx-4 ${variant === 'page' ? 'h-[calc(100dvh-12rem)] min-h-[480px]' : 'h-[72vh] min-h-[420px] md:h-[78vh]'} overflow-hidden rounded-none border-y-[10px] border-stone bg-[var(--map-fondo)] md:mx-0 md:rounded-sm md:border-[12px] md:shadow-[0_0_0_2px_var(--border-ink),6px_6px_0_2px_var(--border-ink)]`}
+        className={`relative -mx-4 ${variant === 'page' ? 'h-[calc(100dvh-12rem)] min-h-[480px]' : 'h-[72vh] min-h-[420px] md:h-[78vh]'} overflow-hidden border-y border-line-strong bg-[var(--map-fondo)] md:mx-0 md:rounded-sm md:border`}
       >
         <p id="hero-descripcion" className="sr-only">
           {t('hero.description')}

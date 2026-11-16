@@ -26,7 +26,7 @@ export function HeroLegend({ defaultOpen = false }: { defaultOpen?: boolean }) {
         aria-expanded={open}
         aria-controls={listId}
         onClick={() => setOpen((v) => !v)}
-        className="ui-pressable ui-btn--ghost flex min-h-11 items-center justify-between gap-2 border-2 border-transparent px-3 text-step--1 font-semibold text-fg"
+        className="ui-pressable ui-btn--ghost flex min-h-11 items-center justify-between gap-2 border border-transparent px-3 text-step--1 font-semibold text-fg"
       >
         {t('hero.legend.title')}
         <span aria-hidden="true">{open ? '−' : '+'}</span>
@@ -42,7 +42,7 @@ export function HeroLegend({ defaultOpen = false }: { defaultOpen?: boolean }) {
                 type="button"
                 aria-pressed={shown}
                 onClick={() => toggleCategory(slug)}
-                className={`ui-pressable flex min-h-11 w-full items-center gap-2 rounded-sm border-2 px-2 text-left text-step--1 ${
+                className={`ui-pressable flex min-h-11 w-full items-center gap-2 rounded-sm border px-2 text-left text-step--1 ${
                   shown ? 'border-ink bg-stone text-on-stone' : 'ui-btn--ghost border-transparent text-fg line-through'
                 }`}
               >

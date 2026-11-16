@@ -10,7 +10,7 @@ export function SectionPage({ section }: { section: string }) {
   return (
     <div className="flex max-w-3xl flex-col gap-6">
       <PageHeader title={t(`nav.${section}`)} description={t(`pages.${section}`)} eyebrow={t('construction.badge')} />
-      <p className="m-0 rounded-sm border-2 border-warning bg-surface p-4 text-fg">
+      <p className="m-0 rounded-sm border border-warning bg-surface p-4 text-fg">
         {t('construction.notice')} {t(`construction.${section}`, { defaultValue: '' })}
       </p>
     </div>

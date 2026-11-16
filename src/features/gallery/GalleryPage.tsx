@@ -27,7 +27,7 @@ export function GalleryPage() {
         <h2 id="gallery-places" className="m-0 text-step-2 text-fg">{t('galleryPage.places')}</h2>
         {photos.status === 'loading' ? <Skeleton className="h-48 w-full" lines={3} /> : null}
         {photos.status === 'error' ? (
-          <div role="alert" className="flex flex-col items-start gap-3 rounded-sm border-2 border-error bg-surface p-6">
+          <div role="alert" className="flex flex-col items-start gap-3 rounded-sm border border-error bg-surface p-6">
             <p className="m-0 text-fg">{t('modules.error')}</p>
             <Button variant="secondary" size="sm" onClick={photos.retry}>{t('modules.retry')}</Button>
           </div>

@@ -28,7 +28,7 @@ export function ModuleList(props: ModuleListProps) {
   if (list.status === 'loading') return <Skeleton className="h-24 w-full" lines={3} />;
   if (list.status === 'error') {
     return (
-      <div role="alert" className="flex flex-col items-start gap-3 rounded-sm border-2 border-error bg-surface p-6">
+      <div role="alert" className="flex flex-col items-start gap-3 rounded-sm border border-error bg-surface p-6">
         <p className="m-0 text-fg">{t('modules.error')}</p>
         <Button variant="secondary" size="sm" onClick={list.retry}>
           {t('modules.retry')}

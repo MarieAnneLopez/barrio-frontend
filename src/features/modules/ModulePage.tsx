@@ -24,7 +24,7 @@ export function ModulePage() {
         description={t(`categories.${category.slug}.description`)}
       />
       {category && i18n.exists(`categories.${category.slug}.notice`) ? (
-        <p role="note" className="m-0 max-w-3xl rounded-sm border-2 border-warning border-dashed bg-surface p-4 text-step--1 text-fg">
+        <p role="note" className="m-0 max-w-3xl rounded-sm border border-warning border-dashed bg-surface p-4 text-step--1 text-fg">
           {t(`categories.${category.slug}.notice`)}
         </p>
       ) : null}

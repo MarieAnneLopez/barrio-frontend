@@ -7,7 +7,8 @@ interface PhotoCreditProps {
   source?: string | null | undefined;
 }
 
-const LINK = 'text-fg-secondary underline underline-offset-2';
+// Alto mínimo de 24 px: el destino táctil que pide WCAG 2.2 (antes medían 18 px).
+const LINK = 'inline-flex min-h-6 items-center text-fg-secondary underline underline-offset-2';
 const external = { target: '_blank', rel: 'noopener noreferrer', className: LINK } as const;
 
 /**
@@ -20,7 +21,7 @@ export function PhotoCredit({ author, license, source }: PhotoCreditProps) {
   const page = sourcePage(source);
   const profile = authorPage(source, author);
   return (
-    <p className="m-0 flex flex-wrap gap-x-3 font-mono text-[0.75rem] text-fg-secondary">
+    <p className="m-0 flex flex-wrap items-center gap-x-3 font-mono text-[0.75rem] text-fg-secondary">
       {author && profile ? <a href={profile} {...external}>{t('carousel.credit', { author })}</a> : null}
       {author && !profile ? <span>{t('carousel.credit', { author })}</span> : null}
       {license && legal ? <a href={legal} {...external}>{t('carousel.license', { license })}</a> : null}

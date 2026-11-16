@@ -12,7 +12,7 @@ interface FormFieldProps {
   error: string | undefined;
 }
 
-const SELECT = 'ui-field min-h-11 w-full rounded-sm border-2 border-ink bg-stone px-3 text-step-0 text-on-stone';
+const SELECT = 'ui-field min-h-11 w-full rounded-sm border border-ink bg-stone px-3 text-step-0 text-on-stone';
 const INPUT_TYPE: Partial<Record<FieldSpec['kind'], string>> = { date: 'date', tel: 'tel' };
 
 /** Un control por tipo de campo: texto, área de texto, lista, sí/no, número o fecha. */

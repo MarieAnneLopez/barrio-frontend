@@ -35,7 +35,7 @@ export function ChatInput({ onSend, inputRef }: ChatInputProps) {
         maxLength={300}
         autoComplete="off"
         placeholder={t('chat.placeholder')}
-        className="ui-field min-h-11 min-w-0 flex-1 rounded-sm border-2 border-ink bg-stone px-3 text-step--1 text-on-stone placeholder:text-on-stone placeholder:opacity-80"
+        className="ui-field min-h-11 min-w-0 flex-1 rounded-sm border border-ink bg-stone px-3 text-step--1 text-on-stone placeholder:text-on-stone placeholder:opacity-80"
       />
       <button
         type="submit"
