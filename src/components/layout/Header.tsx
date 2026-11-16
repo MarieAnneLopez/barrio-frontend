@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { AccountButton } from '../../features/auth/AccountButton';
 import { useWelcomeStore } from '../../store/welcomeStore';
 import { Tooltip } from '../ui/Tooltip';
+import { BrandLogo } from './BrandLogo';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { NavIcon } from './NavIcon';
 
@@ -29,6 +30,7 @@ export function Header({ menuOpen, onToggleMenu, sidebarId }: HeaderProps) {
       >
         <NavIcon name="menu" />
       </button>
+      <BrandLogo />
       <Link
         to="/"
         className="flex min-w-0 flex-col rounded-sm leading-tight no-underline"
