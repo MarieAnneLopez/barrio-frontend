@@ -4,6 +4,8 @@
 // ancho entero, para mostrarla 1:1 (o 2:1 exacto en pantallas 2×) con image-rendering: pixelated.
 // WebP al 90 %: medido, a ×4 de aumento se ve igual que sin pérdida y pesa 3,8 veces menos.
 // Lee los cuadros ya recortados de public/assets/avatar (copias): nunca "MINI MARIE.png".
+// La sentada no tiene cuadros sueltos: sale de sit_strip.webp, hecha una sola vez a partir de
+// «Mini marie sentada.jpeg» con un script puntual; ningún script la regenera (no borrar).
 // Uso: node scripts/build_sprite_scales.mjs
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
@@ -26,11 +28,16 @@ async function frame(name, i, frames) {
   return strip.extract({ left: i * w, top: 0, width: w, height }).png().toBuffer();
 }
 
-for (const [name, { frames, cell, sizes }] of Object.entries(scales)) {
+for (const [name, { frames, cell, sizes, source: origin }] of Object.entries(scales)) {
   const [cellW, cellH] = cell;
+  // `source` (solo la sentada): cuántos cuadros trae el dibujo y cuáles se saltan. Su tercer
+  // cuadro viene corrido en «Mini marie sentada.jpeg» y parpadeaba (D88).
+  const total = origin?.frames ?? frames;
+  const kept = [...Array(total).keys()].filter((i) => !origin?.skip?.includes(i));
+  if (kept.length !== frames) throw new Error(`${name}: ${kept.length} cuadros útiles, se esperaban ${frames}`);
   const cells = [];
-  for (let i = 0; i < frames; i++) {
-    const source = await frame(name, i, frames);
+  for (const i of kept) {
+    const source = await frame(name, i, total);
     const meta = await sharp(source).metadata();
     // La celda se completa con transparente (wave: 327 → 328 px de ancho) para que sea divisible.
     cells.push(await sharp({ create: { width: cellW, height: cellH, channels: 4, background: CLEAR } })

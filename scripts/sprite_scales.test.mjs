@@ -29,6 +29,18 @@ describe('tamaños fijos de Mini Marie (D86)', () => {
     expect(meta.hasAlpha).toBe(true);
   });
 
+  // D88: el tercer cuadro del dibujo original de la sentada viene corrido y parpadeaba; se salta.
+  it('la sentada se arma sin el cuadro corrido: 7 cuadros, y el tercero es el cuarto del dibujo', async () => {
+    expect([scales.sit.frames, scales.sit.source]).toEqual([7, { frames: 8, skip: [2] }]);
+    const [cellW, cellH] = scales.sit.cell;
+    const cut = (path, index) => sharp(path).extract({ left: index * cellW, top: 0, width: cellW, height: cellH }).raw().toBuffer();
+    const strip = join(root, 'public/assets/avatar/sit/sit_strip.webp');
+    const distance = (a, b) => a.reduce((sum, value, i) => sum + Math.abs(value - b[i]), 0) / a.length;
+    const third = await cut(file('sit', cellH), 2);
+    expect(distance(third, await cut(strip, 3))).toBeLessThan(6);
+    expect(distance(third, await cut(strip, 2))).toBeGreaterThan(12);
+  });
+
   // Medido: WebP al 90 % se ve igual que sin pérdida a ×4 de aumento y pesa 3,8 veces menos.
   it.each(cases)('%s a %i px: pesa poco (≤ 160 KB; ≤ 320 KB la de 640 px)', (name, size) => {
     const budgetKb = size > 420 ? 320 : 160;

@@ -9,6 +9,8 @@ export const FRAME_MS: Record<SequenceName, number> = { run: 90, wave: 140, sit:
  * Tamaños fijos (alto en px) de cada secuencia: «escala entera» (D86). Los dibujos de Mini Marie
  * no siguen una rejilla de píxel regular, así que no se escalan con CSS: cada tamaño es un recurso
  * generado por scripts/build_sprite_scales.mjs con celdas de ancho entero, y se muestra 1:1.
+ * La sentada sale de «Mini marie sentada.jpeg» (sit_strip.webp, que ningún script regenera) y va
+ * sin su tercer cuadro, que en el dibujo viene corrido y parpadeaba (D88): 7 cuadros.
  */
 export const SPRITE_SIZES: Record<SequenceName, readonly number[]> = {
   wave: scales.wave.sizes,
