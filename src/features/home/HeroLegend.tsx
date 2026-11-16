@@ -20,7 +20,7 @@ export function HeroLegend({ defaultOpen = false }: { defaultOpen?: boolean }) {
   const numbers = new Intl.NumberFormat(i18n.language);
 
   return (
-    <div className="brick-card pointer-events-auto flex min-h-0 w-[min(18rem,100%)] flex-col self-start">
+    <div className="ui-panel pointer-events-auto flex min-h-0 w-[min(18rem,100%)] flex-col self-start">
       <button
         type="button"
         aria-expanded={open}

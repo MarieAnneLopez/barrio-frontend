@@ -25,7 +25,7 @@ export function LocatorMap({ kennedy, tintal }: LocatorMapProps) {
         <path d={svgPath(kennedy, project)} className="fill-surface stroke-line-strong" strokeWidth={1.5} />
         <path d={svgPath(tintal, project)} className="fill-pink/60 stroke-pink" strokeWidth={2} />
       </svg>
-      <figcaption className="band-text flex flex-wrap gap-4 text-step--1 text-fg-secondary">
+      <figcaption className="flex flex-wrap gap-4 text-step--1 text-fg-secondary">
         <span className="flex items-center gap-2">
           <span aria-hidden="true" className="inline-block size-3 rounded-sm border border-line-strong bg-surface" />
           {t('history.locator.kennedy')}

@@ -1,13 +1,14 @@
-/* Estrellas (D13, D79): relleno lavanda con borde claro (íconos ≥ 3:1 sobre oscuro). Sin amarillo. */
+/* Estrellas (D13, D84): vacías con una línea (3,78:1 sobre noche) y llenas en el color de realce
+   (ámbar sobre noche; noche sobre papel; blanco en alto contraste). */
 .stars-empty {
   fill: transparent;
-  stroke: var(--palette-claro);
+  stroke: var(--border-strong);
   stroke-width: 1.2;
 }
 
 .stars-full {
-  fill: var(--palette-lavanda);
-  stroke: var(--palette-claro);
+  fill: var(--text-highlight);
+  stroke: var(--text-highlight);
   stroke-width: 1.2;
 }
 

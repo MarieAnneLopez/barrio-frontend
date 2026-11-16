@@ -18,7 +18,7 @@ export function Footer() {
   const lines = t('footer.locationLines', { returnObjects: true }) as string[];
 
   return (
-    <footer aria-label={t('footer.label')} className="brick-bond--vino mt-16 border-t-2 border-ink px-4 py-12 md:pr-24 md:pl-10">
+    <footer aria-label={t('footer.label')} className="mt-16 border-t border-line px-4 py-12 md:pr-24 md:pl-10">
       <FooterContact />
       <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_1fr]">
         {pathname === '/creadora' ? null : <CreatorProfileSection headingLevel={2} />}

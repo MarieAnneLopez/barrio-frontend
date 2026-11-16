@@ -15,7 +15,7 @@ export function PlaceGallery({ group }: { group: PlaceGroup }) {
   const module = t(`categories.${group.slug}.name`);
 
   return (
-    <section aria-labelledby={`place-${group.key}`} className="band-text flex flex-col gap-3">
+    <section aria-labelledby={`place-${group.key}`} className="flex flex-col gap-3">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h3 id={`place-${group.key}`} className="m-0 text-step-1 text-fg">{group.name}</h3>
         <Link to={`/categorias/${group.slug}`} className="text-step--1 text-accent underline underline-offset-4">
@@ -30,7 +30,7 @@ export function PlaceGallery({ group }: { group: PlaceGroup }) {
               <button
                 type="button"
                 onClick={() => setOpen(index)}
-                className="ui-pressable px-corners block w-full overflow-hidden"
+                className="ui-pressable block w-full overflow-hidden rounded-sm"
               >
                 <img
                   {...photoSet(photo.url)}

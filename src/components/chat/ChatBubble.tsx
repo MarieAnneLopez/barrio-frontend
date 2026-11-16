@@ -63,7 +63,7 @@ function MarieBubble({ text, actions, animate, onNavigate }: MarieBubbleProps) {
   const typing = shown.length < text.length;
 
   return (
-    <div className="chat-msg pixel-bubble max-w-[90%] self-start text-step--1">
+    <div className="chat-msg ui-card max-w-[90%] self-start px-4 py-3 text-step--1">
       <span className="sr-only">{t('chat.title')}: {text}</span>
       <p aria-hidden="true" className="whitespace-pre-line">{shown}</p>
       {!typing && actions.length ? (

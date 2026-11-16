@@ -7,7 +7,7 @@ import { categoryPath } from '../../lib/categoryConfig';
 import { useHeroStore } from '../../three/heroStore';
 
 const label = 'font-mono text-[0.75rem] tracking-[0.18em] text-fg-muted uppercase';
-const panel = 'glass pointer-events-auto rounded-md px-3 py-2';
+const panel = 'ui-panel pointer-events-auto px-3 py-2';
 
 /**
  * HUD de la maqueta (ref. visual 1): paneles en los bordes, nunca al centro. Todo va en una sola

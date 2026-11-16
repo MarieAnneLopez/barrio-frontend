@@ -48,7 +48,7 @@ export function ChatPanel({ id, titleId, inputRef, onClose, onNavigate }: ChatPa
       <div className="flex items-center gap-3 border-b border-line px-4 py-3">
         <ChatAvatar size={44} />
         <div className="min-w-0 flex-1">
-          <h2 id={titleId} className="pixel-font text-step--1 text-fg">
+          <h2 id={titleId} className="font-display text-step-0 text-fg not-italic">
             {t('chat.title')}
           </h2>
           <p className="text-step--2 leading-tight text-fg-muted">{t('chat.subtitle')}</p>

@@ -28,8 +28,7 @@ h3 {
 }
 
 /* Lo que use la display fuera de un h1 tampoco sintetiza negrita. */
-.font-display,
-.font-pixel {
+.font-display {
   font-synthesis: none;
   font-weight: 400;
   letter-spacing: 0.01em;

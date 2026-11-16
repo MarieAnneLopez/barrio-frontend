@@ -10,7 +10,7 @@ export function SourcesList({ fuentes, consultado }: { fuentes: Fuente[]; consul
   );
 
   return (
-    <div className="band-text flex flex-col gap-4">
+    <div className="flex flex-col gap-4">
       <p className="m-0 text-step--1 text-fg-muted">{t('history.sources.consulted', { date })}</p>
       <ol className="m-0 flex flex-col gap-4 pl-5">
         {fuentes.map((fuente) => (

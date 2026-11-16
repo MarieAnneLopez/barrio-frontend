@@ -1,0 +1,42 @@
+/* Tonos (D84, etapa 2). Una superficie papel reescopa los tokens de texto y de línea: dentro, todo
+   el texto pasa a noche y las líneas a acero, así cualquier componente se lee sobre los dos fondos.
+   Una superficie noche dentro de ella los devuelve a su valor de la raíz. Se apoyan en tokens
+   semánticos, no en colores fijos: en alto contraste siguen en blanco y negro. */
+:root {
+  /* Valor de la raíz de cada token: aquí var() llega ya resuelto a los descendientes. */
+  --noche-text-primary: var(--text-primary);
+  --noche-text-secondary: var(--text-secondary);
+  --noche-text-muted: var(--text-muted);
+  --noche-text-highlight: var(--text-highlight);
+  --noche-accent-soft: var(--accent-soft);
+  --noche-border-subtle: var(--border-subtle);
+  --noche-border-strong: var(--border-strong);
+  --noche-skeleton-base: var(--skeleton-base);
+  --noche-skeleton-shine: var(--skeleton-shine);
+}
+
+.tone-papel {
+  --text-primary: var(--text-on-accent);
+  --text-secondary: var(--text-on-accent);
+  --text-muted: var(--text-on-accent);
+  --text-highlight: var(--text-on-accent); /* ámbar nunca es texto sobre papel */
+  --accent-soft: var(--text-on-accent);
+  --border-subtle: var(--border-ink);
+  --border-strong: var(--border-ink);
+  --skeleton-base: color-mix(in srgb, var(--text-on-accent) 10%, transparent);
+  --skeleton-shine: color-mix(in srgb, var(--text-on-accent) 22%, transparent);
+  color: var(--text-primary);
+}
+
+.tone-noche {
+  --text-primary: var(--noche-text-primary);
+  --text-secondary: var(--noche-text-secondary);
+  --text-muted: var(--noche-text-muted);
+  --text-highlight: var(--noche-text-highlight);
+  --accent-soft: var(--noche-accent-soft);
+  --border-subtle: var(--noche-border-subtle);
+  --border-strong: var(--noche-border-strong);
+  --skeleton-base: var(--noche-skeleton-base);
+  --skeleton-shine: var(--noche-skeleton-shine);
+  color: var(--text-primary);
+}

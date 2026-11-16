@@ -21,7 +21,7 @@ export function NeighborhoodViews({ photos }: { photos: CarouselPhoto[] }) {
                 alt={t(`carousel.photos.${photo.id}.alt`)}
                 loading="lazy"
                 decoding="async"
-                className="px-corners aspect-[4/3] w-full object-cover"
+                className="aspect-[4/3] w-full rounded-sm object-cover"
               />
               <figcaption className="flex flex-col gap-1">
                 <span className="text-step--1 text-fg">{t(`carousel.photos.${photo.id}.caption`)}</span>

@@ -9,9 +9,9 @@ const LINK =
 export function FooterContact() {
   const { t } = useTranslation();
   return (
-    <section aria-labelledby="footer-contact" className="band-rosa flex flex-col gap-4 rounded-sm border-2 border-ink p-6 shadow-[var(--shadow-brick)]">
-      <h2 id="footer-contact" className="eyebrow m-0 text-on-pink">{t('footer.contact')}</h2>
-      <p className="m-0 max-w-prose text-on-pink">{t('footer.contactText')}</p>
+    <section aria-labelledby="footer-contact" className="ui-card ui-card--paper tone-papel flex flex-col gap-4 p-6">
+      <h2 id="footer-contact" className="ui-eyebrow m-0">{t('footer.contact')}</h2>
+      <p className="m-0 max-w-prose">{t('footer.contactText')}</p>
       <ul className="m-0 flex list-none flex-wrap gap-3 p-0">
         <li>
           <a href={`mailto:${EMAIL}`} target="_blank" rel="noopener noreferrer" className={LINK}>

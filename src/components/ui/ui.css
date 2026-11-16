@@ -1,6 +1,5 @@
 /* Estados compartidos de los controles (§10): hover, focus-visible,
-   active/pressed, disabled y loading. Solo transform/opacity/color.
-   La sombra dura cambia sin transición (box-shadow repinta cada cuadro, H32). */
+   active/pressed, disabled y loading. Solo transform/opacity/color; sin sombras (D85). */
 .ui-pressable {
   transition:
     transform var(--dur-1) var(--ease-emphasis),
@@ -9,19 +8,9 @@
     opacity var(--dur-2) ease;
 }
 
-/* Pulsar = el bloque se acomoda: baja 2 px y su sombra se acorta (D68). */
+/* Pulsar = el control se acomoda 2 px (D68). */
 .ui-pressable:active:not([aria-disabled='true']) {
   transform: translate(var(--press-shift), var(--press-shift)) scale(var(--press-scale));
-}
-
-.ui-btn--primary,
-.ui-btn--secondary {
-  box-shadow: var(--shadow-brick);
-}
-
-.ui-btn--primary:active:not([aria-disabled='true']),
-.ui-btn--secondary:active:not([aria-disabled='true']) {
-  box-shadow: var(--shadow-brick-pressed);
 }
 
 .ui-pressable:disabled,
@@ -76,15 +65,10 @@
   pointer-events: none;
 }
 
-/* Ítem activo del menú: rosa con borde vino; el ghost hover no lo apaga. */
+/* Ítem activo: papel con texto noche; el hover «ghost» no lo apaga. */
 .ui-nav-active,
 .ui-nav-active:hover {
   border-color: var(--border-ink);
   background-color: var(--bg-accent);
   color: var(--text-on-accent);
-}
-
-/* Dentro de superficies vino la sombra vino no se vería: sombra dura negra al 35 %. */
-:is(.bg-surface, .glass, .brick-card) :is(.ui-btn--primary, .ui-btn--secondary) {
-  box-shadow: var(--shadow-deep);
 }

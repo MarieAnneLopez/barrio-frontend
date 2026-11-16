@@ -44,7 +44,7 @@ export function MapsPreview({ place, geometry }: Props) {
         href={mapsSearchUrl(center)}
         target="_blank"
         rel="noopener noreferrer"
-        className="maps-preview px-corners"
+        className="maps-preview overflow-hidden rounded-sm"
       >
         <svg viewBox={`0 0 ${VIEW.width} ${VIEW.height}`} aria-hidden="true" className="block h-auto w-full">
           <rect width={VIEW.width} height={VIEW.height} className="maps-preview__ground" />

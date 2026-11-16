@@ -28,7 +28,7 @@ export function Timeline({ hitos, fuentes }: { hitos: Hito[]; fuentes: Fuente[] 
         return (
           <li key={hito.id} data-reveal className="relative flex gap-4 border-l-4 border-ink pb-6 pl-6 last:pb-0">
             <span aria-hidden="true" className="absolute top-6 -left-[10px] size-4 border-2 border-ink bg-pink" />
-            <div className="brick-card flex min-w-0 max-w-3xl flex-1 flex-col gap-2 p-5">
+            <div className="ui-card flex min-w-0 max-w-3xl flex-1 flex-col gap-2 p-5">
               <p className="m-0 font-display text-step-3 font-bold text-highlight">{hito.anio}</p>
               <h3 className="m-0 text-step-1 text-fg">{t(`${key}.title`, { defaultValue: hito.titulo })}</h3>
               <p className="m-0 max-w-prose text-fg-secondary">

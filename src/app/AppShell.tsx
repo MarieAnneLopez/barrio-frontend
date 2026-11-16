@@ -72,7 +72,7 @@ export function AppShell() {
             className="fixed inset-0 top-16 z-30 bg-[var(--overlay)]"
           />
         ) : null}
-        <aside ref={drawer} className={`brick-bond--nav border-r-2 border-ink ${asideClasses}`}>
+        <aside ref={drawer} className={`border-r border-line bg-bg ${asideClasses}`}>
           <Sidebar
             id={SIDEBAR_ID}
             collapsed={sidebarCollapsed}

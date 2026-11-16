@@ -42,7 +42,7 @@
   stroke-width: 2;
 }
 
-/* Placa del enlace: blanco sobre oscuro (12,25:1). */
+/* Placa del enlace: papel sobre noche (8,67:1). */
 .maps-preview__label {
   position: absolute;
   right: 0.5rem;
@@ -51,6 +51,6 @@
   font-weight: 700;
   font-size: 0.875rem;
   line-height: 1.4;
-  color: #fff;
-  background-color: var(--palette-oscuro);
+  color: var(--text-primary);
+  background-color: var(--bg-surface);
 }

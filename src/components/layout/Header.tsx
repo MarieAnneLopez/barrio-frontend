@@ -19,7 +19,7 @@ export function Header({ menuOpen, onToggleMenu, sidebarId }: HeaderProps) {
   const { t } = useTranslation();
   const replay = useWelcomeStore((s) => s.replay);
   return (
-    <header className="glass sticky top-0 z-40 flex h-16 items-center gap-3 border-x-0 border-t-0 px-4 md:px-6">
+    <header className="sticky top-0 z-40 flex h-16 items-center gap-3 border-b border-line bg-bg px-4 md:px-6">
       <button
         type="button"
         onClick={onToggleMenu}

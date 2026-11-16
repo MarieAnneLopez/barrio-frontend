@@ -20,7 +20,7 @@ export function HelpPage() {
     <div className="flex max-w-3xl flex-col gap-8">
       <PageHeader title={t('nav.help')} description={t('pages.help')} />
       {SECTIONS.map(({ key, to, label }) => (
-        <section key={key} aria-labelledby={`ayuda-${key}`} className="band-text flex flex-col gap-2">
+        <section key={key} aria-labelledby={`ayuda-${key}`} className="flex max-w-3xl flex-col gap-2 border-t border-line pt-6">
           <h2 id={`ayuda-${key}`} className="m-0 text-step-1 text-fg">{t(`help.sections.${key}.title`)}</h2>
           <p className="m-0 max-w-prose text-fg-secondary">{t(`help.sections.${key}.body`)}</p>
           {to && label ? (

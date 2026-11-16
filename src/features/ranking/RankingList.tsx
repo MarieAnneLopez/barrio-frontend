@@ -10,7 +10,7 @@ export function RankingList({ entries }: { entries: RankingEntry[] }) {
   const format = (n: number) => n.toLocaleString(i18n.language === 'en' ? 'en-US' : 'es-CO');
 
   if (!entries.length) {
-    return <p className="band-text m-0 text-fg-secondary">{t('ranking.empty')}</p>;
+    return <p className="ui-prose m-0">{t('ranking.empty')}</p>;
   }
   return (
     <ol aria-label={t('ranking.list')} className="m-0 flex list-none flex-col gap-3 p-0">

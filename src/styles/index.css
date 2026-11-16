@@ -3,9 +3,8 @@
 @import './map-palette.css';
 @import './scale.css';
 @import './contrast.css';
-@import './pixel.css';
-@import './brick.css';
-@import './bands.css';
+@import './tone.css';
+@import './surfaces.css';
 @import './type.css';
 @import '../components/ui/ui.css';
 @import '../components/ui/ui-motion.css';
@@ -38,7 +37,6 @@
   --font-serif: var(--ff-serif);
   --font-body: var(--ff-body);
   --font-mono: var(--ff-mono);
-  --font-pixel: var(--ff-pixel);
   /* Texto mínimo del chat (fechas, notas); sin él Tailwind no generaba text-step--2 (H30). */
   --text-step--2: clamp(0.75rem, 0.73rem + 0.08vw, 0.8125rem);
   --text-step--1: var(--step--1);
@@ -74,9 +72,4 @@ body {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
   box-shadow: 0 0 0 2px var(--focus-ring-inner);
-}
-
-.glass {
-  background-color: var(--glass-fill);
-  border: 2px solid var(--border-ink);
 }

@@ -18,7 +18,7 @@ export function PhotoCreditsPage() {
   return (
     <div className="flex flex-col gap-8">
       <PageHeader title={t('credits.title')} description={t('credits.description')} />
-      <p className="band-text m-0 max-w-3xl text-step-0 text-fg-secondary">{t('credits.changes')}</p>
+      <p className="ui-prose m-0 text-step-0">{t('credits.changes')}</p>
       {photos.status === 'loading' ? <Skeleton className="h-48 w-full" lines={4} /> : null}
       {photos.status === 'error' ? (
         <div role="alert" className="flex flex-col items-start gap-3 rounded-sm border-2 border-error bg-surface p-6">
@@ -27,7 +27,7 @@ export function PhotoCreditsPage() {
         </div>
       ) : null}
       {photos.status === 'success' ? (
-        <div className="band-text flex flex-col gap-3">
+        <div className="flex flex-col gap-3 border-t border-line pt-4">
           <p className="m-0 text-step--1 text-fg-muted">{t('credits.count', { count: photos.items.length })}</p>
           <ol className="m-0 flex list-none flex-col gap-3 p-0">
             {photos.items.map((photo) => (

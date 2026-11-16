@@ -43,7 +43,7 @@ export function HistoryPage() {
       </Section>
       <Section id="historia-cifras" title={t('history.indicators.title')}>
         {indicators.length ? <Indicators items={indicators} /> : <Skeleton className="h-24 w-full" />}
-        <p className="band-text m-0 max-w-prose text-step--1 text-fg-muted">
+        <p className="m-0 max-w-prose text-step--1 text-fg-muted">
           {t('history.indicators.note')} <SourceLinks refs={kennedy?.source_ref ?? null} />
         </p>
       </Section>
@@ -53,7 +53,7 @@ export function HistoryPage() {
         ) : (
           <Skeleton className="h-64 w-full max-w-md" />
         )}
-        <p className="band-text m-0 max-w-prose text-step--1 text-fg-secondary">{t('history.locator.definition')}</p>
+        <p className="ui-prose m-0 text-step--1">{t('history.locator.definition')}</p>
       </Section>
       {historia.status === 'success' ? (
         <Section id="historia-fuentes" title={t('history.sources.title')}>

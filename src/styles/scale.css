@@ -7,7 +7,6 @@
   --ff-serif: 'Cormorant Garamond', Georgia, serif; /* cursiva: títulos de sección y de foto */
   --ff-body: 'Inter', system-ui, sans-serif;
   --ff-mono: var(--ff-body); /* cifras: Inter con números tabulares */
-  --ff-pixel: var(--ff-display);
   --step--1: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
   --step-0: clamp(1rem, 0.97rem + 0.15vw, 1.0625rem);
   --step-1: clamp(1.1875rem, 1.12rem + 0.35vw, 1.375rem);
@@ -31,7 +30,6 @@
   --r-sm: 4px;
   --r-md: 4px;
   --r-lg: 4px;
-  --px: 4px; /* paso de las esquinas de píxel */
 
   /* Movimiento */
   --dur-1: 120ms;
@@ -48,8 +46,6 @@
   --disabled-opacity: 0.45;
   /* Sin sombras duras (D84): una sola sombra suave para lo que flota y un aro ámbar de 1 px */
   --shadow-deep: 0 8px 24px rgb(0 0 0 / 0.18);
-  --shadow-brick: none;
-  --shadow-brick-pressed: none;
   --glow-active: 0 0 0 1px var(--c-ambar);
 }
 

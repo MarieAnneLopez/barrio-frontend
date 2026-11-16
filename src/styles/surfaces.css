@@ -1,0 +1,75 @@
+/* Superficies de la interfaz elegante (D84, D85): radio de 4 px, líneas de 1 px y ninguna sombra
+   dura. El texto suelto va directo sobre noche; las cajas se reservan para lo que agrupa. */
+
+/* Tarjeta sobre noche: una línea fina la separa del fondo. */
+.ui-card {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-sm);
+  background-color: var(--bg-surface);
+}
+
+/* Tarjeta papel (va junto a .tone-papel, que pone el texto en noche). */
+.ui-card--paper {
+  border-color: transparent;
+  background-color: var(--bg-accent);
+}
+
+/* Lo que flota sobre el contenido: modal, menú, paneles de la maqueta. */
+.ui-panel {
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  background-color: var(--bg-surface);
+}
+
+/* Etiqueta superior: versalitas espaciadas en Inter (antes iba en fuente de píxel). */
+.ui-eyebrow {
+  font-family: var(--ff-body);
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+/* Párrafo de página: sin caja, a un ancho de lectura cómodo. */
+.ui-prose {
+  max-width: 65ch;
+  color: var(--text-secondary);
+}
+
+/* Regla ámbar de 1 px: el único adorno del encabezado de página. */
+.ui-rule {
+  display: block;
+  width: 4rem;
+  height: 1px;
+  background-color: var(--text-highlight);
+}
+
+/* Entrada del encabezado de cada página (D68): 200 ms y 6 px; con movimiento reducido, solo opacidad. */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@keyframes page-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.page-enter {
+  animation: page-enter 200ms var(--ease-emphasis) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter {
+    animation-name: page-fade;
+  }
+}
+
+:root.reduce-motion .page-enter {
+  animation-name: page-fade;
+}

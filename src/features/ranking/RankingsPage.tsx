@@ -20,7 +20,7 @@ export function RankingsPage() {
   return (
     <div className="flex flex-col gap-8">
       <PageHeader title={t('nav.ranking')} description={t('pages.ranking')} />
-      <div className="band-text flex max-w-sm flex-col gap-1">
+      <div className="flex max-w-sm flex-col gap-1">
         <label htmlFor={selectId} className="text-step--1 font-medium text-fg-secondary">
           {t('ranking.category')}
         </label>

@@ -9,12 +9,6 @@
   --c-ambar: #ffa649;
   --c-acero: #4b607f;
   --c-naranja: #f3701e;
-  /* Alias de la paleta anterior (D79) mientras la etapa 2 retira sus usos: ya sin violeta. */
-  --palette-principal: var(--c-noche);
-  --palette-intenso: var(--c-noche);
-  --palette-oscuro: var(--c-noche);
-  --palette-lavanda: var(--c-papel);
-  --palette-claro: var(--c-papel);
 
   /* Superficies */
   --bg-primary: var(--c-noche);

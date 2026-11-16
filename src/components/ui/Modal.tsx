@@ -50,7 +50,7 @@ export function Modal({ open, onClose, title, description, children, footer, wid
         aria-labelledby={titleId}
         aria-describedby={description ? descId : undefined}
         tabIndex={-1}
-        className={`ui-modal-panel glass relative w-full ${wide ? 'max-w-3xl' : 'max-w-lg'} rounded-lg bg-surface p-6 shadow-[var(--shadow-deep)]`}
+        className={`ui-modal-panel ui-panel relative w-full ${wide ? 'max-w-3xl' : 'max-w-lg'} p-6 shadow-[var(--shadow-deep)]`}
       >
         <div className="mb-4 flex items-start justify-between gap-4">
           <h2 id={titleId} className="m-0 text-step-2 text-fg">
