@@ -61,12 +61,14 @@ export async function apiGet<T>(path: string, params?: QueryParams, signal?: Abo
 export type WriteMethod = 'POST' | 'PATCH' | 'DELETE';
 
 /** Escritura JSON (crear, editar, borrar); 204 devuelve undefined. */
-export async function apiSend<T>(method: WriteMethod, path: string, body?: unknown): Promise<T | undefined> {
+export async function apiSend<T>(
+  method: WriteMethod, path: string, body?: unknown, timeoutMs = TIMEOUT_MS,
+): Promise<T | undefined> {
   const tracker = track(path);
   try {
     let response: Response;
     try {
-      const init: RequestInit = { method, headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(TIMEOUT_MS) };
+      const init: RequestInit = { method, headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(timeoutMs) };
       if (body !== undefined) {
         init.headers = { Accept: 'application/json', 'Content-Type': 'application/json' };
         init.body = JSON.stringify(body);

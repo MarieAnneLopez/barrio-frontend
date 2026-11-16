@@ -37,8 +37,21 @@ describe('Proxy de Cloudflare Pages (D62)', () => {
     const missing = await proxyToBackend(new Request('https://t.dev/api/v1/health'), {});
     expect(missing.status).toBe(503);
     vi.stubGlobal('fetch', vi.fn(async () => { throw new TypeError('network'); }));
-    const down = await proxyToBackend(new Request('https://t.dev/api/v1/health'), { BACKEND_URL: 'https://api.onrender.com' });
+    const down = await proxyToBackend(new Request('https://t.dev/api/v1/health'), { BACKEND_URL: 'https://api.onrender.com' },
+      { totalMs: 0, stepMs: 0 });
     expect(down.status).toBe(502);
     expect(await down.json()).toEqual({ error: { code: 'BACKEND_UNAVAILABLE', message: expect.stringContaining('despertando') } });
+  });
+
+  it('mientras Render despierta (conexión cortada o 502/503) espera y reintenta hasta que responde (D82)', async () => {
+    const answers = [() => { throw new TypeError('network'); }, () => new Response('', { status: 502 }),
+      () => new Response('', { status: 503 }), () => new Response('{"ok":true}', { status: 200 })];
+    let n = 0;
+    const backend = vi.fn(async () => answers[n++]?.() ?? new Response('', { status: 500 }));
+    vi.stubGlobal('fetch', backend);
+    const response = await proxyToBackend(new Request('https://t.dev/api/v1/chat', { method: 'POST', body: '{"m":1}' }),
+      { BACKEND_URL: 'https://api.onrender.com' }, { totalMs: 5_000, stepMs: 1 });
+    expect(backend).toHaveBeenCalledTimes(4);
+    expect(response.status).toBe(200);
   });
 });

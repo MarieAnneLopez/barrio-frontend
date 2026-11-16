@@ -476,11 +476,10 @@
       "theft": "Let's go to {{name}}. These reports are for prevention, not alarm. In an emergency call 123.",
       "map": "The 3D map shows El Tintal's blocks, roads and parks with the places of each module.",
       "history": "Local History tells the story of El Tintal and the Kennedy district.",
-      "fallback": "Without a connection to the server I answer from a local repertoire: I can take you to the 14 modules, the 3D map, the history or Marie's contact.",
+      "fallback": "I don't have that one at hand, but I can take you to the 14 modules, the 3D map, the history or Marie's contact.",
       "limit": "You've reached the message limit for now. Wait a few minutes and ask me again."
     },
     "thinking": "Mini Marie is looking through the neighborhood data…",
-    "offline": "No connection to the server: answer from the local repertoire.",
     "privacy": "Mini Marie writes with Gemini, Google's AI: don't share personal data."
   },
   "ratings": {

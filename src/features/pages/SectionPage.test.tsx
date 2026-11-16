@@ -29,6 +29,6 @@ describe('Secciones en construcción y límite del chat (D62)', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Abrir chat con Mini Marie' }));
     await userEvent.type(screen.getByRole('textbox', { name: 'Escribe tu pregunta' }), 'colegios{Enter}');
     await waitFor(() => expect(screen.getByRole('log')).toHaveTextContent('Llegaste al límite de mensajes'));
-    expect(screen.queryByText(/Sin conexión con el servidor/)).not.toBeInTheDocument();
+    expect(screen.getByRole('log').textContent).not.toMatch(/servidor|conexión|repertorio/i);
   });
 });

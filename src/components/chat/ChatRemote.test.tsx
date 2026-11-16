@@ -84,11 +84,4 @@ describe('Chat conectado a /api/v1/chat', () => {
     await waitFor(() => expect(screen.queryByText(/está buscando/)).not.toBeInTheDocument());
   });
 
-  it('sin servidor responde con el repertorio local y lo dice', async () => {
-    mockApi(chatRoute({ status: 500, body: { error: { code: 'INTERNAL_ERROR', message: 'x' } } }));
-    renderRoute('/');
-    await ask('¿Qué colegios hay?');
-    expect(await screen.findByText('Sin conexión con el servidor: respuesta del repertorio local.')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Ir a Centros Educativos' })).toBeInTheDocument();
-  });
 });

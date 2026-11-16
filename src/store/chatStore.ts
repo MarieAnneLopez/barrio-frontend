@@ -7,8 +7,8 @@ import { useAvatarStore } from './avatarStore';
 
 export type ChatMessage =
   | { id: number; from: 'user'; text: string }
-  /** Saludo contextual o respuesta local cuando el servidor no responde (offline). */
-  | { id: number; from: 'marie'; reply: LocalReply; offline?: boolean }
+  /** Saludo contextual o respuesta local si la API no contesta tras los reintentos (D82). */
+  | { id: number; from: 'marie'; reply: LocalReply }
   /** Respuesta del ModelProvider del backend (H23). */
   | { id: number; from: 'marie'; remote: RemoteReply };
 
@@ -34,7 +34,7 @@ const react = (type: AvatarEvent['type'] | null) => {
 
 let nextId = 1;
 
-/** Conversación con Mini Marie: /api/v1/chat y, sin conexión, el repertorio local (H13). */
+/** Conversación con Mini Marie: /api/v1/chat y, si no contesta, respuestas locales (H13, D82). */
 export const useChatStore = create<ChatStore>()((set, get) => ({
   open: false,
   messages: [],
@@ -65,7 +65,7 @@ export const useChatStore = create<ChatStore>()((set, get) => ({
         message = { id: nextId++, from: 'marie', reply: { key: 'chat.replies.limit' } };
       } else {
         const reply = localReply(clean);
-        message = { id: nextId++, from: 'marie', reply, offline: true };
+        message = { id: nextId++, from: 'marie', reply };
         react(reply.alert ? 'ALERT' : 'GREET');
       }
     }

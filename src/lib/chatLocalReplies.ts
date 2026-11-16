@@ -1,5 +1,5 @@
 // Respuestas locales de Mini Marie (H13). Desde H23 el chat usa /api/v1/chat
-// y este repertorio queda como respaldo cuando el servidor no responde.
+// y estas respuestas quedan de respaldo si la API no contesta tras los reintentos (D82).
 // Devuelven claves i18n, no textos: así cambian de idioma con la interfaz.
 import { categoryPath } from './categoryConfig';
 

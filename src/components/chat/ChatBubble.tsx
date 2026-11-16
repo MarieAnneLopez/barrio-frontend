@@ -46,7 +46,7 @@ export function ChatBubble({ message, animate, onNavigate }: ChatBubbleProps) {
   const actions = reply.action ? [{ to: reply.action.to, label: t(reply.action.labelKey) }] : [];
   return (
     <MarieBubble text={t(reply.key, resolveParams(t, reply.params))} actions={actions} animate={animate}
-      onNavigate={onNavigate} note={message.offline ? t('chat.offline') : undefined} />
+      onNavigate={onNavigate} />
   );
 }
 
@@ -55,10 +55,9 @@ interface MarieBubbleProps {
   actions: QuickAction[];
   animate: boolean;
   onNavigate: () => void;
-  note?: string | undefined;
 }
 
-function MarieBubble({ text, actions, animate, onNavigate, note }: MarieBubbleProps) {
+function MarieBubble({ text, actions, animate, onNavigate }: MarieBubbleProps) {
   const { t } = useTranslation();
   const shown = useTypewriter(text, animate);
   const typing = shown.length < text.length;
@@ -67,7 +66,6 @@ function MarieBubble({ text, actions, animate, onNavigate, note }: MarieBubblePr
     <div className="chat-msg pixel-bubble max-w-[90%] self-start text-step--1">
       <span className="sr-only">{t('chat.title')}: {text}</span>
       <p aria-hidden="true" className="whitespace-pre-line">{shown}</p>
-      {note && !typing ? <p className="mt-1 text-step--2 text-fg-muted">{note}</p> : null}
       {!typing && actions.length ? (
         <div className="mt-2 flex flex-wrap gap-2">
           {actions.map((action) => (

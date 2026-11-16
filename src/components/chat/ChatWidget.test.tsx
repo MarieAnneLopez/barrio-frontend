@@ -95,6 +95,6 @@ describe('Respaldo honesto', () => {
     renderRoute('/');
     await openChat();
     await userEvent.type(screen.getByRole('textbox', { name: 'Escribe tu pregunta' }), 'xyz{Enter}');
-    await waitFor(() => expect(screen.getByRole('log')).toHaveTextContent('repertorio local'));
+    await waitFor(() => expect(screen.getByRole('log')).toHaveTextContent('puedo llevarte a los 14 módulos'));
   });
 });
