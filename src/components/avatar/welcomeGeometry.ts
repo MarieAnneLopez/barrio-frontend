@@ -13,7 +13,7 @@ export const PEEK_SLOTS = SLOTS.map((id, i) => ({ id, pose: POSES[i] ?? 2, phase
 /** Obstáculos que ninguna puede tapar: letrero, botón, chat, WhatsApp y barra de accesibilidad. */
 const OBSTACLES = '#welcome-sign, .welcome-cta, .chat-launcher, .ui-whatsapp, aside.fixed';
 
-/** Mide la pantalla y los obstáculos y ancla cada Mini Marie (left/top en px). */
+/** Mide la pantalla y los obstáculos y ancla cada Mini Marie (left/top en px enteros, D86). */
 export function layoutPeeks(root: HTMLElement): void {
   const body = root.querySelector<HTMLElement>('.welcome-peek__body');
   const sprite = { w: body?.offsetWidth ?? 0, h: body?.offsetHeight ?? 0 };
@@ -24,10 +24,11 @@ export function layoutPeeks(root: HTMLElement): void {
   root.querySelectorAll<HTMLElement>('.welcome-peek').forEach((el) => {
     const spot = placed[el.dataset.slot as PeekSlot];
     if (!spot) return;
-    el.style.left = `${spot.x}px`;
-    el.style.top = `${spot.y}px`;
+    el.style.left = `${Math.round(spot.x)}px`;
+    el.style.top = `${Math.round(spot.y)}px`;
     el.style.transform = `rotate(${spot.rotation}deg)`; // cabeza siempre hacia adentro
     el.dataset.shifted = String(spot.shifted);
+    el.dataset.diagonal = String(spot.rotation % 90 !== 0); // a 45° no hay píxel entero: se suaviza
   });
 }
 

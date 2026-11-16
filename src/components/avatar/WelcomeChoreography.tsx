@@ -1,7 +1,8 @@
 import './welcome.css';
-import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, type CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { useWelcomeStore } from '../../store/welcomeStore';
 import { Button } from '../ui/Button';
@@ -9,6 +10,7 @@ import { useFocusTrap } from '../ui/useFocusTrap';
 import { useLoadingScreenStore } from '../../store/loadingScreenStore';
 import { SequenceSprite } from './SequenceSprite';
 import { CONFETTI_COUNT, layoutPeeks, PEEK_SLOTS, welcomeGeometry } from './welcomeGeometry';
+import { VISIBLE } from './welcomePeeks';
 import { exitWelcome, playWelcome } from './welcomeTimeline';
 
 const AUTO_CLOSE_MS = 3800;
@@ -16,7 +18,8 @@ const AUTO_CLOSE_MS = 3800;
 /**
  * Bienvenida (§11.4.3, D6, D11, H33, D82): exactamente 8 Mini Marie salen desde fuera de la
  * pantalla (4 esquinas y el centro de cada borde), de cabeza hacia adentro, y saludan con sus
- * 7 cuadros; el letrero "Hola" al centro. Espera a la pantalla de carga.
+ * 7 cuadros; el letrero "Hola" al centro. Espera a la pantalla de carga. Escala entera (D86):
+ * 160 px de alto, u 80 px en pantallas de menos de 640 px; lo que asoma, en píxeles enteros.
  */
 export function WelcomeChoreography() {
   const { t } = useTranslation();
@@ -29,6 +32,8 @@ export function WelcomeChoreography() {
   const root = useRef<HTMLDivElement>(null);
   const closing = useRef(false);
   const reduced = useReducedMotion();
+  const size = useMediaQuery('(min-width: 640px)', true) ? 160 : 80;
+  const rise = { '--peek-rise': `${Math.round(size * VISIBLE)}px` } as CSSProperties;
 
   useEffect(() => openIfFirstVisit(), [openIfFirstVisit]);
 
@@ -60,9 +65,9 @@ export function WelcomeChoreography() {
     <div ref={root} role="dialog" aria-modal="true" aria-labelledby="welcome-sign" className="fixed inset-0 z-[150] overflow-hidden">
       <div className="welcome-backdrop" onClick={requestClose} aria-hidden="true" />
       {PEEK_SLOTS.map((slot) => (
-        <span key={slot.id} className="welcome-peek" data-slot={slot.id}>
+        <span key={slot.id} className="welcome-peek" data-slot={slot.id} style={rise}>
           <span className="welcome-peek__body">
-            <SequenceSprite name="wave" size={160} pose={slot.pose} phase={slot.phase} />
+            <SequenceSprite name="wave" size={size} pose={slot.pose} phase={slot.phase} />
           </span>
         </span>
       ))}

@@ -1,19 +1,18 @@
-/* Bienvenida: velo, Mini Marie asomadas, letrero pixel "Hola" y confeti de la paleta (D6, D68, H33). */
+/* Bienvenida (D6, H33, D82; interfaz elegante D84–D86): velo noche, las 8 Mini Marie asomadas, el
+   letrero en la display y confeti de puntos en ámbar, papel y acero. Nada proyecta sombra. */
 .welcome-backdrop {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(circle at 50% 50%, rgb(40 56 69 / 0.55), transparent 60%),
-    var(--overlay);
+  background: var(--overlay);
   backdrop-filter: blur(6px);
 }
 
-/* Mini Marie que se asoman (H33, D82): 8 anclas sin tamaño en las esquinas y el centro de
-   cada borde (JS las corre por el borde si chocan); la ancla gira para que la cabeza apunte
-   adentro y GSAP mueve solo el cuerpo, así no pisa esa colocación. Tamaño con clamp():
-   la suma de lo visible queda muy por debajo del 12 % de la pantalla. */
+/* Mini Marie que se asoman: 8 anclas sin tamaño en las esquinas y el centro de cada borde (JS las
+   corre por el borde si chocan, en píxeles enteros); la ancla gira para que la cabeza apunte
+   adentro y GSAP mueve solo el cuerpo, así no pisa esa colocación. Tamaño fijo (escala entera):
+   160 px de alto, u 80 px en pantallas de menos de 640 px; --peek-rise es el 46 % que asoma. */
 .welcome-peek {
-  --peek-h: 160px;
+  --peek-rise: 74px;
   position: absolute;
   width: 0;
   height: 0;
@@ -33,21 +32,26 @@
 .welcome-peek__body {
   position: absolute;
   left: 0;
-  top: calc(var(--peek-h) * -0.46);
+  top: calc(var(--peek-rise) * -1);
   display: block;
   line-height: 0;
   transform: translateX(-50%);
 }
 
+/* Girada 45° no hay píxel entero que conservar: se suaviza para que el borde no salga dentado. */
+.welcome-peek[data-diagonal='true'] .sequence__strip {
+  image-rendering: auto;
+}
+
 .welcome-sign {
-  font-family: var(--ff-pixel);
-  font-size: clamp(2.5rem, 9vw, 6rem);
-  line-height: 1.1;
+  font-family: var(--ff-display);
+  font-size: clamp(4rem, 14vw, 9rem);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
   color: var(--text-primary);
-  text-shadow:
-    4px 4px 0 var(--palette-oscuro),
-    -2px -2px 0 var(--palette-lavanda);
-  letter-spacing: 0.08em;
 }
 
 .welcome-letter {
@@ -58,16 +62,17 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
   opacity: 0;
-  background-color: var(--palette-claro);
+  background-color: var(--c-ambar);
 }
 
 .welcome-confetti:nth-child(3n) {
-  background-color: var(--palette-lavanda);
+  background-color: var(--c-papel);
 }
 
 .welcome-confetti:nth-child(3n + 1) {
-  background-color: var(--palette-oscuro);
+  background-color: var(--c-acero);
 }

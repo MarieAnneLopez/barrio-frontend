@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
@@ -7,6 +10,7 @@ import { SLOTS } from './welcomePeeks';
 
 const SEEN = 'mini-marie:welcome-seen';
 const dialog = () => screen.queryByRole('dialog', { name: 'Hola' });
+const css = readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'welcome.css'), 'utf8');
 
 beforeEach(() => {
   window.sessionStorage.removeItem(SEEN);
@@ -26,11 +30,26 @@ describe('Bienvenida de Mini Marie', () => {
     await waitFor(() => expect(screen.getByRole('button', { name: '¡Hola! Explorar El Tintal' })).toHaveFocus());
   });
 
-  it('en móvil también son exactamente 8: 4 esquinas y el centro de cada borde (D82)', async () => {
-    setViewport(false);
+  it.each([
+    ['escritorio', true, '82px', '160px', '74px'],
+    ['móvil', false, '41px', '80px', '37px'],
+  ])('en %s son exactamente 8 a escala entera: tamaño fijo y asomo en píxeles enteros (D86)', async (_view, desktop, width, height, rise) => {
+    setViewport(desktop);
     renderRoute('/');
     const welcome = await screen.findByRole('dialog', { name: 'Hola' });
-    expect(welcome.querySelectorAll('.welcome-peek')).toHaveLength(8);
+    const peeks = [...welcome.querySelectorAll<HTMLElement>('.welcome-peek')];
+    expect(peeks).toHaveLength(8);
+    for (const peek of peeks) {
+      const box = peek.querySelector<HTMLElement>('.sequence');
+      expect([box?.style.width, box?.style.height]).toEqual([width, height]);
+      expect(peek.style.getPropertyValue('--peek-rise')).toBe(rise); // 46 % del alto, redondeado
+    }
+  });
+
+  it('su estilo va en la interfaz nueva: sin violeta, fuente de píxel ni sombras (D84)', () => {
+    expect(css).not.toMatch(/--palette-|--ff-pixel|shadow|gradient|clamp\(96px/);
+    expect(css).toMatch(/\.welcome-sign \{[^}]*font-family: var\(--ff-display\)/);
+    for (const token of ['--c-ambar', '--c-papel', '--c-acero']) expect(css).toContain(`var(${token})`);
   });
 
   it('con movimiento reducido las poses quedan fijas (sin animar la tira)', async () => {

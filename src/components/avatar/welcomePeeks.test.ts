@@ -2,21 +2,20 @@ import { describe, expect, it } from 'vitest';
 import { placePeeks, SLOTS, visibleBox, type Rect, type Size } from './welcomePeeks';
 
 // D82: 8 Mini Marie, ninguna tapa letrero, botón ni chat, ni se pisan; ≤ 12 % de la pantalla.
-const ASPECT = 327 / 640; // cuadro del saludo
-/** Igual que .welcome-peek: --peek-h: clamp(96px, 20vmin, 190px). */
-const spriteFor = ({ w, h }: Size): Size => {
-  const height = Math.min(190, Math.max(96, 0.2 * Math.min(w, h)));
-  return { w: height * ASPECT, h: height };
-};
+/** Igual que la bienvenida (D86): 82 × 160 px desde 640 px de ancho de pantalla; 41 × 80 px por debajo. */
+const spriteFor = ({ w }: Size): Size => (w >= 640 ? { w: 82, h: 160 } : { w: 41, h: 80 });
 const rect = (left: number, top: number, width: number, height: number): Rect =>
   ({ left, top, right: left + width, bottom: top + height });
 
-/** Obstáculos medidos en el sitio (letrero, botón, chat, WhatsApp, barra de accesibilidad). */
+// Obstáculos medidos en el sitio (2026-11-16, interfaz elegante): barra de accesibilidad, chat,
+// WhatsApp, letrero y botón; en móvil cuenta además el panel lateral, que espera fuera de pantalla.
 const CASES: [Size, Rect[]][] = [
-  [{ w: 1440, h: 900 }, [rect(560, 360, 320, 110), rect(600, 494, 240, 48), rect(1290, 820, 56, 56),
-    rect(1360, 820, 56, 56), rect(1386, 316, 54, 268)]],
-  [{ w: 390, h: 844 }, [rect(40, 360, 310, 60), rect(80, 444, 230, 48), rect(250, 772, 56, 56),
-    rect(318, 772, 56, 56), rect(336, 690, 54, 60)]],
+  [{ w: 1440, h: 900 }, [rect(1386, 315, 54, 270), rect(1292, 817, 56, 56), rect(1360, 820, 56, 56),
+    rect(580, 344, 281, 144), rect(607, 512, 227, 44)]],
+  [{ w: 390, h: 844 }, [rect(-280, 64, 280, 780), rect(336, 692, 54, 56), rect(250, 770, 56, 56),
+    rect(318, 772, 56, 56), rect(133, 356, 125, 64), rect(87, 444, 217, 44)]],
+  [{ w: 360, h: 640 }, [rect(-280, 64, 280, 576), rect(306, 488, 54, 56), rect(220, 566, 56, 56),
+    rect(288, 568, 56, 56), rect(118, 254, 125, 64), rect(72, 342, 216, 44)]],
 ];
 const area = (r: Rect) => (r.right - r.left) * (r.bottom - r.top);
 const overlap = (a: Rect, b: Rect) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
