@@ -66,13 +66,13 @@
   height: 6px;
   border-radius: 50%;
   opacity: 0;
-  background-color: var(--c-ambar);
+  background-color: var(--text-highlight);
 }
 
 .welcome-confetti:nth-child(3n) {
-  background-color: var(--c-papel);
+  background-color: var(--text-primary);
 }
 
 .welcome-confetti:nth-child(3n + 1) {
-  background-color: var(--c-acero);
+  background-color: var(--border-ink);
 }

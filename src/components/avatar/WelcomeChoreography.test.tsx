@@ -49,7 +49,9 @@ describe('Bienvenida de Mini Marie', () => {
   it('su estilo va en la interfaz nueva: sin violeta, fuente de píxel ni sombras (D84)', () => {
     expect(css).not.toMatch(/--palette-|--ff-pixel|shadow|gradient|clamp\(96px/);
     expect(css).toMatch(/\.welcome-sign \{[^}]*font-family: var\(--ff-display\)/);
-    for (const token of ['--c-ambar', '--c-papel', '--c-acero']) expect(css).toContain(`var(${token})`);
+    // Confeti con tokens semánticos: en alto contraste también pasa a blanco y negro.
+    for (const token of ['--text-highlight', '--text-primary', '--border-ink']) expect(css).toContain(`var(${token})`);
+    expect(css).not.toMatch(/var\(--c-/);
   });
 
   it('con movimiento reducido las poses quedan fijas (sin animar la tira)', async () => {
