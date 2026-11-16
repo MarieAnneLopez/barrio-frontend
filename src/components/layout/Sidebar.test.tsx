@@ -1,71 +1,30 @@
-import { screen, within } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it } from 'vitest';
-import { renderRoute, setViewport } from '../../test/renderRoute';
+import { MemoryRouter } from 'react-router-dom';
+import { describe, expect, it } from 'vitest';
+import { Sidebar } from './Sidebar';
 
-beforeEach(() => {
-  window.localStorage.clear();
-  setViewport(true);
-});
-
+// La barra lateral dejó de usarse en la etapa 2: la reemplaza el menú del header (SiteMenu.test.tsx).
+// El componente sigue en el repositorio hasta que se autorice borrarlo; aquí solo se comprueba que
+// todavía funciona suelto.
+const renderSidebar = (path: string) =>
+  render(
+    <MemoryRouter initialEntries={[path]}>
+      <Sidebar id="menu-lateral" collapsed={false} onToggleCollapsed={() => undefined} onExpand={() => undefined} />
+    </MemoryRouter>,
+  );
 const nav = () => screen.getByRole('navigation', { name: 'Navegación principal' });
 
-describe('Sidebar', () => {
+describe('Sidebar (sin uso desde la etapa 2)', () => {
   it('lista las secciones y marca la activa con aria-current', () => {
-    renderRoute('/historia');
-    const links = within(nav()).getAllByRole('link');
-    expect(links.map((l) => l.textContent)).toEqual(
-      expect.arrayContaining(['Inicio', 'Mapa 3D', 'Historia Local', 'Acceso / Sesión']),
-    );
-    expect(within(nav()).getByRole('link', { name: 'Historia Local' })).toHaveAttribute(
-      'aria-current',
-      'page',
-    );
+    renderSidebar('/historia');
+    expect(within(nav()).getByRole('link', { name: 'Historia Local' })).toHaveAttribute('aria-current', 'page');
     expect(within(nav()).getByRole('link', { name: 'Inicio' })).not.toHaveAttribute('aria-current');
   });
 
-  it('se contrae, conserva nombres accesibles y recuerda la preferencia', async () => {
-    const { unmount } = renderRoute('/');
-    const toggle = screen.getByRole('button', { name: 'Contraer menú' });
-    expect(toggle).toHaveAttribute('aria-expanded', 'true');
-    await userEvent.click(toggle);
-    expect(screen.getByRole('button', { name: 'Expandir menú' })).toHaveAttribute(
-      'aria-expanded',
-      'false',
-    );
-    expect(within(nav()).getByRole('link', { name: 'Mapa 3D' })).toBeInTheDocument();
-    expect(window.localStorage.getItem('mini-marie:sidebar-collapsed')).toBe('true');
-    unmount();
-    renderRoute('/');
-    expect(screen.getByRole('button', { name: 'Expandir menú' })).toBeInTheDocument();
-  });
-
-  it('el submenú Categorías abre los 14 módulos con teclado', async () => {
-    renderRoute('/');
-    const button = within(nav()).getByRole('button', { name: 'Categorías' });
-    expect(button).toHaveAttribute('aria-expanded', 'false');
-    button.focus();
-    await userEvent.keyboard('{Enter}');
-    expect(button).toHaveAttribute('aria-expanded', 'true');
-    const list = screen.getByRole('list', { name: '14 módulos del barrio' });
-    expect(within(list).getAllByRole('link')).toHaveLength(14);
-  });
-
-  it('contraído, abrir Categorías expande el menú', async () => {
-    window.localStorage.setItem('mini-marie:sidebar-collapsed', 'true');
-    renderRoute('/');
+  it('el submenú Categorías abre los 14 módulos', async () => {
+    renderSidebar('/');
     await userEvent.click(within(nav()).getByRole('button', { name: 'Categorías' }));
-    expect(screen.getByRole('button', { name: 'Contraer menú' })).toBeInTheDocument();
-    expect(screen.getByRole('list', { name: '14 módulos del barrio' })).toBeVisible();
-  });
-
-  it('en un módulo, el submenú aparece abierto con el módulo activo', async () => {
-    renderRoute('/categorias/robos');
-    expect(await screen.findByRole('heading', { level: 1, name: 'Datos sobre Robos' })).toBeInTheDocument();
-    const list = screen.getByRole('list', { name: '14 módulos del barrio' });
-    expect(within(list).getByRole('link', { name: 'Datos sobre Robos' })).toHaveAttribute(
-      'aria-current',
-      'page',
-    );
+    expect(within(screen.getByRole('list', { name: '14 módulos del barrio' })).getAllByRole('link')).toHaveLength(14);
   });
 });

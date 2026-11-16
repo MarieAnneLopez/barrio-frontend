@@ -23,7 +23,8 @@ describe('Manejo de errores en todas las rutas (H31)', () => {
     expect(alert).toHaveTextContent('Algo salió mal al mostrar esta sección');
     expect(screen.getByRole('button', { name: 'Recargar la página' })).toBeInTheDocument();
     expect(screen.queryByText(/Unexpected Application Error/)).not.toBeInTheDocument();
-    expect(screen.getByRole('navigation', { name: /principal|menú/i })).toBeInTheDocument();
+    // El shell sigue ahí: el botón del menú desplegable (etapa 2) permite salir de la página rota.
+    expect(screen.getByRole('button', { name: 'Abrir menú' })).toBeInTheDocument();
   });
 
   it('las demás rutas siguen funcionando', async () => {

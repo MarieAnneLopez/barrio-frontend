@@ -1,63 +1,65 @@
+import './site-header.css';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
-import { AccountButton } from '../../features/auth/AccountButton';
-import { useWelcomeStore } from '../../store/welcomeStore';
-import { Tooltip } from '../ui/Tooltip';
+import { Link, useLocation } from 'react-router-dom';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { BrandLogo } from './BrandLogo';
-import { LanguageSwitcher } from './LanguageSwitcher';
+import { HeaderTools } from './HeaderTools';
 import { NavIcon } from './NavIcon';
+import { SiteMenu } from './SiteMenu';
+import { useHeaderLook } from './useHeaderLook';
 
-interface HeaderProps {
-  menuOpen: boolean;
-  onToggleMenu: () => void;
-  /** id del Sidebar que controla el botón de menú (móvil). */
-  sidebarId: string;
-}
+const MENU_ID = 'menu-principal';
 
-/** Barra superior: menú (móvil), marca, sesión y selector de idioma. */
-export function Header({ menuOpen, onToggleMenu, sidebarId }: HeaderProps) {
+/**
+ * Barra superior fija (etapa 2): logo y nombre, herramientas y el botón «Menú», que abre el panel
+ * con todas las rutas (reemplaza a la barra lateral). Toma el tono de la sección que tiene debajo.
+ */
+export function Header() {
   const { t } = useTranslation();
-  const replay = useWelcomeStore((s) => s.replay);
+  const { pathname } = useLocation();
+  const wide = useMediaQuery('(min-width: 640px)');
+  const { tone, float } = useHeaderLook();
+  const [open, setOpen] = useState(false);
+
+  // Navegar cierra el menú (ajuste durante el render, sin efecto).
+  const [lastPath, setLastPath] = useState(pathname);
+  if (pathname !== lastPath) {
+    setLastPath(pathname);
+    setOpen(false);
+  }
+
   return (
-    <header className="sticky top-0 z-40 flex h-16 items-center gap-3 border-b border-line bg-bg px-4 md:px-6">
-      <button
-        type="button"
-        onClick={onToggleMenu}
-        aria-expanded={menuOpen}
-        aria-controls={sidebarId}
-        aria-label={menuOpen ? t('header.closeMenu') : t('header.openMenu')}
-        className="ui-pressable ui-btn--ghost inline-flex size-11 items-center justify-center rounded-md border border-transparent text-fg md:hidden"
-      >
-        <NavIcon name="menu" />
-      </button>
-      <BrandLogo />
-      <Link
-        to="/"
-        className="flex min-w-0 flex-col rounded-sm leading-tight no-underline"
-      >
-        <span className="truncate font-display text-step-1 font-bold text-fg">
-          {t('app.shortTitle')}
-        </span>
-        <span className="truncate font-mono text-step--1 tracking-[0.08em] text-fg-muted uppercase sm:tracking-[0.16em]">
-          {t('app.location')}
-        </span>
-        {/* El nombre accesible empieza por el texto visible (WCAG 2.5.3). */}
-        <span className="sr-only">{t('header.home')}</span>
-      </Link>
-      <div className="ml-auto flex items-center gap-2">
-        <Tooltip content={t('welcome.replay')} side="bottom">
+    <header
+      data-tone={tone}
+      data-float={float || undefined}
+      data-open={open || undefined}
+      className={`site-header fixed inset-x-0 top-0 z-40 ${tone === 'papel' ? 'tone-papel' : 'tone-noche'}`}
+    >
+      <div className="mx-auto flex h-16 max-w-[1200px] items-center gap-3 px-4 md:px-10">
+        <BrandLogo />
+        <Link to="/" className="flex min-w-0 flex-col rounded-sm leading-tight no-underline">
+          <span className="font-display text-step-1 whitespace-nowrap text-fg">{t('app.shortTitle')}</span>
+          <span className="ui-eyebrow truncate text-fg-muted max-sm:hidden">{t('app.location')}</span>
+          {/* El nombre accesible empieza por el texto visible (WCAG 2.5.3). */}
+          <span className="sr-only">{t('header.home')}</span>
+        </Link>
+        <div className="ml-auto flex items-center gap-2">
+          {wide ? <HeaderTools /> : null}
           <button
             type="button"
-            onClick={replay}
-            aria-label={t('welcome.replay')}
-            className="ui-pressable ui-btn--ghost inline-flex size-11 items-center justify-center rounded-md border border-transparent text-fg-secondary"
+            onClick={() => setOpen((value) => !value)}
+            aria-expanded={open}
+            aria-controls={MENU_ID}
+            aria-label={open ? t('header.closeMenu') : t('header.openMenu')}
+            className="ui-pressable ui-btn--ghost inline-flex min-h-11 items-center gap-2 rounded-sm border border-line-strong px-3 text-step--1 font-medium tracking-[0.12em] text-fg uppercase"
           >
-            <NavIcon name="replay" />
+            <NavIcon name={open ? 'close' : 'menu'} />
+            <span aria-hidden="true">{t('header.menu')}</span>
           </button>
-        </Tooltip>
-        <AccountButton />
-        <LanguageSwitcher />
+        </div>
       </div>
+      {open ? <SiteMenu id={MENU_ID} onClose={() => setOpen(false)} tools={wide ? null : <HeaderTools />} /> : null}
     </header>
   );
 }

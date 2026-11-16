@@ -1,0 +1,78 @@
+/* Header y menú desplegable (etapa 2). El header toma el tono de la sección que tiene debajo
+   (data-tone; ver toneRegistry.ts) y, si esa sección lo pide, flota transparente (data-float).
+   El cambio de tono es instantáneo: solo se animan transform y opacity. */
+.site-header {
+  border-bottom: 1px solid var(--border-subtle);
+  background-color: var(--bg-primary);
+}
+
+.site-header[data-tone='papel'] {
+  background-color: var(--bg-accent);
+}
+
+/* Sobre una sección a pantalla completa: sin fondo ni línea. Con el menú abierto vuelve a ser sólido. */
+.site-header[data-float]:not([data-open]) {
+  border-bottom-color: transparent;
+  background-color: transparent;
+}
+
+/* Abierto, queda por encima del chat y de WhatsApp para que el velo los cubra. */
+.site-header[data-open] {
+  z-index: 60;
+}
+
+.site-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  max-height: calc(100dvh - 4rem);
+  overflow-y: auto;
+  border-bottom: 1px solid var(--border-strong);
+  background-color: var(--bg-primary);
+  animation: site-menu-in var(--dur-3) var(--ease-emphasis) both;
+}
+
+.site-header[data-tone='papel'] .site-menu {
+  background-color: var(--bg-accent);
+}
+
+.site-menu__veil {
+  position: fixed;
+  inset: 4rem 0 0;
+  background-color: var(--overlay);
+  animation: site-veil-in var(--dur-2) ease both;
+}
+
+/* Página activa: subrayada con la regla de realce (el color nunca va solo). */
+.site-menu__link[aria-current='page'] {
+  text-decoration: underline;
+  text-decoration-color: var(--text-highlight);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+@keyframes site-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes site-veil-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-menu,
+  .site-menu__veil {
+    animation: none;
+  }
+}
+
+:root.reduce-motion .site-menu,
+:root.reduce-motion .site-menu__veil {
+  animation: none;
+}

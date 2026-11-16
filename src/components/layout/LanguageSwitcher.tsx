@@ -10,7 +10,7 @@ export function LanguageSwitcher() {
     <div
       role="group"
       aria-label={t('header.language')}
-      className="inline-flex rounded-md border border-line bg-surface p-1"
+      className="inline-flex rounded-sm border border-line p-1"
     >
       {SUPPORTED_LANGUAGES.map((lng) => {
         const active = lng === current;

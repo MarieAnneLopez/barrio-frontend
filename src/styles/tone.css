@@ -28,7 +28,9 @@
   color: var(--text-primary);
 }
 
-.tone-noche {
+/* Una superficie noche dentro de un tono papel recupera sola los tokens de la raíz. */
+.tone-noche,
+.tone-papel :is(.ui-card:not(.ui-card--paper), .ui-panel, .bg-surface, .bg-bg, .bg-glass) {
   --text-primary: var(--noche-text-primary);
   --text-secondary: var(--noche-text-secondary);
   --text-muted: var(--noche-text-muted);

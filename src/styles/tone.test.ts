@@ -22,12 +22,14 @@ describe('tonos de superficie', () => {
   });
 
   it('.tone-noche devuelve cada token a su valor de la raíz', () => {
-    const [root, noche] = [block(':root'), block('.tone-noche')];
+    const [root, noche] = [block(':root'), /\.tone-noche,[^{]*\{([^}]*)\}/.exec(css)?.[1] ?? ''];
     for (const token of [...TEXT, ...LINES, 'skeleton-base', 'skeleton-shine']) {
       expect(root).toContain(`--noche-${token}: var(--${token});`);
       expect(noche).toContain(`--${token}: var(--noche-${token});`);
     }
     expect(noche).toContain('color: var(--text-primary);');
+    // También sin la clase: una tarjeta o un panel noche dentro de un tono papel.
+    expect(css).toContain('.tone-papel :is(.ui-card:not(.ui-card--paper), .ui-panel, .bg-surface, .bg-bg, .bg-glass)');
   });
 
   it('los esqueletos de carga se tiñen con el texto de la superficie papel', () => {
