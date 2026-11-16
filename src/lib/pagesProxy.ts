@@ -10,11 +10,11 @@ export interface ProxyEnv {
 }
 
 /**
- * Render gratuito se apaga tras 15 min sin uso y tarda ~40 s en volver (D64, D82): mientras
+ * Render gratuito se apaga tras 15 min sin uso y tarda ~40–65 s en volver (D64, D82; medido: 63,5 s): mientras
  * arranca, la conexión falla o responde 502/503/504. El proxy espera y reintenta hasta que
- * despierta (sin límite de duración en Workers HTTP; ~20 subpeticiones de 50 posibles).
+ * despierta (sin límite de duración en Workers HTTP; ~30 subpeticiones de 50 posibles).
  */
-export const WAKE = { totalMs: 50_000, stepMs: 2_500 };
+export const WAKE = { totalMs: 75_000, stepMs: 2_500 };
 const ASLEEP = new Set([502, 503, 504]);
 const pause = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 

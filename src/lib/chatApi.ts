@@ -18,8 +18,8 @@ export interface ChatContext {
   ruta: string;
 }
 
-/** El proxy espera hasta ~50 s a que la API despierte (D82): el chat la espera. */
-const CHAT_TIMEOUT_MS = 55_000;
+/** El proxy espera hasta ~75 s a que la API despierte (D82): el chat la espera. */
+const CHAT_TIMEOUT_MS = 80_000;
 /** Pedido de Marie (D82): si una consulta falla, se reintenta en silencio 2 veces. */
 export const chatRetry = { delaysMs: [1000, 2000] };
 const pause = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
