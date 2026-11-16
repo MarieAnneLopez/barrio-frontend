@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
+import { classRatio, MODES } from '../../test/classContrast';
 import { Input } from './Input';
 
 describe('Input', () => {
@@ -23,6 +24,12 @@ describe('Input', () => {
     render(<Input label="Buscar" loading />);
     expect(screen.getByLabelText('Buscar')).toHaveAttribute('aria-busy', 'true');
     expect(screen.getByRole('status')).toHaveTextContent('Cargando…');
+  });
+
+  it.each(MODES)('loading: el spinner se distingue sobre el campo en modo %s (≥ 3:1)', (_mode, vars) => {
+    render(<Input label="Buscar" loading />);
+    const ratio = classRatio(screen.getByLabelText('Buscar').className, screen.getByRole('status').className, vars);
+    expect(ratio).toBeGreaterThanOrEqual(3);
   });
 
   it('disabled: no acepta escritura', async () => {

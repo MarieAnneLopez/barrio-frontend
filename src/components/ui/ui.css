@@ -34,17 +34,22 @@
   cursor: progress;
 }
 
+/* Un hover que cambia el fondo fija también el texto: la clase de color de quien usa el botón
+   no siempre acompaña (styles/consumers.test.ts). */
 @media (hover: hover) and (pointer: fine) {
   .ui-btn--primary:hover {
     background-color: var(--interactive-hover);
+    color: var(--text-on-interactive);
   }
 
   .ui-btn--secondary:hover {
     background-color: var(--interactive-primary);
+    color: var(--text-on-interactive);
   }
 
+  /* Se tiñe con el color del propio texto: nunca lo iguala, tampoco en alto contraste. */
   .ui-btn--ghost:hover {
-    background-color: var(--hairline);
+    background-color: color-mix(in srgb, currentColor 14%, transparent);
   }
 
   .ui-field:hover {
@@ -76,6 +81,7 @@
 .ui-nav-active:hover {
   border-color: var(--border-ink);
   background-color: var(--bg-accent);
+  color: var(--text-on-accent);
 }
 
 /* Dentro de superficies vino la sombra vino no se vería: sombra dura negra al 35 %. */

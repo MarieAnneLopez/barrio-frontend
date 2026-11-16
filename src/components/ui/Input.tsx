@@ -38,7 +38,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           className="ui-field min-h-11 w-full rounded-sm border-2 border-ink bg-stone px-3 text-step-0 text-on-stone placeholder:text-on-stone placeholder:opacity-80"
         />
         {loading ? (
-          <Spinner size={16} className="absolute top-1/2 right-3 -translate-y-1/2 text-accent" />
+          <Spinner size={16} className="absolute top-1/2 right-3 -translate-y-1/2 text-on-stone" />
         ) : null}
       </div>
       {hint ? (

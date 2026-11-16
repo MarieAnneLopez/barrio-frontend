@@ -9,8 +9,8 @@ interface WhatsAppFloatProps {
 }
 
 /**
- * Botón flotante permanente (§11.2.4, D7): glifo --accent-soft sobre
- * --interactive-primary, pulso sutil (apagado con movimiento reducido) y tooltip.
+ * Botón flotante permanente (§11.2.4, D7): glifo noche sobre ámbar
+ * (--text-on-interactive sobre --interactive-primary, 6,20:1), pulso sutil (apagado con movimiento reducido) y tooltip.
  */
 export function WhatsAppFloat({ raised = false }: WhatsAppFloatProps) {
   const { t } = useTranslation();
@@ -26,7 +26,7 @@ export function WhatsAppFloat({ raised = false }: WhatsAppFloatProps) {
           target="_blank"
           rel="noopener noreferrer"
           aria-label={t('whatsapp.label')}
-          className="ui-pressable ui-whatsapp relative inline-flex size-14 items-center justify-center rounded-full border border-line-strong bg-interactive text-accent shadow-[var(--shadow-deep)]"
+          className="ui-pressable ui-whatsapp relative inline-flex size-14 items-center justify-center rounded-full border border-line-strong bg-interactive text-on-interactive shadow-[var(--shadow-deep)]"
         >
           <WhatsAppGlyph size={28} />
         </a>
