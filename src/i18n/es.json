@@ -381,7 +381,6 @@
     "placeCard": "Lugar seleccionado",
     "openModule": "Ver en {{module}}",
     "closePlace": "Cerrar ficha",
-    "error": "No se pudo cargar la maqueta 3D.",
     "source": "Datos © OpenStreetMap (ODbL)",
     "legend": {
       "title": "Leyenda y filtro",

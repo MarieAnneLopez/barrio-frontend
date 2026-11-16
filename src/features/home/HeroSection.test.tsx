@@ -57,13 +57,14 @@ describe('Hero 3D', () => {
     expect(screen.queryByRole('region', { name: 'Lugar seleccionado' })).not.toBeInTheDocument();
   });
 
-  it('si el mapa base falla, muestra el error con reintento', async () => {
-    mockApi({ '/barrio/poligono': { status: 500, body: {} } });
+  it('si la API aún no responde, nunca muestra un error: reintenta sola y luego dibuja', async () => {
+    mockApi({ '/barrio/poligono': { status: 502, body: {} } });
     renderRoute('/');
+    await new Promise((resolve) => setTimeout(resolve, 300)); // primer intento fallido
 
-    expect(await screen.findByText('No se pudo cargar la maqueta 3D.')).toBeInTheDocument();
-    mockApi({ ...BASE_MAP, '/centros-educativos/geojson': FEATURES });
-    await userEvent.click(screen.getByRole('button', { name: 'Reintentar' }));
-    expect(await screen.findByTestId('escena-3d')).toBeInTheDocument();
-  });
+    expect(screen.queryByRole('alert')).toBeNull();
+    expect(screen.queryByText(/No se pudo cargar/)).toBeNull();
+    mockApi({ ...BASE_MAP, '/centros-educativos/geojson': FEATURES }); // la API despertó
+    expect(await screen.findByTestId('escena-3d', {}, { timeout: 4000 })).toBeInTheDocument();
+  }, 8000);
 });

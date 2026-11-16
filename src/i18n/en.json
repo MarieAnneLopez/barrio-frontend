@@ -381,7 +381,6 @@
     "placeCard": "Selected place",
     "openModule": "View in {{module}}",
     "closePlace": "Close card",
-    "error": "The 3D model could not be loaded.",
     "source": "Data © OpenStreetMap (ODbL)",
     "legend": {
       "title": "Legend and filter",

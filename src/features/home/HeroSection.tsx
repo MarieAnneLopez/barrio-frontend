@@ -1,6 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '../../components/ui/Button';
 import { Skeleton } from '../../components/ui/Skeleton';
 import { LoadingTask } from '../../components/avatar/LoadingTask';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
@@ -18,8 +17,7 @@ const TintalScene = lazy(() => import('../../three/TintalScene'));
  */
 export function HeroSection({ variant = 'hero' }: { variant?: 'hero' | 'page' }) {
   const { t } = useTranslation();
-  const [attempt, setAttempt] = useState(0);
-  const state = useTintalData(attempt);
+  const state = useTintalData(); // reintenta sola: nunca muestra un error
   const section = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(true);
   const systemReduced = useMediaQuery('(prefers-reduced-motion: reduce)', false);
@@ -45,14 +43,7 @@ export function HeroSection({ variant = 'hero' }: { variant?: 'hero' | 'page' })
       <p id="hero-descripcion" className="sr-only">
         {t('hero.description')}
       </p>
-      {state.status === 'error' ? (
-        <div role="alert" className="flex h-full flex-col items-center justify-center gap-3 p-6 text-center">
-          <p className="m-0 text-fg-secondary">{t('hero.error')}</p>
-          <Button variant="secondary" size="sm" onClick={() => setAttempt((n) => n + 1)}>
-            {t('modules.retry')}
-          </Button>
-        </div>
-      ) : state.status === 'loading' ? (
+      {state.status === 'loading' ? (
         <Skeleton className="h-full w-full" />
       ) : (
         <>

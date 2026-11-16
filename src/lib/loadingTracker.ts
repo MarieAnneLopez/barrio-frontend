@@ -17,8 +17,23 @@ export interface Tracker {
 
 const SILENT: Tracker = { stage: () => undefined, done: () => undefined };
 
+let quietDepth = 0;
+
+/**
+ * Lanza peticiones sin mostrar la pantalla de carga (reintentos en segundo plano de la
+ * maqueta). Cada petición se registra al empezar, así que basta con iniciarlas aquí dentro.
+ */
+export function quietly<T>(start: () => Promise<T>): Promise<T> {
+  quietDepth += 1;
+  try {
+    return start();
+  } finally {
+    quietDepth -= 1;
+  }
+}
+
 export function track(path: string): Tracker {
-  if (QUIET.some((quiet) => path.startsWith(quiet))) return SILENT;
+  if (quietDepth > 0 || QUIET.some((quiet) => path.startsWith(quiet))) return SILENT;
   const { begin, update, end } = useLoadingStore.getState();
   const id = begin();
   update(id, STAGE.sent);
