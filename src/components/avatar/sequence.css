@@ -9,8 +9,20 @@
 .sequence__strip {
   display: block;
   max-width: none;
-  image-rendering: pixelated; /* escala entera (D86): sin suavizado */
   user-select: none;
+}
+
+/* <picture> solo elige el recurso: no ocupa caja propia. */
+.sequence picture {
+  display: contents;
+}
+
+/* Escala entera (D86): sin suavizado solo donde un píxel del dibujo cae en píxeles enteros de
+   pantalla (1× y 2×). Con escalas intermedias (125 %, 150 %, zoom) suaviza el navegador. */
+@media (resolution: 1dppx), (resolution: 2dppx) {
+  .sequence__strip {
+    image-rendering: pixelated;
+  }
 }
 
 .sequence[data-playing] .sequence__strip {

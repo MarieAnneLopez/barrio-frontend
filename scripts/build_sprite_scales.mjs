@@ -2,6 +2,7 @@
 // Tamaños fijos de Mini Marie (D86, «escala entera»). Sus dibujos no siguen una rejilla de píxel
 // regular, así que cada secuencia se genera una sola vez en sus tamaños de uso, con celdas de
 // ancho entero, para mostrarla 1:1 (o 2:1 exacto en pantallas 2×) con image-rendering: pixelated.
+// WebP al 90 %: medido, a ×4 de aumento se ve igual que sin pérdida y pesa 3,8 veces menos.
 // Lee los cuadros ya recortados de public/assets/avatar (copias): nunca "MINI MARIE.png".
 // Uso: node scripts/build_sprite_scales.mjs
 import { existsSync, readFileSync } from 'node:fs';
@@ -13,6 +14,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const avatar = join(root, 'public', 'assets', 'avatar');
 const scales = JSON.parse(readFileSync(join(root, 'src', 'components', 'avatar', 'spriteScales.json'), 'utf8'));
 const CLEAR = { r: 0, g: 0, b: 0, alpha: 0 };
+const WEBP = { quality: 90, alphaQuality: 100, effort: 6 }; // sin smartSubsample: deja un filo violeta
 
 /** Cuadro i (desde 0) de una secuencia: su PNG si existe; si no, el recorte de la tira. */
 async function frame(name, i, frames) {
@@ -42,7 +44,7 @@ for (const [name, { frames, cell, sizes }] of Object.entries(scales)) {
       parts.push({ input, left: i * w, top: 0 });
     }
     await sharp({ create: { width: w * frames, height: size, channels: 4, background: CLEAR } })
-      .composite(parts).webp({ lossless: true }).toFile(join(avatar, name, `${name}_${size}.webp`));
+      .composite(parts).webp(WEBP).toFile(join(avatar, name, `${name}_${size}.webp`));
     console.log(`${name}_${size}.webp: ${frames} cuadros de ${w}×${size}`);
   }
 }

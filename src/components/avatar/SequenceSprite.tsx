@@ -15,11 +15,17 @@ interface Props {
   className?: string;
 }
 
+/** Densidad de pantalla desde la que conviene cada múltiplo: el cuádruple por encima de 2×, el doble por encima de 1×. */
+const DENSER = [[4, 2.01], [2, 1.01]] as const;
+const above = (dppx: number) => `(min-resolution: ${dppx}dppx), (-webkit-min-device-pixel-ratio: ${dppx})`;
+
 /**
  * Secuencia de Mini Marie dibujada por Marie (H33): una tira de cuadros que se desliza con
  * transform y steps(), así nunca se repinta. Escala entera (D86): la caja mide exactamente el
- * recurso (1:1, o 2:1 exacto en pantallas 2×) y el paso entre cuadros es un número entero de
- * píxeles. Movimiento reducido: pose estática. Decorativa: el texto lo da quien la usa.
+ * recurso a 1× y el paso entre cuadros es un número entero de píxeles; en pantallas más densas
+ * <picture> elige el doble o el cuádruple exactos (con srcset, a 125 % el navegador se quedaría
+ * con el pequeño y lo estiraría). Movimiento reducido: pose estática. Decorativa: el texto lo da
+ * quien la usa.
  */
 export function SequenceSprite({ name, size, pose = 0, playing = true, phase = 0, className = '' }: Props) {
   const reduced = useReducedMotion();
@@ -30,17 +36,20 @@ export function SequenceSprite({ name, size, pose = 0, playing = true, phase = 0
   const motion: CSSProperties = animate
     ? { animationDuration: `${cycle}ms`, animationTimingFunction: `steps(${frames})`, animationDelay: `${-phase * cycle}ms` }
     : { transform: `translateX(${-pose * width}px)` };
-  const twice = sizes.includes(size * 2) ? `${spriteUrl(name, size)} 1x, ${spriteUrl(name, size * 2)} 2x` : undefined;
   return (
     <span className={`sequence ${className}`} style={{ width, height: size }} data-sequence={name} data-playing={animate || undefined} aria-hidden="true">
-      <img
-        className="sequence__strip"
-        src={spriteUrl(name, size)}
-        srcSet={twice}
-        alt=""
-        draggable={false}
-        style={{ ...motion, width: frames * width, height: size }}
-      />
+      <picture>
+        {DENSER.filter(([times]) => sizes.includes(size * times)).map(([times, dppx]) => (
+          <source key={times} media={above(dppx)} srcSet={spriteUrl(name, size * times)} />
+        ))}
+        <img
+          className="sequence__strip"
+          src={spriteUrl(name, size)}
+          alt=""
+          draggable={false}
+          style={{ ...motion, width: frames * width, height: size }}
+        />
+      </picture>
     </span>
   );
 }
