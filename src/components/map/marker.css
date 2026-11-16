@@ -1,0 +1,93 @@
+/* Marcadores de lugar (2D y 3D) en los verdes del mapa (D82). Opción B: la placa cambia de forma
+   por grupo (círculo = servicios, cuadrado = seguridad, rombo = movilidad). La placa es un
+   ::before: así su giro no choca con el transform con que MapLibre y drei ubican el botón. */
+.map-marker {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  padding: 0;
+  background: none;
+  font-size: 1.125rem;
+  cursor: pointer;
+}
+
+.map-marker::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border: 2px solid var(--map-hoja);
+  border-radius: 9999px;
+  background-color: var(--map-via);
+  transition:
+    transform var(--dur-1) var(--ease-emphasis),
+    border-color var(--dur-2) ease,
+    box-shadow var(--dur-2) ease;
+}
+
+.map-marker[data-shape='cuadrado']::before {
+  border-radius: 4px;
+}
+
+.map-marker[data-shape='rombo']::before {
+  inset: 6px;
+  border-radius: 3px;
+  transform: rotate(45deg);
+}
+
+.map-marker[data-verified='false']::before {
+  border-style: dashed;
+}
+
+.map-marker[data-selected='true']::before {
+  border-color: var(--map-noche);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--map-salvia) 45%, transparent);
+  transform: scale(1.12);
+}
+
+.map-marker[data-shape='rombo'][data-selected='true']::before {
+  transform: rotate(45deg) scale(1.12);
+}
+
+/* Etiqueta corta con el nombre, solo en el lugar elegido. */
+.map-marker__label {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  max-width: 12rem;
+  overflow: hidden;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background-color: var(--map-noche);
+  color: var(--map-via);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transform: translateX(-50%);
+}
+
+.map-marker[data-selected='true'] .map-marker__label {
+  display: block;
+}
+
+.map-marker:focus-visible {
+  outline: 2px solid var(--map-noche);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .map-marker:hover::before {
+    border-color: var(--map-noche);
+  }
+}
+
+:root.reduce-motion .map-marker::before {
+  transition: none;
+}

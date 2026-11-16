@@ -1,6 +1,7 @@
 import { Marker, type Map as MapLibreMap } from 'maplibre-gl';
 import { useEffect, useRef } from 'react';
 import type { ModuleFeatures } from '../../lib/apiTypes';
+import { markerShape } from '../../lib/markerShape';
 import { labelOf } from '../../lib/moduleFields';
 import { createEmojiMarker, setMarkerSelected } from './EmojiMarker';
 import { isMapAlive } from './mapCleanup';
@@ -30,7 +31,7 @@ export function useMarkers({ map, slug, features, emoji, selectedId, onSelect, r
       if (feature.geometry?.type !== 'Point') continue;
       const { id, verified } = feature.properties;
       const element = createEmojiMarker(
-        { emoji, label: labelOf(feature.properties, slug), verified },
+        { emoji, label: labelOf(feature.properties, slug), verified, shape: markerShape(slug) },
         () => select.current(id),
       );
       const [lon, lat] = feature.geometry.coordinates as [number, number];

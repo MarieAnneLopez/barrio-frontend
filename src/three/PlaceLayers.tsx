@@ -2,6 +2,7 @@ import type { ThreeEvent } from '@react-three/fiber';
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { BufferAttribute, BufferGeometry, Color, LineSegments, Points } from 'three';
 import { mapColor } from '../lib/cssToken';
+import { markerShape } from '../lib/markerShape';
 import { emojiTexture } from './emojiTexture';
 import { useHeroStore } from './heroStore';
 import type { CategoryLayer } from './categoryLayers';
@@ -24,7 +25,7 @@ function useGeometry(positions: Float32Array) {
 /** Lugares puntuales de un módulo: un sprite emoji por lugar, una sola llamada de dibujo. */
 function PlacePoints({ layer, visible }: { layer: CategoryLayer; visible: boolean }) {
   const geometry = useGeometry(layer.positions);
-  const texture = useMemo(() => emojiTexture(layer.emoji), [layer.emoji]);
+  const texture = useMemo(() => emojiTexture(layer.emoji, markerShape(layer.slug)), [layer.emoji, layer.slug]);
   useEffect(() => () => texture.dispose(), [texture]);
   const select = useHeroStore((s) => s.select);
 

@@ -1,4 +1,5 @@
 import { Html } from '@react-three/drei';
+import { markerShape } from '../lib/markerShape';
 import { useHeroStore, type HeroPlace } from './heroStore';
 
 /**
@@ -22,8 +23,10 @@ export function Billboards({ places }: { places: readonly HeroPlace[] }) {
               onClick={() => select(active ? null : place)}
               className="map-marker"
               data-selected={active}
+              data-shape={markerShape(place.slug)}
             >
               <span aria-hidden="true">{place.emoji}</span>
+              <span aria-hidden="true" className="map-marker__label">{place.name}</span>
             </button>
           </Html>
         );

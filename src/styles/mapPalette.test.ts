@@ -9,7 +9,8 @@ const read = (file: string) => readFileSync(join(src, file), 'utf8');
 
 const VIOLETS = ['af50e5', '8a0bd2', 'd980f9', 'e2cef6', '5b0672'];
 const MAP_STYLE_FILES = [
-  'styles/map-palette.css', 'components/map/map.css', 'components/map/baseStyle.ts',
+  'styles/map-palette.css', 'components/map/map.css', 'components/map/marker.css', 'components/map/baseStyle.ts',
+  'components/map/shapeFill.ts', 'features/home/LegendMarker.tsx',
   'components/map/useShapes.ts', 'features/modules/maps-preview.css', 'three/sceneColors.ts',
   'three/shapeStyle.ts', 'three/emojiTexture.ts', 'three/PlaceLayers.tsx', 'three/GroundLayer.tsx',
   'three/RoadsLayer.tsx', 'three/BuildingsLayer.tsx', 'three/Particles.tsx', 'three/TintalScene.tsx',

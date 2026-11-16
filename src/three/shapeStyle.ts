@@ -10,14 +10,14 @@ export interface ShapeStyle {
   /** [guion, espacio] en metros; null = trazo continuo. */
   dash: [number, number] | null;
   /** Forma de la muestra en la leyenda: grosor de la línea, o relleno para áreas. */
-  swatch: 'relleno' | 'fino' | 'grueso';
+  swatch: 'relleno' | 'rayado' | 'fino' | 'grueso';
 }
 
 export const SHAPE_STYLE: Record<string, ShapeStyle> = {
   'estado-calles': { token: 'noche', opacity: 0.95, dash: null, swatch: 'grueso' },
   'zonas-verdes': { token: 'bosque', opacity: 1, dash: null, swatch: 'relleno' },
   'escenarios-deportivos': { token: 'noche', opacity: 0.9, dash: [6, 5], swatch: 'grueso' },
-  'datos-catastrales': { token: 'salvia', opacity: 0.5, dash: null, swatch: 'fino' },
+  'datos-catastrales': { token: 'salvia', opacity: 0.5, dash: null, swatch: 'rayado' },
   localidad: { token: 'hoja', opacity: 0.85, dash: [40, 20], swatch: 'grueso' },
 };
 

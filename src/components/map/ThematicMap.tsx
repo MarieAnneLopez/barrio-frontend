@@ -33,7 +33,7 @@ export default function ThematicMap({ slug, label, features, emoji, selectedId, 
     reducedMotion,
   });
   useMarkers({ map, slug, features, emoji, selectedId, onSelect, reducedMotion });
-  useShapes({ map, features, selectedId, onSelect, reducedMotion });
+  useShapes({ map, slug, features, selectedId, onSelect, reducedMotion });
 
   return (
     <section aria-label={label} className="thematic-map h-[420px] lg:h-full">

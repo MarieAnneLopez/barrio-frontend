@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 import type { ModuleFeatures } from '../../lib/apiTypes';
 import { mapColor } from '../../lib/cssToken';
 import { geometryBounds } from './geometryBounds';
+import { fillPaint } from './shapeFill';
 import { isMapAlive, removeLayersAndSource } from './mapCleanup';
 
 export const SHAPES_SOURCE = 'modulo-figuras';
@@ -12,6 +13,7 @@ export const CASING_LAYER = 'modulo-borde-blanco';
 
 interface Options {
   map: MapLibreMap | null;
+  slug: string;
   features: ModuleFeatures | undefined;
   selectedId: number | null;
   onSelect: (id: number) => void;
@@ -21,7 +23,7 @@ interface Options {
 const selected: ExpressionSpecification = ['boolean', ['feature-state', 'selected'], false];
 
 /** Polígonos y líneas del módulo (zonas, lotes, calles): clic = seleccionar; la cámara encuadra. */
-export function useShapes({ map, features, selectedId, onSelect, reducedMotion }: Options) {
+export function useShapes({ map, slug, features, selectedId, onSelect, reducedMotion }: Options) {
   const select = useRef(onSelect);
   useEffect(() => {
     select.current = onSelect;
@@ -40,7 +42,7 @@ export function useShapes({ map, features, selectedId, onSelect, reducedMotion }
       type: 'fill',
       source: SHAPES_SOURCE,
       filter: ['in', ['geometry-type'], ['literal', ['Polygon', 'MultiPolygon']]],
-      paint: { 'fill-color': ink, 'fill-opacity': ['case', selected, 0.7, 0.45] },
+      paint: fillPaint(map, slug), // liso, rayado o solo borde según el módulo (opción B)
     });
     map.addLayer({
       id: CASING_LAYER, type: 'line', source: SHAPES_SOURCE,
@@ -69,7 +71,7 @@ export function useShapes({ map, features, selectedId, onSelect, reducedMotion }
       }
       removeLayersAndSource(map, [FILL_LAYER, LINE_LAYER, CASING_LAYER], SHAPES_SOURCE);
     };
-  }, [map, features]);
+  }, [map, slug, features]);
 
   useEffect(() => {
     if (!map || !features) return undefined;

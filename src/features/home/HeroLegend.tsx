@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { CATEGORIES } from '../../lib/categoryConfig';
 import { useHeroStore } from '../../three/heroStore';
 import { DEFAULT_SHAPE, SHAPE_STYLE } from '../../three/shapeStyle';
+import { LegendMarker } from './LegendMarker';
 import { ShapeSwatch } from './ShapeSwatch';
 
 /**
@@ -44,7 +45,7 @@ export function HeroLegend({ defaultOpen = false }: { defaultOpen?: boolean }) {
                 }`}
               >
                 {geometry === 'POINT' ? (
-                  <span aria-hidden="true" className="w-5 text-center">{emoji}</span>
+                  <LegendMarker slug={slug} emoji={emoji} />
                 ) : (
                   <ShapeSwatch style={SHAPE_STYLE[slug] ?? DEFAULT_SHAPE} />
                 )}
