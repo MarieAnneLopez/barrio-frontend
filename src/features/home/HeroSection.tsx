@@ -34,7 +34,8 @@ export function HeroSection({ variant = 'hero' }: { variant?: 'hero' | 'page' })
   }, []);
 
   return (
-    // El recuadro recorta su contenido (overflow-hidden): la sentada va afuera, sobre su borde (D82).
+    // El recuadro recorta su contenido (overflow-hidden): la sentada va afuera, sobre su borde inferior
+    // (D82, D86); por eso los paneles de abajo del HUD suben 40 px y dejan ese borde libre.
     <div className="relative">
       <section
         ref={section}

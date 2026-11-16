@@ -53,6 +53,9 @@ describe('Hero 3D', () => {
     expect(screen.getByRole('link', { name: 'Ver en Centros Educativos' })).toHaveAttribute(
       'href', '/categorias/centros-educativos',
     );
+    // El borde inferior queda libre: ahí se sienta Mini Marie (29 px de cuerpo sobre la maqueta).
+    const hint = screen.getByRole('region', { name: 'Maqueta 3D de El Tintal' }).querySelector('[aria-live="polite"]');
+    for (const panel of [card, hint]) expect(panel?.className).toMatch(/\bbottom-10\b/);
     await userEvent.click(screen.getByRole('button', { name: 'Cerrar ficha' }));
     expect(screen.queryByRole('region', { name: 'Lugar seleccionado' })).not.toBeInTheDocument();
   });

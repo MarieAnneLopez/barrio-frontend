@@ -29,7 +29,7 @@ export function HeroHud() {
           {paused ? t('hero.play') : t('hero.pause')}
         </Button>
       </div>
-      <div className={`${panel} absolute bottom-4 left-4 z-30 max-w-[min(22rem,calc(100%-2rem))]`} aria-live="polite">
+      <div className={`${panel} absolute bottom-10 left-4 z-30 max-w-[min(22rem,calc(100%-2rem))]`} aria-live="polite">
         {hovered ? (
           <p className="m-0 font-mono text-step--1 text-fg">
             {t('hero.building')} · {t(`hero.buildingKind.${hovered.kind ?? 'yes'}`, { defaultValue: hovered.kind ?? '' })}
@@ -44,7 +44,7 @@ export function HeroHud() {
       {selected ? (
         <section
           aria-label={t('hero.placeCard')}
-          className={`${panel} absolute right-4 bottom-4 z-30 flex max-w-[min(20rem,calc(100%-2rem))] flex-col gap-2 p-4`}
+          className={`${panel} absolute right-4 bottom-10 z-30 flex max-w-[min(20rem,calc(100%-2rem))] flex-col gap-2 p-4`}
         >
           <p className={`m-0 ${label}`}>{t('hero.placeCard')}</p>
           <h2 className="m-0 text-step-1 text-fg">
