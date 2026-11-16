@@ -61,5 +61,16 @@ test('todas las rutas: entrar, salir, recargar y volver sin errores', async ({ p
     await go(page, `/categorias/${slug}`);
     await go(page, `/categorias/${SLUGS[(i + 1) % SLUGS.length]}`);
   }
+  // Etapa 2: el menú desplegable abre, lleva a otra sección y se cierra solo, en los dos idiomas.
+  step = 'menú desplegable';
+  const es = lang === 'es';
+  await go(page, '/');
+  await page.getByRole('button', { name: es ? 'Abrir menú' : 'Open menu' }).click();
+  const menu = page.getByRole('navigation', { name: es ? 'Navegación principal' : 'Main navigation' });
+  await expect(menu.getByRole('link')).toHaveCount(23);
+  await menu.getByRole('link', { name: es ? 'Ayuda' : 'Help', exact: true }).click();
+  await expect(page).toHaveURL(/\/ayuda$/);
+  await expect(menu).toHaveCount(0);
+  await settle(page);
   expect(errors, errors.join('\n')).toEqual([]);
 });
