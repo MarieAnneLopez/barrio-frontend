@@ -17,15 +17,14 @@
     "test": "vitest run",
     "check:lines": "node scripts/check_line_length.mjs",
     "sprite": "node scripts/slice_spritesheet.mjs",
+    "sprites": "node scripts/build_sprite_scales.mjs",
+    "brand": "node scripts/build_brand_assets.mjs",
     "e2e": "playwright test"
   },
   "dependencies": {
     "@fontsource/anton": "5.3.0",
     "@fontsource/cormorant-garamond": "5.3.0",
     "@fontsource/inter": "5.3.0",
-    "@fontsource/jetbrains-mono": "5.3.0",
-    "@fontsource/press-start-2p": "5.3.0",
-    "@fontsource/space-grotesk": "5.3.0",
     "@hookform/resolvers": "5.9.2",
     "@react-three/drei": "9.122.0",
     "@react-three/fiber": "8.18.0",
