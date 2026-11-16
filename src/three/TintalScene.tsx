@@ -7,11 +7,14 @@ import { BuildingsLayer } from './BuildingsLayer';
 import { CameraRig } from './CameraRig';
 import { GroundLayer } from './GroundLayer';
 import { useHeroStore } from './heroStore';
+import { footprintArea } from './metrics';
 import { PlaceLayers } from './PlaceLayers';
 import { buildCategoryLayer } from './categoryLayers';
 import { Particles } from './Particles';
 import { PerfProbe } from './PerfProbe';
 import { bboxSize, createProjection } from './projection';
+import { densestSpot } from './framing';
+import { FOV_DEG, gridAzimuth } from './referenceView';
 import { RoadsLayer } from './RoadsLayer';
 import { readSceneColors } from './sceneColors';
 import type { TintalData } from './useTintalData';
@@ -23,7 +26,10 @@ interface Props {
   reducedMotion: boolean;
 }
 
-/** Maqueta 3D de El Tintal (§11.1.1) con datos OSM reales servidos por la API. */
+/**
+ * Maqueta 3D de El Tintal (§11.1.1) con datos OSM reales servidos por la API. Render D83: colores
+ * planos del tema (`flat` = sin tone mapping; materiales sin luz), cámara y niebla medidas en la referencia.
+ */
 export default function TintalScene({ data, active, reducedMotion }: Props) {
   const { base, categories } = data;
   const colors = useMemo(() => readSceneColors(), []);
@@ -31,6 +37,15 @@ export default function TintalScene({ data, active, reducedMotion }: Props) {
   const size = useMemo(() => bboxSize(base.polygon.bbox), [base]);
   const radius = Math.max(size[0], size[1]) * 0.95;
   const setInteracting = useHeroStore((s) => s.setInteracting);
+  // Encuadre: malla vial, zona con más edificios reales y manzana mediana, todo sacado de los datos.
+  const view = useMemo(() => {
+    const areas = base.layers.manzanas.features.map((f) => footprintArea(f, project)).sort((a, b) => a - b);
+    return {
+      grid: gridAzimuth(base.layers.vias.features, project),
+      spot: densestSpot(base.layers.edificios.features, base.polygon.geometry, project),
+      blockSize: Math.sqrt(areas[areas.length >> 1] ?? 10_000),
+    };
+  }, [base, project]);
   // Los 14 módulos (H34, D69); un módulo cuya API falló no se dibuja y la leyenda lo dice.
   const layers = useMemo(
     () => categories.flatMap((c) => (c.collection ? [buildCategoryLayer(c.slug, c.emoji, c.collection, project)] : [])),
@@ -39,25 +54,28 @@ export default function TintalScene({ data, active, reducedMotion }: Props) {
   const setDrawn = useHeroStore((s) => s.setDrawn);
   useEffect(() => setDrawn(Object.fromEntries(layers.map((l) => [l.slug, l.drawn]))), [layers, setDrawn]);
   const selected = useHeroStore((s) => s.selected);
+  // Lotes catastrales (módulo «datos-catastrales»): tejido real del suelo; si su API falló, queda OSM.
+  const lots = useMemo(
+    () => categories.find((c) => c.slug === 'datos-catastrales')?.collection?.features ?? [],
+    [categories],
+  );
 
   return (
     <Canvas
+      flat
       style={{ touchAction: 'pan-y' }} // H34: un dedo desplaza la página; dos dedos manejan la maqueta
       dpr={[1, 2]}
       frameloop={active ? 'always' : 'never'}
-      camera={{ fov: 38, near: 10, far: radius * 6, position: [0, radius, radius] }}
+      camera={{ fov: FOV_DEG, near: 10, far: radius * 8, position: [0, radius, radius] }}
       gl={{ antialias: true, powerPreference: 'high-performance' }}
       raycaster={{ params: { Points: { threshold: 18 }, Line: { threshold: 1 }, Mesh: {}, LOD: {}, Sprite: {} } }}
       onPointerEnter={() => setInteracting(true)}
       onPointerLeave={() => setInteracting(false)}
     >
       <color attach="background" args={[colors.fondo]} />
-      <fog attach="fog" args={[colors.fondo, radius * 0.9, radius * 3]} />
-      {/* Luz de día (D82): cielo y suelo verdes suaves + sol blanco; sin luces de color. */}
-      <hemisphereLight args={[colors.fondo, colors.suelo, 1.1]} />
-      <directionalLight position={[-radius, radius * 1.4, radius * 0.6]} intensity={1.4} />
-      <directionalLight position={[radius, radius * 0.4, -radius]} intensity={0.35} />
-      <GroundLayer base={base} project={project} colors={colors} />
+      {/* Niebla oscura y leve (≈ 15 % al fondo, como la referencia); CameraRig la ajusta a la distancia. */}
+      <fog attach="fog" args={[colors.fondo, radius, radius * 4]} />
+      <GroundLayer base={base} lots={lots} project={project} colors={colors} />
       <RoadsLayer features={base.layers.vias.features} project={project} colors={colors} />
       <BuildingsLayer
         features={base.layers.edificios.features as Feature<Polygon | MultiPolygon>[]}
@@ -67,7 +85,7 @@ export default function TintalScene({ data, active, reducedMotion }: Props) {
       <Particles size={size} colors={colors} still={reducedMotion} />
       <PlaceLayers layers={layers} />
       <Billboards places={selected ? [selected] : []} />
-      <CameraRig radius={radius} reducedMotion={reducedMotion} />
+      <CameraRig radius={radius} view={view} reducedMotion={reducedMotion} />
       <PerfProbe />
     </Canvas>
   );

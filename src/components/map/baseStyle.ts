@@ -1,4 +1,4 @@
-// Estilo del mapa base local (D5): solo El Tintal, en los verdes propios del mapa (D82).
+// Estilo del mapa base local (D5): solo El Tintal, con el tema único de los mapas (D83).
 // Sin teselas externas ni fuentes remotas: todas las capas son GeoJSON de la API.
 import type { ExpressionSpecification, MapOptions } from 'maplibre-gl';
 import { mapColor } from '../../lib/cssToken';
@@ -10,26 +10,26 @@ type LayerSpec = StyleSpec['layers'][number];
 const MAJOR_ROADS = ['motorway', 'trunk', 'primary', 'secondary', 'tertiary'];
 
 function layers(): LayerSpec[] {
-  // D82 (pedido de Marie): dentro del mapa todo es verde y claro (suelo niebla, manzanas brote,
-  // edificios follaje, parques menta, vías blancas con borde follaje) para que la capa del
-  // módulo, verde bosque con borde blanco, resalte. Paleta propia (styles/map-palette.css).
-  const via = mapColor('via');
-  const follaje = mapColor('follaje');
+  // D83: los mismos hex del tema que la maqueta 3D (styles/map-palette.css), sin opacidades para
+  // que el color no se mezcle: suelo, manzanas, parques, vías con borde, edificios por altura y
+  // el límite del barrio. La capa del módulo va encima en el color de contorno.
   const width = (major: number, minor: number): ExpressionSpecification =>
     ['match', ['get', 'kind'], MAJOR_ROADS, major, minor];
+  const byHeight: ExpressionSpecification = ['step', ['to-number', ['get', 'levels']],
+    mapColor('edificio-bajo'), 4, mapColor('edificio-medio'), 7, mapColor('edificio-alto')];
   return [
     { id: 'fondo', type: 'background', paint: { 'background-color': mapColor('fondo') } },
-    { id: 'tintal-area', type: 'fill', source: 'tintal', paint: { 'fill-color': mapColor('niebla'), 'fill-opacity': 1 } },
-    { id: 'manzanas', type: 'fill', source: 'manzanas', paint: { 'fill-color': mapColor('brote'), 'fill-outline-color': follaje } },
-    { id: 'parques', type: 'fill', source: 'parques', paint: { 'fill-color': mapColor('menta'), 'fill-opacity': 0.85 } },
-    { id: 'edificios', type: 'fill', source: 'edificios', paint: { 'fill-color': follaje, 'fill-opacity': 0.9 } },
-    { id: 'vias-borde', type: 'line', source: 'vias', paint: { 'line-color': follaje, 'line-width': width(4, 2) } },
-    { id: 'vias', type: 'line', source: 'vias', paint: { 'line-color': via, 'line-width': width(2.4, 0.9) } },
+    { id: 'tintal-area', type: 'fill', source: 'tintal', paint: { 'fill-color': mapColor('suelo') } },
+    { id: 'manzanas', type: 'fill', source: 'manzanas', paint: { 'fill-color': mapColor('manzana'), 'fill-outline-color': mapColor('sombra') } },
+    { id: 'parques', type: 'fill', source: 'parques', paint: { 'fill-color': mapColor('parque') } },
+    { id: 'vias-borde', type: 'line', source: 'vias', paint: { 'line-color': mapColor('via-borde'), 'line-width': width(4, 2) } },
+    { id: 'vias', type: 'line', source: 'vias', paint: { 'line-color': mapColor('via'), 'line-width': width(2.4, 0.9) } },
+    { id: 'edificios', type: 'fill', source: 'edificios', paint: { 'fill-color': byHeight, 'fill-outline-color': mapColor('contorno') } },
     {
       id: 'tintal-borde',
       type: 'line',
       source: 'tintal',
-      paint: { 'line-color': mapColor('hoja'), 'line-width': 3, 'line-dasharray': [2, 1.5] },
+      paint: { 'line-color': mapColor('limite'), 'line-width': 3, 'line-dasharray': [2, 1.5] },
     },
   ];
 }

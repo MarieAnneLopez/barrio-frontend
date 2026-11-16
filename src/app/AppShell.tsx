@@ -13,6 +13,7 @@ import { WhatsAppFloat } from '../components/layout/WhatsAppFloat';
 import { useFocusTrap } from '../components/ui/useFocusTrap';
 import { restoreSession } from '../features/auth/authApi';
 import { LoginModal } from '../features/auth/LoginModal';
+import { ScenePortal } from '../features/home/ScenePortal';
 import { useApplyA11y } from '../hooks/useApplyA11y';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { usePersistentFlag } from '../hooks/usePersistentFlag';
@@ -92,6 +93,7 @@ export function AppShell() {
       <ChatWidget />
       <WhatsAppFloat />
       <WelcomeChoreography />
+      <ScenePortal />
       <LoginModal />
     </div>
   );

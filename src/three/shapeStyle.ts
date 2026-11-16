@@ -14,14 +14,14 @@ export interface ShapeStyle {
 }
 
 export const SHAPE_STYLE: Record<string, ShapeStyle> = {
-  'estado-calles': { token: 'noche', opacity: 0.95, dash: null, swatch: 'grueso' },
-  'zonas-verdes': { token: 'bosque', opacity: 1, dash: null, swatch: 'relleno' },
-  'escenarios-deportivos': { token: 'noche', opacity: 0.9, dash: [6, 5], swatch: 'grueso' },
-  'datos-catastrales': { token: 'salvia', opacity: 0.5, dash: null, swatch: 'rayado' },
-  localidad: { token: 'hoja', opacity: 0.85, dash: [40, 20], swatch: 'grueso' },
+  'estado-calles': { token: 'contorno', opacity: 0.95, dash: null, swatch: 'grueso' },
+  'zonas-verdes': { token: 'parque', opacity: 1, dash: null, swatch: 'relleno' },
+  'escenarios-deportivos': { token: 'contorno', opacity: 0.9, dash: [6, 5], swatch: 'grueso' },
+  'datos-catastrales': { token: 'via', opacity: 0.5, dash: null, swatch: 'rayado' },
+  localidad: { token: 'limite', opacity: 0.85, dash: [40, 20], swatch: 'grueso' },
 };
 
-export const DEFAULT_SHAPE: ShapeStyle = { token: 'salvia', opacity: 0.8, dash: null, swatch: 'fino' };
+export const DEFAULT_SHAPE: ShapeStyle = { token: 'via', opacity: 0.8, dash: null, swatch: 'fino' };
 
 /** Valor CSS del token (para la muestra de la leyenda). */
 export function cssColorOf(style: ShapeStyle): string {

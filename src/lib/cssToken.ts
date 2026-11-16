@@ -13,9 +13,10 @@ export function paletteColor(token: PaletteToken): string {
   return cssVar(`--palette-${token}`, 'black');
 }
 
-/** Verdes de los mapas (D82, styles/map-palette.css): nada violeta dentro de un mapa. */
+/** Roles del tema único de los mapas (D83, styles/map-palette.css): colores medidos en la referencia. */
 export type MapToken =
-  | 'noche' | 'bosque' | 'hoja' | 'salvia' | 'menta' | 'follaje' | 'brote' | 'niebla' | 'fondo' | 'via';
+  | 'fondo' | 'suelo' | 'manzana' | 'lote' | 'via' | 'via-borde' | 'parque' | 'agua' | 'edificio-bajo'
+  | 'edificio-medio' | 'edificio-alto' | 'sombra' | 'contorno' | 'limite' | 'control';
 
 export function mapColor(token: MapToken): string {
   return cssVar(`--map-${token}`, 'black');

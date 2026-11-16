@@ -1,21 +1,34 @@
 /*
- * Paleta propia de los mapas (D82, pedido de Marie): todo lo que se dibuja dentro de un mapa
- * (2D, 3D, vista previa y marcadores) va en verdes; la interfaz que lo rodea sigue en violeta.
- * Base medida con un script en "Barrio 3d ejemplo.jpeg" (k-means de sus verdes, matiz 138–160°);
- * los claros se derivan con el mismo matiz para un mapa claro y tranquilo. Estilo propio:
- * sin teselas, estilos ni íconos de terceros.
+ * Tema único de los mapas (D83, pedido de Marie): TODOS los mapas leen de aquí (maqueta 3D de
+ * Inicio y Mapa 3D, mapa temático 2D de los módulos y vista previa de la ficha). Los 8 colores se
+ * midieron con un script (k-means, k = 8, en Lab) en la zona de mapa de "Barrio 3d ejemplo.jpeg";
+ * cada rol apunta a uno de ellos, sin retocarlo. La interfaz que rodea al mapa sigue en violeta.
  */
 :root {
-  /* Medidos en la referencia (peso entre sus verdes). */
-  --map-noche: #0e2c1c; /* 39,1 % · hsl(147 52% 11%) */
-  --map-bosque: #1e432c; /* 32,8 % · hsl(142 37% 19%) */
-  --map-hoja: #355e41; /* 18,8 % · hsl(138 28% 29%) */
-  --map-salvia: #4d8872; /* 6,2 % · hsl(158 28% 42%) */
-  --map-menta: #90dec5; /* 3,2 % · hsl(160 54% 72%) */
-  /* Derivados claros (matiz 137–142°). */
-  --map-follaje: #b7d8c2; /* edificios y zócalos */
-  --map-brote: #d3e8da; /* manzanas */
-  --map-niebla: #eaf4ed; /* suelo del barrio, cielo de la maqueta */
-  --map-fondo: #cfe0d4; /* alrededor del barrio */
-  --map-via: #ffffff; /* vías y placas de los marcadores */
+  /* Medidos en la referencia (peso en la imagen · croma C*). */
+  --map-ref-1: #1f3a5f; /* 19,9 % · 25,1 · azul noche */
+  --map-ref-2: #1a273a; /* 18,3 % · 14,3 · azul noche oscuro */
+  --map-ref-3: #3e5c78; /* 17,9 % · 19,4 · azul acero */
+  --map-ref-4: #758ea6; /* 14,1 % · 16,0 · azul acero claro */
+  --map-ref-5: #625f61; /* 9,4 % · 2,3 · gris */
+  --map-ref-6: #152b20; /* 8,7 % · 13,1 · verde oscuro */
+  --map-ref-7: #bbbab4; /* 6,4 % · 3,0 · gris claro */
+  --map-ref-8: #33593f; /* 5,4 % · 22,9 · verde */
+
+  /* Roles: qué color medido usa cada cosa del mapa. */
+  --map-fondo: var(--map-ref-2); /* alrededor del barrio, cielo y niebla de la maqueta */
+  --map-suelo: var(--map-ref-6); /* suelo del barrio */
+  --map-manzana: var(--map-ref-1); /* manzanas */
+  --map-lote: var(--map-ref-1); /* lotes catastrales (mismo azul que las manzanas) */
+  --map-via: var(--map-ref-4); /* vías */
+  --map-via-borde: var(--map-ref-5); /* borde de las vías principales y senderos */
+  --map-parque: var(--map-ref-8); /* parques y zonas verdes */
+  --map-agua: var(--map-ref-3); /* agua */
+  --map-edificio-bajo: var(--map-ref-3); /* edificios de hasta 3 pisos */
+  --map-edificio-medio: var(--map-ref-4); /* de 4 a 6 pisos */
+  --map-edificio-alto: var(--map-ref-7); /* de 7 pisos o más */
+  --map-sombra: var(--map-ref-2); /* caras en sombra */
+  --map-contorno: var(--map-ref-7); /* contornos, placas de los marcadores y capa del módulo */
+  --map-limite: var(--map-ref-7); /* límite del barrio */
+  --map-control: var(--map-ref-8); /* controles propios del mapa (zoom, recentrar) */
 }

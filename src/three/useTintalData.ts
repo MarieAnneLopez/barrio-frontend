@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
 import { loadBaseMap, type BaseMapData } from '../components/map/baseMapData';
 import { apiGet } from '../lib/apiClient';
 import { quietly } from '../lib/loadingTracker';
@@ -36,33 +36,51 @@ async function fetchAll(): Promise<TintalData> {
   return { base, categories: data };
 }
 
+// Estado compartido por toda la app (D83): los datos se piden una sola vez y sobreviven al
+// cambio de sección, así ni la escena ni sus fuentes se vuelven a crear.
+let state: State = { status: 'loading' };
+let started = false;
+let generation = 0;
+let timer: number | undefined;
+const listeners = new Set<() => void>();
+
+function run(tries: number, gen: number): void {
+  (tries === 0 ? fetchAll() : quietly(fetchAll)).then(
+    (data) => {
+      if (gen !== generation) return;
+      state = { status: 'ready', data };
+      listeners.forEach((listener) => listener());
+    },
+    () => {
+      if (gen !== generation) return;
+      timer = window.setTimeout(() => run(tries + 1, gen), RETRY_MS[Math.min(tries, RETRY_MS.length - 1)]);
+    },
+  );
+}
+
+/** Para las pruebas: olvida los datos y corta los reintentos en curso. */
+export function resetTintalData(): void {
+  generation += 1;
+  started = false;
+  window.clearTimeout(timer);
+  state = { status: 'loading' };
+}
+
+function subscribe(listener: () => void): () => void {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
+
 /**
- * Mapa base + lugares de los 14 módulos. Nunca se rinde (pedido de Marie: el mensaje de
- * error de la maqueta no debe aparecer): mientras la API no responde se sigue en «cargando»
- * y se reintenta solo, con esperas crecientes y sin volver a tapar la página: solo la primera
- * carga muestra la pantalla completa; los reintentos van en silencio (la maqueta sigue en esqueleto).
+ * Mapa base + lugares de los 14 módulos. Nunca se rinde (pedido de Marie: el mensaje de error de
+ * la maqueta no debe aparecer): mientras la API no responde se sigue en «cargando» y se reintenta
+ * solo, con esperas crecientes y en silencio (solo la primera carga muestra la pantalla completa).
  */
 export function useTintalData(): State {
-  const [state, setState] = useState<State>({ status: 'loading' });
-
   useEffect(() => {
-    let cancelled = false;
-    let timer: number | undefined;
-    const run = (tries: number) => {
-      (tries === 0 ? fetchAll() : quietly(fetchAll)).then(
-        (data) => !cancelled && setState({ status: 'ready', data }),
-        () => {
-          if (cancelled) return;
-          timer = window.setTimeout(() => run(tries + 1), RETRY_MS[Math.min(tries, RETRY_MS.length - 1)]);
-        },
-      );
-    };
-    run(0);
-    return () => {
-      cancelled = true;
-      window.clearTimeout(timer);
-    };
+    if (started) return;
+    started = true;
+    run(0, generation);
   }, []);
-
-  return state;
+  return useSyncExternalStore(subscribe, () => state);
 }

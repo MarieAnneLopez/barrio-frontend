@@ -5,6 +5,7 @@ import type { Feature, FeatureCollection, Geometry, Position } from 'geojson';
 import type { ModuleItem } from '../lib/apiTypes';
 import { labelOf } from '../lib/moduleFields';
 import type { Projection } from './projection';
+import { SHAPE_Y as SHAPE_LINE_Y } from './referenceView';
 
 export interface PlacePoint {
   id: number;
@@ -26,7 +27,7 @@ export interface CategoryLayer {
 export type ModuleCollection = FeatureCollection<Geometry | null, ModuleItem>;
 
 const POINT_Y = 46;
-const SHAPE_Y = 3;
+const SHAPE_Y = SHAPE_LINE_Y; // por encima del zócalo de las manzanas (D83)
 
 /** Anillos o trazos de una geometría de figura (cada uno es una polilínea). */
 function strokes(geometry: Geometry): Position[][] {

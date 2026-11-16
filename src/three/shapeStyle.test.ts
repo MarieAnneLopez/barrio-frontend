@@ -8,7 +8,7 @@ describe('Figuras de la maqueta (D79): no se distinguen solo por color', () => {
   });
 
   it('las categorías que comparten color difieren en el trazo', () => {
-    const oscuras = Object.values(SHAPE_STYLE).filter((s) => s.token === 'noche');
+    const oscuras = Object.values(SHAPE_STYLE).filter((s) => s.token === 'contorno');
     expect(new Set(oscuras.map((s) => s.dash?.join('-') ?? 'continuo')).size).toBe(oscuras.length);
   });
 });

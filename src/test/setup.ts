@@ -6,6 +6,8 @@ import { chatRetry } from '../lib/chatApi';
 import { useAuthStore } from '../store/authStore';
 import { useLoadingStore } from '../store/loadingStore';
 import { useWelcomeStore } from '../store/welcomeStore';
+import { resetSceneHost } from '../three/sceneHost';
+import { resetTintalData } from '../three/useTintalData';
 
 // Rutas en diferido (H27): con la suite en paralelo un chunk puede tardar más de 1 s en jsdom.
 configure({ asyncUtilTimeout: 3000 });
@@ -21,6 +23,9 @@ beforeEach(() => {
   useWelcomeStore.setState({ open: false });
   useAuthStore.setState({ status: 'checking', user: null, dialogOpen: false });
   useLoadingStore.setState({ tasks: {} });
+  // La maqueta 3D y sus datos son compartidos por toda la app (D83): cada prueba empieza de cero.
+  resetTintalData();
+  resetSceneHost();
 });
 
 // jsdom no tiene WebGL: MapLibre se sustituye por un doble con el mismo contrato.

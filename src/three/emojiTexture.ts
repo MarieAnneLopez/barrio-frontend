@@ -20,7 +20,7 @@ function plate(ctx: CanvasRenderingContext2D, shape: MarkerShape): void {
 }
 
 /**
- * Placa del marcador (D82): placa blanca con aro verde hoja (círculo, cuadrado o rombo) y el
+ * Placa del marcador (D82, D83): placa clara con aro oscuro del tema (círculo, cuadrado o rombo) y el
  * emoji del módulo, hecha en un canvas local (sin imágenes externas).
  */
 export function emojiTexture(emoji: string, shape: MarkerShape = 'circulo'): CanvasTexture {
@@ -30,10 +30,10 @@ export function emojiTexture(emoji: string, shape: MarkerShape = 'circulo'): Can
   const ctx = canvas.getContext('2d');
   if (ctx) {
     plate(ctx, shape);
-    ctx.fillStyle = mapColor('via');
+    ctx.fillStyle = mapColor('contorno');
     ctx.fill();
     ctx.lineWidth = 4;
-    ctx.strokeStyle = mapColor('hoja');
+    ctx.strokeStyle = mapColor('fondo');
     ctx.stroke();
     ctx.font = `${SIZE * (shape === 'rombo' ? 0.4 : 0.5)}px system-ui, "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
     ctx.textAlign = 'center';

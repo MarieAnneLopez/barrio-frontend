@@ -1,32 +1,20 @@
 import type { ThreeEvent } from '@react-three/fiber';
 import type { Feature, MultiPolygon, Polygon } from 'geojson';
 import { useEffect, useMemo, useRef } from 'react';
-import { EdgesGeometry, Float32BufferAttribute, type BufferGeometry } from 'three';
+import { EdgesGeometry } from 'three';
 import { extrudeFeatures } from './extrude';
 import { useHeroStore } from './heroStore';
 import { footprintArea, levelsOf, METERS_PER_LEVEL } from './metrics';
 import type { Projection } from './projection';
-import type { SceneColors } from './sceneColors';
+import { EXAGGERATION } from './referenceView';
+import { heightClass, type SceneColors } from './sceneColors';
+import { paintFaces } from './toon';
 
 type Building = Feature<Polygon | MultiPolygon>;
 
-const heightOf = (f: Pick<Feature, 'properties'>) => levelsOf(f) * METERS_PER_LEVEL;
+/** Altura dibujada: pisos de OSM × 3,2 m × exageración vertical medida en la referencia (D83). */
+const heightOf = (f: Pick<Feature, 'properties'>) => levelsOf(f) * METERS_PER_LEVEL * EXAGGERATION;
 const highlightHeight = (f: Pick<Feature, 'properties'>) => heightOf(f) + 0.6;
-
-/** Degradado de verde follaje (base) a verde niebla (remate) según la altura (D82). */
-function paintByHeight(geometry: BufferGeometry, colors: SceneColors): void {
-  const position = geometry.getAttribute('position');
-  if (!position) return;
-  geometry.computeBoundingBox();
-  const top = Math.max(1, geometry.boundingBox?.max.y ?? 1);
-  const values = new Float32Array(position.count * 3);
-  const mix = colors.edificio.clone();
-  for (let i = 0; i < position.count; i++) {
-    mix.copy(colors.edificio).lerp(colors.alto, Math.min(1, position.getY(i) / top));
-    values.set([mix.r, mix.g, mix.b], i * 3);
-  }
-  geometry.setAttribute('color', new Float32BufferAttribute(values, 3));
-}
 
 interface Props {
   features: readonly Building[];
@@ -38,7 +26,13 @@ interface Props {
 export function BuildingsLayer({ features, project, colors }: Props) {
   const geometry = useMemo(() => {
     const merged = extrudeFeatures(features, project, heightOf);
-    paintByHeight(merged, colors);
+    // Techo por clase de altura; la cara iluminada va un tono más clara y la otra en sombra.
+    paintFaces(merged, (kind, id) => {
+      const feature = features[id];
+      const cls = feature ? heightClass(levelsOf(feature)) : 0;
+      if (kind === 'shadow') return colors.sombra;
+      return colors.edificio[kind === 'top' ? cls : cls === 2 ? 1 : cls + 1] ?? colors.edificio[0];
+    });
     return merged;
   }, [features, project, colors]);
   const edges = useMemo(() => new EdgesGeometry(geometry, 25), [geometry]);
@@ -73,14 +67,14 @@ export function BuildingsLayer({ features, project, colors }: Props) {
   return (
     <group>
       <mesh geometry={geometry} onPointerMove={onMove} onPointerOut={onOut}>
-        <meshStandardMaterial vertexColors roughness={0.85} metalness={0} />
+        <meshBasicMaterial vertexColors />
       </mesh>
       <lineSegments geometry={edges}>
-        <lineBasicMaterial color={colors.borde} transparent opacity={0.45} />
+        <lineBasicMaterial color={colors.contorno} transparent opacity={0.5} />
       </lineSegments>
       {highlight ? (
         <mesh geometry={highlight}>
-          <meshStandardMaterial color={colors.seleccion} emissive={colors.seleccion} emissiveIntensity={0.35} transparent opacity={0.9} />
+          <meshBasicMaterial color={colors.contorno} transparent opacity={0.9} />
         </mesh>
       ) : null}
     </group>

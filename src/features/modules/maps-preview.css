@@ -1,4 +1,4 @@
-/* Vista previa que lleva a Google Maps: mapa propio en los verdes del mapa (D82), sin animación. */
+/* Vista previa que lleva a Google Maps: mapa propio con el tema de los mapas (D83), sin animación. */
 .maps-preview {
   position: relative;
   display: block;
@@ -8,40 +8,37 @@
 }
 
 .maps-preview__ground {
-  fill: var(--map-niebla);
+  fill: var(--map-suelo);
 }
 
 .maps-preview__parks {
-  fill: var(--map-menta);
-  fill-opacity: 0.8;
+  fill: var(--map-parque);
 }
 
 .maps-preview__blocks {
-  fill: var(--map-brote);
-  fill-opacity: 1;
-  stroke: var(--map-follaje);
-  stroke-opacity: 1;
+  fill: var(--map-manzana);
+  stroke: var(--map-sombra);
   stroke-width: 0.6;
 }
 
 .maps-preview__roads {
   fill: none;
-  stroke: #fff;
+  stroke: var(--map-via);
   stroke-width: 2.4;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
 .maps-preview__place {
-  fill: var(--map-salvia);
-  fill-opacity: 0.5;
-  stroke: var(--map-bosque);
+  fill: var(--map-contorno);
+  fill-opacity: 0.35;
+  stroke: var(--map-contorno);
   stroke-width: 3;
 }
 
 .maps-preview__pin {
-  fill: var(--map-noche);
-  stroke: #fff;
+  fill: var(--map-contorno);
+  stroke: var(--map-fondo);
   stroke-width: 2;
 }
 

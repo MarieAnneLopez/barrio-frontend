@@ -33,9 +33,9 @@ export function useShapes({ map, slug, features, selectedId, onSelect, reducedMo
     if (!map || !features) return undefined;
     const shapes = features.features.filter((f) => f.geometry && f.geometry.type !== 'Point');
     if (!shapes.length) return undefined;
-    // D82: la categoría va en verde bosque con borde blanco sobre la base verde clara; el blanco
-    // la separa además de todo lo demás (no solo el color la distingue).
-    const ink = mapColor('bosque');
+    // D83: la capa del módulo va en el color de contorno (claro) con borde oscuro sobre la base
+    // nocturna del tema; el borde la separa de todo lo demás (no solo el color la distingue).
+    const ink = mapColor('contorno');
     map.addSource(SHAPES_SOURCE, { type: 'geojson', data: { type: 'FeatureCollection', features: shapes } });
     map.addLayer({
       id: FILL_LAYER,
@@ -46,7 +46,7 @@ export function useShapes({ map, slug, features, selectedId, onSelect, reducedMo
     });
     map.addLayer({
       id: CASING_LAYER, type: 'line', source: SHAPES_SOURCE,
-      paint: { 'line-color': '#ffffff', 'line-width': ['case', selected, 8, 5] },
+      paint: { 'line-color': mapColor('fondo'), 'line-width': ['case', selected, 8, 5] },
     });
     map.addLayer({
       id: LINE_LAYER, type: 'line', source: SHAPES_SOURCE,

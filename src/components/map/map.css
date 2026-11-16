@@ -1,7 +1,7 @@
 @import './marker.css';
 
-/* Mapa temático: lo de dentro (fondo y marcadores) en los verdes del mapa (D82);
-   el marco y los controles siguen en la paleta violeta de la interfaz. */
+/* Mapa temático (D83): lo de dentro (fondo, marcadores, atribución y los controles propios del
+   mapa: zoom y recentrar) usa el tema de los mapas; el marco sigue en el violeta de la interfaz. */
 .thematic-map {
   position: relative;
   min-height: 360px;
@@ -19,12 +19,12 @@
 }
 
 .thematic-map .maplibregl-ctrl-group {
-  border: 1px solid var(--border-subtle);
-  background-color: var(--bg-surface);
+  border: 1px solid var(--map-suelo);
+  background-color: var(--map-control);
 }
 
 .thematic-map .maplibregl-ctrl-group button + button {
-  border-top-color: var(--border-subtle);
+  border-top-color: var(--map-suelo);
 }
 
 .thematic-map .maplibregl-ctrl-icon {
@@ -32,17 +32,17 @@
 }
 
 .thematic-map .maplibregl-ctrl-attrib {
-  background-color: var(--overlay);
-  color: var(--text-secondary);
+  background-color: var(--map-fondo);
+  color: var(--map-contorno);
 }
 
 .thematic-map .maplibregl-ctrl-attrib a {
-  color: var(--text-secondary);
+  color: var(--map-contorno);
 }
 
 /* Botón «Recentrar» (H34): mismo tamaño que los controles de zoom de MapLibre. */
 .map-recenter {
   font-size: 1.125rem;
   line-height: 1;
-  color: var(--palette-oscuro);
+  color: var(--map-contorno);
 }

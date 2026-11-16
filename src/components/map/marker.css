@@ -1,4 +1,4 @@
-/* Marcadores de lugar (2D y 3D) en los verdes del mapa (D82). Opción B: la placa cambia de forma
+/* Marcadores de lugar (2D y 3D) con el tema de los mapas (D83): placa clara y aro oscuro. Opción B: la placa cambia de forma
    por grupo (círculo = servicios, cuadrado = seguridad, rombo = movilidad). La placa es un
    ::before: así su giro no choca con el transform con que MapLibre y drei ubican el botón. */
 .map-marker {
@@ -21,9 +21,9 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  border: 2px solid var(--map-hoja);
+  border: 2px solid var(--map-fondo);
   border-radius: 9999px;
-  background-color: var(--map-via);
+  background-color: var(--map-contorno);
   transition:
     transform var(--dur-1) var(--ease-emphasis),
     border-color var(--dur-2) ease,
@@ -45,8 +45,8 @@
 }
 
 .map-marker[data-selected='true']::before {
-  border-color: var(--map-noche);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--map-salvia) 45%, transparent);
+  border-color: var(--map-control);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--map-contorno) 55%, transparent);
   transform: scale(1.12);
 }
 
@@ -64,8 +64,9 @@
   overflow: hidden;
   padding: 1px 6px;
   border-radius: 3px;
-  background-color: var(--map-noche);
-  color: var(--map-via);
+  border: 1px solid var(--map-contorno);
+  background-color: var(--map-fondo);
+  color: var(--map-contorno);
   font-size: 0.75rem;
   line-height: 1.4;
   white-space: nowrap;
@@ -78,13 +79,13 @@
 }
 
 .map-marker:focus-visible {
-  outline: 2px solid var(--map-noche);
+  outline: 2px solid var(--map-contorno);
   outline-offset: 3px;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .map-marker:hover::before {
-    border-color: var(--map-noche);
+    border-color: var(--map-control);
   }
 }
 

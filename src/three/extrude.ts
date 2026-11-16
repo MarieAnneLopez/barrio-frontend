@@ -1,7 +1,7 @@
 // Polígonos GeoJSON → una sola BufferGeometry extruida (una draw call por capa).
 // Cada vértice guarda `featureId` para saber qué edificio está bajo el puntero.
 import type { Feature, Polygon, MultiPolygon } from 'geojson';
-import { BufferGeometry, ExtrudeGeometry, Float32BufferAttribute, Shape, Vector2 } from 'three';
+import { BufferGeometry, ExtrudeGeometry, Float32BufferAttribute, Shape, ShapeGeometry, Vector2 } from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import type { Projection } from './projection';
 
@@ -45,6 +45,26 @@ export function extrudeFeatures(
       part.dispose();
     }
   });
+  if (parts.length === 0) return new BufferGeometry();
+  const merged = mergeGeometries(parts, false) ?? new BufferGeometry();
+  parts.forEach((part) => part.dispose());
+  return merged;
+}
+
+/** Polígonos planos (solo la cara de arriba, a la altura `y`): capas que no se levantan (D83). */
+export function flatFeatures(features: readonly AreaFeature[], project: Projection, y: number): BufferGeometry {
+  const parts: BufferGeometry[] = [];
+  for (const feature of features) {
+    for (const rings of polygons(feature)) {
+      const shape = toShape(rings, project);
+      if (!shape) continue;
+      const part = new ShapeGeometry(shape, 1);
+      part.rotateX(-Math.PI / 2);
+      part.translate(0, y, 0);
+      parts.push(part.toNonIndexed());
+      part.dispose();
+    }
+  }
   if (parts.length === 0) return new BufferGeometry();
   const merged = mergeGeometries(parts, false) ?? new BufferGeometry();
   parts.forEach((part) => part.dispose());
