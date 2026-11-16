@@ -1,21 +1,19 @@
-/* Mini Marie sentada (D82, D86): 48 px de alto, sin escalar. Se sienta en una repisa mínima, una
-   línea ámbar de 1 px, sobre el borde inferior de la maqueta. El asiento (bajo de la falda) está
-   al 60 % de su altura: el cuerpo queda sobre la maqueta y las piernas cuelgan por debajo. */
+/* Mini Marie sentada (D82, D86, D88): 48 px de alto, sin escalar, sobre el borde superior del
+   recuadro del mapa 3D y casi pegada a su esquina derecha (pedido de Martín). El asiento (bajo de
+   la falda) está al 60 % de su altura: ese punto queda en el borde y las piernas cuelgan hacia el
+   mapa. Encima del recuadro, debajo del encabezado fijo. */
 .sitting-marie {
   position: absolute;
-  right: clamp(96px, 22vw, 320px);
-  bottom: -19px; /* las piernas: 40 % de 48 px */
+  top: -29px; /* 60 % de 48 px */
+  right: -4px; /* el recuadro va de lado a lado, 16 px más allá: queda a 12 px de la esquina */
   z-index: 10;
   line-height: 0;
   pointer-events: none;
 }
 
-/* La repisa: 72 px centrados bajo ella (29 px de ancho), en la primera fila bajo el borde. */
-.sitting-marie__ledge {
-  position: absolute;
-  left: -21px;
-  bottom: 18px;
-  width: 72px;
-  height: 1px;
-  background-color: var(--text-highlight);
+/* Desde md (48rem, igual que el md:mx-0 del recuadro) ya no va de lado a lado: los mismos 12 px. */
+@media (min-width: 48rem) {
+  .sitting-marie {
+    right: 12px;
+  }
 }

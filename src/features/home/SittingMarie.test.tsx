@@ -7,8 +7,8 @@ import { CATEGORIES, categoryPath } from '../../lib/categoryConfig';
 import { NAV_AFTER_CATEGORIES, NAV_BEFORE_CATEGORIES } from '../../lib/navigation';
 import { renderRoute } from '../../test/renderRoute';
 
-// D82, D86: Mini Marie sentada solo en Inicio y Mapa 3D; decorativa (sin eventos ni lector de
-// pantalla), a 48 px sin escalar y sobre una repisa de 1 px en el borde inferior de la maqueta.
+// D82, D86, D88: Mini Marie sentada solo en Inicio y Mapa 3D; decorativa (sin eventos ni lector de
+// pantalla), a 48 px sin escalar, sobre el borde superior del recuadro y casi en su esquina derecha.
 const css = readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'sitting.css'), 'utf8');
 const ROUTES = [
   ...[...NAV_BEFORE_CATEGORIES, ...NAV_AFTER_CATEGORIES].map((item) => item.path),
@@ -28,16 +28,18 @@ describe('Mini Marie sentada (D82)', () => {
       expect(node).toHaveAttribute('aria-hidden', 'true');
       const sprite = node.querySelector<HTMLElement>('.sequence[data-sequence="sit"]');
       expect([sprite?.style.width, sprite?.style.height]).toEqual(['29px', '48px']);
-      expect(node.querySelector('.sitting-marie__ledge')).not.toBeNull();
+      expect(node.querySelector('.sitting-marie__ledge')).toBeNull(); // su asiento es el borde del recuadro
     });
     cleanup();
   }, 15000);
 
-  it('se sienta en el borde inferior: el asiento (60 %) sobre la línea y las piernas por debajo', () => {
-    const block = (selector: string) => new RegExp(`\\${selector} \\{([^}]*)\\}`).exec(css)?.[1] ?? '';
-    expect(block('.sitting-marie')).toMatch(/bottom: -19px;/); // 40 % de 48 px
-    expect(block('.sitting-marie')).toMatch(/right: clamp\(96px, 22vw, 320px\);/);
-    expect(block('.sitting-marie')).not.toMatch(/\btop:/);
-    expect(block('.sitting-marie__ledge')).toMatch(/width: 72px;\s*height: 1px;\s*background-color: var\(--text-highlight\);/);
+  it('se sienta arriba a la derecha, casi en la esquina: el asiento (60 %) en el borde y las piernas hacia el mapa', () => {
+    const rules = css.replace(/\/\*[\s\S]*?\*\//g, '');
+    const base = /\.sitting-marie \{([^}]*)\}/.exec(rules)?.[1] ?? '';
+    expect(base).toMatch(/top: -29px;/); // 60 % de 48 px por encima del borde superior
+    expect(base).toMatch(/right: -4px;/); // a 12 px de la esquina cuando el recuadro va de lado a lado
+    expect(base).not.toMatch(/\bbottom:/);
+    // Desde md el recuadro ya no va de lado a lado: los mismos 12 px desde su esquina.
+    expect(rules).toMatch(/@media \(min-width: 48rem\) \{\s*\.sitting-marie \{\s*right: 12px;\s*\}\s*\}/);
   });
 });
