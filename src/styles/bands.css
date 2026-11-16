@@ -1,4 +1,4 @@
-/* Bandas de texto (D79). Sobre el fondo principal (#af50e5) no cabe texto normal
+/* Bandas de texto (D79). Sobre el fondo principal (noche) no cabe texto normal
    (blanco 4,12; oscuro 2,98): el texto suelto de las páginas va en una banda lavanda
    con texto oscuro (8,40). Dentro, los tokens de texto pasan a oscuro (las utilidades
    de Tailwind los leen directo: @theme inline); una superficie oscura dentro vuelve a blanco. */

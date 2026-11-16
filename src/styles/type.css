@@ -1,0 +1,41 @@
+/* Tipografía base (D85, docs/DISENO-V3.md): la tipografía es la protagonista.
+   h1 en la display condensada (Anton); h2 y h3 en serif cursiva (Cormorant Garamond);
+   el resto en Inter fina. Sin negrita falsa: Anton solo tiene el peso 400. */
+body {
+  font-weight: 300;
+}
+
+h1,
+h2,
+h3 {
+  font-synthesis: none;
+  text-wrap: balance;
+}
+
+h1 {
+  font-family: var(--ff-display);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 1.02;
+}
+
+h2,
+h3 {
+  font-family: var(--ff-serif);
+  font-style: italic;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+/* Lo que use la display fuera de un h1 tampoco sintetiza negrita. */
+.font-display,
+.font-pixel {
+  font-synthesis: none;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+/* Cifras y coordenadas: Inter con números tabulares (ya no hay fuente monoespaciada). */
+.font-mono {
+  font-variant-numeric: tabular-nums;
+}

@@ -6,6 +6,7 @@
 @import './pixel.css';
 @import './brick.css';
 @import './bands.css';
+@import './type.css';
 @import '../components/ui/ui.css';
 @import '../components/ui/ui-motion.css';
 
@@ -34,6 +35,7 @@
   --color-warning: var(--state-warning);
   --color-error: var(--state-error);
   --font-display: var(--ff-display);
+  --font-serif: var(--ff-serif);
   --font-body: var(--ff-body);
   --font-mono: var(--ff-mono);
   --font-pixel: var(--ff-pixel);
@@ -67,17 +69,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-h1,
-h2,
-h3 {
-  font-family: var(--ff-display);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  text-wrap: balance;
-}
-
-/* Foco doble (D68): blanco por fuera y vino por dentro, visible en las 4 superficies. */
+/* Foco doble (D84): ámbar por fuera y noche por dentro, visible sobre noche, papel y ámbar. */
 :focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;

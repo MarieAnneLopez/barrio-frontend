@@ -1,50 +1,56 @@
-/* Tokens del design system (docs/DISENO-V2.md; paleta D79). Única fuente de la paleta:
-   principal #af50e5 (~40 %), lavanda #e2cef6 (~30 %), oscuro #5b0672 (~15 %),
-   intenso #8a0bd2 (~10 %), claro #d980f9 (~5 %) de la superficie; además blanco y negro
-   solo como texto o ícono, y estados semánticos. Sobre principal no va texto normal. */
+/* Tokens del design system (docs/DISENO-V3.md; paleta D84, «interfaz elegante»). Única fuente de
+   la paleta: noche #283845 (~55 %), papel #e8d8c9 (~30 %), ámbar #ffa649 (~10 %), acero #4b607f
+   (~4 %) y naranja #f3701e (≤ 1 %). Sobre ámbar solo va texto noche; acero nunca es texto sobre
+   noche (1,88:1). Los mapas tienen su propio tema (styles/map-palette.css). */
 :root {
   /* Primitivos */
-  --palette-principal: #af50e5;
-  --palette-intenso: #8a0bd2;
-  --palette-claro: #d980f9;
-  --palette-lavanda: #e2cef6;
-  --palette-oscuro: #5b0672;
+  --c-noche: #283845;
+  --c-papel: #e8d8c9;
+  --c-ambar: #ffa649;
+  --c-acero: #4b607f;
+  --c-naranja: #f3701e;
+  /* Alias de la paleta anterior (D79) mientras la etapa 2 retira sus usos: ya sin violeta. */
+  --palette-principal: var(--c-noche);
+  --palette-intenso: var(--c-noche);
+  --palette-oscuro: var(--c-noche);
+  --palette-lavanda: var(--c-papel);
+  --palette-claro: var(--c-papel);
 
   /* Superficies */
-  --bg-primary: var(--palette-principal); /* fondo de página: sin texto normal encima */
-  --bg-surface: var(--palette-oscuro);
-  --bg-accent: var(--palette-lavanda);
-  --bg-soft: var(--palette-claro);
-  --bg-nav: var(--palette-intenso);
+  --bg-primary: var(--c-noche);
+  --bg-surface: var(--c-noche);
+  --bg-accent: var(--c-papel);
+  --bg-soft: var(--c-papel);
+  --bg-nav: var(--c-noche);
 
   /* Texto (pares medidos en tokens.test.ts) */
-  --text-primary: #ffffff; /* 12,25 sobre oscuro · 6,86 sobre intenso · solo grande sobre principal (4,12) */
-  --text-secondary: rgb(255 255 255 / 0.94);
-  --text-muted: rgb(255 255 255 / 0.9);
-  --text-on-accent: var(--palette-oscuro); /* 8,40 sobre lavanda */
-  --text-on-soft: var(--palette-oscuro); /* 4,90 sobre claro */
-  --text-highlight: var(--palette-claro); /* solo sobre oscuro: 4,90 */
-  --accent-soft: #ffffff; /* enlaces: blanco subrayado, solo sobre oscuro o intenso */
+  --text-primary: var(--c-papel); /* 8,67 sobre noche */
+  --text-secondary: rgb(232 216 201 / 0.9); /* 7,35 */
+  --text-muted: rgb(232 216 201 / 0.76); /* ≥ 5,3 */
+  --text-on-accent: var(--c-noche); /* 8,67 sobre papel */
+  --text-on-soft: var(--c-noche);
+  --text-highlight: var(--c-ambar); /* 6,20 sobre noche */
+  --accent-soft: var(--c-ambar); /* enlaces y acentos: solo sobre noche */
 
   /* Interacción */
-  --interactive-primary: var(--palette-lavanda);
-  --interactive-hover: var(--palette-claro);
-  --interactive-active: var(--palette-claro);
-  --text-on-interactive: var(--palette-oscuro);
-  --border-subtle: rgb(255 255 255 / 0.22);
-  --border-strong: rgb(255 255 255 / 0.6);
-  --border-ink: var(--palette-oscuro);
-  --glass-fill: var(--palette-oscuro);
+  --interactive-primary: var(--c-ambar);
+  --interactive-hover: var(--c-papel);
+  --interactive-active: var(--c-papel);
+  --text-on-interactive: var(--c-noche); /* 6,20 sobre ámbar · 8,67 sobre papel */
+  --border-subtle: rgb(232 216 201 / 0.2);
+  --border-strong: rgb(232 216 201 / 0.55);
+  --border-ink: var(--c-acero); /* líneas de 1 px: 4,60 sobre papel; decorativa sobre noche */
+  --glass-fill: var(--c-noche);
   --glass-blur: 0px;
-  --hairline: rgb(255 255 255 / 0.14);
-  /* Foco doble: blanco por fuera, oscuro por dentro; visible sobre las cinco superficies. */
-  --focus-ring: #ffffff;
-  --focus-ring-inner: var(--palette-oscuro);
-  --overlay: rgb(91 6 114 / 0.8);
-  --skeleton-base: rgb(255 255 255 / 0.12);
-  --skeleton-shine: rgb(255 255 255 / 0.24);
+  --hairline: rgb(232 216 201 / 0.14);
+  /* Foco doble: ámbar por fuera, noche por dentro; visible sobre noche, papel y ámbar. */
+  --focus-ring: var(--c-ambar);
+  --focus-ring-inner: var(--c-noche);
+  --overlay: rgb(40 56 69 / 0.86);
+  --skeleton-base: rgb(232 216 201 / 0.1);
+  --skeleton-shine: rgb(232 216 201 / 0.2);
 
-  /* Estados semánticos: tonos claros que se leen sobre oscuro (no sobre principal) */
+  /* Estados semánticos: tonos claros que se leen sobre noche (8,59 · 7,15 · 6,35) */
   --state-success: #86efac;
   --state-warning: #fdba74;
   --state-error: #fca5a5;
