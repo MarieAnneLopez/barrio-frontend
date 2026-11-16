@@ -62,7 +62,7 @@ export function WelcomeChoreography() {
       {PEEK_SLOTS.map((slot) => (
         <span key={slot.id} className="welcome-peek" data-slot={slot.id}>
           <span className="welcome-peek__body">
-            <SequenceSprite name="wave" height="var(--peek-h)" pose={slot.pose} phase={slot.phase} />
+            <SequenceSprite name="wave" size={160} pose={slot.pose} phase={slot.phase} />
           </span>
         </span>
       ))}

@@ -1,4 +1,4 @@
-import { sequenceSpec } from './sequences';
+import { cellWidth } from './sequences';
 import { SequenceSprite } from './SequenceSprite';
 
 interface Props {
@@ -6,8 +6,8 @@ interface Props {
   size: number;
 }
 
-/** Fracción de la altura del cuadro que se ve: cabeza, hombros y la mano que saluda. */
-const VISIBLE = 0.6;
+/** Alto fijo del sprite (escala entera, D86): en un círculo de 48 px se ve el 60 % de arriba. */
+const SPRITE = 80;
 /** La mano que saluda está a la derecha de la cabeza: se corre un poco el encuadre hacia ella. */
 const SHIFT = 0.1;
 
@@ -17,9 +17,7 @@ const SHIFT = 0.1;
  * de carga es aparte (LoadingScreen). Movimiento reducido: pose fija con la mano arriba.
  */
 export function ChatAvatar({ size }: Props) {
-  const spec = sequenceSpec('wave');
-  const height = Math.round(size / VISIBLE);
-  const width = Math.round((height * spec.width) / spec.height);
+  const width = cellWidth('wave', SPRITE);
   return (
     <span
       aria-hidden="true"
@@ -27,7 +25,7 @@ export function ChatAvatar({ size }: Props) {
       style={{ width: size, height: size }}
     >
       <span className="absolute top-[2%]" style={{ left: Math.round((size - width) / 2 - width * SHIFT) }}>
-        <SequenceSprite name="wave" height={height} pose={2} />
+        <SequenceSprite name="wave" size={SPRITE} pose={2} />
       </span>
     </span>
   );

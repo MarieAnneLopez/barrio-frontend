@@ -21,7 +21,7 @@ export function LoadingScreen() {
   return (
     <div role="status" aria-live="polite" data-leaving={leaving || undefined} className="loading-screen brick-bond fixed inset-0 z-[140]">
       <div className="loading-screen__stage">
-        <SequenceSprite name="run" height="clamp(160px, 42vh, 420px)" pose={3} className="loading-screen__runner" />
+        <SequenceSprite name="run" size={420} pose={3} className="loading-screen__runner" />
         <div className="loading-screen__ground" aria-hidden="true" />
       </div>
       <p className="loading-screen__text px-corners">

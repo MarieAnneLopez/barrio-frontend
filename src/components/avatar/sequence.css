@@ -8,8 +8,8 @@
 
 .sequence__strip {
   display: block;
-  height: 100%;
   max-width: none;
+  image-rendering: pixelated; /* escala entera (D86): sin suavizado */
   user-select: none;
 }
 

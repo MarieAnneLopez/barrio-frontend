@@ -39,7 +39,7 @@ describe('Bienvenida de Mini Marie', () => {
     const welcome = await screen.findByRole('dialog', { name: 'Hola' });
     expect(welcome.querySelectorAll('.sequence[data-playing]')).toHaveLength(0);
     const strip = welcome.querySelector<HTMLElement>('.welcome-peek[data-slot="top"] .sequence__strip');
-    expect(strip?.style.transform).toMatch(/^translateX\(-28\.57\d*%\)$/); // cuadro 3 de 7: brazo arriba
+    expect(strip?.style.transform).toBe('translateX(-164px)'); // cuadro 3 de 7 (2 × 82 px): brazo arriba
   });
 
   it('el botón la cierra y la sesión la recuerda (D11)', async () => {

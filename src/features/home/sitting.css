@@ -2,7 +2,7 @@
    al 60 % de su altura: ese punto queda sobre el borde superior del recuadro y las piernas
    cuelgan hacia el mapa. Encima del recuadro, debajo del encabezado fijo. */
 .sitting-marie {
-  --sit-h: clamp(36px, 3.4vw, 48px);
+  --sit-h: 48px;
   position: absolute;
   top: calc(var(--sit-h) * -0.6);
   right: 1.5rem;

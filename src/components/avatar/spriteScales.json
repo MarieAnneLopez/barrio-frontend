@@ -1,0 +1,5 @@
+{
+  "wave": { "frames": 7, "cell": [328, 640], "sizes": [80, 160, 320] },
+  "run": { "frames": 8, "cell": [196, 420], "sizes": [210, 420] },
+  "sit": { "frames": 8, "cell": [116, 192], "sizes": [48, 96] }
+}

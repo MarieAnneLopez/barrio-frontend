@@ -13,7 +13,7 @@
    adentro y GSAP mueve solo el cuerpo, así no pisa esa colocación. Tamaño con clamp():
    la suma de lo visible queda muy por debajo del 12 % de la pantalla. */
 .welcome-peek {
-  --peek-h: clamp(96px, 20vmin, 190px);
+  --peek-h: 160px;
   position: absolute;
   width: 0;
   height: 0;

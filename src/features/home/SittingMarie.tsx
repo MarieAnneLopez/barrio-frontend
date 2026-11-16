@@ -11,7 +11,7 @@ import { SequenceSprite } from '../../components/avatar/SequenceSprite';
 export function SittingMarie() {
   return (
     <span aria-hidden="true" data-mascot="sentada" className="sitting-marie">
-      <SequenceSprite name="sit" height="var(--sit-h)" pose={0} />
+      <SequenceSprite name="sit" size={48} pose={0} />
     </span>
   );
 }

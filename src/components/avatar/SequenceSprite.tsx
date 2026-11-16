@@ -1,11 +1,12 @@
 import './sequence.css';
 import type { CSSProperties } from 'react';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
-import { FRAME_MS, sequenceSpec, type SequenceName } from './sequences';
+import { cellWidth, FRAME_MS, sequenceSpec, spriteUrl, type SequenceName } from './sequences';
 
 interface Props {
   name: SequenceName;
-  height: number | string;
+  /** Alto en px: uno de los tamaños fijos de la secuencia (escala entera, D86). */
+  size: number;
   /** Pose fija (índice desde 0) con movimiento reducido o si playing = false. */
   pose?: number;
   playing?: boolean;
@@ -15,27 +16,30 @@ interface Props {
 }
 
 /**
- * Secuencia de Mini Marie dibujada por Marie (H33): una tira de cuadros que se
- * desliza con transform y steps(), así nunca se repinta ni cambia de tamaño.
- * Movimiento reducido: pose estática. Decorativa: el texto lo da quien la usa.
+ * Secuencia de Mini Marie dibujada por Marie (H33): una tira de cuadros que se desliza con
+ * transform y steps(), así nunca se repinta. Escala entera (D86): la caja mide exactamente el
+ * recurso (1:1, o 2:1 exacto en pantallas 2×) y el paso entre cuadros es un número entero de
+ * píxeles. Movimiento reducido: pose estática. Decorativa: el texto lo da quien la usa.
  */
-export function SequenceSprite({ name, height, pose = 0, playing = true, phase = 0, className = '' }: Props) {
+export function SequenceSprite({ name, size, pose = 0, playing = true, phase = 0, className = '' }: Props) {
   const reduced = useReducedMotion();
-  const spec = sequenceSpec(name);
+  const { frames, sizes } = sequenceSpec(name);
+  const width = cellWidth(name, size);
   const animate = playing && !reduced;
-  const box: CSSProperties = { height, aspectRatio: `${spec.width} / ${spec.height}` };
-  const cycle = spec.frames * FRAME_MS[name];
-  const strip: CSSProperties = animate
-    ? { animationDuration: `${cycle}ms`, animationTimingFunction: `steps(${spec.frames})`, animationDelay: `${-phase * cycle}ms` }
-    : { transform: `translateX(${(-100 * pose) / spec.frames}%)` };
+  const cycle = frames * FRAME_MS[name];
+  const motion: CSSProperties = animate
+    ? { animationDuration: `${cycle}ms`, animationTimingFunction: `steps(${frames})`, animationDelay: `${-phase * cycle}ms` }
+    : { transform: `translateX(${-pose * width}px)` };
+  const twice = sizes.includes(size * 2) ? `${spriteUrl(name, size)} 1x, ${spriteUrl(name, size * 2)} 2x` : undefined;
   return (
-    <span className={`sequence ${className}`} style={box} data-sequence={name} data-playing={animate || undefined} aria-hidden="true">
+    <span className={`sequence ${className}`} style={{ width, height: size }} data-sequence={name} data-playing={animate || undefined} aria-hidden="true">
       <img
         className="sequence__strip"
-        src={`/assets/avatar/${name}/${name}_strip.webp`}
+        src={spriteUrl(name, size)}
+        srcSet={twice}
         alt=""
         draggable={false}
-        style={{ ...strip, width: `${spec.frames * 100}%` }}
+        style={{ ...motion, width: frames * width, height: size }}
       />
     </span>
   );
