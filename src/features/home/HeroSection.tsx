@@ -34,8 +34,8 @@ export function HeroSection({ variant = 'hero' }: { variant?: 'hero' | 'page' })
   }, []);
 
   return (
-    // El recuadro recorta su contenido (overflow-hidden): la sentada va afuera, sobre su borde inferior
-    // (D82, D86); por eso los paneles de abajo del HUD suben 40 px y dejan ese borde libre.
+    // El recuadro recorta su contenido (overflow-hidden): la sentada va afuera, sobre su borde superior,
+    // casi en la esquina derecha (D82, D88).
     <div className="relative">
       <section
         ref={section}
@@ -51,10 +51,7 @@ export function HeroSection({ variant = 'hero' }: { variant?: 'hero' | 'page' })
         {state.status === 'loading' ? (
           <Skeleton className="h-full w-full" />
         ) : (
-          <>
-            <HeroHud />
-            <HeroLegend defaultOpen={variant === 'page'} />
-          </>
+          <HeroHud legend={<HeroLegend defaultOpen={variant === 'page'} />} />
         )}
       </section>
       <SittingMarie />

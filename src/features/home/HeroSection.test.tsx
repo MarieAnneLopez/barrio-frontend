@@ -53,11 +53,32 @@ describe('Hero 3D', () => {
     expect(screen.getByRole('link', { name: 'Ver en Centros Educativos' })).toHaveAttribute(
       'href', '/categorias/centros-educativos',
     );
-    // El borde inferior queda libre: ahí se sienta Mini Marie (29 px de cuerpo sobre la maqueta).
+    // La ficha comparte la fila de abajo con la pista: si no caben, saltan de línea en vez de montarse.
     const hint = screen.getByRole('region', { name: 'Maqueta 3D de El Tintal' }).querySelector('[aria-live="polite"]');
-    for (const panel of [card, hint]) expect(panel?.className).toMatch(/\bbottom-10\b/);
+    expect(card.parentElement).toBe(hint?.parentElement);
+    expect(card.className).not.toMatch(/\babsolute\b/);
     await userEvent.click(screen.getByRole('button', { name: 'Cerrar ficha' }));
     expect(screen.queryByRole('region', { name: 'Lugar seleccionado' })).not.toBeInTheDocument();
+  });
+
+  it('ningún panel del HUD se monta sobre otro: una columna con filas que saltan y una leyenda que cede el alto', async () => {
+    mockApi({ ...BASE_MAP, '/centros-educativos/geojson': FEATURES });
+    renderRoute('/mapa');
+    await screen.findByTestId('escena-3d');
+    const hero = screen.getByRole('region', { name: 'Maqueta 3D de El Tintal' });
+    const hint = hero.querySelector('[aria-live="polite"]');
+    const legend = screen.getByRole('list', { name: 'Leyenda y filtro' }).parentElement;
+    const [column, bottom] = [legend?.parentElement, hint?.parentElement];
+    expect(column?.className).toMatch(/\bflex-col\b/);
+    expect([bottom?.parentElement, column?.lastElementChild]).toEqual([column, bottom]);
+    expect(bottom?.className).toMatch(/\bmt-auto\b.*\bflex-wrap\b/);
+    expect(legend?.className).toMatch(/\bmin-h-0\b/);
+    expect(legend?.className).not.toMatch(/\babsolute\b/);
+    // Arriba, coordenadas y botones van en una fila que salta de línea: a 390 px se montaban.
+    const top = column?.firstElementChild;
+    expect(top?.className).toMatch(/\bflex-wrap\b/);
+    expect(top?.contains(screen.getByRole('button', { name: 'Recentrar' }))).toBe(true);
+    expect(top?.contains(screen.getByText('4,653° N · 74,157° O'))).toBe(true);
   });
 
   it('si la API aún no responde, nunca muestra un error: reintenta sola y luego dibuja', async () => {

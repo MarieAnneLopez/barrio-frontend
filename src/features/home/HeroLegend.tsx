@@ -9,6 +9,8 @@ import { ShapeSwatch } from './ShapeSwatch';
 /**
  * Leyenda y filtro de la maqueta (H34): las 14 categorías con su símbolo y los lugares
  * que la escena dibujó; cada una se puede ocultar. Es HTML real: teclado y lector de pantalla.
+ * Va dentro de la columna del HUD y cede el alto (min-h-0): su lista se desplaza y
+ * nunca tapa la pista de abajo (D88).
  */
 export function HeroLegend({ defaultOpen = false }: { defaultOpen?: boolean }) {
   const { t, i18n } = useTranslation();
@@ -18,7 +20,7 @@ export function HeroLegend({ defaultOpen = false }: { defaultOpen?: boolean }) {
   const numbers = new Intl.NumberFormat(i18n.language);
 
   return (
-    <div className="brick-card absolute top-24 left-4 z-30 flex max-h-[calc(100%-8rem)] w-[min(18rem,calc(100%-2rem))] flex-col">
+    <div className="brick-card pointer-events-auto flex min-h-0 w-[min(18rem,100%)] flex-col self-start">
       <button
         type="button"
         aria-expanded={open}
