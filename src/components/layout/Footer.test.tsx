@@ -29,7 +29,13 @@ describe('Footer', () => {
     const card = within(footer()).getByRole('region', { name: 'Marie Anne Lopez Poveda' });
     expect(card).toHaveTextContent('estudiante de Ingeniería Catastral y Geodesia');
     expect(card).toHaveTextContent('Funza');
-    expect(within(card).getByRole('img', { name: /Mini Marie/ })).toHaveClass('pixel-art');
+    // D88: a escala entera, como las demás (64 × 140 px; el recurso doble o cuádruple según la pantalla).
+    const sprite = within(card).getByRole('img', { name: /Mini Marie/ }).querySelector<HTMLElement>('.sequence[data-sequence="idle"]');
+    expect([sprite?.style.width, sprite?.style.height]).toEqual(['64px', '140px']);
+    expect([...(sprite?.querySelectorAll('source') ?? [])].map((s) => s.getAttribute('srcset'))).toEqual([
+      '/assets/avatar/idle/idle_560.webp', '/assets/avatar/idle/idle_280.webp',
+    ]);
+    expect(sprite).not.toHaveAttribute('data-playing');
     expect(within(card).getByRole('link', { name: /WhatsApp/ })).toHaveAttribute('href', SPEC_WHATSAPP);
   });
 

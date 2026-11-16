@@ -16,7 +16,7 @@ const file = (name, size) => join(root, 'public/assets/avatar', name, `${name}_$
 describe('tamaños fijos de Mini Marie (D86)', () => {
   it('cada secuencia tiene su tamaño base, el doble y el cuádruple que existan en el dibujo', () => {
     expect(Object.fromEntries(Object.entries(scales).map(([name, spec]) => [name, spec.sizes]))).toEqual({
-      wave: [80, 160, 320, 640], run: [210, 420], sit: [48, 96, 192],
+      wave: [80, 160, 320, 640], run: [210, 420], sit: [48, 96, 192], idle: [140, 280, 560],
     });
   });
 

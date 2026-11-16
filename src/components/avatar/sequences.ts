@@ -1,9 +1,9 @@
 import scales from './spriteScales.json';
 
-export type SequenceName = 'run' | 'wave' | 'sit';
+export type SequenceName = 'run' | 'wave' | 'sit' | 'idle';
 
 /** Milisegundos por cuadro: carrera ágil (8 × 90 = 720 ms por zancada), saludo pausado, sentada a 8 fps. */
-export const FRAME_MS: Record<SequenceName, number> = { run: 90, wave: 140, sit: 125 };
+export const FRAME_MS: Record<SequenceName, number> = { run: 90, wave: 140, sit: 125, idle: 1000 };
 
 /**
  * Tamaños fijos (alto en px) de cada secuencia: «escala entera» (D86). Los dibujos de Mini Marie
@@ -11,11 +11,13 @@ export const FRAME_MS: Record<SequenceName, number> = { run: 90, wave: 140, sit:
  * generado por scripts/build_sprite_scales.mjs con celdas de ancho entero, y se muestra 1:1.
  * La sentada sale de «Mini marie sentada.jpeg» (sit_strip.webp, que ningún script regenera) y va
  * sin su tercer cuadro, que en el dibujo viene corrido y parpadeaba (D88): 7 cuadros.
+ * `idle` es un solo cuadro, de pie (copia de frame_1.png): el del perfil de la creadora (D88).
  */
 export const SPRITE_SIZES: Record<SequenceName, readonly number[]> = {
   wave: scales.wave.sizes,
   run: scales.run.sizes,
   sit: scales.sit.sizes,
+  idle: scales.idle.sizes,
 };
 
 /** Cuadros de la secuencia y sus tamaños disponibles. */

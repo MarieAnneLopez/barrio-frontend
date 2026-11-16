@@ -1,5 +1,6 @@
 {
   "wave": { "frames": 7, "cell": [328, 640], "sizes": [80, 160, 320, 640] },
   "run": { "frames": 8, "cell": [196, 420], "sizes": [210, 420] },
-  "sit": { "frames": 7, "source": { "frames": 8, "skip": [2] }, "cell": [116, 192], "sizes": [48, 96, 192] }
+  "sit": { "frames": 7, "source": { "frames": 8, "skip": [2] }, "cell": [116, 192], "sizes": [48, 96, 192] },
+  "idle": { "frames": 1, "cell": [256, 560], "sizes": [140, 280, 560] }
 }
