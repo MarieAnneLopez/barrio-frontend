@@ -13,7 +13,7 @@ const SHIFT = 0.1;
 
 /**
  * Avatar del chat (pedido de Marie): Mini Marie saludando como foto de perfil, recortada
- * en un círculo y animada con los cuadros del saludo. No camina ni corre: la animación
+ * en un círculo papel con una línea de 1 px y animada con los cuadros del saludo. No camina ni corre: la animación
  * de carga es aparte (LoadingScreen). Movimiento reducido: pose fija con la mano arriba.
  */
 export function ChatAvatar({ size }: Props) {
@@ -21,10 +21,10 @@ export function ChatAvatar({ size }: Props) {
   return (
     <span
       aria-hidden="true"
-      className="chat-avatar relative inline-block shrink-0 overflow-hidden rounded-full border-2 border-ink bg-pink"
+      className="chat-avatar relative inline-block shrink-0 overflow-hidden rounded-full border border-ink bg-pink"
       style={{ width: size, height: size }}
     >
-      <span className="absolute top-[2%]" style={{ left: Math.round((size - width) / 2 - width * SHIFT) }}>
+      <span className="absolute" style={{ top: 1, left: Math.round((size - width) / 2 - width * SHIFT) }}>
         <SequenceSprite name="wave" size={SPRITE} pose={2} />
       </span>
     </span>

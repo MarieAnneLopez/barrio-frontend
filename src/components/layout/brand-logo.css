@@ -1,0 +1,11 @@
+/* Logo (D82, D86). <picture> solo elige el recurso: no ocupa caja propia. */
+.brand-logo picture {
+  display: contents;
+}
+
+/* Escala entera: sin suavizado solo donde el dibujo cae en píxeles enteros de pantalla (1× y 2×). */
+@media (resolution: 1dppx), (resolution: 2dppx) {
+  .brand-logo img {
+    image-rendering: pixelated;
+  }
+}

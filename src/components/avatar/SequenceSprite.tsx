@@ -1,6 +1,7 @@
 import './sequence.css';
 import type { CSSProperties } from 'react';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { denserThan } from '../../lib/density';
 import { cellWidth, FRAME_MS, sequenceSpec, spriteUrl, type SequenceName } from './sequences';
 
 interface Props {
@@ -17,7 +18,6 @@ interface Props {
 
 /** Densidad de pantalla desde la que conviene cada múltiplo: el cuádruple por encima de 2×, el doble por encima de 1×. */
 const DENSER = [[4, 2.01], [2, 1.01]] as const;
-const above = (dppx: number) => `(min-resolution: ${dppx}dppx), (-webkit-min-device-pixel-ratio: ${dppx})`;
 
 /**
  * Secuencia de Mini Marie dibujada por Marie (H33): una tira de cuadros que se desliza con
@@ -40,7 +40,7 @@ export function SequenceSprite({ name, size, pose = 0, playing = true, phase = 0
     <span className={`sequence ${className}`} style={{ width, height: size }} data-sequence={name} data-playing={animate || undefined} aria-hidden="true">
       <picture>
         {DENSER.filter(([times]) => sizes.includes(size * times)).map(([times, dppx]) => (
-          <source key={times} media={above(dppx)} srcSet={spriteUrl(name, size * times)} />
+          <source key={times} media={denserThan(dppx)} srcSet={spriteUrl(name, size * times)} />
         ))}
         <img
           className="sequence__strip"
