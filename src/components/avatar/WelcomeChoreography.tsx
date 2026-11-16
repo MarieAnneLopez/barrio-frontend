@@ -2,21 +2,21 @@ import './welcome.css';
 import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { useWelcomeStore } from '../../store/welcomeStore';
 import { Button } from '../ui/Button';
 import { useFocusTrap } from '../ui/useFocusTrap';
 import { useLoadingScreenStore } from '../../store/loadingScreenStore';
 import { SequenceSprite } from './SequenceSprite';
-import { CONFETTI_COUNT, PEEK_SLOTS, welcomeGeometry } from './welcomeGeometry';
+import { CONFETTI_COUNT, layoutPeeks, PEEK_SLOTS, welcomeGeometry } from './welcomeGeometry';
 import { exitWelcome, playWelcome } from './welcomeTimeline';
 
 const AUTO_CLOSE_MS = 3800;
 
 /**
- * Bienvenida (§11.4.3, D6, D11, H33): Mini Marie grandes se asoman desde los bordes y
- * saludan con sus 7 cuadros; el letrero "Hola" al centro. Espera a la pantalla de carga.
+ * Bienvenida (§11.4.3, D6, D11, H33, D82): exactamente 8 Mini Marie salen desde fuera de la
+ * pantalla (4 esquinas y el centro de cada borde), de cabeza hacia adentro, y saludan con sus
+ * 7 cuadros; el letrero "Hola" al centro. Espera a la pantalla de carga.
  */
 export function WelcomeChoreography() {
   const { t } = useTranslation();
@@ -28,7 +28,6 @@ export function WelcomeChoreography() {
   const close = useWelcomeStore((s) => s.close);
   const root = useRef<HTMLDivElement>(null);
   const closing = useRef(false);
-  const mobile = useMediaQuery('(max-width: 640px)', false);
   const reduced = useReducedMotion();
 
   useEffect(() => openIfFirstVisit(), [openIfFirstVisit]);
@@ -45,6 +44,7 @@ export function WelcomeChoreography() {
     const node = root.current;
     if (!open || !node) return undefined;
     closing.current = false;
+    layoutPeeks(node); // antes de animar: ninguna tapa el letrero, los botones ni el chat
     const timeline = playWelcome(node, welcomeGeometry(window.innerWidth, window.innerHeight), reduced);
     const timer = window.setTimeout(requestClose, AUTO_CLOSE_MS);
     return () => {
@@ -59,10 +59,10 @@ export function WelcomeChoreography() {
   return createPortal(
     <div ref={root} role="dialog" aria-modal="true" aria-labelledby="welcome-sign" className="fixed inset-0 z-[150] overflow-hidden">
       <div className="welcome-backdrop" onClick={requestClose} aria-hidden="true" />
-      {PEEK_SLOTS.filter((slot) => !mobile || slot.mobile).map((slot) => (
-        <span key={slot.id} className="welcome-peek" data-edge={slot.edge}>
-          <span className="welcome-peek__body" data-edge={slot.edge}>
-            <SequenceSprite name="wave" height={mobile ? '36vh' : 'clamp(280px, 64vh, 640px)'} pose={slot.pose} phase={slot.phase} />
+      {PEEK_SLOTS.map((slot) => (
+        <span key={slot.id} className="welcome-peek" data-slot={slot.id}>
+          <span className="welcome-peek__body">
+            <SequenceSprite name="wave" height="var(--peek-h)" pose={slot.pose} phase={slot.phase} />
           </span>
         </span>
       ))}

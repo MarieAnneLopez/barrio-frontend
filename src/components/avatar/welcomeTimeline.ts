@@ -1,11 +1,12 @@
-// Coreografía de la bienvenida (§11.4.3, H33) con GSAP. Principal: el letrero "Hola";
-// apoyo: las Mini Marie que se asoman desde los bordes y el botón; decoración: confeti.
+// Coreografía de la bienvenida (§11.4.3, H33, D82) con GSAP. Principal: el letrero "Hola";
+// apoyo: las 8 Mini Marie que salen desde fuera de la pantalla y el botón; decoración: confeti.
 // Solo transform y opacity.
 import gsap from 'gsap';
-import { peekStart, type PeekEdge } from './welcomeGeometry';
 
 /** Desfases cortos y distintos: llegan casi juntas, sin sonar a metrónomo. */
-const PEEK_OFFSETS = [0, 0.07, 0.12];
+const PEEK_OFFSETS = [0, 0.06, 0.03, 0.09, 0.05, 0.11, 0.02, 0.08];
+/** Fuera de la pantalla: se corre hacia afuera su parte visible (46 %) y un poco más. */
+const OUTSIDE = 50;
 
 export interface WelcomeGeometry {
   confettiTargets: readonly { x: number; y: number }[];
@@ -21,12 +22,12 @@ export function playWelcome(root: HTMLElement, geometry: WelcomeGeometry, reduce
     return tl;
   }
   tl.fromTo(q('.welcome-backdrop'), { opacity: 0 }, { opacity: 1, duration: 0.24, ease: 'power2.out' }, 0);
+  // Cada una gira con su ranura: «abajo» en su propio eje es siempre hacia afuera del borde.
   q('.welcome-peek__body').forEach((element, i) => {
-    const start = peekStart((element.dataset.edge ?? 'left') as PeekEdge);
     tl.fromTo(
       element,
-      { ...start, opacity: 0 },
-      { xPercent: 0, yPercent: 0, opacity: 1, duration: 0.7, ease: 'back.out(1.4)' },
+      { xPercent: -50, yPercent: OUTSIDE },
+      { xPercent: -50, yPercent: 0, duration: 0.7, ease: 'back.out(1.4)' },
       PEEK_OFFSETS[i] ?? 0,
     );
   });

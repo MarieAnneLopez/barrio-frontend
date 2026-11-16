@@ -8,50 +8,35 @@
   backdrop-filter: blur(6px);
 }
 
-/* Mini Marie que se asoman (H33): la ranura las deja medio fuera del borde e
-   inclinadas; GSAP mueve solo el cuerpo interior, así no pisa esa colocación. */
+/* Mini Marie que se asoman (H33, D82): 8 anclas sin tamaño en las esquinas y el centro de
+   cada borde (JS las corre por el borde si chocan); la ancla gira para que la cabeza apunte
+   adentro y GSAP mueve solo el cuerpo, así no pisa esa colocación. Tamaño con clamp():
+   la suma de lo visible queda muy por debajo del 12 % de la pantalla. */
 .welcome-peek {
+  --peek-h: clamp(96px, 20vmin, 190px);
   position: absolute;
-  line-height: 0;
+  width: 0;
+  height: 0;
   pointer-events: none;
 }
 
-.welcome-peek[data-edge='left'] {
-  left: 0;
-  bottom: 6%;
-  transform: translateX(-30%) rotate(9deg);
-  transform-origin: 0 100%;
-}
+.welcome-peek[data-slot='tl'] { left: 0; top: 0; transform: rotate(135deg); }
+.welcome-peek[data-slot='top'] { left: 50%; top: 0; transform: rotate(180deg); }
+.welcome-peek[data-slot='tr'] { left: 100%; top: 0; transform: rotate(-135deg); }
+.welcome-peek[data-slot='right'] { left: 100%; top: 50%; transform: rotate(-90deg); }
+.welcome-peek[data-slot='br'] { left: 100%; top: 100%; transform: rotate(-45deg); }
+.welcome-peek[data-slot='bottom'] { left: 50%; top: 100%; }
+.welcome-peek[data-slot='bl'] { left: 0; top: 100%; transform: rotate(45deg); }
+.welcome-peek[data-slot='left'] { left: 0; top: 50%; transform: rotate(90deg); }
 
-.welcome-peek[data-edge='right'] {
-  right: 0;
-  bottom: 12%;
-  transform: translateX(16%) rotate(-8deg);
-  transform-origin: 100% 100%;
-}
-
-/* La de abajo solo saca la cabeza: no tapa el letrero ni el botón. */
-.welcome-peek[data-edge='bottom'] {
-  left: 50%;
-  bottom: 0;
-  transform: translate(-50%, 64%);
-}
-
+/* Asoma el 46 % de arriba (cabeza, hombros y la mano); el resto queda fuera del borde. */
 .welcome-peek__body {
+  position: absolute;
+  left: 0;
+  top: calc(var(--peek-h) * -0.46);
   display: block;
-}
-
-/* Móvil: más hacia los bordes y abajo, lejos del letrero y del botón. */
-@media (max-width: 640px) {
-  .welcome-peek[data-edge='left'] {
-    bottom: -2%;
-    transform: translateX(-36%) rotate(9deg);
-  }
-
-  .welcome-peek[data-edge='right'] {
-    bottom: 0;
-    transform: translateX(34%) rotate(-8deg);
-  }
+  line-height: 0;
+  transform: translateX(-50%);
 }
 
 .welcome-sign {

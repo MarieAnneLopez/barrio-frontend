@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { useA11yStore } from '../../store/a11yStore';
 import { renderRoute, setViewport } from '../../test/renderRoute';
+import { SLOTS } from './welcomePeeks';
 
 const SEEN = 'mini-marie:welcome-seen';
 const dialog = () => screen.queryByRole('dialog', { name: 'Hola' });
@@ -14,22 +15,22 @@ beforeEach(() => {
 });
 
 describe('Bienvenida de Mini Marie', () => {
-  it('se abre en la primera visita con 3 Mini Marie asomadas saludando, el letrero y el foco en el botón', async () => {
+  it('se abre en la primera visita con exactamente 8 Mini Marie saludando, el letrero y el foco en el botón', async () => {
     renderRoute('/');
 
     const welcome = await screen.findByRole('dialog', { name: 'Hola' });
     expect(welcome).toHaveAttribute('aria-modal', 'true');
     const peeks = welcome.querySelectorAll('.welcome-peek');
-    expect([...peeks].map((p) => p.getAttribute('data-edge'))).toEqual(['left', 'right', 'bottom']);
-    expect(welcome.querySelectorAll('.sequence[data-sequence="wave"][data-playing]')).toHaveLength(3);
+    expect([...peeks].map((p) => p.getAttribute('data-slot'))).toEqual(SLOTS);
+    expect(welcome.querySelectorAll('.sequence[data-sequence="wave"][data-playing]')).toHaveLength(8);
     await waitFor(() => expect(screen.getByRole('button', { name: '¡Hola! Explorar El Tintal' })).toHaveFocus());
   });
 
-  it('en móvil solo se asoman las de los lados', async () => {
+  it('en móvil también son exactamente 8: 4 esquinas y el centro de cada borde (D82)', async () => {
     setViewport(false);
     renderRoute('/');
     const welcome = await screen.findByRole('dialog', { name: 'Hola' });
-    expect([...welcome.querySelectorAll('.welcome-peek')].map((p) => p.getAttribute('data-edge'))).toEqual(['left', 'right']);
+    expect(welcome.querySelectorAll('.welcome-peek')).toHaveLength(8);
   });
 
   it('con movimiento reducido las poses quedan fijas (sin animar la tira)', async () => {
@@ -37,7 +38,7 @@ describe('Bienvenida de Mini Marie', () => {
     renderRoute('/');
     const welcome = await screen.findByRole('dialog', { name: 'Hola' });
     expect(welcome.querySelectorAll('.sequence[data-playing]')).toHaveLength(0);
-    const strip = welcome.querySelector<HTMLElement>('.welcome-peek[data-edge="left"] .sequence__strip');
+    const strip = welcome.querySelector<HTMLElement>('.welcome-peek[data-slot="top"] .sequence__strip');
     expect(strip?.style.transform).toMatch(/^translateX\(-28\.57\d*%\)$/); // cuadro 3 de 7: brazo arriba
   });
 
