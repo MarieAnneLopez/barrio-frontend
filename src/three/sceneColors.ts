@@ -1,26 +1,42 @@
-// Colores de la escena 3D desde la paleta v2 (docs/DISENO-V2.md §9), por rol.
+// Colores de la maqueta 3D desde la paleta verde de los mapas (D82, styles/map-palette.css),
+// por rol: maqueta clara y tranquila; la interfaz alrededor sigue en violeta.
 import { Color } from 'three';
-import { paletteColor } from '../lib/cssToken';
+import { mapColor } from '../lib/cssToken';
 
 export interface SceneColors {
-  /** Fondo y niebla. */
+  /** Cielo y niebla. */
   fondo: Color;
-  /** Suelo y base de los edificios. */
-  base: Color;
-  /** Bordes, luces y partículas. */
-  linea: Color;
+  /** Huella del barrio. */
+  suelo: Color;
+  /** Manzanas (zócalos bajos). */
+  manzana: Color;
+  /** Parques. */
+  parque: Color;
+  /** Base de los edificios. */
+  edificio: Color;
   /** Remate alto de los edificios. */
   alto: Color;
-  /** Realces: parques, vías y selección. */
-  realce: Color;
+  /** Aristas y partículas. */
+  borde: Color;
+  /** Vías. */
+  via: Color;
+  /** Filo de las vías principales. */
+  filo: Color;
+  /** Edificio elegido. */
+  seleccion: Color;
 }
 
 export function readSceneColors(): SceneColors {
   return {
-    fondo: new Color(paletteColor('oscuro')),
-    base: new Color(paletteColor('principal')),
-    linea: new Color(paletteColor('claro')),
-    alto: new Color(paletteColor('lavanda')),
-    realce: new Color(paletteColor('lavanda')),
+    fondo: new Color(mapColor('niebla')),
+    suelo: new Color(mapColor('brote')),
+    manzana: new Color(mapColor('follaje')),
+    parque: new Color(mapColor('menta')),
+    edificio: new Color(mapColor('follaje')),
+    alto: new Color(mapColor('niebla')),
+    borde: new Color(mapColor('hoja')),
+    via: new Color(mapColor('via')),
+    filo: new Color(mapColor('salvia')),
+    seleccion: new Color(mapColor('salvia')),
   };
 }

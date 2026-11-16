@@ -1,0 +1,21 @@
+/*
+ * Paleta propia de los mapas (D82, pedido de Marie): todo lo que se dibuja dentro de un mapa
+ * (2D, 3D, vista previa y marcadores) va en verdes; la interfaz que lo rodea sigue en violeta.
+ * Base medida con un script en "Barrio 3d ejemplo.jpeg" (k-means de sus verdes, matiz 138–160°);
+ * los claros se derivan con el mismo matiz para un mapa claro y tranquilo. Estilo propio:
+ * sin teselas, estilos ni íconos de terceros.
+ */
+:root {
+  /* Medidos en la referencia (peso entre sus verdes). */
+  --map-noche: #0e2c1c; /* 39,1 % · hsl(147 52% 11%) */
+  --map-bosque: #1e432c; /* 32,8 % · hsl(142 37% 19%) */
+  --map-hoja: #355e41; /* 18,8 % · hsl(138 28% 29%) */
+  --map-salvia: #4d8872; /* 6,2 % · hsl(158 28% 42%) */
+  --map-menta: #90dec5; /* 3,2 % · hsl(160 54% 72%) */
+  /* Derivados claros (matiz 137–142°). */
+  --map-follaje: #b7d8c2; /* edificios y zócalos */
+  --map-brote: #d3e8da; /* manzanas */
+  --map-niebla: #eaf4ed; /* suelo del barrio, cielo de la maqueta */
+  --map-fondo: #cfe0d4; /* alrededor del barrio */
+  --map-via: #ffffff; /* vías y placas de los marcadores */
+}

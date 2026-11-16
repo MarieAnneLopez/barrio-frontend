@@ -13,16 +13,16 @@ type Building = Feature<Polygon | MultiPolygon>;
 const heightOf = (f: Pick<Feature, 'properties'>) => levelsOf(f) * METERS_PER_LEVEL;
 const highlightHeight = (f: Pick<Feature, 'properties'>) => heightOf(f) + 0.6;
 
-/** Degradado navy → cobalt según la altura (ref. visual 1). */
+/** Degradado de verde follaje (base) a verde niebla (remate) según la altura (D82). */
 function paintByHeight(geometry: BufferGeometry, colors: SceneColors): void {
   const position = geometry.getAttribute('position');
   if (!position) return;
   geometry.computeBoundingBox();
   const top = Math.max(1, geometry.boundingBox?.max.y ?? 1);
   const values = new Float32Array(position.count * 3);
-  const mix = colors.base.clone();
+  const mix = colors.edificio.clone();
   for (let i = 0; i < position.count; i++) {
-    mix.copy(colors.base).lerp(colors.alto, Math.min(1, position.getY(i) / top));
+    mix.copy(colors.edificio).lerp(colors.alto, Math.min(1, position.getY(i) / top));
     values.set([mix.r, mix.g, mix.b], i * 3);
   }
   geometry.setAttribute('color', new Float32BufferAttribute(values, 3));
@@ -73,14 +73,14 @@ export function BuildingsLayer({ features, project, colors }: Props) {
   return (
     <group>
       <mesh geometry={geometry} onPointerMove={onMove} onPointerOut={onOut}>
-        <meshStandardMaterial vertexColors roughness={0.55} metalness={0.15} />
+        <meshStandardMaterial vertexColors roughness={0.85} metalness={0} />
       </mesh>
       <lineSegments geometry={edges}>
-        <lineBasicMaterial color={colors.linea} transparent opacity={0.55} />
+        <lineBasicMaterial color={colors.borde} transparent opacity={0.45} />
       </lineSegments>
       {highlight ? (
         <mesh geometry={highlight}>
-          <meshStandardMaterial color={colors.realce} emissive={colors.realce} emissiveIntensity={0.6} transparent opacity={0.85} />
+          <meshStandardMaterial color={colors.seleccion} emissive={colors.seleccion} emissiveIntensity={0.35} transparent opacity={0.9} />
         </mesh>
       ) : null}
     </group>

@@ -31,7 +31,7 @@ describe('paleta estricta (D79)', () => {
   });
 
   it('los CSS solo usan colores permitidos (sin amarillo fuera del sprite)', () => {
-    for (const [file, text] of sources('.css')) {
+    for (const [file, text] of sources('.css').filter(([f]) => !f.endsWith('map-palette.css'))) { // D82: aparte
       for (const [, hex] of text.matchAll(/#([0-9a-f]{6})\b/gi)) {
         expect(ALLOWED.has((hex ?? '').toLowerCase()), `${file}: #${hex}`).toBe(true);
       }

@@ -39,7 +39,7 @@ export function Particles({ size, colors, still }: Props) {
 
   return (
     <points ref={ref} geometry={geometry}>
-      <pointsMaterial color={colors.linea} size={2.2} sizeAttenuation={false} transparent opacity={0.45} depthWrite={false} />
+      <pointsMaterial color={colors.borde} size={2.2} sizeAttenuation={false} transparent opacity={0.3} depthWrite={false} />
     </points>
   );
 }

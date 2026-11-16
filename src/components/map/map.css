@@ -1,11 +1,12 @@
-/* Mapa temático: contenedor, marcadores emoji y controles en la paleta. */
+/* Mapa temático: lo de dentro (fondo y marcadores) en los verdes del mapa (D82);
+   el marco y los controles siguen en la paleta violeta de la interfaz. */
 .thematic-map {
   position: relative;
   min-height: 360px;
   overflow: hidden;
   border: 1px solid var(--border-subtle);
   border-radius: var(--r-lg);
-  background-color: var(--bg-primary);
+  background-color: var(--map-fondo);
 }
 
 /* maplibre-gl.css declara .maplibregl-map { position: relative } y se carga después:
@@ -21,9 +22,9 @@
   height: 40px;
   align-items: center;
   justify-content: center;
-  border: 2px solid var(--accent-soft);
+  border: 2px solid var(--map-hoja);
   border-radius: 9999px;
-  background-color: var(--bg-surface);
+  background-color: var(--map-via);
   font-size: 1.125rem;
   cursor: pointer;
   transition:
@@ -37,19 +38,19 @@
 }
 
 .map-marker[data-selected='true'] {
-  border-color: var(--interactive-active);
-  box-shadow: var(--glow-active);
+  border-color: var(--map-noche);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--map-salvia) 45%, transparent);
   transform: scale(1.12);
 }
 
 .map-marker:focus-visible {
-  outline: 2px solid var(--focus-ring);
+  outline: 2px solid var(--map-noche);
   outline-offset: 3px;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .map-marker:hover {
-    border-color: var(--interactive-active);
+    border-color: var(--map-noche);
   }
 }
 

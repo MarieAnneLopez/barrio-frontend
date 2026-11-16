@@ -20,7 +20,7 @@ export function Billboards({ places }: { places: readonly HeroPlace[] }) {
               aria-label={place.name}
               aria-pressed={active}
               onClick={() => select(active ? null : place)}
-              className={`map-marker ${active ? 'shadow-[var(--glow-active)]' : ''}`}
+              className="map-marker"
               data-selected={active}
             >
               <span aria-hidden="true">{place.emoji}</span>

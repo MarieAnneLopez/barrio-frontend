@@ -53,9 +53,10 @@ export default function TintalScene({ data, active, reducedMotion }: Props) {
     >
       <color attach="background" args={[colors.fondo]} />
       <fog attach="fog" args={[colors.fondo, radius * 0.9, radius * 3]} />
-      <ambientLight intensity={0.35} />
-      <directionalLight position={[-radius, radius * 1.4, radius * 0.6]} intensity={1.1} color={colors.linea} />
-      <directionalLight position={[radius, radius * 0.4, -radius]} intensity={0.9} color={colors.linea} />
+      {/* Luz de día (D82): cielo y suelo verdes suaves + sol blanco; sin luces de color. */}
+      <hemisphereLight args={[colors.fondo, colors.suelo, 1.1]} />
+      <directionalLight position={[-radius, radius * 1.4, radius * 0.6]} intensity={1.4} />
+      <directionalLight position={[radius, radius * 0.4, -radius]} intensity={0.35} />
       <GroundLayer base={base} project={project} colors={colors} />
       <RoadsLayer features={base.layers.vias.features} project={project} colors={colors} />
       <BuildingsLayer

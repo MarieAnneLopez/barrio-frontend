@@ -1,7 +1,7 @@
 import type { ExpressionSpecification, Map as MapLibreMap, MapLayerMouseEvent } from 'maplibre-gl';
 import { useEffect, useRef } from 'react';
 import type { ModuleFeatures } from '../../lib/apiTypes';
-import { paletteColor } from '../../lib/cssToken';
+import { mapColor } from '../../lib/cssToken';
 import { geometryBounds } from './geometryBounds';
 import { isMapAlive, removeLayersAndSource } from './mapCleanup';
 
@@ -31,9 +31,9 @@ export function useShapes({ map, features, selectedId, onSelect, reducedMotion }
     if (!map || !features) return undefined;
     const shapes = features.features.filter((f) => f.geometry && f.geometry.type !== 'Point');
     if (!shapes.length) return undefined;
-    // D79: la categoría va en oscuro con borde blanco: 4,90 contra el suelo claro y 8,40 contra la
-    // base lavanda; el blanco la separa además de todo lo demás (no solo el color la distingue).
-    const ink = paletteColor('oscuro');
+    // D82: la categoría va en verde bosque con borde blanco sobre la base verde clara; el blanco
+    // la separa además de todo lo demás (no solo el color la distingue).
+    const ink = mapColor('bosque');
     map.addSource(SHAPES_SOURCE, { type: 'geojson', data: { type: 'FeatureCollection', features: shapes } });
     map.addLayer({
       id: FILL_LAYER,

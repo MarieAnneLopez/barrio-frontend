@@ -38,13 +38,13 @@ export function GroundLayer({ base, project, colors }: Props) {
   return (
     <group>
       <mesh geometry={footprint} position-y={-0.6}>
-        <meshStandardMaterial color={colors.base} roughness={0.95} />
+        <meshStandardMaterial color={colors.suelo} roughness={0.95} />
       </mesh>
       <mesh geometry={blocks}>
-        <meshStandardMaterial color={colors.base} emissive={colors.alto} emissiveIntensity={0.08} roughness={0.8} />
+        <meshStandardMaterial color={colors.manzana} roughness={0.9} />
       </mesh>
       <mesh geometry={parks}>
-        <meshStandardMaterial color={colors.realce} transparent opacity={0.32} roughness={1} />
+        <meshStandardMaterial color={colors.parque} roughness={1} />
       </mesh>
     </group>
   );

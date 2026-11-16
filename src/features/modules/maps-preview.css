@@ -1,4 +1,4 @@
-/* Vista previa que lleva a Google Maps: mapa propio con la paleta D68, sin animación. */
+/* Vista previa que lleva a Google Maps: mapa propio en los verdes del mapa (D82), sin animación. */
 .maps-preview {
   position: relative;
   display: block;
@@ -8,19 +8,19 @@
 }
 
 .maps-preview__ground {
-  fill: var(--palette-claro);
+  fill: var(--map-niebla);
 }
 
 .maps-preview__parks {
-  fill: var(--palette-lavanda);
-  fill-opacity: 0.55;
+  fill: var(--map-menta);
+  fill-opacity: 0.8;
 }
 
 .maps-preview__blocks {
-  fill: var(--palette-principal);
-  fill-opacity: 0.35;
-  stroke: var(--palette-principal);
-  stroke-opacity: 0.5;
+  fill: var(--map-brote);
+  fill-opacity: 1;
+  stroke: var(--map-follaje);
+  stroke-opacity: 1;
   stroke-width: 0.6;
 }
 
@@ -33,14 +33,14 @@
 }
 
 .maps-preview__place {
-  fill: var(--palette-lavanda);
-  fill-opacity: 0.6;
-  stroke: var(--palette-oscuro);
+  fill: var(--map-salvia);
+  fill-opacity: 0.5;
+  stroke: var(--map-bosque);
   stroke-width: 3;
 }
 
 .maps-preview__pin {
-  fill: var(--palette-oscuro);
+  fill: var(--map-noche);
   stroke: #fff;
   stroke-width: 2;
 }

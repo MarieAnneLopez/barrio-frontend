@@ -15,8 +15,8 @@ interface Props {
 }
 
 /**
- * Ejes viales como cintas: las principales oscuras con filo activo azul
- * (una cinta azul más ancha debajo) y la red local como trazo tenue.
+ * Ejes viales como cintas claras (D82): las principales blancas con filo verde
+ * (una cinta más ancha debajo) y la red local blanca y más fina.
  */
 export function RoadsLayer({ features, project, colors }: Props) {
   const geometries = useMemo(() => {
@@ -33,13 +33,13 @@ export function RoadsLayer({ features, project, colors }: Props) {
   return (
     <group>
       <mesh geometry={geometries.edge}>
-        <meshBasicMaterial color={colors.realce} side={DoubleSide} transparent opacity={0.85} />
+        <meshBasicMaterial color={colors.filo} side={DoubleSide} transparent opacity={0.7} />
       </mesh>
       <mesh geometry={geometries.core}>
-        <meshBasicMaterial color={colors.fondo} side={DoubleSide} />
+        <meshBasicMaterial color={colors.via} side={DoubleSide} />
       </mesh>
       <mesh geometry={geometries.local}>
-        <meshBasicMaterial color={colors.linea} side={DoubleSide} transparent opacity={0.28} />
+        <meshBasicMaterial color={colors.via} side={DoubleSide} transparent opacity={0.9} />
       </mesh>
     </group>
   );
