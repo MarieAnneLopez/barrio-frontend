@@ -1,0 +1,18 @@
+import { useLayoutEffect, type RefObject } from 'react';
+import { layoutPeeks } from './welcomeGeometry';
+
+/**
+ * Vuelve a anclar las asomadas de la bienvenida si la pantalla cambia mientras está abierta (girar el
+ * móvil, cruzar 640 px): en cada `resize` y, tras el nuevo render, cuando cambia su escala (160 ↔ 80 px).
+ * Solo mueve los contenedores (left/top y el giro); la animación va en su cuerpo y sigue su curso.
+ */
+export function useWelcomeRelayout(root: RefObject<HTMLElement>, open: boolean, size: number): void {
+  useLayoutEffect(() => {
+    const node = root.current;
+    if (!open || !node) return undefined;
+    layoutPeeks(node);
+    const relayout = () => layoutPeeks(node);
+    window.addEventListener('resize', relayout);
+    return () => window.removeEventListener('resize', relayout);
+  }, [root, open, size]);
+}

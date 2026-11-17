@@ -12,6 +12,7 @@ import { SequenceSprite } from './SequenceSprite';
 import { CONFETTI_COUNT, layoutPeeks, PEEK_SLOTS, welcomeGeometry } from './welcomeGeometry';
 import { VISIBLE } from './welcomePeeks';
 import { exitWelcome, playWelcome } from './welcomeTimeline';
+import { useWelcomeRelayout } from './useWelcomeRelayout';
 
 const AUTO_CLOSE_MS = 3800;
 
@@ -57,6 +58,7 @@ export function WelcomeChoreography() {
       window.clearTimeout(timer);
     };
   }, [open, reduced, requestClose]);
+  useWelcomeRelayout(root, open, size);
 
   if (!open) return null;
   const sign = t('welcome.sign');
