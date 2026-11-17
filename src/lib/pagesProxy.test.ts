@@ -40,6 +40,15 @@ describe('Proxy de Cloudflare Pages (D62)', () => {
     expect(headers.get('x-client-ip')).toBe('190.1.2.3'); // la IP real viaja solo por la cabecera del proxy
   });
 
+  it('/api/_wake no se reenvía: redirige al navegador a la API para que la despierte él mismo (D91)', async () => {
+    const backend = vi.fn(async () => new Response('[]'));
+    vi.stubGlobal('fetch', backend);
+    const response = await proxyToBackend(new Request('https://t.dev/api/_wake'), { BACKEND_URL: 'https://api.onrender.com' });
+    expect([response.status, response.headers.get('location')]).toEqual([302, 'https://api.onrender.com/api/v1/health']);
+    expect(response.headers.get('cache-control')).toBe('no-store');
+    expect(backend).not.toHaveBeenCalled();
+  });
+
   it('sin clave no reenvía cabeceras de IP; sin backend o caído responde con el formato de error', async () => {
     const backend = vi.fn(async () => new Response('[]'));
     vi.stubGlobal('fetch', backend);

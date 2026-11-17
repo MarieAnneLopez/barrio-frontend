@@ -15,13 +15,16 @@ export interface ProxyEnv {
  * despierta (sin límite de duración en Workers HTTP; ~30 subpeticiones de 50 posibles).
  */
 export const WAKE = { totalMs: 75_000, stepMs: 2_500 };
+// Las peticiones del proxy no despiertan a Render (medido el 2026-11-16: minutos de 502), pero una
+// directa sí (~55 s). El navegador pide esta ruta al abrir la app y aquí se le redirige a la API:
+// su segunda petición ya es directa y la despierta (D91). Mientras, el proxy espera y reintenta.
+export const WAKE_PATH = '/api/_wake';
 const ASLEEP = new Set([502, 503, 504]);
 const pause = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // Cabeceras que no se reenvían: las que solo puede poner el proxy (nadie de afuera puede hacerse
-// pasar por él), las de salto a salto y las que Cloudflare añadió por el camino. Con estas
-// últimas, Render respondía 502 al instante con la API dormida y no la despertaba (medido el
-// 2026-11-16: 76 s de reintentos por el proxy sin efecto; la llamada directa la despertó en 53 s).
+// pasar por él), las de salto a salto y las que Cloudflare añadió por el camino, que no son de la
+// aplicación. (Quitarlas no bastó para que el proxy despertara a Render: ver WAKE_PATH.)
 const DROPPED = new Set(['host', 'x-proxy-secret', 'x-client-ip', 'x-real-ip', 'cdn-loop', 'connection', 'keep-alive',
   'transfer-encoding', 'upgrade']);
 const DROPPED_PREFIX = ['cf-', 'x-forwarded-'];
@@ -61,6 +64,10 @@ const json = (status: number, code: string, message: string) =>
 export async function proxyToBackend(request: Request, env: ProxyEnv, wake = WAKE): Promise<Response> {
   if (!env.BACKEND_URL) return json(503, 'BACKEND_NOT_CONFIGURED', 'Falta BACKEND_URL en Cloudflare Pages');
   const incoming = new URL(request.url);
+  if (incoming.pathname === WAKE_PATH) {
+    const headers = { Location: new URL('/api/v1/health', env.BACKEND_URL).href, 'Cache-Control': 'no-store' };
+    return new Response(null, { status: 302, headers });
+  }
   const target = new URL(`${incoming.pathname}${incoming.search}`, env.BACKEND_URL);
   const init: RequestInit = { method: request.method, headers: forwardedHeaders(request, env), redirect: 'manual' };
   if (request.method !== 'GET' && request.method !== 'HEAD') init.body = await request.arrayBuffer();
