@@ -1,0 +1,34 @@
+/* Estados de la animación del manifiesto (capítulo 1). Sin data-done (antes y durante la animación)
+   las palabras esperan invisibles y el papel, cerrado. El rAF escribe encima transform, opacity y
+   el recorte en elipse (la única animación que no es transform ni opacity: la fija la
+   especificación). Con data-done ya no queda nada en línea y manda la hoja, que es el estado final. */
+.manifesto:not([data-done]) .manifesto__word {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.manifesto:not([data-done]) .manifesto__layer--papel {
+  clip-path: ellipse(20% 0% at 100% 100%);
+}
+
+/* Respaldo de movimiento reducido (sistema o barra de accesibilidad): estado final aunque el
+   script aún no haya reaccionado. El componente, además, no anima (useReducedMotion). */
+@media (prefers-reduced-motion: reduce) {
+  .manifesto .manifesto__word {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .manifesto .manifesto__layer--papel {
+    clip-path: none !important;
+  }
+}
+
+:root.reduce-motion .manifesto .manifesto__word {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+:root.reduce-motion .manifesto .manifesto__layer--papel {
+  clip-path: none !important;
+}

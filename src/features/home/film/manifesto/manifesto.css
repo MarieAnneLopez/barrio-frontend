@@ -1,0 +1,58 @@
+/* Capítulo 1 del Inicio: manifiesto elástico (docs/superpowers/specs, §6). Dos capas idénticas a
+   toda la sección: noche con texto papel y, encima, papel con texto noche, que un recorte en elipse
+   va destapando; así el texto nunca queda noche sobre noche. El header fijo (4rem) flota encima:
+   cada capa deja libre esa franja. El titular va en manifesto-title.css y los estados de la
+   animación, en manifesto-motion.css. */
+.manifesto {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  container-type: inline-size; /* el titular se mide con el ancho de la sección (cqw) */
+  background-color: var(--bg-primary);
+}
+
+.manifesto__layer {
+  --gutter: max(1rem, 5vw);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 4rem var(--gutter) 2rem;
+}
+
+.manifesto__layer--noche {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.manifesto__layer--papel {
+  background-color: var(--bg-accent);
+  color: var(--text-on-accent);
+}
+
+/* Pie: la flecha, de línea fina, y a su derecha el lema. Deja libre la esquina de abajo a la
+   derecha (10rem desde el borde), donde flotan los botones del chat y de WhatsApp. */
+.manifesto__foot {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.25rem;
+  margin-right: max(0px, calc(10rem - var(--gutter)));
+}
+
+.manifesto__tagline {
+  max-width: 28ch;
+  font-family: var(--ff-serif);
+  font-size: var(--step-2);
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.manifesto__arrow {
+  flex: none;
+  width: auto;
+  height: clamp(4rem, 7vw, 6rem);
+  stroke-width: 1px;
+}
