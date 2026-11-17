@@ -18,6 +18,27 @@ export const WAKE = { totalMs: 75_000, stepMs: 2_500 };
 const ASLEEP = new Set([502, 503, 504]);
 const pause = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// Cabeceras que no se reenvían: las que solo puede poner el proxy (nadie de afuera puede hacerse
+// pasar por él), las de salto a salto y las que Cloudflare añadió por el camino. Con estas
+// últimas, Render respondía 502 al instante con la API dormida y no la despertaba (medido el
+// 2026-11-16: 76 s de reintentos por el proxy sin efecto; la llamada directa la despertó en 53 s).
+const DROPPED = new Set(['host', 'x-proxy-secret', 'x-client-ip', 'x-real-ip', 'cdn-loop', 'connection', 'keep-alive',
+  'transfer-encoding', 'upgrade']);
+const DROPPED_PREFIX = ['cf-', 'x-forwarded-'];
+
+function forwardedHeaders(request: Request, env: ProxyEnv): Headers {
+  const headers = new Headers();
+  request.headers.forEach((value, name) => {
+    const key = name.toLowerCase();
+    if (!DROPPED.has(key) && !DROPPED_PREFIX.some((prefix) => key.startsWith(prefix))) headers.set(name, value);
+  });
+  if (env.PROXY_SECRET) {
+    headers.set('x-proxy-secret', env.PROXY_SECRET);
+    headers.set('x-client-ip', request.headers.get('cf-connecting-ip') ?? '');
+  }
+  return headers;
+}
+
 async function fetchAwake(target: URL, init: RequestInit, wake: typeof WAKE): Promise<Response | null> {
   const deadline = Date.now() + wake.totalMs;
   for (;;) {
@@ -41,14 +62,7 @@ export async function proxyToBackend(request: Request, env: ProxyEnv, wake = WAK
   if (!env.BACKEND_URL) return json(503, 'BACKEND_NOT_CONFIGURED', 'Falta BACKEND_URL en Cloudflare Pages');
   const incoming = new URL(request.url);
   const target = new URL(`${incoming.pathname}${incoming.search}`, env.BACKEND_URL);
-  const headers = new Headers(request.headers);
-  // Nadie de afuera puede hacerse pasar por el proxy: estas cabeceras solo las pone él.
-  ['host', 'x-proxy-secret', 'x-client-ip'].forEach((name) => headers.delete(name));
-  if (env.PROXY_SECRET) {
-    headers.set('x-proxy-secret', env.PROXY_SECRET);
-    headers.set('x-client-ip', request.headers.get('cf-connecting-ip') ?? '');
-  }
-  const init: RequestInit = { method: request.method, headers, redirect: 'manual' };
+  const init: RequestInit = { method: request.method, headers: forwardedHeaders(request, env), redirect: 'manual' };
   if (request.method !== 'GET' && request.method !== 'HEAD') init.body = await request.arrayBuffer();
   const response = await fetchAwake(target, init, wake);
   if (response) return new Response(response.body, response);

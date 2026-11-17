@@ -26,6 +26,20 @@ describe('Proxy de Cloudflare Pages (D62)', () => {
     expect(response.headers.get('set-cookie')).toContain('HttpOnly');
   });
 
+  it('no reenvía las cabeceras que Cloudflare añadió por el camino (cf-, x-forwarded-, cdn-loop…), sí las de la app', async () => {
+    const backend = vi.fn<(url: URL, init?: RequestInit) => Promise<Response>>(async () => new Response('[]'));
+    vi.stubGlobal('fetch', backend);
+    const edge = { 'cf-ray': '8a1', 'cf-ipcountry': 'CO', 'cf-visitor': '{}', 'cf-connecting-ip': '190.1.2.3', 'cdn-loop': 'cloudflare',
+      'x-forwarded-for': '190.1.2.3', 'x-forwarded-proto': 'https', 'x-real-ip': '190.1.2.3', connection: 'keep-alive' };
+    const app = { cookie: 'mm_session=y', accept: 'application/json', 'accept-language': 'es', 'content-type': 'application/json', origin: 'https://t.dev' };
+    await proxyToBackend(new Request('https://t.dev/api/v1/barberias', { headers: { ...edge, ...app } }),
+      { BACKEND_URL: 'https://api.onrender.com', PROXY_SECRET: 'clave' });
+    const headers = (backend.mock.calls[0] as [URL, RequestInit])[1].headers as Headers;
+    for (const name of Object.keys(edge)) expect(headers.get(name), name).toBeNull();
+    for (const [name, value] of Object.entries(app)) expect(headers.get(name), name).toBe(value);
+    expect(headers.get('x-client-ip')).toBe('190.1.2.3'); // la IP real viaja solo por la cabecera del proxy
+  });
+
   it('sin clave no reenvía cabeceras de IP; sin backend o caído responde con el formato de error', async () => {
     const backend = vi.fn(async () => new Response('[]'));
     vi.stubGlobal('fetch', backend);
