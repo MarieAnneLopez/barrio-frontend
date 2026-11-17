@@ -1,0 +1,53 @@
+/* Titular del capítulo 4, en la display. Va en dos trozos que flanquean la tarjeta central y se meten
+   un poco bajo ella (el lienzo se dibuja encima), lo justo para que las letras se sigan leyendo. El
+   motor publica en el escenario el tamaño de esa tarjeta (--reel-card-w, --reel-card-h) y el hueco
+   que deja a cada lado (--reel-room); los valores de respaldo son solo para el primer pintado. */
+.reel-title {
+  margin: 0;
+  font-family: var(--ff-display);
+  font-size: min(calc(var(--reel-card-h, 30vw) * 0.5), calc((var(--reel-room, 30vw) - 1.5rem) / 2.35));
+  font-style: normal;
+  font-weight: 400;
+  font-synthesis: none;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.reel-title span {
+  position: absolute;
+  white-space: nowrap;
+}
+
+/* A lo ancho: el primer trozo va arriba a la izquierda y mete su esquina inferior derecha bajo la tarjeta. */
+.reel-title span:first-child {
+  right: calc(50% + var(--reel-card-w, 40vw) * 0.5 - 0.1em);
+  bottom: calc(50% - 2rem + var(--reel-card-h, 30vw) * 0.5 - 0.39em);
+}
+
+/* El segundo va abajo a la derecha y mete su esquina superior izquierda. */
+.reel-title span:last-child {
+  top: calc(50% + 2rem + var(--reel-card-h, 30vw) * 0.5 - 0.365em);
+  left: calc(50% + var(--reel-card-w, 40vw) * 0.5 - 0.1em);
+}
+
+/* En vertical la tarjeta ocupa casi todo el ancho: el titular va encima y debajo, alineado con sus
+   bordes y con el pie (o la cabeza) de las letras apenas metido bajo ella. */
+@media (max-aspect-ratio: 1/1) {
+  .reel-title {
+    font-size: calc(var(--reel-card-w, 77vw) * 0.4);
+  }
+
+  .reel-title span:first-child {
+    right: auto;
+    bottom: calc(50% - 2rem + var(--reel-card-h, 50vw) * 0.5 - 0.16em);
+    left: calc(50% - var(--reel-card-w, 77vw) * 0.5);
+  }
+
+  .reel-title span:last-child {
+    top: calc(50% + 2rem + var(--reel-card-h, 50vw) * 0.5 - 0.135em);
+    right: calc(50% - var(--reel-card-w, 77vw) * 0.5);
+    left: auto;
+  }
+}

@@ -1,0 +1,98 @@
+/* Capítulo 4 del Inicio: reel curvo de módulos. La sección mide 300svh: su pantalla (sticky, 100svh)
+   se queda fija mientras pasan 200svh de recorrido, que el motor convierte en avance. Solo tokens
+   semánticos, así el alto contraste sigue funcionando; lo que se mueve lo dibuja el lienzo WebGL. */
+.reel {
+  position: relative;
+  height: 300vh;
+  height: 300svh;
+  background-color: var(--bg-accent);
+}
+
+/* Pantalla fija: papel con grano de puntos de 6 px. Los 4rem de arriba son del header, que flota encima. */
+.reel-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  padding-top: 4rem;
+  overflow: hidden;
+  overflow: clip;
+  background-color: var(--bg-accent);
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--text-on-accent) 22%, transparent) 0.6px, transparent 1.1px);
+  background-size: 6px 6px;
+}
+
+/* Contenedor del lienzo: todo el escenario bajo el header. Con el dedo, lo vertical sigue siendo scroll. */
+.reel-frame {
+  position: absolute;
+  inset: 4rem 0 0;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.reel-frame[data-dragging] {
+  cursor: grabbing;
+}
+
+/* Hasta que llega el motor el lienzo no se ve ni estorba a la rejilla, pero ya ocupa su sitio. */
+.reel[data-mode='pending'] .reel-frame {
+  visibility: hidden;
+}
+
+.reel-frame canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Foco doble por dentro (ámbar fuera, noche dentro): por fuera lo recortaría el escenario. */
+.reel-frame:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+  box-shadow: inset 0 0 0 4px var(--focus-ring-inner);
+}
+
+/* Pista inferior: la única copia además del titular. No estorba al arrastre. */
+.reel-hint {
+  position: absolute;
+  right: 0;
+  bottom: 1.25rem;
+  left: 0;
+  margin: 0;
+  font-family: var(--ff-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  line-height: 1.6;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  pointer-events: none;
+}
+
+/* En pantallas estrechas el chat y WhatsApp ocupan la esquina inferior: la pista sube por encima. */
+@media (max-width: 639px) {
+  .reel-hint {
+    bottom: 5.5rem;
+  }
+}
+
+/* Movimiento reducido (sistema o barra de accesibilidad): sin recorrido; queda una sola pantalla. */
+@media (prefers-reduced-motion: reduce) {
+  .reel {
+    height: auto;
+  }
+
+  .reel-stage {
+    position: relative;
+  }
+}
+
+:root.reduce-motion .reel {
+  height: auto;
+}
+
+:root.reduce-motion .reel-stage {
+  position: relative;
+}
