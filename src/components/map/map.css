@@ -18,6 +18,14 @@
   inset: 0;
 }
 
+/* Igual con los marcadores: maplibre-gl.css los coloca con position: absolute y marker.css les da
+   relative (lo necesitan los de la maqueta 3D). Con la misma especificidad gana la hoja que llegue
+   después, y eso depende de cómo reparta el build los trozos: si gana relative, los marcadores se
+   colocan en fila y no señalan su lugar (e2e/map.spec.ts). Este selector gana en cualquier orden. */
+.maplibregl-marker.map-marker {
+  position: absolute;
+}
+
 .thematic-map .maplibregl-ctrl-group {
   border: 1px solid var(--map-suelo);
   background-color: var(--map-control);
