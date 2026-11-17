@@ -690,5 +690,31 @@
     "count_one": "{{count}} photo",
     "count_other": "{{count}} photos",
     "link": "Photo credits"
+  },
+  "home": {
+    "manifesto": {
+      "label": "Know your barrio. El Tintal.",
+      "lines": [
+        [
+          "KNOW",
+          "YOUR"
+        ],
+        [
+          "BARRIO"
+        ],
+        [
+          "EL",
+          "TINTAL."
+        ]
+      ]
+    },
+    "flight": {
+      "label": "Photos of El Tintal"
+    },
+    "reel": {
+      "label": "The 14 neighborhood modules",
+      "hint": "Scroll or drag to explore",
+      "current": "Module {{n}} of {{total}}: {{name}}. Press Enter to open it."
+    }
   }
 }

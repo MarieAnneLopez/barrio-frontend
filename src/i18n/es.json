@@ -690,5 +690,31 @@
     "count_one": "{{count}} foto",
     "count_other": "{{count}} fotos",
     "link": "Créditos de fotos"
+  },
+  "home": {
+    "manifesto": {
+      "label": "Reconoce tu barrio. El Tintal.",
+      "lines": [
+        [
+          "RECONOCE",
+          "TU"
+        ],
+        [
+          "BARRIO"
+        ],
+        [
+          "EL",
+          "TINTAL."
+        ]
+      ]
+    },
+    "flight": {
+      "label": "Fotos de El Tintal"
+    },
+    "reel": {
+      "label": "Los 14 módulos del barrio",
+      "hint": "Desplaza o arrastra para explorar",
+      "current": "Módulo {{n}} de {{total}}: {{name}}. Pulsa Enter para abrirlo."
+    }
   }
 }
