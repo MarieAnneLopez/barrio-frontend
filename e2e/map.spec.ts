@@ -23,3 +23,16 @@ test('mapa del módulo: cada marcador va en su sitio, no en fila', async ({ page
   });
   expect(new Set(await positions(page)), 'llegando desde el Inicio').toEqual(new Set(['absolute']));
 });
+
+// maplibre-gl.css pone Helvetica Neue a todo el mapa y un anillo de 2 px a los controles; la interfaz
+// usa Inter (como las etiquetas de la maqueta 3D) y no lleva sombras duras (§10).
+test('mapa del módulo: etiquetas en Inter y controles sin el anillo de maplibre', async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.setItem('mini-marie:welcome-seen', 'true'));
+  await page.goto('/categorias/centros-educativos');
+  const label = page.locator('.thematic-map .map-marker__label').first();
+  await expect(label).toBeAttached({ timeout: 30_000 });
+  expect(await label.evaluate((el) => getComputedStyle(el).fontFamily)).toMatch(/^"?Inter/);
+  const shadows = await page.locator('.thematic-map .maplibregl-ctrl-group').evaluateAll((list) => list.map((el) => getComputedStyle(el).boxShadow));
+  expect(shadows.length).toBeGreaterThan(0);
+  expect(new Set(shadows)).toEqual(new Set(['none']));
+});

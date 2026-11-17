@@ -11,11 +11,13 @@
   background-color: var(--map-fondo);
 }
 
-/* maplibre-gl.css declara .maplibregl-map { position: relative } y se carga después:
-   este selector (más específico) asegura que el mapa ocupe todo el contenedor. */
+/* maplibre-gl.css declara .maplibregl-map { position: relative; font: … Helvetica Neue } y se carga
+   después: este selector (más específico) asegura que el mapa ocupe todo el contenedor y que sus
+   textos (etiquetas de los marcadores, atribución) vayan en la tipografía de la interfaz. */
 .thematic-map .maplibregl-map {
   position: absolute;
   inset: 0;
+  font-family: var(--ff-body);
 }
 
 /* Igual con los marcadores: maplibre-gl.css los coloca con position: absolute y marker.css les da
@@ -29,6 +31,12 @@
 .thematic-map .maplibregl-ctrl-group {
   border: 1px solid var(--map-suelo);
   background-color: var(--map-control);
+}
+
+/* Sin el anillo de 2 px que maplibre pone a los controles (.maplibregl-ctrl-group:not(:empty), de
+   igual especificidad que la regla de arriba): ya llevan su línea de 1 px y no hay sombras duras. */
+.thematic-map .maplibregl-ctrl-group:not(:empty) {
+  box-shadow: none;
 }
 
 .thematic-map .maplibregl-ctrl-group button + button {
