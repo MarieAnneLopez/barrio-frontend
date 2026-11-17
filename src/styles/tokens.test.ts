@@ -3,6 +3,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { contrastRatio, over, parseVars, resolveColor } from '../test/colorMath';
+import { colorsIn } from '../test/paletteScan';
 
 // Lectura directa: con `css: false`, Vitest entrega los .css?raw vacíos.
 const srcDir = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -20,7 +21,6 @@ const ALLOWED = new Set([
   'ffffff', '000000', // alto contraste y sombras
   '86efac', 'fdba74', 'fca5a5', // estados semánticos
 ]);
-const ALLOWED_RGB = new Set([...ALLOWED].map((h) => [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16)).join(' ')));
 
 describe('paleta estricta (D84)', () => {
   it('lee de verdad los estilos', () => {
@@ -30,18 +30,14 @@ describe('paleta estricta (D84)', () => {
 
   it('los CSS solo usan colores de la paleta (sin violeta; el tema de los mapas va aparte)', () => {
     for (const [file, text] of sources('.css').filter(([f]) => !f.endsWith('map-palette.css'))) {
-      for (const [, hex] of text.matchAll(/#([0-9a-f]{6})\b/gi)) {
-        expect(ALLOWED.has((hex ?? '').toLowerCase()), `${file}: #${hex}`).toBe(true);
-      }
-      for (const [, r, g, b] of text.matchAll(/rgba?\((\d+)[\s,]+(\d+)[\s,]+(\d+)/g)) {
-        expect(ALLOWED_RGB.has(`${r} ${g} ${b}`), `${file}: rgb(${r} ${g} ${b})`).toBe(true);
-      }
+      // Hex de 3 a 8 cifras, rgb(), funciones de color y nombres de color (src/test/paletteScan.ts).
+      for (const color of colorsIn(text)) expect(ALLOWED.has(color), `${file}: ${color}`).toBe(true);
     }
   });
 
   it('los componentes no escriben hex sueltos: usan tokens', () => {
-    for (const [file, text] of sources('.tsx')) {
-      expect(text.match(/#[0-9a-f]{6}\b/gi), file).toBeNull();
+    for (const [file, text] of sources('.tsx').filter(([f]) => !f.includes('.test.'))) {
+      expect(text.match(/#[0-9a-f]{3,8}\b/gi), file).toBeNull();
     }
   });
 });
