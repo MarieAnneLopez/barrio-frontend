@@ -51,6 +51,7 @@ describe('SequenceSprite a escala entera (D86)', () => {
   });
 
   it('rechaza un tamaño que no es de la secuencia (nada de escalas intermedias)', () => {
+    // @ts-expect-error: tampoco compila (spriteSizes.test.tsx); aquí se prueba la guarda al pintar
     expect(() => render(<SequenceSprite name="sit" size={36} />)).toThrow(/sit/);
   });
 

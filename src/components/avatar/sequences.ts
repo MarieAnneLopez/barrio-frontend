@@ -20,6 +20,13 @@ export const SPRITE_SIZES: Record<SequenceName, readonly number[]> = {
   idle: scales.idle.sizes,
 };
 
+/**
+ * Los mismos tamaños como tipos, para que uno que la secuencia no tiene no compile. Deben coincidir
+ * con spriteScales.json, que genera `npm run sprites` (lo vigila spriteSizes.test.tsx).
+ */
+export const SIZES = { wave: [80, 160, 320, 640], run: [210, 420], sit: [48, 96, 192], idle: [140, 280, 560] } as const;
+export type SpriteSize<N extends SequenceName> = (typeof SIZES)[N][number];
+
 /** Cuadros de la secuencia y sus tamaños disponibles. */
 export function sequenceSpec(name: SequenceName): { frames: number; sizes: readonly number[] } {
   return { frames: scales[name].frames, sizes: SPRITE_SIZES[name] };

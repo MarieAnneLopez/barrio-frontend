@@ -2,12 +2,12 @@ import './sequence.css';
 import type { CSSProperties } from 'react';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { denserThan } from '../../lib/density';
-import { cellWidth, FRAME_MS, sequenceSpec, spriteUrl, type SequenceName } from './sequences';
+import { cellWidth, FRAME_MS, sequenceSpec, spriteUrl, type SequenceName, type SpriteSize } from './sequences';
 
-interface Props {
-  name: SequenceName;
-  /** Alto en px: uno de los tamaños fijos de la secuencia (escala entera, D86). */
-  size: number;
+interface Props<N extends SequenceName> {
+  name: N;
+  /** Alto en px: uno de los tamaños fijos de la secuencia (escala entera, D86); otro no compila. */
+  size: SpriteSize<N>;
   /** Pose fija (índice desde 0) con movimiento reducido o si playing = false. */
   pose?: number;
   playing?: boolean;
@@ -27,7 +27,7 @@ const DENSER = [[4, 2.01], [2, 1.01]] as const;
  * con el pequeño y lo estiraría). Movimiento reducido: pose estática. Decorativa: el texto lo da
  * quien la usa.
  */
-export function SequenceSprite({ name, size, pose = 0, playing = true, phase = 0, className = '' }: Props) {
+export function SequenceSprite<N extends SequenceName>({ name, size, pose = 0, playing = true, phase = 0, className = '' }: Props<N>) {
   const reduced = useReducedMotion();
   const { frames, sizes } = sequenceSpec(name);
   const width = cellWidth(name, size);
