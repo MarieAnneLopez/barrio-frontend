@@ -1,16 +1,6 @@
-import { useTranslation } from 'react-i18next';
-import { HeroSection } from '../home/HeroSection';
-import { NeighborhoodCarousel } from '../home/NeighborhoodCarousel';
-import { PageHeader } from './PageHeader';
+import { HomeFilm } from '../home/film/HomeFilm';
 
-/** Inicio: título, Hero 3D (H10) y carrusel del entorno (H11). */
+/** Inicio: la película de scroll en 4 capítulos (etapa 3). La ruta pide todo el ancho (`bleed`). */
 export function HomePage() {
-  const { t } = useTranslation();
-  return (
-    <div className="flex flex-col gap-8">
-      <PageHeader eyebrow={t('app.location')} title={t('app.title')} description={t('app.tagline')} />
-      <HeroSection />
-      <NeighborhoodCarousel />
-    </div>
-  );
+  return <HomeFilm />;
 }

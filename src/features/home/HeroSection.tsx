@@ -7,16 +7,32 @@ import { HeroHud } from './HeroHud';
 import { HeroLegend } from './HeroLegend';
 import { SittingMarie } from './SittingMarie';
 
+type Variant = 'page' | 'stage';
+
+const FRAME: Record<Variant, string> = {
+  // Mapa 3D: recuadro casi a pantalla completa, con una línea de 1 px.
+  page: '-mx-4 h-[calc(100dvh-12rem)] min-h-[480px] border-y border-line-strong md:mx-0 md:rounded-sm md:border',
+  // Inicio (capítulo 3): ocupa todo su contenedor sticky, sin marco.
+  stage: 'h-full',
+};
+
+/** La rueda sin Ctrl ni ⌘ no llega a los controles de la maqueta: desplaza la página. Sin preventDefault. */
+function scrollsThePage(event: WheelEvent) {
+  if (!event.ctrlKey && !event.metaKey) event.stopPropagation();
+}
+
 /**
- * Hero Stage (§11.1.1): maqueta 3D de El Tintal a 72–80vh con HUD de vidrio.
- * En /mapa (variant="page") ocupa casi toda la pantalla. La escena vive en el shell
- * (ScenePortal, D83): aquí solo se le presta el recuadro, así no se recrea al cambiar de sección.
+ * Recuadro de la maqueta 3D de El Tintal con su HUD. La escena vive en el shell (ScenePortal, D83):
+ * aquí solo se le presta el recuadro, así no se recrea al cambiar de sección. `page` es el de
+ * Mapa 3D; `stage`, el del capítulo 3 del Inicio: a pantalla completa, con HUD sobrio y la rueda
+ * reservada al scroll (se acerca con Ctrl/⌘ + rueda, el pellizco del panel táctil o dos dedos).
  */
-export function HeroSection({ variant = 'hero' }: { variant?: 'hero' | 'page' }) {
+export function HeroSection({ variant = 'page' }: { variant?: Variant }) {
   const { t } = useTranslation();
   const state = useTintalData(); // reintenta sola: nunca muestra un error
   const section = useRef<HTMLElement>(null);
   const slot = useRef<HTMLDivElement>(null);
+  const stage = variant === 'stage';
 
   useLayoutEffect(() => {
     const { attach, detach } = useSceneHost.getState();
@@ -33,28 +49,34 @@ export function HeroSection({ variant = 'hero' }: { variant?: 'hero' | 'page' })
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const node = slot.current;
+    if (!stage || !node) return undefined;
+    node.addEventListener('wheel', scrollsThePage, { capture: true, passive: true });
+    return () => node.removeEventListener('wheel', scrollsThePage, { capture: true });
+  }, [stage]);
+
   return (
-    // El recuadro recorta su contenido (overflow-hidden): la sentada va afuera, sobre su borde superior,
-    // casi en la esquina derecha (D82, D88).
-    <div className="relative">
+    // El recuadro recorta su contenido (overflow-hidden): Mini Marie va afuera, arriba a la derecha (D88).
+    <div className={`relative ${stage ? 'h-full' : ''}`}>
       <section
         ref={section}
         data-hero
         aria-label={t('hero.label')}
         aria-describedby="hero-descripcion"
-        className={`relative -mx-4 ${variant === 'page' ? 'h-[calc(100dvh-12rem)] min-h-[480px]' : 'h-[72vh] min-h-[420px] md:h-[78vh]'} overflow-hidden border-y border-line-strong bg-[var(--map-fondo)] md:mx-0 md:rounded-sm md:border`}
+        className={`relative overflow-hidden bg-[var(--map-fondo)] ${FRAME[variant]}`}
       >
         <p id="hero-descripcion" className="sr-only">
           {t('hero.description')}
         </p>
-        <div ref={slot} className="absolute inset-0" />
+        <div ref={slot} data-scene-slot className="absolute inset-0" />
         {state.status === 'loading' ? (
           <Skeleton className="h-full w-full" />
         ) : (
-          <HeroHud legend={<HeroLegend defaultOpen={variant === 'page'} />} />
+          <HeroHud sober={stage} legend={stage ? null : <HeroLegend defaultOpen />} />
         )}
       </section>
-      <SittingMarie />
+      <SittingMarie stage={stage} />
     </div>
   );
 }

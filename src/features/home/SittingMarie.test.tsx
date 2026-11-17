@@ -28,7 +28,9 @@ describe('Mini Marie sentada (D82)', () => {
       expect(node).toHaveAttribute('aria-hidden', 'true');
       const sprite = node.querySelector<HTMLElement>('.sequence[data-sequence="sit"]');
       expect([sprite?.style.width, sprite?.style.height]).toEqual(['29px', '48px']);
-      expect(node.querySelector('.sitting-marie__ledge')).toBeNull(); // su asiento es el borde del recuadro
+      // En Mapa 3D su asiento es el borde del recuadro; en el Inicio (sin marco), una repisa de 1 px.
+      expect(node.querySelectorAll('.sitting-marie__ledge')).toHaveLength(path === '/' ? 1 : 0);
+      expect(node.classList.contains('sitting-marie--stage')).toBe(path === '/');
     });
     cleanup();
   }, 15000);
@@ -41,5 +43,14 @@ describe('Mini Marie sentada (D82)', () => {
     expect(base).not.toMatch(/\bbottom:/);
     // Desde md el recuadro ya no va de lado a lado: los mismos 12 px desde su esquina.
     expect(rules).toMatch(/@media \(min-width: 48rem\) \{\s*\.sitting-marie \{\s*right: 12px;\s*\}\s*\}/);
+  });
+
+  it('en el Inicio, a pantalla completa, va bajo el header (64 px) y a los mismos 12 px de la esquina, con la repisa detrás', () => {
+    const rules = css.replace(/\/\*[\s\S]*?\*\//g, '');
+    expect(rules).toMatch(/\.sitting-marie\.sitting-marie--stage \{\s*top: calc\(4rem \+ 12px\);\s*right: 12px;\s*\}/);
+    const ledge = /\.sitting-marie__ledge \{([^}]*)\}/.exec(rules)?.[1] ?? '';
+    expect(ledge).toMatch(/top: 29px;/); // pasa por su asiento
+    expect(ledge).toMatch(/z-index: -1;/);
+    expect(ledge).toMatch(/height: 1px;\s*background-color: var\(--text-highlight\);/);
   });
 });

@@ -47,7 +47,8 @@ export const routes: RouteObject[] = [
         // Ruta sin path: un error en cualquier página se muestra dentro del shell (H31).
         errorElement: <RouteError inShell />,
         children: [
-          { index: true, element: <HomePage /> },
+          // El Inicio ocupa todo el ancho y empieza bajo el header (AppShell lee `handle.bleed`).
+          { index: true, element: <HomePage />, handle: { bleed: true } },
           ...SECTION_PAGES.map((item) => ({
             path: item.path.slice(1),
             element: DEDICATED[item.key] ?? <SectionPage section={item.key} />,

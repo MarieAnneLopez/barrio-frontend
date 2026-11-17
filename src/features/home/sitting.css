@@ -17,3 +17,21 @@
     right: 12px;
   }
 }
+
+/* Inicio (capítulo 3): la maqueta va a pantalla completa y sin marco, así que se sienta en una
+   repisa de 1 px justo bajo el header (64 px), a los mismos 12 px de la esquina derecha. */
+.sitting-marie.sitting-marie--stage {
+  top: calc(4rem + 12px);
+  right: 12px;
+}
+
+/* La repisa pasa por su asiento (29 px desde arriba) y queda detrás de ella. */
+.sitting-marie__ledge {
+  position: absolute;
+  top: 29px;
+  right: -4px;
+  left: -20px;
+  z-index: -1;
+  height: 1px;
+  background-color: var(--text-highlight);
+}

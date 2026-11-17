@@ -11,7 +11,7 @@ describe('App', () => {
   it('muestra el título en español por defecto', () => {
     render(<App />);
     expect(
-      screen.getByRole('heading', { level: 1, name: 'Reconoce tu Barrio: El Tintal' }),
+      screen.getByRole('heading', { level: 1, name: 'Reconoce tu barrio. El Tintal.' }),
     ).toBeInTheDocument();
   });
 
@@ -19,7 +19,7 @@ describe('App', () => {
     render(<App />);
     await act(() => i18n.changeLanguage('en'));
     expect(
-      screen.getByRole('heading', { level: 1, name: /Get to Know Your Neighborhood/ }),
+      screen.getByRole('heading', { level: 1, name: 'Know your barrio. El Tintal.' }),
     ).toBeInTheDocument();
   });
 });

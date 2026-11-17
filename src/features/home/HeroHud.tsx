@@ -13,17 +13,19 @@ const panel = 'ui-panel pointer-events-auto px-3 py-2';
  * HUD de la maqueta (ref. visual 1): paneles en los bordes, nunca al centro. Todo va en una sola
  * columna (fila de arriba, leyenda y fila de abajo) cuyas filas saltan de línea y cuya leyenda cede
  * el alto: ningún panel puede montarse sobre otro, a ningún ancho (D88). Los huecos no reciben
- * eventos, para poder arrastrar la maqueta.
+ * eventos, para poder arrastrar la maqueta. `sober` es el del capítulo 3 del Inicio, a pantalla
+ * completa: sin leyenda ni texto de ayuda, bajo el header, con la esquina superior derecha para Mini
+ * Marie y la fila de abajo fuera del sitio del chat, WhatsApp y la barra de accesibilidad.
  */
-export function HeroHud({ legend }: { legend: ReactNode }) {
+export function HeroHud({ legend, sober = false }: { legend: ReactNode; sober?: boolean }) {
   const { t, i18n } = useTranslation();
   const { paused, hovered, selected, togglePaused, select, recenter } = useHeroStore();
   const touch = useMediaQuery('(pointer: coarse)', false);
   const numbers = new Intl.NumberFormat(i18n.language);
 
   return (
-    <div className="pointer-events-none absolute inset-4 z-30 flex flex-col gap-3">
-      <div className="flex flex-wrap items-start gap-2">
+    <div className={`pointer-events-none absolute z-30 flex flex-col gap-3 ${sober ? 'inset-x-4 top-20 bottom-24 md:bottom-4' : 'inset-4'}`}>
+      <div className={`flex flex-wrap items-start gap-2 ${sober ? 'pr-14' : ''}`}>
         <div className={`${panel} flex flex-col gap-1`}>
           <p className={`m-0 ${label}`}>{t('hero.eyebrow')}</p>
           <p className="m-0 font-mono text-step--1 text-fg-secondary">{t('hero.coords')}</p>
@@ -38,7 +40,7 @@ export function HeroHud({ legend }: { legend: ReactNode }) {
         </div>
       </div>
       {legend}
-      <div className="mt-auto flex flex-wrap items-end gap-2">
+      <div className={`mt-auto flex flex-wrap items-end gap-2 ${sober ? 'pr-14 md:pr-40' : ''}`}>
         <div className={`${panel} max-w-[22rem]`} aria-live="polite">
           {hovered ? (
             <p className="m-0 font-mono text-step--1 text-fg">
@@ -46,10 +48,11 @@ export function HeroHud({ legend }: { legend: ReactNode }) {
               {' · '}
               {t('hero.levels', { count: hovered.levels })} · {t('hero.area', { value: numbers.format(Math.round(hovered.areaM2)) })}
             </p>
-          ) : (
+          ) : null}
+          {hovered || sober ? null : (
             <p className="m-0 text-step--1 text-fg-secondary">{t(touch ? 'hero.touchHint' : 'hero.hint')}</p>
           )}
-          <p className={`m-0 mt-1 ${label}`}>{t('hero.source')}</p>
+          <p className={`m-0 ${hovered || !sober ? 'mt-1' : ''} ${label}`}>{t('hero.source')}</p>
         </div>
         {selected ? (
           <section aria-label={t('hero.placeCard')} className={`${panel} ml-auto flex max-w-[20rem] flex-col gap-2 p-4`}>
@@ -61,7 +64,7 @@ export function HeroHud({ legend }: { legend: ReactNode }) {
             <div className="flex flex-wrap gap-2">
               <Link
                 to={categoryPath(selected.slug)}
-                className="ui-pressable ui-btn--primary inline-flex min-h-9 items-center rounded-md border border-interactive bg-interactive px-3 text-step--1 text-on-interactive no-underline"
+                className="ui-pressable ui-btn--primary inline-flex min-h-9 items-center rounded-sm border border-interactive bg-interactive px-3 text-step--1 text-on-interactive no-underline"
               >
                 {t('hero.openModule', { module: t(`categories.${selected.slug}.name`) })}
               </Link>

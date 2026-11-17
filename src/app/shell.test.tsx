@@ -20,7 +20,7 @@ describe('Header e idioma', () => {
     const group = screen.getByRole('group', { name: 'Idioma' });
     expect(group).toBeInTheDocument();
     await userEvent.click(screen.getByRole('button', { name: /^en/i }));
-    expect(screen.getByRole('heading', { level: 1, name: /Get to Know/ })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: /Know your barrio/ })).toBeInTheDocument();
     expect(document.documentElement.lang).toBe('en');
     expect(window.localStorage.getItem('mini-marie:lang')).toBe('en');
     expect(screen.getByRole('button', { name: /^en/i })).toHaveAttribute('aria-pressed', 'true');
