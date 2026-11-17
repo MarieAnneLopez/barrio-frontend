@@ -1,5 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
+test.afterEach(async ({ page }) => page.close()); // recursos (D95): cada prueba cierra su página
+
 // WCAG 2.4.11 (foco no tapado): al tabular, lo enfocado no puede quedar bajo el header fijo, los
 // botones flotantes (chat, WhatsApp, barra de accesibilidad) ni, en un mapa, bajo otro marcador.
 // Se mira el centro de cada parada; tapar el centro de algo grande (el lienzo del mapa) no cuenta.

@@ -1,5 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
+test.afterEach(async ({ page }) => page.close()); // recursos (D95): cada prueba cierra su página
+
 // MapLibre coloca cada marcador con `position: absolute` y un transform desde la esquina del mapa.
 // Si otra hoja le cambia el `position`, los marcadores se colocan en fila y no señalan su lugar.
 // Pasó en la etapa 3: el build repartió las hojas en otros trozos y cambió el orden de carga.

@@ -1,5 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
+test.afterEach(async ({ page }) => page.close()); // recursos (D95): cada prueba cierra su página
+
 // H31: ninguna ruta puede dejar errores sin capturar ni errores de consola, al entrar,
 // salir navegando dentro del sitio, recargar o volver atrás. Tampoco puede desbordar la
 // pantalla en horizontal (interfaz elegante, D84).

@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 
+test.afterEach(async ({ page }) => page.close()); // recursos (D95): cada prueba cierra su página
+
 // Etapa 3 (interfaz elegante): el Inicio es una película de 4 capítulos. Aquí se mide en el
 // navegador lo que jsdom no puede: el alto del recorrido, que nada del HUD de la maqueta quede
 // bajo el header ni bajo los botones flotantes, y que el reel de módulos termine de cargar.

@@ -12,5 +12,7 @@ export default defineConfig({
     setupFiles: ['./src/test/setup.ts'],
     include: ['src/**/*.test.{ts,tsx}', 'scripts/**/*.test.mjs'],
     css: false,
+    // Recursos (D95): como mucho 2 procesos de prueba a la vez (opción de Vitest 5.1).
+    maxWorkers: 2,
   },
 });

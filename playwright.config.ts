@@ -5,12 +5,17 @@ import { defineConfig } from '@playwright/test';
 // E2E_CHANNEL=chrome o vacío para otro navegador.
 const PORT = 4174;
 
+// Recursos (D95): un solo navegador headless y un solo proceso de pruebas; el servidor lo levanta
+// Playwright y lo cierra al terminar (nunca reutiliza uno viejo que sirva otro build).
 export default defineConfig({
   testDir: 'e2e',
   timeout: 300_000,
   fullyParallel: false,
+  workers: 1,
   reporter: 'list',
+  globalTeardown: './e2e/globalTeardown.ts',
   use: {
+    headless: true,
     baseURL: `http://localhost:${PORT}`,
     channel: process.env.E2E_CHANNEL ?? 'msedge',
     viewport: { width: 1440, height: 900 },
@@ -27,7 +32,7 @@ export default defineConfig({
   webServer: {
     command: `npm run build && npx vite preview --port ${PORT} --strictPort`,
     url: `http://localhost:${PORT}`,
-    reuseExistingServer: true,
+    reuseExistingServer: false,
     timeout: 180_000,
   },
 });
