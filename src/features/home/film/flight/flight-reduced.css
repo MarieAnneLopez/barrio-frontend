@@ -1,0 +1,79 @@
+/* Vuelo entre fotos con movimiento reducido: sin recorrido, sin sticky y sin perspectiva. Las 4
+   fotos quedan en una rejilla estática de 2 × 2 sobre el fondo, en una sola pantalla. Lo pide el
+   componente (data-reduced, vía useReducedMotion) o la barra de accesibilidad; abajo, el mismo
+   bloque como respaldo para la preferencia del sistema. Los !important ganan a los estilos en
+   línea del vuelo si la hoja se adelanta al script. El ancho de la rejilla se limita por el alto:
+   dos filas de 4:3 caben siempre bajo el header. */
+:is(.flight[data-reduced], :root.reduce-motion .flight) {
+  height: auto;
+}
+
+:is(.flight[data-reduced], :root.reduce-motion .flight) .flight__sticky {
+  position: relative;
+}
+
+:is(.flight[data-reduced], :root.reduce-motion .flight) .flight__camera {
+  display: grid;
+  place-items: center;
+  padding: 5rem 0 1.5rem;
+  perspective: none;
+}
+
+:is(.flight[data-reduced], :root.reduce-motion .flight) .flight__space {
+  position: static;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  width: min(90%, calc((100svh - 7.5rem) * 4 / 3));
+  height: auto;
+  transform: none !important;
+  transform-style: flat;
+}
+
+:is(.flight[data-reduced], :root.reduce-motion .flight) .flight__card {
+  position: relative;
+  top: auto;
+  width: auto;
+  aspect-ratio: 4 / 3;
+  transform: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flight {
+    height: auto;
+  }
+
+  .flight .flight__sticky {
+    position: relative;
+  }
+
+  .flight .flight__camera {
+    display: grid;
+    place-items: center;
+    padding: 5rem 0 1.5rem;
+    perspective: none;
+  }
+
+  .flight .flight__space {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    width: min(90%, calc((100svh - 7.5rem) * 4 / 3));
+    height: auto;
+    transform: none !important;
+    transform-style: flat;
+  }
+
+  .flight .flight__card {
+    position: relative;
+    top: auto;
+    width: auto;
+    aspect-ratio: 4 / 3;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+}

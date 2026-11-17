@@ -1,0 +1,77 @@
+/* Capítulo 2 del Inicio: vuelo entre fotos (docs/superpowers/specs, §6). La sección mide N + 1
+   pantallas y no recorta nada: su hijo sticky ocupa una pantalla y es el que recorta. Dentro, una
+   cámara con perspectiva de 30 px y un espacio 3D que flightScene.ts acerca con el scroll; las
+   tarjetas, separadas 100 px en profundidad, pasan junto a la cámara. El espacio no lleva opacity,
+   filter ni recorte: aplanarían el 3D. Movimiento reducido: flight-reduced.css. */
+.flight {
+  position: relative;
+  height: calc((var(--flight-n) + 1) * 100vh);
+  height: calc((var(--flight-n) + 1) * 100svh);
+  background-color: var(--bg-primary);
+}
+
+.flight__sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+}
+
+/* Fondo estático: una de las fotos, oscurecida, fuera del subárbol de la cámara. */
+.flight__backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.62);
+}
+
+.flight__camera {
+  position: absolute;
+  inset: 0;
+  perspective: 30px;
+  perspective-origin: 50% 50%;
+}
+
+.flight__space {
+  position: absolute;
+  top: 0;
+  left: 5%;
+  width: 90%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+/* flightScene.ts escribe en cada tarjeta transform, opacity y visibility. Sin will-change: el
+   navegador vuelve a pintar la foto a su tamaño según se acerca, y no se ve borrosa. */
+.flight__card {
+  position: absolute;
+  top: 50%;
+  width: 45%;
+  aspect-ratio: var(--flight-ratio);
+  backface-visibility: hidden;
+}
+
+.flight__card[data-side='left'] {
+  left: 0;
+}
+
+.flight__card[data-side='right'] {
+  right: 0;
+}
+
+.flight__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--r-sm);
+  object-fit: cover;
+}
+
+/* Ninguna foto (tampoco el fondo) se enseña hasta estar decodificada: FlightPhoto pone data-ready. */
+.flight img:not([data-ready]) {
+  visibility: hidden;
+}
