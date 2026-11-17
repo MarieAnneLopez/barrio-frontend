@@ -49,8 +49,19 @@
   --glow-active: 0 0 0 1px var(--c-ambar);
 }
 
+/* scroll-padding: lo que recibe el foco (o el destino de un ancla) no queda bajo el header fijo de
+   4rem ni bajo los botones flotantes: chat y WhatsApp abajo, y en móvil también el botón de la barra
+   de accesibilidad, que va encima de ellos (WCAG 2.4.11; e2e/focus.spec.ts). En rem, como ellos. */
 html {
   font-size: calc(100% * var(--font-scale));
+  scroll-padding-top: 5rem;
+  scroll-padding-bottom: 10rem;
+}
+
+@media (min-width: 48rem) {
+  html {
+    scroll-padding-bottom: 6rem;
+  }
 }
 
 /* Movimiento reducido (sistema o toggle manual): sin desplazamientos ni

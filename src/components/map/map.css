@@ -28,6 +28,12 @@
   position: absolute;
 }
 
+/* El marcador enfocado o elegido pasa por encima de sus vecinos: si se solapan, no queda tapado. */
+.maplibregl-marker.map-marker:focus-visible,
+.maplibregl-marker.map-marker[data-selected='true'] {
+  z-index: 1;
+}
+
 .thematic-map .maplibregl-ctrl-group {
   border: 1px solid var(--map-suelo);
   background-color: var(--map-control);

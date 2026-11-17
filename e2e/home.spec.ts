@@ -21,7 +21,11 @@ test('Inicio: 4 capítulos, HUD de la maqueta a la vista y reel cargado', async 
   );
   expect(screens).toEqual([1, 5, 2, 3]); // 1100svh de recorrido en total
 
-  await page.evaluate(() => document.querySelector('[data-chapter="3"]')?.scrollIntoView());
+  // Al inicio del capítulo, con el recuadro ya fijado arriba, como lo ve quien se desplaza. No con
+  // scrollIntoView: respeta el scroll-padding de la página y dejaría el recuadro sin fijar.
+  const toChapter = (n: number) =>
+    page.evaluate((c) => window.scrollTo(0, (document.querySelector(`[data-chapter="${c}"]`) as HTMLElement).offsetTop), n);
+  await toChapter(3);
   await page.locator('[data-chapter="3"] canvas').waitFor();
   await page.waitForTimeout(500);
   const covered = await page.evaluate(() => {
@@ -51,7 +55,7 @@ test('Inicio: 4 capítulos, HUD de la maqueta a la vista y reel cargado', async 
   });
   expect(covered, covered.join('\n')).toEqual([]);
 
-  await page.evaluate(() => document.querySelector('[data-chapter="4"]')?.scrollIntoView());
+  await toChapter(4);
   await expect(page.locator('[data-chapter="4"]')).toHaveAttribute('data-mode', /^(reel|grid)$/, { timeout: 30_000 });
   const extra = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(extra, 'desborde horizontal').toBeLessThanOrEqual(0);

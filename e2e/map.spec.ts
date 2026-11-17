@@ -6,7 +6,7 @@ import { expect, test, type Page } from '@playwright/test';
 // Se mira entrando directo al módulo y llegando desde el Inicio, porque el orden puede cambiar.
 async function positions(page: Page) {
   const markers = page.locator('.thematic-map .maplibregl-marker');
-  await expect(markers.first()).toBeAttached({ timeout: 30_000 });
+  await expect(markers.first()).toBeAttached({ timeout: 60_000 }); // con 5 navegadores a la vez, WebGL va lento
   return markers.evaluateAll((list) => list.map((el) => getComputedStyle(el).position));
 }
 
@@ -17,6 +17,7 @@ test('mapa del módulo: cada marcador va en su sitio, no en fila', async ({ page
 
   await page.goto('/');
   await page.locator('[data-chapter="1"]').waitFor();
+  await page.locator('.loading-screen').waitFor({ state: 'detached', timeout: 60_000 }); // el Inicio ya cargó sus trozos
   await page.evaluate(() => {
     window.history.pushState({}, '', '/categorias/barberias');
     window.dispatchEvent(new PopStateEvent('popstate'));
