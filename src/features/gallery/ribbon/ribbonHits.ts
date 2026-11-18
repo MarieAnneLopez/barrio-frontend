@@ -29,18 +29,19 @@ export function createHits(): Hits {
     },
     place(placed, layout) {
       const now = new Set<number>();
-      for (const { index, x } of placed) {
+      // De la más honda a la más cercana: z-index 1 … n (locales al escenario), la más cercana encima.
+      const depth = (x: number) => surfaceAt(x, layout.halfW).z;
+      [...placed].sort((a, b) => depth(a.x) - depth(b.x)).forEach(({ index, x }, rank) => {
         const button = buttons[index];
         const zone = cardZone(x, layout);
-        if (!button || !onScreen(zone, layout)) continue;
+        if (!button || !onScreen(zone, layout)) return;
         now.add(index);
         delete button.dataset.parked;
         Object.assign(button.style, {
           transform: `translate(${px(zone.left)}, ${px(zone.top)})`, width: px(zone.width), height: px(zone.height),
-          clipPath: `polygon(${zone.points})`, pointerEvents: '',
-          zIndex: String(Math.round(1000 + 10 * surfaceAt(x, layout.halfW).z)), // la más cercana, encima
+          clipPath: `polygon(${zone.points})`, pointerEvents: '', zIndex: String(rank + 1),
         });
-      }
+      });
       for (const index of shown) {
         const button = buttons[index];
         if (button && !now.has(index)) parkHit(button);

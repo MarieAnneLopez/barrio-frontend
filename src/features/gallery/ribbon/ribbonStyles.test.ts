@@ -23,6 +23,10 @@ describe('escenario de la cinta', () => {
     expect(rule(grid, ".ribbon[data-mode='grid'] .ribbon-stage")).toMatch(/height: auto;/);
   });
 
+  it('el escenario aísla su apilamiento: los botones de las fotos nunca tapan el visor, el menú ni lo fijo', () => {
+    expect(rule(ribbon, '.ribbon-stage')).toContain('isolation: isolate;');
+  });
+
   it('el lienzo deja el scroll vertical al navegador y, mientras llega el motor, no tapa la rejilla', () => {
     expect(rule(ribbon, '.ribbon-frame')).toMatch(/touch-action: pan-y;/);
     expect(rule(ribbon, ".ribbon[data-mode='pending'] .ribbon-frame")).toMatch(/visibility: hidden;/);

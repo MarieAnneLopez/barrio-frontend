@@ -7,9 +7,12 @@
   gap: var(--space-3);
 }
 
-/* El escenario mide lo mismo con la cinta que con la rejilla de espera: el cambio no mueve la página. */
+/* El escenario mide lo mismo con la cinta que con la rejilla de espera: el cambio no mueve la página.
+   Aísla su apilamiento: los z-index de los botones de las fotos no compiten con el header, el menú,
+   el chat ni el visor, que van siempre encima. */
 .ribbon-stage {
   position: relative;
+  isolation: isolate;
   height: clamp(24rem, 70svh, 46rem);
   overflow: hidden;
   overflow: clip;
