@@ -67,4 +67,12 @@ describe.each(FONT_SCALES)('con la letra al %s', (fontScale) => {
       expect(cssPx(fontSize(body), at(width, height, vars)), `${width} × ${height}`).toBeGreaterThanOrEqual(24);
     }
   });
+
+  it('el nombre del sitio en la banda marrón del pie (crema, Anton 400) mide ≥ 24 px', () => {
+    const chunk = readSrc('components', 'layout', 'Footer.tsx').split(/['"`]/).find((c) => c.includes('text-on-band'));
+    const classes = (chunk ?? '').split(/\s+/);
+    const base = sizeOf(classes, '') ?? 'var(--step-0)';
+    for (const width of NARROW) expect(cssPx(base, at(width))).toBeGreaterThanOrEqual(24);
+    for (const width of WIDE) expect(cssPx(sizeOf(classes, 'md:') ?? base, at(width))).toBeGreaterThanOrEqual(24);
+  });
 });
