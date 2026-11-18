@@ -24,6 +24,12 @@ describe('labelComponents', () => {
     const big = comps.find((c) => c.area === 4);
     expect(big).toMatchObject({ minX: 0, maxX: 1, minY: 0, maxY: 1 });
   });
+
+  it('con diagonal, conectividad 8: un trazo en escalera es una sola pieza (sprites32, trozos sueltos)', () => {
+    const { mask, W, H } = maskFrom(['#..#', '.#..', '...#']);
+    const { comps } = labelComponents(mask, W, H, { diagonal: true });
+    expect(comps.map((c) => c.area).sort()).toEqual([1, 1, 2]);
+  });
 });
 
 describe('groupPoses', () => {

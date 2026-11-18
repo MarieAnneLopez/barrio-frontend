@@ -1,54 +1,29 @@
 // @vitest-environment node
 // Verifica la salida real de build_sprite_scales.mjs (sprites32): cada secuencia de Mini Marie es un
-// ciclo de 32 cuadros en un atlas de 8 × 4, en sus tamaños fijos (D86, «escala entera») y con celdas
-// de ancho entero. Los cuadros que dibujó Marie están en su sitio, intactos, y los intermedios solo
-// usan colores de esos cuadros, con alfa binaria (sin halos ni colores nuevos).
-import { existsSync, readFileSync, statSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+// atlas de 32 cuadros en 8 × 4, en sus tamaños fijos (D86, «escala entera»), con celdas de ancho
+// entero, hecho con el ciclo maestro de hoy y sin pasarse de peso. Los ciclos maestros (cuadros
+// dibujados intactos, paleta, huecos, pie de la carrera) se prueban en sprite_cycles.test.mjs.
+import { existsSync, statSync } from 'node:fs';
+import { join } from 'node:path';
 import sharp from 'sharp';
 import { describe, expect, it } from 'vitest';
+import { cellsOf, readCycle, root, scales } from './sprite_cycles_lib.mjs';
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const scales = JSON.parse(readFileSync(join(root, 'src/components/avatar/spriteScales.json'), 'utf8'));
 const cases = Object.entries(scales).flatMap(([name, spec]) => spec.sizes.map((size) => [name, size, spec]));
 const file = (name, size) => join(root, 'public/assets/avatar', name, `${name}_${size}.webp`);
-const raw = async (input) => sharp(input).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
 
-/** Cuadro n del ciclo maestro (scripts/sprite-cycles), en RGBA crudo. */
-async function cycleFrame(name, n) {
-  const { grid: [cols], cell: [w, h] } = scales[name];
-  const left = (n % cols) * w;
-  const top = Math.floor(n / cols) * h;
-  const path = join(root, 'scripts/sprite-cycles', `${name}_ciclo.webp`);
-  return (await raw(await sharp(path).extract({ left, top, width: w, height: h }).png().toBuffer())).data;
+/** Parte de los píxeles que se apartan más de `t` niveles (color premultiplicado o alfa). */
+function offShare(a, b, t) {
+  let off = 0;
+  for (let p = 0; p < a.length; p += 4) {
+    let e = Math.abs(a[p + 3] - b[p + 3]);
+    for (let c = 0; c < 3; c += 1) e = Math.max(e, Math.abs(a[p + c] * a[p + 3] - b[p + c] * b[p + 3]) / 255);
+    if (e > t) off += 1;
+  }
+  return off / (a.length / 4);
 }
 
-/** Cuadro dibujado i, con alfa binaria (opaco desde 128), abajo a la izquierda de la celda. */
-async function drawnFrame(name, i) {
-  const { cell: [w, h], source } = scales[name];
-  const dir = join(root, 'public/assets/avatar', name);
-  let input = join(dir, `${name}_${i + 1}.png`);
-  if (!existsSync(input)) {
-    const index = [...Array(source.frames).keys()].filter((k) => !source.skip.includes(k))[i];
-    const strip = join(dir, `${name}_strip.webp`);
-    const { width, height } = await sharp(strip).metadata();
-    const sw = width / source.frames;
-    input = await sharp(strip).extract({ left: index * sw, top: 0, width: sw, height }).png().toBuffer();
-  }
-  const { data, info } = await raw(input);
-  const out = Buffer.alloc(w * h * 4);
-  for (let y = 0; y < info.height; y += 1) {
-    for (let x = 0; x < info.width; x += 1) {
-      const from = (y * info.width + x) * 4;
-      if (data[from + 3] < 128) continue;
-      out.set([data[from], data[from + 1], data[from + 2], 255], ((h - info.height + y) * w + x) * 4);
-    }
-  }
-  return out;
-}
-
-describe('ciclos de 32 cuadros de Mini Marie (sprites32)', () => {
+describe('atlas de Mini Marie (sprites32)', () => {
   it('cada secuencia tiene su tamaño base, el doble y el cuádruple que existan en el dibujo', () => {
     expect(Object.fromEntries(Object.entries(scales).map(([name, spec]) => [name, spec.sizes]))).toEqual({
       wave: [80, 160, 320, 640], run: [105, 210, 420], sit: [48, 96, 192], idle: [140, 280, 560],
@@ -62,25 +37,6 @@ describe('ciclos de 32 cuadros de Mini Marie (sprites32)', () => {
     expect(spec.keys.at(-1)).toBeLessThan(32);
   });
 
-  it.each(Object.keys(scales))('%s: los cuadros dibujados van intactos y los intermedios con su paleta', async (name) => {
-    const { keys } = scales[name];
-    const palette = new Set();
-    for (const [i, n] of keys.entries()) {
-      const drawn = await drawnFrame(name, i);
-      expect((await cycleFrame(name, n)).equals(drawn), `${name}: cuadro ${n}`).toBe(true);
-      for (let p = 0; p < drawn.length; p += 4) if (drawn[p + 3]) palette.add(drawn.readUIntBE(p, 3));
-    }
-    for (let n = 0; n < 32; n += 1) {
-      const data = await cycleFrame(name, n);
-      let foreign = 0;
-      for (let p = 0; p < data.length; p += 4) {
-        if (data[p + 3] !== 0 && data[p + 3] !== 255) foreign += 1;
-        else if (data[p + 3] && !palette.has(data.readUIntBE(p, 3))) foreign += 1;
-      }
-      expect(foreign, `${name}: cuadro ${n}`).toBe(0);
-    }
-  }, 120_000);
-
   it.each(cases)('%s a %i px: atlas de 8 × 4 con celdas de ancho entero', async (name, size, spec) => {
     const cell = (spec.cell[0] * size) / spec.cell[1];
     expect(Number.isInteger(cell) && Number.isInteger((spec.box[0] * size) / spec.box[1])).toBe(true);
@@ -89,6 +45,22 @@ describe('ciclos de 32 cuadros de Mini Marie (sprites32)', () => {
     expect([meta.width, meta.height]).toEqual([spec.grid[0] * cell, spec.grid[1] * size]);
     expect(meta.hasAlpha).toBe(true);
   });
+
+  // Revisión de sprites32: nada comprobaba que el atlas saliera del ciclo maestro de hoy. Cada celda
+  // es su cuadro reducido como en build_sprite_scales.mjs (lanczos3); la compresión con pérdida
+  // aparta a lo sumo un 0,1 % de los píxeles más de 64 niveles (medido); un maestro cambiado sin
+  // rehacer el atlas, en torno al 16 % (la carrera con las piernas nuevas).
+  it.each(cases)('%s a %i px: cada celda es su cuadro del ciclo maestro de hoy', async (name, size, spec) => {
+    const { frames, w, h } = await readCycle(name);
+    const cw = (w * size) / h;
+    const decoded = await sharp(file(name, size)).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    const cells = cellsOf(decoded, spec.grid[0], cw, size, frames.length);
+    for (const [n, frame] of frames.entries()) {
+      const want = size === h ? frame : await sharp(frame, { raw: { width: w, height: h, channels: 4 } })
+        .resize(cw, size, { kernel: 'lanczos3' }).raw().toBuffer();
+      expect(offShare(cells[n], want, 64), `${name}_${size}: celda ${n}`).toBeLessThanOrEqual(0.005);
+    }
+  }, 120_000);
 
   // Medido (sprites32): 32 cuadros pesan de 3 a 4 veces lo que las tiras de 7 u 8 (el reposo, que era
   // un solo cuadro, unas 25 veces); el tope deja un 10 % de holgura sobre lo medido.

@@ -1,11 +1,12 @@
-// Etiquetado de componentes conectados (conectividad 4) sobre una máscara.
+// Etiquetado de componentes conectados (conectividad 4, u 8 con `diagonal`) sobre una máscara.
 
 /**
  * @param {Uint8Array} mask 1 = primer plano
+ * @param {{ diagonal?: boolean }} [options] diagonal: también se unen los vecinos en diagonal
  * @returns {{ labels: Int32Array, comps: Array<{id:number, area:number,
  *   minX:number, maxX:number, minY:number, maxY:number}> }}
  */
-export function labelComponents(mask, width, height) {
+export function labelComponents(mask, width, height, { diagonal = false } = {}) {
   const labels = new Int32Array(width * height);
   const comps = [];
   const stack = new Int32Array(width * height);
@@ -28,12 +29,12 @@ export function labelComponents(mask, width, height) {
       if (x > comp.maxX) comp.maxX = x;
       if (y < comp.minY) comp.minY = y;
       if (y > comp.maxY) comp.maxY = y;
-      const neighbors = [
-        x > 0 ? p - 1 : -1,
-        x < width - 1 ? p + 1 : -1,
-        y > 0 ? p - width : -1,
-        y < height - 1 ? p + width : -1,
-      ];
+      const [left, right, up, down] = [x > 0, x < width - 1, y > 0, y < height - 1];
+      const neighbors = [left ? p - 1 : -1, right ? p + 1 : -1, up ? p - width : -1, down ? p + width : -1];
+      if (diagonal) {
+        neighbors.push(left && up ? p - width - 1 : -1, right && up ? p - width + 1 : -1);
+        neighbors.push(left && down ? p + width - 1 : -1, right && down ? p + width + 1 : -1);
+      }
       for (const n of neighbors) {
         if (n >= 0 && mask[n] && !labels[n]) {
           labels[n] = next;
