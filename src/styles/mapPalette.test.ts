@@ -15,7 +15,6 @@ const VIOLETS = ['af50e5', '8a0bd2', 'd980f9', 'e2cef6', '5b0672'];
 const MAP_STYLE_FILES = [
   'styles/map-palette.css', 'components/map/map.css', 'components/map/marker.css', 'components/map/baseStyle.ts',
   'components/map/shapeFill.ts', 'components/map/useShapes.ts', 'features/home/LegendMarker.tsx',
-  'features/modules/maps-preview.css',
   // Toda la maqueta 3D (src/three), sin pruebas: los carriles agregan y quitan archivos sin tocar esta lista.
   ...readdirSync(join(src, 'three'), { recursive: true, encoding: 'utf8' })
     .filter((f) => /\.(tsx?|css)$/.test(f) && !/\.test\./.test(f))

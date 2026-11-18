@@ -15,7 +15,7 @@ interface PlaceCardProps {
   slug: string;
   item: ModuleItem;
   titleId: string;
-  /** Dentro de su módulo la ficha completa se abre ahí mismo; fuera, se enlaza al módulo. */
+  /** Dentro de su módulo la ficha completa se abre ahí mismo; fuera, se enlaza al módulo con el lugar enfocado. */
   onOpenPlace?: ((slug: string, id: number) => void) | undefined;
 }
 
@@ -50,7 +50,7 @@ export function PlaceCard({ slug, item, titleId, onOpenPlace }: PlaceCardProps) 
           {t('card.fullDetail')}
         </button>
       ) : (
-        <Link to={`${categoryPath(slug)}?lugar=${item.id}`} className={ACTION}>
+        <Link to={`${categoryPath(slug)}?enfoque=${item.id}`} className={ACTION}>
           {t('hero.openModule', { module })}
         </Link>
       )}

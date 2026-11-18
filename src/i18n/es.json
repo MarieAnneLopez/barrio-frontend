@@ -243,13 +243,6 @@
       "windows": "Usa Ctrl + rueda para acercar el mapa",
       "mac": "Usa ⌘ + rueda para acercar el mapa",
       "mobile": "Usa dos dedos para mover el mapa"
-    },
-    "maps": {
-      "section": "Ubicación en Google Maps",
-      "cta": "Ver en Google Maps",
-      "streetView": "Abrir Street View",
-      "newTab": "(se abre en una pestaña nueva)",
-      "attribution": "Vista previa: mapa de la plataforma con datos © OpenStreetMap."
     }
   },
   "fields": {
@@ -359,30 +352,14 @@
   },
   "hero": {
     "label": "Maqueta 3D de El Tintal",
-    "description": "Modelo 3D con las manzanas, vías, parques y edificios de OpenStreetMap. Arrastra el puntero para mirar alrededor y elige un lugar para ver su ficha.",
+    "description": "Maqueta 3D del barrio real: edificios de Catastro Bogotá y vías, parques y agua de OpenStreetMap. Arrastra el puntero para mirar alrededor y elige un lugar para ver su ficha.",
     "eyebrow": "El Tintal · Kennedy",
     "coords": "4,653° N · 74,157° O",
     "pause": "Pausar la órbita",
     "play": "Reanudar la órbita",
-    "building": "Edificio",
-    "buildingKind": {
-      "school": "colegio",
-      "apartments": "apartamentos",
-      "yes": "sin clasificar",
-      "construction": "en construcción",
-      "commercial": "comercial",
-      "retail": "comercial",
-      "house": "casa",
-      "industrial": "industrial"
-    },
-    "levels_one": "{{count}} piso",
-    "levels_other": "{{count}} pisos",
-    "area": "{{value}} m² de planta",
     "hint": "Arrastra para mover, usa la rueda para acercar y el botón derecho para girar. Pasa el puntero sobre un edificio o elige un lugar para ver su ficha.",
-    "placeCard": "Lugar seleccionado",
     "openModule": "Ver en {{module}}",
-    "closePlace": "Cerrar ficha",
-    "source": "Datos © OpenStreetMap (ODbL)",
+    "source": "Datos: Catastro Bogotá · © OpenStreetMap (ODbL)",
     "legend": {
       "title": "Leyenda y filtro",
       "noData": "sin datos",
@@ -422,7 +399,18 @@
     "catastroCite": "Catastro Bogotá – Datos Abiertos Bogotá (licencia abierta)",
     "osmCite": "© colaboradores de OpenStreetMap (ODbL)",
     "fullDetail": "Ver ficha completa",
-    "missing": "Este lugar ya no está en los datos del módulo."
+    "missing": "Este lugar ya no está en los datos del módulo.",
+    "modified": "datos modificados"
+  },
+  "stage": {
+    "menu": "Panel de información",
+    "panel": "Información del mapa",
+    "hint": "Arrastra para mover el mapa, usa la rueda para acercar y el botón derecho para girar. Elige un lugar o un edificio para ver su ficha.",
+    "legendHint": "Oculta o muestra los lugares de cada módulo en la maqueta; la flecha abre su sección.",
+    "openModule": "Abrir la sección de {{module}}",
+    "sample": "Dato de ejemplo: no se dibuja en la maqueta.",
+    "noPlace": "Sin ubicación en el mapa.",
+    "showOnModel": "Ver en la maqueta"
   },
   "carousel": {
     "label": "Fotografías del entorno de El Tintal",
@@ -703,10 +691,8 @@
     }
   },
   "mapPage": {
-    "explore": "Arrastra el puntero para mirar alrededor, pasa el puntero sobre un edificio para ver sus datos y usa «Pausar la órbita» si prefieres que la cámara quede quieta. Con movimiento reducido la cámara no gira sola.",
-    "thematic": "Mapas temáticos",
-    "thematicIntro": "Cada módulo tiene su propio mapa con los lugares marcados con su emoji, filtros y la ficha de cada sitio.",
-    "note": "Manzanas, vías, parques y edificios de OpenStreetMap (ODbL). El Tintal es aquí la suma de las UPZ 78 y 79 (662 ha): una definición operativa, no una unidad administrativa oficial."
+    "explore": "Arrastra para mover el mapa, usa la rueda o dos dedos para acercar y elige un lugar o un edificio para ver su ficha a la derecha.",
+    "note": "Edificios, lotes, placas y sectores de Catastro Bogotá (UAECD) por Datos Abiertos Bogotá (CC BY 4.0, datos modificados); vías, parques y agua de OpenStreetMap (ODbL). El Tintal es aquí la suma de las UPZ 78 y 79 (662 ha): una definición operativa, no una unidad administrativa oficial."
   },
   "galleryPage": {
     "note": "Solo fotos reales de Wikimedia Commons con licencia libre, guardadas en la plataforma con su autor y su licencia. Los lugares que no tienen una foto libre no muestran ninguna: no se inventan fotos.",

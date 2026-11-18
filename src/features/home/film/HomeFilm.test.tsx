@@ -1,6 +1,5 @@
 import { screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { clearBaseMapCache } from '../../../components/map/baseMapData';
 import { mockApi } from '../../../test/mockApi';
 import { BASE_MAP, FEATURES } from '../../../test/moduleFixtures';
 import { renderRoute, setViewport } from '../../../test/renderRoute';
@@ -12,7 +11,6 @@ vi.mock('../../../three/TintalScene', () => ({ default: () => <div data-testid="
 beforeEach(() => {
   worldReady();
   window.localStorage.clear();
-  clearBaseMapCache();
   setViewport(true);
   mockApi({ ...BASE_MAP, '/centros-educativos/geojson': FEATURES });
 });
@@ -52,7 +50,7 @@ describe('Inicio: película de 4 capítulos (etapa 3)', () => {
     await screen.findByTestId('escena-3d');
     expect(within(hero()).getByText('4,653° N · 74,157° O')).toBeInTheDocument();
     for (const name of ['Recentrar', 'Pausar la órbita']) expect(within(hero()).getByRole('button', { name })).toBeInTheDocument();
-    expect(within(hero()).getByText('Datos © OpenStreetMap (ODbL)')).toBeInTheDocument();
+    expect(within(hero()).getByText('Datos: Catastro Bogotá · © OpenStreetMap (ODbL)')).toBeInTheDocument();
     expect(within(hero()).queryByRole('button', { name: 'Leyenda y filtro' })).toBeNull();
     expect(within(hero()).queryByText(/usa la rueda para acercar/)).toBeNull(); // aquí la rueda desplaza la página
   });

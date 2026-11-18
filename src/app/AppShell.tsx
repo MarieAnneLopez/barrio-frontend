@@ -21,7 +21,8 @@ const COLUMN = 'mx-auto w-full max-w-[1200px] px-4 pt-24 pb-8 md:pr-20 md:pl-10 
 /**
  * Estructura común (etapa 2): enlace de salto, header fijo con el menú desplegable, contenido,
  * pie, barra de accesibilidad, chat flotante y botón de WhatsApp. Ya no hay barra lateral.
- * Una ruta con `handle: { bleed: true }` ocupa todo el ancho y empieza bajo el header (Inicio, Galería).
+ * Una ruta con `handle: { bleed: true }` ocupa todo el ancho y empieza bajo el header (Inicio, Mapa 3D
+ * y los módulos); `bleed` también puede ser una función de los parámetros (un módulo inexistente no).
  */
 export function AppShell() {
   useApplyA11y();
@@ -30,7 +31,10 @@ export function AppShell() {
     void restoreSession(controller.signal);
     return () => controller.abort();
   }, []);
-  const bleed = useMatches().some((match) => (match.handle as { bleed?: boolean } | undefined)?.bleed === true);
+  const bleed = useMatches().some(({ handle, params }) => {
+    const value = (handle as { bleed?: boolean | ((p: typeof params) => boolean) } | undefined)?.bleed;
+    return typeof value === 'function' ? value(params) : value === true;
+  });
 
   return (
     <div className="flex min-h-dvh flex-col">

@@ -8,7 +8,10 @@ import { chatRetry } from '../lib/chatApi';
 import { useAuthStore } from '../store/authStore';
 import { useLoadingStore } from '../store/loadingStore';
 import { useWelcomeStore } from '../store/welcomeStore';
+import { useFocusStore } from '../three/camera/focusStore';
+import { ALL_PLACES, usePlaceScope } from '../three/places/placeScope';
 import { resetSceneHost } from '../three/sceneHost';
+import { useSelectionStore } from '../three/selection/selectionStore';
 import { resetTintalData } from '../three/useTintalData';
 import { worldPending } from './emptyWorld';
 
@@ -34,6 +37,10 @@ beforeEach(() => {
   resetTintalData();
   worldPending();
   resetSceneHost();
+  // Lo elegido, el foco de la cámara y el alcance de los lugares de la maqueta tampoco pasan de una prueba a otra.
+  useSelectionStore.setState({ selected: null, hovered: null });
+  useFocusStore.setState({ target: null, tick: 0 });
+  usePlaceScope.setState(ALL_PLACES);
 });
 
 // jsdom no tiene WebGL: MapLibre se sustituye por un doble con el mismo contrato.

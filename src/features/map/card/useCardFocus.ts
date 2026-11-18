@@ -5,13 +5,15 @@ type Ref = RefObject<HTMLElement | null>;
 
 /** ¿El foco está «en la maqueta» (en la página o en su lienzo), sin un control de por medio? */
 const onScene = (el: Element | null) => !el || el === document.body || el.closest('[data-scene-slot]') !== null;
+/** Un control que se acaba de ocultar (el panel se cierra al elegir en el celular) ya no tiene el foco. */
+const gone = (el: Element | null) => !el?.isConnected || el.closest('[hidden], [inert]') !== null;
 
 /** Cierra la ficha; si el foco estaba en ella, lo devuelve a quien la abrió (o a `fallback`). */
 function closeCard(card: Ref, opener: Ref, fallback?: Ref): void {
   const inside = card.current?.contains(document.activeElement) ?? false;
   useSelectionStore.getState().select(null);
   if (!inside) return;
-  const back = opener.current?.isConnected ? opener.current : fallback?.current;
+  const back = opener.current && !gone(opener.current) ? opener.current : fallback?.current;
   back?.focus();
 }
 
@@ -27,7 +29,7 @@ export function useCardFocus(card: Ref, selected: Selection | null, fallback?: R
   useEffect(() => {
     if (!key) return;
     const active = document.activeElement;
-    const fromScene = onScene(active);
+    const fromScene = onScene(active) || gone(active);
     if (!card.current?.contains(active)) opener.current = fromScene ? null : (active as HTMLElement);
     if (fromScene) card.current?.querySelector<HTMLElement>('h2')?.focus({ preventScroll: true });
   }, [key, card]);
@@ -36,6 +38,7 @@ export function useCardFocus(card: Ref, selected: Selection | null, fallback?: R
     if (!key) return undefined;
     const onKey = (event: KeyboardEvent) => {
       if (event.key !== 'Escape' || event.defaultPrevented || !onScene(event.target as Element | null)) return;
+      event.preventDefault(); // un solo Escape: cierra la ficha y no también el panel
       closeCard(card, opener, fallback);
     };
     document.addEventListener('keydown', onKey);

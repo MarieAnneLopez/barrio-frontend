@@ -1,7 +1,6 @@
 import { act, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { clearBaseMapCache } from '../../components/map/baseMapData';
 import { CATEGORIES } from '../../lib/categoryConfig';
 import { useHeroStore } from '../../three/heroStore';
 import { useSelectionStore } from '../../three/selection/selectionStore';
@@ -14,10 +13,8 @@ vi.mock('../../three/TintalScene', () => ({ default: () => <div data-testid="esc
 
 beforeEach(() => {
   worldReady();
-  clearBaseMapCache();
   setViewport(true);
   act(() => useHeroStore.setState({ hidden: [], drawn: {} }));
-  act(() => useSelectionStore.setState({ selected: null, hovered: null }));
 });
 
 describe('Maqueta 3D con los 14 módulos (H34)', () => {
@@ -28,9 +25,9 @@ describe('Maqueta 3D con los 14 módulos (H34)', () => {
     for (const { slug } of CATEGORIES) expect(callsTo(fetchMock, `/${slug}/geojson`)).toHaveLength(1);
   });
 
-  it('la leyenda muestra lo dibujado por categoría y el filtro oculta y vuelve a mostrar', async () => {
+  it('la leyenda del panel muestra lo dibujado por categoría y el filtro oculta y vuelve a mostrar', async () => {
     mockApi({ ...BASE_MAP, '/centros-educativos/geojson': FEATURES });
-    renderRoute('/mapa');
+    renderRoute('/mapa?panel=abierto');
     await screen.findByTestId('escena-3d');
     act(() => useHeroStore.getState().setDrawn({ 'centros-educativos': 5, 'datos-catastrales': 3706 }));
     const legend = screen.getByRole('list', { name: 'Leyenda y filtro' });
@@ -46,7 +43,7 @@ describe('Maqueta 3D con los 14 módulos (H34)', () => {
     expect(useHeroStore.getState().hidden).toEqual([]);
   });
 
-  it('el botón Recentrar suelta el lugar elegido y vuelve al encuadre inicial', async () => {
+  it('el botón Recentrar suelta lo elegido y vuelve al encuadre inicial', async () => {
     mockApi({ ...BASE_MAP, '/centros-educativos/geojson': FEATURES });
     renderRoute('/');
     await screen.findByTestId('escena-3d');

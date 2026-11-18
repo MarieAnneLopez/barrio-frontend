@@ -24,7 +24,7 @@ afterEach(async () => {
 
 describe('Ficha con descripción verificada y sitio oficial (H35)', () => {
   it('muestra la descripción en español y la fuente «sitio oficial»', async () => {
-    renderRoute('/categorias/barberias');
+    renderRoute('/categorias/barberias?panel=abierto');
     await userEvent.click(await screen.findByRole('button', { name: 'Ver detalle de Barbería Kings' }));
     const dialog = await screen.findByRole('dialog', { name: 'Barbería Kings' });
     expect(await within(dialog).findByText('Barbería en el C. C. Tintal Plaza, local 117.')).toBeInTheDocument();
@@ -33,7 +33,7 @@ describe('Ficha con descripción verificada y sitio oficial (H35)', () => {
 
   it('en inglés muestra la descripción en inglés', async () => {
     await act(() => i18n.changeLanguage('en'));
-    renderRoute('/categorias/barberias');
+    renderRoute('/categorias/barberias?panel=abierto');
     await userEvent.click(await screen.findByRole('button', { name: /Barbería Kings/ }));
     const dialog = await screen.findByRole('dialog', { name: 'Barbería Kings' });
     expect(await within(dialog).findByText('Barbershop in the Tintal Plaza mall, unit 117.')).toBeInTheDocument();

@@ -243,13 +243,6 @@
       "windows": "Use Ctrl + scroll to zoom the map",
       "mac": "Use ⌘ + scroll to zoom the map",
       "mobile": "Use two fingers to move the map"
-    },
-    "maps": {
-      "section": "Location on Google Maps",
-      "cta": "View on Google Maps",
-      "streetView": "Open Street View",
-      "newTab": "(opens in a new tab)",
-      "attribution": "Preview: the platform's own map with data © OpenStreetMap."
     }
   },
   "fields": {
@@ -359,30 +352,14 @@
   },
   "hero": {
     "label": "3D model of El Tintal",
-    "description": "3D model with the blocks, roads, parks and buildings from OpenStreetMap. Move the pointer to look around and pick a place to see its card.",
+    "description": "3D model of the real neighborhood: buildings from Catastro Bogotá and roads, parks and water from OpenStreetMap. Move the pointer to look around and pick a place to see its card.",
     "eyebrow": "El Tintal · Kennedy",
     "coords": "4.653° N · 74.157° W",
     "pause": "Pause the orbit",
     "play": "Resume the orbit",
-    "building": "Building",
-    "buildingKind": {
-      "school": "school",
-      "apartments": "apartments",
-      "yes": "unclassified",
-      "construction": "under construction",
-      "commercial": "commercial",
-      "retail": "commercial",
-      "house": "house",
-      "industrial": "industrial"
-    },
-    "levels_one": "{{count}} floor",
-    "levels_other": "{{count}} floors",
-    "area": "{{value}} m² footprint",
     "hint": "Drag to move, use the wheel to zoom and the right button to rotate. Hover over a building or pick a place to see its details.",
-    "placeCard": "Selected place",
     "openModule": "View in {{module}}",
-    "closePlace": "Close card",
-    "source": "Data © OpenStreetMap (ODbL)",
+    "source": "Data: Catastro Bogotá · © OpenStreetMap (ODbL)",
     "legend": {
       "title": "Legend and filter",
       "noData": "no data",
@@ -422,7 +399,18 @@
     "catastroCite": "Catastro Bogotá – Bogotá Open Data (open license)",
     "osmCite": "© OpenStreetMap contributors (ODbL)",
     "fullDetail": "Open full details",
-    "missing": "This place is no longer in the module data."
+    "missing": "This place is no longer in the module data.",
+    "modified": "modified data"
+  },
+  "stage": {
+    "menu": "Information panel",
+    "panel": "Map information",
+    "hint": "Drag to move the map, use the wheel to zoom and the right button to rotate. Pick a place or a building to see its details.",
+    "legendHint": "Hide or show each module's places on the model; the arrow opens its section.",
+    "openModule": "Open the {{module}} section",
+    "sample": "Sample record: not drawn on the model.",
+    "noPlace": "No location on the map.",
+    "showOnModel": "Show on the model"
   },
   "carousel": {
     "label": "Photos of the El Tintal area",
@@ -703,10 +691,8 @@
     }
   },
   "mapPage": {
-    "explore": "Drag the pointer to look around, hover a building to see its data and use «Pause the orbit» if you prefer a still camera. With reduced motion the camera doesn't rotate on its own.",
-    "thematic": "Thematic maps",
-    "thematicIntro": "Each module has its own map with places marked by their emoji, filters and a detail view for every site.",
-    "note": "Blocks, streets, parks and buildings from OpenStreetMap (ODbL). Here El Tintal is UPZ 78 plus UPZ 79 (662 ha): an operational definition, not an official administrative unit."
+    "explore": "Drag to move the map, use the wheel or two fingers to zoom and pick a place or a building to see its details on the right.",
+    "note": "Buildings, lots, address plates and sectors from Catastro Bogotá (UAECD) via Bogotá Open Data (CC BY 4.0, modified data); roads, parks and water from OpenStreetMap (ODbL). Here El Tintal is UPZ 78 plus UPZ 79 (662 ha): an operational definition, not an official administrative unit."
   },
   "galleryPage": {
     "note": "Only real photos from Wikimedia Commons with a free license, stored on the platform with their author and license. Places without a free photo show none: no photos are made up.",

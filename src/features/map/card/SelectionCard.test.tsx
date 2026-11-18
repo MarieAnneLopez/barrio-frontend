@@ -62,7 +62,7 @@ describe('ficha de un lugar y cierre', () => {
     expect(within(ficha).getByText('Colegio')).toBeInTheDocument();
     expect(within(ficha).getByText('Verificado')).toBeInTheDocument();
     expect(within(ficha).getByRole('link', { name: 'Ver en Centros Educativos' })).toHaveAttribute(
-      'href', '/categorias/centros-educativos?lugar=1');
+      'href', '/categorias/centros-educativos?enfoque=1');
     expect(within(ficha).getByText('© colaboradores de OpenStreetMap (ODbL)')).toBeInTheDocument();
   });
 

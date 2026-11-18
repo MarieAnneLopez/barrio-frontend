@@ -18,7 +18,7 @@ beforeEach(() => {
 describe('Robos: aviso ético y meses legibles', () => {
   it('muestra el aviso y el mes como texto', async () => {
     mockApi({ ...BASE_MAP, '/robos': page([ROBO]), '/robos/geojson': { body: { type: 'FeatureCollection', features: [] } } });
-    renderRoute('/categorias/robos');
+    renderRoute('/categorias/robos?panel=abierto');
 
     expect(await screen.findByRole('note')).toHaveTextContent('no denuncias ni hechos confirmados');
     expect(await screen.findByText('septiembre de 2026')).toBeInTheDocument();
@@ -26,7 +26,7 @@ describe('Robos: aviso ético y meses legibles', () => {
 
   it('los módulos sin aviso no muestran la nota', async () => {
     mockApi({ ...BASE_MAP, '/librerias': page([]), '/librerias/geojson': { body: { type: 'FeatureCollection', features: [] } } });
-    renderRoute('/categorias/librerias');
+    renderRoute('/categorias/librerias?panel=abierto');
 
     expect(await screen.findByText('Este módulo todavía no tiene lugares registrados.')).toBeInTheDocument();
     expect(screen.queryByRole('note')).not.toBeInTheDocument();

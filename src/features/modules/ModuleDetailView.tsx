@@ -1,45 +1,55 @@
-import { lazy, Suspense, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/ui/Button';
-import { Skeleton } from '../../components/ui/Skeleton';
-import { LoadingTask } from '../../components/avatar/LoadingTask';
 import type { ModuleItem } from '../../lib/apiTypes';
 import type { CategoryConfig } from '../../lib/categoryConfig';
+import { useSelectionStore } from '../../three/selection/selectionStore';
 import { AuthGuard } from '../auth/AuthGuard';
+import { MapStage } from '../map/stage/MapStage';
 import { CrudFormModal } from './CrudFormModal';
 import { ItemDetailModal } from './ItemDetailModal';
 import { ModuleFilters } from './ModuleFilters';
+import { ModuleIntro } from './ModuleIntro';
 import { ModuleList } from './ModuleList';
 import { ModuleSearch } from './ModuleSearch';
 import { useModuleData, type Filters } from './useModuleData';
+import { useModuleMap } from './useModuleMap';
 
-// MapLibre pesa: se carga aparte, solo cuando se abre un módulo.
-const ThematicMap = lazy(() => import('../../components/map/ThematicMap'));
+interface ModuleDetailViewProps {
+  category: CategoryConfig;
+  initialOpenId?: number | null;
+  focusId?: number | null;
+}
 
-/** Vista dual del módulo (§11.3): lista filtrable + mapa temático + ficha de detalle. */
-export function ModuleDetailView({ category, initialOpenId = null }: { category: CategoryConfig; initialOpenId?: number | null }) {
+/**
+ * Sección de un módulo (§11.3; gran actualización): la maqueta a pantalla completa con solo sus
+ * lugares reales; la lista filtrable va en el panel izquierdo y lo elegido abre su ficha a la
+ * derecha, con la cámara sobre el lugar. La ficha completa y el formulario siguen siendo modales.
+ */
+export function ModuleDetailView({ category, initialOpenId = null, focusId = null }: ModuleDetailViewProps) {
   const { t } = useTranslation();
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState<Filters>({});
-  const [selectedId, setSelectedId] = useState<number | null>(null);
   const [openId, setOpenId] = useState<number | null>(initialOpenId);
   // Formulario: cerrado (null), crear (undefined) o editar un registro.
   const [editing, setEditing] = useState<ModuleItem | undefined | null>(null);
   const { slug } = category;
   const { list, features, notLoaded, refresh } = useModuleData(slug, page, query, filters);
+  const showOnMap = useModuleMap(slug, features.status === 'success' ? features.data : null, focusId);
+  const selectedId = useSelectionStore((s) => (s.selected?.kind === 'place' && s.selected.slug === slug ? s.selected.id : null));
   const name = t(`categories.${slug}.name`);
 
   const refine = (next: { query?: string; filters?: Filters }) => {
     if (next.query !== undefined) setQuery(next.query);
     if (next.filters) setFilters(next.filters);
     setPage(1);
-    setSelectedId(null);
   };
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
-      <div className="flex flex-col gap-6">
+    <>
+      <MapStage label={t('modules.map', { name })} title={name} emoji={category.emoji} onOpenPlace={(_, id) => setOpenId(id)}>
+        <ModuleIntro category={category} />
         <div className="flex flex-wrap items-end justify-between gap-3">
           <ModuleSearch onSearch={(q) => refine({ query: q })} disabled={notLoaded} />
           <AuthGuard role="admin">
@@ -55,46 +65,32 @@ export function ModuleDetailView({ category, initialOpenId = null }: { category:
           notLoaded={notLoaded}
           searching={query !== '' || Object.keys(filters).length > 0}
           selectedId={selectedId}
-          onSelect={setSelectedId}
+          onSelect={showOnMap}
           onOpen={setOpenId}
           onPage={setPage}
         />
-      </div>
-      <div className="min-h-[420px] lg:sticky lg:top-24 lg:h-[calc(100dvh-8rem)]">
-        <Suspense fallback={<><LoadingTask /><Skeleton className="h-[420px] w-full" /></>}>
-          <ThematicMap
-            slug={slug}
-            label={t('modules.map', { name })}
-            features={features.status === 'success' ? features.data : undefined}
-            emoji={category.emoji}
-            selectedId={selectedId}
-            onSelect={setSelectedId}
-          />
-        </Suspense>
-      </div>
+      </MapStage>
       <ItemDetailModal
         slug={slug}
         itemId={openId}
         onClose={() => setOpenId(null)}
+        onShowOnMap={(id) => {
+          setOpenId(null);
+          showOnMap(id);
+        }}
         onEdit={(item) => {
           setOpenId(null);
           setEditing(item);
         }}
-        onDeleted={() => {
-          setOpenId(null);
-          refresh();
-        }}
+        onDeleted={() => { setOpenId(null); refresh(); }}
       />
       <CrudFormModal
         category={category}
         item={editing ?? undefined}
         open={editing !== null}
         onClose={() => setEditing(null)}
-        onSaved={() => {
-          setEditing(null);
-          refresh();
-        }}
+        onSaved={() => { setEditing(null); refresh(); }}
       />
-    </div>
+    </>
   );
 }

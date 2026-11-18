@@ -14,7 +14,7 @@ export function ModelStage() {
   return (
     <section ref={section} data-chapter="3" data-tone="noche" className="relative h-[200svh]">
       <div className="sticky top-0 h-svh">
-        <HeroSection variant="stage" />
+        <HeroSection />
       </div>
     </section>
   );

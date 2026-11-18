@@ -1,34 +1,28 @@
-import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { findCategory } from '../../lib/categoryConfig';
 import { NotFoundPage } from '../pages/NotFoundPage';
-import { PageHeader } from '../pages/PageHeader';
 import { ModuleDetailView } from './ModuleDetailView';
 
-/** Ruta de cada uno de los 14 módulos: /categorias/:slug. */
+/** Lee un id positivo de la URL, o null. */
+const idParam = (raw: string | null) => (raw && /^\d+$/.test(raw) && Number(raw) > 0 ? Number(raw) : null);
+
+/**
+ * Ruta de cada uno de los 14 módulos: /categorias/:slug, el escenario del mapa con la lista en el
+ * panel. `?lugar=ID` abre la ficha completa de ese lugar (enlaces del ranking); `?enfoque=ID` lo
+ * elige en la maqueta, con su ficha y la cámara sobre él (enlaces de la ficha de Mapa 3D).
+ */
 export function ModulePage() {
-  const { t, i18n } = useTranslation();
   const { slug } = useParams();
   const [params] = useSearchParams();
   const category = findCategory(slug);
-  // ?lugar=ID abre la ficha de ese lugar (enlaces del ranking).
-  const lugar = Number(params.get('lugar'));
   if (!category) return <NotFoundPage />;
 
   return (
-    <div className="flex flex-col gap-8">
-      <PageHeader
-        eyebrow={t('categories.module', { id: category.id })}
-        emoji={category.emoji}
-        title={t(`categories.${category.slug}.name`)}
-        description={t(`categories.${category.slug}.description`)}
-      />
-      {category && i18n.exists(`categories.${category.slug}.notice`) ? (
-        <p role="note" className="m-0 max-w-3xl rounded-sm border border-warning border-dashed bg-surface p-4 text-step--1 text-fg">
-          {t(`categories.${category.slug}.notice`)}
-        </p>
-      ) : null}
-      <ModuleDetailView key={category.slug} category={category} initialOpenId={lugar > 0 ? lugar : null} />
-    </div>
+    <ModuleDetailView
+      key={category.slug}
+      category={category}
+      initialOpenId={idParam(params.get('lugar'))}
+      focusId={idParam(params.get('enfoque'))}
+    />
   );
 }
