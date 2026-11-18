@@ -1,10 +1,30 @@
 import type { BuildingSource } from './protocol';
-import { LEVEL_HEIGHT, volumeOf } from './volume';
+import { LEVEL_HEIGHT, volumeOf, type Volume } from './volume';
 
 // Teselas espaciales de los edificios: una malla fusionada por tesela de TILE_SIZE metros, para que
 // three recorte por frustum las que no se ven y la elección con el puntero pruebe pocas cajas.
 
 export const TILE_SIZE = 400;
+/** Edificios por paso cuando se recorren todos (≈ 1 ms): el respaldo en tandas cede entre pasos. */
+export const STEP_BUILDINGS = 1024;
+
+/** Corre un generador del constructor hasta el final (worker, pruebas y llamadas de una vez). */
+export function drain<T>(steps: Generator<void, T>): T {
+  for (;;) {
+    const step = steps.next();
+    if (step.done) return step.value;
+  }
+}
+
+/** Volumen dibujado de cada edificio (null si no asoma); cede cada STEP_BUILDINGS edificios. */
+export function* volumesOf(s: BuildingSource, levelHeight = LEVEL_HEIGHT): Generator<void, Array<Volume | null>> {
+  const volumes: Array<Volume | null> = [];
+  for (let b = 0; b < s.count; b++) {
+    if (b % STEP_BUILDINGS === 0) yield;
+    volumes.push(volumeOf(s, b, levelHeight));
+  }
+  return volumes;
+}
 
 export interface TilePlan {
   key: string;
@@ -26,11 +46,12 @@ export function footprintCenter(s: Pick<BuildingSource, 'xz' | 'anillos' | 'edif
   return to > from ? [(x0 + x1) / 2, (z0 + z1) / 2] : [0, 0];
 }
 
-/** Reparte los edificios visibles en teselas; orden fijo por fila (z) y columna (x). */
-export function partition(s: BuildingSource, tileSize = TILE_SIZE, levelHeight = LEVEL_HEIGHT): TilePlan[] {
+/** Reparte en teselas los edificios con volumen; orden fijo por fila (z) y columna (x). Cede cada STEP_BUILDINGS. */
+export function* partitionSteps(s: BuildingSource, volumes: ReadonlyArray<Volume | null>, tileSize = TILE_SIZE): Generator<void, TilePlan[]> {
   const cells = new Map<string, TilePlan>();
   for (let b = 0; b < s.count; b++) {
-    if (!volumeOf(s, b, levelHeight)) continue;
+    if (b % STEP_BUILDINGS === 0) yield;
+    if (!volumes[b]) continue;
     const [x, z] = footprintCenter(s, b);
     const [col, row] = [Math.floor(x / tileSize), Math.floor(z / tileSize)];
     const key = `${col},${row}`;
@@ -39,4 +60,9 @@ export function partition(s: BuildingSource, tileSize = TILE_SIZE, levelHeight =
     cells.set(key, cell);
   }
   return [...cells.values()].sort((a, b) => a.row - b.row || a.col - b.col);
+}
+
+/** El reparto en teselas de una vez. */
+export function partition(s: BuildingSource, tileSize = TILE_SIZE, levelHeight = LEVEL_HEIGHT): TilePlan[] {
+  return drain(partitionSteps(s, drain(volumesOf(s, levelHeight)), tileSize));
 }

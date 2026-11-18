@@ -1,9 +1,23 @@
 import { describe, expect, it } from 'vitest';
 import { buildAll } from './builder';
 import { fakeSource, hole, square } from './fixture';
-import { footprintCenter, partition, TILE_SIZE } from './tiles';
+import { drain, footprintCenter, partition, partitionSteps, STEP_BUILDINGS, TILE_SIZE, volumesOf } from './tiles';
 
 describe('teselas de edificios', () => {
+  it('el respaldo en tandas: volúmenes y reparto ceden cada STEP_BUILDINGS edificios', () => {
+    const n = 2 * STEP_BUILDINGS + 1;
+    const source = fakeSource(Array.from({ length: n }, (_, i) => ({ rings: [square((i % 90) * 15, -Math.floor(i / 90) * 15, 10)], pisos: 1 })));
+    const yields = (steps: Generator<void, unknown>) => {
+      let k = 0;
+      while (!steps.next().done) k++;
+      return k;
+    };
+    expect(yields(volumesOf(source))).toBe(3);
+    const volumes = drain(volumesOf(source));
+    expect(yields(partitionSteps(source, volumes))).toBe(3);
+    expect(drain(partitionSteps(source, volumes))).toEqual(partition(source));
+  });
+
   it('reparte por teselas de 400 m según el centro de la huella, en orden fijo (filas, columnas)', () => {
     expect(TILE_SIZE).toBe(400);
     const source = fakeSource([

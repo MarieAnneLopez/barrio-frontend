@@ -1,4 +1,5 @@
 import type { BuildingSource } from './protocol';
+import { STEP_BUILDINGS } from './tiles';
 import type { Volume } from './volume';
 
 // Medianeras: en El Tintal la mitad del largo de los muros (50,8 %, medido en los datos) es un tramo
@@ -11,8 +12,8 @@ export const FACADE = 0;
 export const BLIND = 1;
 export const DROPPED = 2;
 
-/** Tramos por tanda: el respaldo en el hilo principal cede el control entre tandas. */
-const STEP = 8192;
+/** Tramos por paso (≈ 1 ms con los datos reales): el respaldo en tandas cede el control entre pasos. */
+const STEP = 4096;
 
 /** Clave entera de un punto: los decímetros de TNT3 (±3276,7 m) en 16 bits por eje. */
 const pointKey = (xz: ArrayLike<number>, v: number) =>
@@ -32,7 +33,7 @@ export function* wallKinds(s: BuildingSource, volumes: ReadonlyArray<Volume | nu
   const end = new Int32Array(total);
   const keys = new Float64Array(total);
   for (let b = 0; b < s.count; b++) {
-    if (b % 2048 === 0) yield;
+    if (b % STEP_BUILDINGS === 0) yield;
     if (!volumes[b]) continue;
     for (let r = s.edificios[b] ?? 0; r < (s.edificios[b + 1] ?? 0); r++) {
       const [from, to] = [s.anillos[r] ?? 0, s.anillos[r + 1] ?? 0];

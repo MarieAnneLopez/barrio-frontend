@@ -1,13 +1,14 @@
 import { wallKinds } from './partyWalls';
 import type { BuildOptions, BuildResult, BuildingSource, TileData } from './protocol';
-import { partition, TILE_SIZE } from './tiles';
+import { drain, partitionSteps, TILE_SIZE, volumesOf } from './tiles';
 import { createTileWriter } from './tileWriter';
-import { LEVEL_HEIGHT, PARAPET, volumeOf } from './volume';
+import { LEVEL_HEIGHT, PARAPET } from './volume';
 import { WINDOW_SPACING } from './windows';
 
 // Constructor de las mallas de edificios, por teselas. Es un generador que cede el control tras
-// cada edificio: el Web Worker lo corre de un tirón (buildAll) y el respaldo en el hilo principal
-// lo avanza en tandas de pocos milisegundos por cuadro (useBuildingTiles).
+// cada edificio y, en los recorridos de todos (volúmenes, medianeras, reparto), cada pocos miles:
+// el Web Worker lo corre de un tirón (buildAll) y el respaldo en el hilo principal lo avanza en
+// tandas de pocos milisegundos por cuadro (useBuildingTiles).
 
 export const DEFAULT_OPTIONS: BuildOptions = {
   tileSize: TILE_SIZE,
@@ -31,10 +32,11 @@ export function statsOf(tiles: readonly TileData[], ms: number): BuildResult['st
 export function* buildTiles(source: BuildingSource, options: Partial<BuildOptions> = {}): Generator<void, BuildResult> {
   const o: BuildOptions = { ...DEFAULT_OPTIONS, ...options };
   const start = now();
-  const volumes = Array.from({ length: source.count }, (_, b) => volumeOf(source, b, o.levelHeight));
+  const volumes = yield* volumesOf(source, o.levelHeight);
   const kinds = yield* wallKinds(source, volumes);
+  const plans = yield* partitionSteps(source, volumes, o.tileSize);
   const tiles: TileData[] = [];
-  for (const plan of partition(source, o.tileSize, o.levelHeight)) {
+  for (const plan of plans) {
     const writer = createTileWriter(source, plan.buildings, o, kinds);
     for (const b of plan.buildings) {
       writer.add(b);
@@ -47,9 +49,5 @@ export function* buildTiles(source: BuildingSource, options: Partial<BuildOption
 
 /** Construye todo de una vez (Web Worker y pruebas). */
 export function buildAll(source: BuildingSource, options: Partial<BuildOptions> = {}): BuildResult {
-  const steps = buildTiles(source, options);
-  for (;;) {
-    const step = steps.next();
-    if (step.done) return step.value;
-  }
+  return drain(buildTiles(source, options));
 }

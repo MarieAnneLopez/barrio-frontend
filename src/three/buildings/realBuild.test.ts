@@ -2,12 +2,15 @@
 // Los 20 394 edificios reales (public/data/tintal, D105) se construyen completos: cada edificio con
 // volumen en una sola tesela, índices válidos y el tiempo de construcción medido (informe).
 import { readFileSync } from 'node:fs';
-import { beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { decodeEdificios } from '../data/decode';
 import type { Edificios, TintalManifest } from '../data/format';
 import { gunzip } from '../data/gunzip';
-import { buildAll } from './builder';
+import { buildAll, buildTiles } from './builder';
 import { sourceOf, type BuildResult } from './protocol';
+import { SLICE_MS } from './useBuildingTiles';
+
+vi.mock('@react-three/fiber', () => ({ useFrame: () => undefined }));
 
 const dir = new URL('../../../public/data/tintal/', import.meta.url);
 const manifest = JSON.parse(readFileSync(new URL('manifest.json', dir), 'utf8')) as TintalManifest;
@@ -47,5 +50,22 @@ describe('edificios reales de El Tintal', () => {
   it('presupuesto: menos de 600 000 triángulos y construcción en menos de 5 s (medida en el informe)', () => {
     expect(result.stats.triangles).toBeLessThan(600_000);
     expect(result.stats.ms).toBeLessThan(5000);
+  });
+
+  it('respaldo en tandas: ningún paso del constructor dura más que una tanda (reloj real)', () => {
+    const longest = () => {
+      const steps = buildTiles(sourceOf(e));
+      let max = 0;
+      for (;;) {
+        const t0 = performance.now();
+        const step = steps.next();
+        max = Math.max(max, performance.now() - t0);
+        if (step.done) return max;
+      }
+    };
+    // El mejor de dos recorridos: una pausa del recolector no es un paso largo del constructor.
+    const best = Math.min(longest(), longest());
+    console.info('[edificios] paso más largo del respaldo en tandas (ms):', best.toFixed(2));
+    expect(best).toBeLessThan(SLICE_MS);
   });
 });
