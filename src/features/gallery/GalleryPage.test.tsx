@@ -62,6 +62,14 @@ describe('Galería General (/galeria, D66)', () => {
     expect(button).toHaveFocus();
   });
 
+  it('al llegar las fotos nadie vuelve a ocultar ni a mover la entrada de la sección: se anima una vez', async () => {
+    mockApi({ '/fotos': body(PHOTOS) });
+    const { container } = renderRoute('/galeria');
+    await photosList();
+    const intro = container.querySelector('header[data-intro]') as HTMLElement;
+    expect([intro.style.opacity, intro.style.transform]).toEqual(['', '']);
+  });
+
   it('enlaza a los créditos de todas las fotos junto a la galería', async () => {
     mockApi({ '/fotos': body(PHOTOS) });
     renderRoute('/galeria');
