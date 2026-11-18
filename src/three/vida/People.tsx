@@ -27,7 +27,7 @@ interface Props {
 
 /** Personitas low-poly instanciadas que caminan por andenes, senderos y parques (walkers.ts). */
 export function People({ world, capacity, count: wanted, still, palette }: Props) {
-  const paths = useMemo(() => buildWalkPaths(world.vias, world.suelo), [world]);
+  const paths = useMemo(() => buildWalkPaths(world.vias, world.suelo, world.edificios), [world]);
   const count = paths.count > 0 ? Math.min(wanted, capacity) : 0; // sin caminos no hay gente
   const walkers = useMemo(() => createWalkers(paths, capacity), [paths, capacity]);
   const assets = useMemo(() => ({

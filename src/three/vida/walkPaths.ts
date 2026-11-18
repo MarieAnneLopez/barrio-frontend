@@ -1,16 +1,18 @@
-import { TNT3, type Suelo, type Vias } from '../data/format';
+import { TNT3, type Edificios, type Suelo, type Vias } from '../data/format';
 import { areaRings } from '../streets/groundAreas';
 import { LEVEL } from '../streets/levels';
 import { buildNetwork, clearance } from '../streets/network';
 import { rightNormals } from '../streets/polyline';
 import { footSpec } from '../streets/roadClass';
 import { isBridge, wayLine } from '../streets/wayLine';
+import { clipOutside, footprintWalls } from './pathClip';
 import { offsetSlice, packPaths, type PathDraft, type WalkPaths } from './pathPack';
 import { strolls } from './strolls';
 
 // Por dónde caminan las personitas: andenes, senderos, cruces y plazas de OSM (clases 20–27, sin
 // ciclorrutas), el borde de las calzadas (andenes por regla: OSM mapea pocos aparte, FORMATO §4) y
-// paseos dentro de parques, canchas y plazas (strolls.ts).
+// paseos dentro de parques, canchas y plazas (strolls.ts); todo partido donde entra en un edificio
+// a ras de suelo (bajo un voladizo sí se pasa).
 
 export type { WalkPaths } from './pathPack';
 
@@ -63,7 +65,7 @@ function sidewalks(v: Vias, d: PathDraft[]): void {
   }
 }
 
-export function buildWalkPaths(v: Vias, s: Suelo): WalkPaths {
+export function buildWalkPaths(v: Vias, s: Suelo, e?: Edificios): WalkPaths {
   const d: PathDraft[] = [];
   footways(v, d);
   sidewalks(v, d);
@@ -72,5 +74,7 @@ export function buildWalkPaths(v: Vias, s: Suelo): WalkPaths {
     if (!((v.banderas[w] ?? 0) & TNT3.banderasVia.area) || !footSpec(v.clase[w] ?? 0)) continue;
     strolls([wayLine(v, w).xz], 9000 + w, d);
   }
-  return packPaths(d);
+  if (!e) return packPaths(d);
+  const walls = footprintWalls(e);
+  return packPaths(d.flatMap((path) => clipOutside(path, walls)));
 }

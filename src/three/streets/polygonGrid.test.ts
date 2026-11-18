@@ -25,6 +25,20 @@ describe('rejilla de polígonos con huecos', () => {
     expect(grid.contains(520, 510, (p) => p === 1)).toBe(true);
   });
 
+  it('dice dónde cruza un segmento los bordes, también los del hueco, una vez cada uno', () => {
+    const cuts: number[] = [];
+    grid.crossings(-20, 50, 120, 50, cuts); // 140 m que pasan por cuatro celdas del primero
+    expect(cuts).toHaveLength(4);
+    cuts.sort((a, b) => a - b).forEach((t, k) => expect(-20 + 140 * t).toBeCloseTo([0, 40, 60, 100][k] ?? NaN, 4));
+    const more: number[] = [];
+    grid.crossings(10, 10, 10, -10, more);
+    grid.crossings(300, 300, 400, 400, more);
+    grid.crossings(210, -5, 210, 30, more); // el tercero no está en la rejilla
+    expect(more).toEqual([0.5]);
+    grid.crossings(10, 10, 10, -10, more, (p) => p !== 0);
+    expect(more).toEqual([0.5]);
+  });
+
   it('huellas de los edificios: sin los subterráneos y una sola rejilla por juego de datos', () => {
     const b = makeEdificios([[rect(0, 0, 10, 10)], [rect(20, 0, 30, 10)]], [], [0, TNT3.banderasEdificio.subterranea]);
     expect(footprints(b).contains(5, 5)).toBe(true);
