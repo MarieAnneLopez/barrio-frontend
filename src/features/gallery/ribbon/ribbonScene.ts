@@ -73,6 +73,7 @@ export function createRibbonScene(cache: PhotoCache, anisotropy: number): Ribbon
     },
     update(offset, focused) {
       for (const slot of slots) slot.mesh.visible = false;
+      cache.beginFrame();
       floor.setOffset(offset);
       if (!photos.length || !slots.length) return [];
       const nearest = new Map<number, number>();

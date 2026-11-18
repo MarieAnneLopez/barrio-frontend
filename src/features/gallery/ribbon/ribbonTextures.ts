@@ -12,6 +12,8 @@ export interface PhotoTexture {
 export interface PhotoCache {
   /** La textura de `src` si ya está; si no, la pide y devuelve null mientras tanto. */
   get(src: string): PhotoTexture | null;
+  /** Empieza un cuadro: lo que se pida en él no se descarta hasta el siguiente (se está viendo). */
+  beginFrame(): void;
   readonly size: number;
   dispose(): void;
 }
@@ -20,6 +22,8 @@ interface Entry {
   image: HTMLImageElement;
   ready: PhotoTexture | null;
   dropped: boolean;
+  /** Último cuadro en que se pidió. */
+  seen: number;
 }
 
 /** jsdom y algunos navegadores viejos no tienen image.decode(): se espera a onload. */
@@ -34,13 +38,14 @@ function decode(image: HTMLImageElement): Promise<void> {
 /** `onReady` avisa cuando llega una foto, para pedir un cuadro. */
 export function createPhotoCache(capacity: number, anisotropy: number, onReady: () => void): PhotoCache {
   const entries = new Map<string, Entry>(); // en orden de uso: el primero es el más antiguo
+  let frame = 0;
   const drop = (entry: Entry) => {
     entry.dropped = true;
     entry.ready?.texture.dispose();
     entry.image.removeAttribute('src'); // corta la descarga si aún no terminó
   };
   const load = (src: string): Entry => {
-    const entry: Entry = { image: new Image(), ready: null, dropped: false };
+    const entry: Entry = { image: new Image(), ready: null, dropped: false, seen: frame };
     entry.image.decoding = 'async';
     entry.image.src = src;
     decode(entry.image).then(() => {
@@ -60,14 +65,19 @@ export function createPhotoCache(capacity: number, anisotropy: number, onReady: 
   return {
     get(src) {
       const entry = entries.get(src) ?? load(src);
+      entry.seen = frame;
       entries.delete(src);
       entries.set(src, entry);
+      // Sobran las más antiguas, pero nunca una del cuadro en curso: se volvería a pedir en el siguiente.
       for (const [oldest, stale] of entries) {
-        if (entries.size <= capacity) break;
+        if (entries.size <= capacity || stale.seen === frame) break;
         entries.delete(oldest);
         drop(stale);
       }
       return entry.ready;
+    },
+    beginFrame() {
+      frame += 1;
     },
     get size() {
       return entries.size;

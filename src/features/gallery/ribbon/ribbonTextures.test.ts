@@ -40,11 +40,24 @@ describe('texturas de las fotos', () => {
     const cache = createPhotoCache(2, 1, () => undefined);
     ['/a', '/b'].forEach((src) => cache.get(src));
     await settle();
+    cache.beginFrame();
     cache.get('/a'); // la «a» se acaba de usar: la que sobra es la «b»
     cache.get('/c');
     expect(cache.size).toBe(2);
     expect(freed).toHaveBeenCalledTimes(1);
     expect(cache.get('/a')).not.toBeNull();
+  });
+
+  it('nunca descarta una foto pedida en el cuadro en curso, aunque se vean más de las que caben', async () => {
+    const cache = createPhotoCache(2, 1, () => undefined);
+    cache.beginFrame();
+    ['/a', '/b', '/c'].forEach((src) => cache.get(src));
+    expect(cache.size).toBe(3); // las tres se ven: descartar una sería pedirla otra vez en el cuadro siguiente
+    await settle();
+    expect(['/a', '/b', '/c'].map((src) => cache.get(src) !== null)).toEqual([true, true, true]);
+    cache.beginFrame();
+    cache.get('/c'); // en el cuadro siguiente solo se ve la «c»: sobran las más antiguas
+    expect(cache.size).toBe(2);
   });
 
   it('al liberar todo no queda ninguna textura, y una descarga tardía ya no crea nada', async () => {

@@ -6,7 +6,7 @@ import type { PhotoCache } from './ribbonTextures';
 
 afterEach(() => vi.restoreAllMocks());
 
-const cache: PhotoCache = { get: () => null, size: 0, dispose: () => undefined };
+const cache: PhotoCache = { get: () => null, beginFrame: () => undefined, size: 0, dispose: () => undefined };
 const THEME = {
   placeholder: 'gray', sheen: 'white', ring: 'yellow', ringInner: 'black', line: 'brown',
   label: { chip: 'white', ink: 'black', mark: 'yellow', markInk: 'black', fade: 'white', font: 'serif' },
