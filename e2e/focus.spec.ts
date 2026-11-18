@@ -3,8 +3,9 @@ import { expect, test, type Page } from '@playwright/test';
 test.afterEach(async ({ page }) => page.close()); // recursos (D95): cada prueba cierra su página
 
 // WCAG 2.4.11 (foco no tapado): al tabular, lo enfocado no puede quedar bajo el header fijo, los
-// botones flotantes (chat, WhatsApp, barra de accesibilidad) ni, en un mapa, bajo otro marcador.
-// Se mira el centro de cada parada; tapar el centro de algo grande (el lienzo del mapa) no cuenta.
+// botones flotantes (chat, WhatsApp, barra de accesibilidad) ni, en un mapa, bajo otra superficie
+// de vidrio (el panel, la ficha o el pie). Los marcadores van dentro de la maqueta (WebGL) y no
+// reciben foco. Se mira el centro de cada parada; tapar el centro de algo grande (el lienzo) no cuenta.
 async function coveredStops(page: Page, max: number): Promise<string[]> {
   const problems: string[] = [];
   const seen = new Set<number>();
@@ -22,9 +23,10 @@ async function coveredStops(page: Page, max: number): Promise<string[]> {
       if (!top || el.contains(top) || top.contains(el)) return { key, hit: null };
       let fixed = false;
       for (let n: Element | null = top; n && !fixed; n = n.parentElement) fixed = getComputedStyle(n).position === 'fixed';
-      const marker = el.classList.contains('map-marker') && top.closest('.map-marker') !== null;
+      const glass = top.closest('.vidrio');
+      const underGlass = glass !== null && el.closest('.vidrio') !== glass;
       const what = `${el.tagName.toLowerCase()} «${(el.getAttribute('aria-label') ?? el.textContent ?? '').trim().slice(0, 30)}»`;
-      return { key, hit: fixed || marker ? `${what} bajo <${top.tagName.toLowerCase()} class="${String(top.className).slice(0, 40)}">` : null };
+      return { key, hit: fixed || underGlass ? `${what} bajo <${top.tagName.toLowerCase()} class="${String(top.className).slice(0, 40)}">` : null };
     });
     if (!stop) continue;
     if (seen.has(stop.key)) break; // dio la vuelta a la página
