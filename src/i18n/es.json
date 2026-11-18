@@ -676,7 +676,15 @@
     "places": "Lugares del barrio",
     "module": "Ver en {{module}}",
     "views": "Vistas del barrio",
-    "empty": "Todavía no hay fotos de lugares."
+    "empty": "Todavía no hay fotos de lugares.",
+    "photos": "Lugares y vistas del barrio"
+  },
+  "galleryRibbon": {
+    "label": "Fotos de la galería",
+    "hint": "Arrastra, usa la rueda o las flechas para recorrer las fotos; un clic o Enter amplía la del centro.",
+    "hintReduced": "Arrastra o usa las flechas para recorrer las fotos; un clic o Enter amplía la del centro.",
+    "current": "Foto {{n}} de {{total}}: {{label}}. {{alt}} Pulsa Enter para ampliarla.",
+    "credits": "El autor y la licencia de cada foto aparecen al ampliarla y en"
   },
   "routeError": {
     "title": "Algo salió mal al mostrar esta sección",

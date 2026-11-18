@@ -1,0 +1,82 @@
+/* Cinta curva de la Galería General: escenario crema con el lienzo WebGL y, encima, un botón
+   transparente por foto, recortado a su tarjeta. Solo tokens semánticos, así el alto contraste sigue
+   funcionando; lo que se mueve lo dibuja el lienzo. */
+.ribbon {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* El escenario mide lo mismo con la cinta que con la rejilla de espera: el cambio no mueve la página. */
+.ribbon-stage {
+  position: relative;
+  height: clamp(24rem, 70svh, 46rem);
+  overflow: hidden;
+  overflow: clip;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-sm);
+  background-color: var(--bg-primary); /* crema (D96) */
+}
+
+/* Con el dedo, lo vertical sigue siendo scroll de la página: solo el arrastre horizontal es de la cinta. */
+.ribbon-frame {
+  position: absolute;
+  inset: 0;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.ribbon-frame[data-dragging],
+.ribbon-frame[data-dragging] .ribbon-hit {
+  cursor: grabbing;
+}
+
+/* Hasta que llega el motor el lienzo no se ve ni estorba a la rejilla, pero ya ocupa su sitio. */
+.ribbon[data-mode='pending'] .ribbon-frame {
+  visibility: hidden;
+}
+
+.ribbon-canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.ribbon-canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Zona de clic: la caja y el recorte (clip-path) los pone el motor en cada cuadro. */
+.ribbon-hit {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* El anillo de foco doble lo pinta el shader siguiendo la curva: el recorte cortaría el del CSS. */
+.ribbon-hit:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.ribbon-hint,
+.ribbon-credits {
+  margin: 0;
+  font-family: var(--ff-body);
+  font-size: var(--step-0);
+  color: var(--text-secondary);
+}
+
+.ribbon-credits a {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
