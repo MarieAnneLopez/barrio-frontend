@@ -708,12 +708,31 @@
     "reload": "Recargar la página"
   },
   "credits": {
-    "title": "Créditos de fotos",
-    "description": "Cada foto de la plataforma, con su lugar, su autor, su licencia libre y la página donde está el original.",
+    "title": "Créditos de fotos y mapas",
+    "description": "Las fuentes y licencias de los datos de los mapas, y cada foto de la plataforma con su lugar, su autor, su licencia libre y la página donde está el original.",
     "changes": "Las fotos vienen de Wikimedia Commons y de Mapillary (CC BY-SA 4.0). El único cambio que se les hizo es el tamaño y el formato (WebP), para que carguen rápido; el contenido es el original.",
     "count_one": "{{count}} foto",
     "count_other": "{{count}} fotos",
-    "link": "Créditos de fotos"
+    "link": "Créditos de fotos",
+    "map": {
+      "title": "Datos de los mapas",
+      "intro": "La maqueta 3D de todas las secciones con mapa usa datos oficiales y abiertos, procesados una sola vez al construir el sitio. Los lugares de los 14 módulos citan su propia fuente en su ficha.",
+      "entity": "Unidad Administrativa Especial de Catastro Distrital (UAECD), publicado en Datos Abiertos Bogotá.",
+      "ccBy": "Creative Commons Atribución 4.0 (CC BY 4.0)",
+      "license": "Licencia:",
+      "datasets": "Conjuntos usados:",
+      "dataset": {
+        "construccion": "Construcción",
+        "lote": "Lote",
+        "placa-domiciliaria": "Placa domiciliaria",
+        "sector-catastral": "Sector catastral"
+      },
+      "catastroUse": "Edificios (huella, pisos y sótanos), lotes, placas domiciliarias y sectores catastrales.",
+      "modified": "Datos modificados: recortados al barrio, huellas limpiadas y redondeadas a 10 cm en una proyección local, direcciones armadas desde las placas y unidas a cada edificio por su lote, y convertidos al formato de la maqueta.",
+      "osmUse": "Vías, cruces y semáforos, parques, agua y árboles, nombres de edificios, los edificios que faltan en Catastro y el contorno del barrio (UPZ 78 y 79).",
+      "odbl": "Open Database License 1.0 (ODbL)",
+      "osmShare": "Lo que la maqueta deriva de OpenStreetMap es una base de datos derivada bajo la misma licencia."
+    }
   },
   "home": {
     "manifesto": {

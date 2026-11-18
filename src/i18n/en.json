@@ -708,12 +708,31 @@
     "reload": "Reload the page"
   },
   "credits": {
-    "title": "Photo credits",
-    "description": "Every photo on the platform, with its place, author, free license and the page holding the original.",
+    "title": "Photo and map credits",
+    "description": "The sources and licenses of the map data, and every photo on the platform with its place, author, free license and the page holding the original.",
     "changes": "Photos come from Wikimedia Commons and Mapillary (CC BY-SA 4.0). The only change made is size and format (WebP), so they load fast; the content is the original.",
     "count_one": "{{count}} photo",
     "count_other": "{{count}} photos",
-    "link": "Photo credits"
+    "link": "Photo credits",
+    "map": {
+      "title": "Map data",
+      "intro": "The 3D model in every section with a map uses official open data, processed once when the site is built. The places of the 14 modules cite their own source in their details.",
+      "entity": "Unidad Administrativa Especial de Catastro Distrital (UAECD), published on Bogotá Open Data.",
+      "ccBy": "Creative Commons Attribution 4.0 (CC BY 4.0)",
+      "license": "License:",
+      "datasets": "Datasets used:",
+      "dataset": {
+        "construccion": "Buildings (Construcción)",
+        "lote": "Lots (Lote)",
+        "placa-domiciliaria": "Address plates (Placa domiciliaria)",
+        "sector-catastral": "Cadastral sectors (Sector catastral)"
+      },
+      "catastroUse": "Buildings (footprint, floors and basements), lots, address plates and cadastral sectors.",
+      "modified": "Modified data: clipped to the neighborhood, footprints cleaned and rounded to 10 cm in a local projection, addresses built from the plates and joined to each building by its lot, and converted to the model's format.",
+      "osmUse": "Roads, crossings and traffic lights, parks, water and trees, building names, the buildings missing from Catastro and the neighborhood outline (UPZ 78 and 79).",
+      "odbl": "Open Database License 1.0 (ODbL)",
+      "osmShare": "What the model derives from OpenStreetMap is a derivative database under the same license."
+    }
   },
   "home": {
     "manifesto": {
