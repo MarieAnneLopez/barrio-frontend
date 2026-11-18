@@ -21,6 +21,7 @@ export function packLaneGraph(d: Draft, nodes: number): LaneGraph {
     length, from, to: i32('to'), way: i32('way'), forward: u8('forward'), reverse: i32('reverse'), lanes: u8('lanes'),
     offset0: f32('offset0'), laneStep: f32('laneStep'), speed: f32('speed'), weight,
     trimStart: f32('trimStart'), trimEnd: f32('trimEnd'), ...outgoing(from, nodes), spawn: spawnWeights(length, weight),
+    border: u8('border'), entry: spawnWeights(f32('entry'), weight),
   };
 }
 

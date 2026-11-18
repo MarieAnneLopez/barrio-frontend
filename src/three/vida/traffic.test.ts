@@ -17,7 +17,7 @@ const loop = makeVias([[0, 0], [200, 0], [400, 0], [0, 200], [200, 200], [400, 2
   { nodes: [3, 0], clase: C.residential, sentido: 1 },
   { nodes: [1, 4], clase: C.residential },
 ]);
-const NOTHING_WRONG = { wrongWay: 0, leftSide: 0, backwards: 0, jumps: 0, nan: 0, againstDrawing: 0, leftOfTravel: 0 };
+const NOTHING_WRONG = { wrongWay: 0, leftSide: 0, backwards: 0, jumps: 0, nan: 0, againstDrawing: 0, leftOfTravel: 0, leftInside: 0 };
 
 describe('grafo de carriles sobre la red real', () => {
   const g = buildLaneGraph(loop);

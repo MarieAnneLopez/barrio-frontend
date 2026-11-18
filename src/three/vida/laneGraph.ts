@@ -1,4 +1,4 @@
-import type { Vias } from '../data/format';
+import { TNT3, type Vias } from '../data/format';
 import { buildNetwork, isJunction } from '../streets/network';
 import { isCarDriven } from '../streets/roadClass';
 import { wayLine } from '../streets/wayLine';
@@ -41,6 +41,10 @@ export interface LaneGraph {
   outList: Int32Array;
   /** Peso acumulado para aparecer (largo × preferencia). */
   spawn: Float32Array;
+  /** 1 si la vía está recortada en el borde del barrio: en su punta sin salida se sale de la escena. */
+  border: Uint8Array;
+  /** Peso acumulado para entrar a la escena: solo las aristas que empiezan en una punta recortada (todo 0 si no hay). */
+  entry: Float32Array;
 }
 
 export function buildLaneGraph(v: Vias): LaneGraph {
@@ -50,14 +54,15 @@ export function buildLaneGraph(v: Vias): LaneGraph {
     const spec = net.specs[w];
     if (!spec) continue;
     const sentido = v.sentido[w] ?? 0;
+    const border = ((v.banderas[w] ?? 0) & TNT3.banderasVia.recortada) !== 0;
     const line = wayLine(v, w);
     let a = 0;
     for (let k = 1; k < line.node.length; k++) {
       const node = line.node[k] ?? -1;
       if (k < line.node.length - 1 && !(node >= 0 && isJunction(net, node))) continue;
       if ((line.cum[k] ?? 0) - (line.cum[a] ?? 0) > 0.5) {
-        const ahead = sentido >= 0 ? addEdge(d, net, line, a, k, w, spec, sentido) : null;
-        const back = sentido <= 0 ? addEdge(d, net, line, k, a, w, spec, sentido) : null;
+        const ahead = sentido >= 0 ? addEdge(d, net, line, a, k, w, spec, sentido, border) : null;
+        const back = sentido <= 0 ? addEdge(d, net, line, k, a, w, spec, sentido, border) : null;
         if (ahead && back) [ahead.reverse, back.reverse] = [back.id, ahead.id];
       }
       a = k;

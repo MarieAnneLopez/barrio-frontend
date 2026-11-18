@@ -1,8 +1,9 @@
 import type { LaneGraph } from './laneGraph';
 
 // Giros en los cruces: al llegar al final de una arista el carro elige una de las que salen de ese
-// nodo (nunca la gemela en contra: sin otra salida, traffic.ts lo saca y aparece en otra vía) y la
-// une con una curva de Bézier.
+// nodo (nunca la gemela en contra) y la une con una curva de Bézier. Sin otra salida: en una calle sin
+// salida da la vuelta en U por la gemela; en la punta de una vía recortada en el borde del barrio (o
+// de un solo sentido, sin gemela) no hay siguiente y traffic.ts lo saca de la escena.
 
 /** Dirección unitaria del primer (`atEnd` = false) o del último tramo de la arista. */
 export function edgeDirection(g: LaneGraph, e: number, atEnd: boolean, out: number[]): void {
@@ -17,8 +18,10 @@ export function edgeDirection(g: LaneGraph, e: number, atEnd: boolean, out: numb
 
 const dirA = [0, 0];
 const dirB = [0, 0];
+/** Vuelta en U: el control va 1,5 cuerdas por delante; la curva llega a 0,75 (la arista deja media calzada). */
+const U_REACH = 1.5;
 
-/** Siguiente arista desde el final de `e` (u en [0, 1)); −1 si no hay salida (calle sin salida o borde). */
+/** Siguiente arista desde el final de `e` (u en [0, 1)); −1 si se sale de la escena (borde recortado o sin gemela). */
 export function chooseNext(g: LaneGraph, e: number, u: number): number {
   const node = g.to[e] ?? -1;
   if (node < 0) return -1;
@@ -38,15 +41,16 @@ export function chooseNext(g: LaneGraph, e: number, u: number): number {
       if (pass === 1 && acc > u * total) return c;
     }
     total = acc;
-    if (total <= 0) return -1;
+    if (total <= 0) return g.border[e] ? -1 : (g.reverse[e] ?? -1); // sin otra salida: vuelta en U
   }
   return chosen;
 }
 
 /**
  * Curva de giro de p0 (saliendo en la dirección d0) a p2 (llegando en d2): el punto de control es el
- * cruce de las dos rectas, o el punto medio si van casi paralelas. Escribe 6 floats en `out` desde
- * `o` y devuelve el largo aproximado.
+ * cruce de las dos rectas, o el punto medio si van casi paralelas; en una vuelta en U (direcciones
+ * opuestas), U_REACH cuerdas por delante del punto medio (la curva llega a la mitad de eso). Escribe
+ * 6 floats en `out` desde `o` y devuelve el largo aproximado.
  */
 export function turnCurve(
   p0x: number, p0z: number, d0x: number, d0z: number, p2x: number, p2z: number, d2x: number, d2z: number,
@@ -55,7 +59,8 @@ export function turnCurve(
   const chord = Math.hypot(p2x - p0x, p2z - p0z);
   let [cx, cz] = [(p0x + p2x) / 2, (p0z + p2z) / 2];
   const cross = d0x * d2z - d0z * d2x;
-  if (Math.abs(cross) > 0.15) {
+  if (d0x * d2x + d0z * d2z < -0.9) [cx, cz] = [cx + d0x * U_REACH * chord, cz + d0z * U_REACH * chord];
+  else if (Math.abs(cross) > 0.15) {
     const a = ((p2x - p0x) * d2z - (p2z - p0z) * d2x) / cross;
     if (a > 0 && a < chord * 2 + 4) [cx, cz] = [p0x + d0x * a, p0z + d0z * a];
   }

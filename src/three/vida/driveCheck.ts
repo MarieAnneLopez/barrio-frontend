@@ -18,7 +18,9 @@ export function drive(v: Vias, g: LaneGraph, cars: number, steps: number, dt = 0
   const tr: Traffic = createTraffic(g, cars);
   const ways = new SegmentIndex(v, () => 1);
   const center = [0, 0, 0, 0, 0];
-  const report = { wrongWay: 0, leftSide: 0, backwards: 0, jumps: 0, checked: 0, nan: 0, againstDrawing: 0, leftOfTravel: 0, moved: 0, respawns: 0 };
+  const report = {
+    wrongWay: 0, leftSide: 0, backwards: 0, jumps: 0, checked: 0, nan: 0, againstDrawing: 0, leftOfTravel: 0, moved: 0, respawns: 0, leftInside: 0,
+  };
   for (let k = 0; k < steps; k++) {
     const before = Array.from({ length: cars }, (_, i) => [tr.edge[i] ?? 0, tr.s[i] ?? 0, tr.age[i] ?? 0, tr.x[i] ?? 0, tr.z[i] ?? 0, tr.turning[i] ?? 0] as const);
     stepTraffic(g, tr, cars, dt);
@@ -28,6 +30,8 @@ export function drive(v: Vias, g: LaneGraph, cars: number, steps: number, dt = 0
       const [edge0, s0, age0, x0, z0, turning0] = before[i] ?? [0, 0, 0, 0, 0, 0];
       const respawned = (tr.age[i] ?? 0) < age0;
       if (respawned) report.respawns += 1;
+      // Solo se sale de la escena en una punta recortada o sin gemela; donde cabe la vuelta en U, nunca.
+      if (respawned && !g.border[edge0] && (g.reverse[edge0] ?? -1) >= 0) report.leftInside += 1;
       const e = tr.edge[i] ?? 0;
       if (!respawned && e !== edge0 && g.from[e] !== g.to[edge0]) report.jumps += 1;
       if (!respawned && e === edge0 && !tr.turning[i] && (tr.s[i] ?? 0) < s0 - 1e-4) report.backwards += 1;
