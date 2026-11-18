@@ -44,9 +44,12 @@ describe('escenario del mapa a pantalla completa', () => {
     expect(menu()).toHaveAttribute('aria-expanded', 'false');
     expect(menu().className).toMatch(/\bsize-11\b/); // 44 × 44 px
     const panel = document.getElementById(menu().getAttribute('aria-controls') ?? '');
+    const footer = screen.getByText(/botón derecho para girar/).parentElement;
     expect(panel).not.toBeVisible();
+    expect(footer).not.toHaveClass('max-md:hidden');
     await userEvent.click(menu());
     expect(menu()).toHaveAttribute('aria-expanded', 'true');
+    expect(footer).toHaveClass('max-md:hidden'); // en el celular el panel lo tapa y ya lleva la cita de los datos
     expect(screen.getByRole('region', { name: 'Información del mapa' })).toHaveTextContent('Contenido del panel');
     await userEvent.click(menu());
     expect(panel).not.toBeVisible();
