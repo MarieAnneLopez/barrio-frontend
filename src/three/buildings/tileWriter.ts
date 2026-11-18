@@ -33,7 +33,7 @@ export interface TileWriter {
 }
 
 /** Escritor de una tesela con los edificios `ids` (reserva sus arreglos de una vez). */
-export function createTileWriter(s: BuildingSource, ids: readonly number[], o: BuildOptions): TileWriter {
+export function createTileWriter(s: BuildingSource, ids: readonly number[], o: BuildOptions, kinds: Uint8Array): TileWriter {
   let [vertices, indices] = [0, 0];
   for (const b of ids) {
     const c = capacityOf(s, b);
@@ -51,7 +51,7 @@ export function createTileWriter(s: BuildingSource, ids: readonly number[], o: B
       ranges.push(t.i);
       // El techo antes que los muros: tapa primero lo que el pretil no deja ver (menos sobredibujo).
       writeRoof(t, s, b, vol, o.parapet);
-      writeWalls(t, s, b, vol, o.windowSpacing);
+      writeWalls(t, s, b, vol, o.windowSpacing, kinds);
       boxes.push(...boxOf(s, b, vol));
     },
     finish(key) {

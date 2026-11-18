@@ -1,7 +1,8 @@
+import { wallKinds } from './partyWalls';
 import type { BuildOptions, BuildResult, BuildingSource, TileData } from './protocol';
 import { partition, TILE_SIZE } from './tiles';
 import { createTileWriter } from './tileWriter';
-import { LEVEL_HEIGHT } from './volume';
+import { LEVEL_HEIGHT, volumeOf } from './volume';
 import { WINDOW_SPACING } from './windows';
 
 // Constructor de las mallas de edificios, por teselas. Es un generador que cede el control tras
@@ -33,9 +34,11 @@ export function statsOf(tiles: readonly TileData[], ms: number): BuildResult['st
 export function* buildTiles(source: BuildingSource, options: Partial<BuildOptions> = {}): Generator<void, BuildResult> {
   const o: BuildOptions = { ...DEFAULT_OPTIONS, ...options };
   const start = now();
+  const volumes = Array.from({ length: source.count }, (_, b) => volumeOf(source, b, o.levelHeight));
+  const kinds = yield* wallKinds(source, volumes);
   const tiles: TileData[] = [];
   for (const plan of partition(source, o.tileSize, o.levelHeight)) {
-    const writer = createTileWriter(source, plan.buildings, o);
+    const writer = createTileWriter(source, plan.buildings, o, kinds);
     for (const b of plan.buildings) {
       writer.add(b);
       yield;

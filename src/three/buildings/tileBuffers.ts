@@ -1,8 +1,8 @@
 import type { F32, U32 } from '../data/format';
 import type { BuildingSource } from './protocol';
 
-// Arreglos de una tesela en construcción. Se reservan de una vez con el tope exacto de vértices y
-// el máximo de índices (earcut nunca da más de n + 2h − 2 triángulos), sin crecer ni copiar.
+// Arreglos de una tesela en construcción. Se reservan de una vez con el tope de vértices y de
+// índices (earcut nunca da más de n + 2h − 2 triángulos), sin crecer; al cerrar se recortan.
 
 export interface TileBuffers {
   /** x, y, z por vértice. */
@@ -39,16 +39,16 @@ export function pushTriangle(t: TileBuffers, a: number, b: number, c: number): v
 }
 
 /**
- * Tope de vértices e índices del edificio `b`: por anillo de n vértices, el muro lleva 2 (n + 1)
- * vértices (el primero se repite para cerrar las columnas) y 2n triángulos; el techo, n vértices
- * y a lo sumo n + 2h − 2 triángulos en total (h huecos).
+ * Tope de vértices e índices del edificio `b`: por anillo de n vértices, el muro lleva a lo sumo
+ * 4n vértices (dos pares por tramo cuando cambia de fachada a medianera) y 2n triángulos; el
+ * techo, n vértices y a lo sumo n + 2h − 2 triángulos en total (h huecos).
  */
 export function capacityOf(s: BuildingSource, b: number): { vertices: number; indices: number } {
   const [first, last] = [s.edificios[b] ?? 0, s.edificios[b + 1] ?? 0];
   let [vertices, indices, n] = [0, 0, 0];
   for (let r = first; r < last; r++) {
     const k = (s.anillos[r + 1] ?? 0) - (s.anillos[r] ?? 0);
-    vertices += 2 * (k + 1) + k;
+    vertices += 4 * k + k;
     indices += 6 * k;
     n += k;
   }
