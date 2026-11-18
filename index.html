@@ -11,6 +11,11 @@
     <!-- Soria es la letra de todo el texto (D98): se pide ya, sin esperar al CSS. -->
     <link rel="preload" href="/assets/fonts/soria/soria.woff2" as="font" type="font/woff2" crossorigin />
     <title>Reconoce tu Barrio · El Tintal</title>
+    <!-- Pantalla de carga (H33): el atlas de la carrera se pide al leer la página, no cuando React
+         la pinta. El de 420 px si la pantalla da para ese alto o es densa (el doble exacto de 210);
+         si no, el de 210. Misma condición que LoadingScreen (LOADER_WIDE) y SequenceSprite. -->
+    <link rel="preload" as="image" type="image/webp" href="/assets/avatar/run/run_420.webp" media="(min-width: 640px) and (min-height: 860px), (min-resolution: 1.01dppx), (-webkit-min-device-pixel-ratio: 1.01)" />
+    <link rel="preload" as="image" type="image/webp" href="/assets/avatar/run/run_210.webp" media="(max-width: 639.98px) and (max-resolution: 1dppx), (max-height: 859.98px) and (max-resolution: 1dppx)" />
   </head>
   <body>
     <div id="root"></div>

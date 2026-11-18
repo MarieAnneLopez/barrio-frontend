@@ -54,13 +54,14 @@ describe('Bienvenida de Mini Marie', () => {
     expect(css).not.toMatch(/var\(--c-/);
   });
 
-  it('con movimiento reducido las poses quedan fijas (sin animar la tira)', async () => {
+  it('con movimiento reducido las poses quedan fijas (sin animar el atlas)', async () => {
     act(() => useA11yStore.setState({ reducedMotion: true }));
     renderRoute('/');
     const welcome = await screen.findByRole('dialog', { name: 'Hola' });
     expect(welcome.querySelectorAll('.sequence[data-playing]')).toHaveLength(0);
-    const strip = welcome.querySelector<HTMLElement>('.welcome-peek[data-slot="top"] .sequence__strip');
-    expect(strip?.style.transform).toBe('translateX(-164px)'); // cuadro 3 de 7 (2 × 82 px): brazo arriba
+    const top = (part: string) => welcome.querySelector<HTMLElement>(`.welcome-peek[data-slot="top"] ${part}`)?.style.transform;
+    // tercer cuadro dibujado (brazo arriba) = cuadro 11 del ciclo: columna 2 (2 × 98 px), fila 1 (160 px)
+    expect([top('.sequence__strip'), top('.sequence__rows')]).toEqual(['translateX(-196px)', 'translateY(-160px)']);
   });
 
   it('el botón la cierra y la sesión la recuerda (D11)', async () => {

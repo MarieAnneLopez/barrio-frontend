@@ -1,49 +1,72 @@
 // @vitest-environment node
-// Verifica la salida real de build_sprite_scales.mjs: cada secuencia de Mini Marie existe en sus
-// tamaños fijos (D86, «escala entera»), cada celda mide un número entero de píxeles de ancho y
-// ninguna tira pesa de más (la de la pantalla de carga se descarga antes que nada).
-import { existsSync, readFileSync, statSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+// Verifica la salida real de build_sprite_scales.mjs (sprites32): cada secuencia de Mini Marie es un
+// atlas de 32 cuadros en 8 × 4, en sus tamaños fijos (D86, «escala entera»), con celdas de ancho
+// entero, hecho con el ciclo maestro de hoy y sin pasarse de peso. Los ciclos maestros (cuadros
+// dibujados intactos, paleta, huecos, pie de la carrera) se prueban en sprite_cycles.test.mjs.
+import { existsSync, statSync } from 'node:fs';
+import { join } from 'node:path';
 import sharp from 'sharp';
 import { describe, expect, it } from 'vitest';
+import { cellsOf, readCycle, root, scales } from './sprite_cycles_lib.mjs';
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const scales = JSON.parse(readFileSync(join(root, 'src/components/avatar/spriteScales.json'), 'utf8'));
 const cases = Object.entries(scales).flatMap(([name, spec]) => spec.sizes.map((size) => [name, size, spec]));
 const file = (name, size) => join(root, 'public/assets/avatar', name, `${name}_${size}.webp`);
 
-describe('tamaños fijos de Mini Marie (D86)', () => {
+/** Parte de los píxeles que se apartan más de `t` niveles (color premultiplicado o alfa). */
+function offShare(a, b, t) {
+  let off = 0;
+  for (let p = 0; p < a.length; p += 4) {
+    let e = Math.abs(a[p + 3] - b[p + 3]);
+    for (let c = 0; c < 3; c += 1) e = Math.max(e, Math.abs(a[p + c] * a[p + 3] - b[p + c] * b[p + 3]) / 255);
+    if (e > t) off += 1;
+  }
+  return off / (a.length / 4);
+}
+
+describe('atlas de Mini Marie (sprites32)', () => {
   it('cada secuencia tiene su tamaño base, el doble y el cuádruple que existan en el dibujo', () => {
     expect(Object.fromEntries(Object.entries(scales).map(([name, spec]) => [name, spec.sizes]))).toEqual({
-      wave: [80, 160, 320, 640], run: [210, 420], sit: [48, 96, 192], idle: [140, 280, 560],
+      wave: [80, 160, 320, 640], run: [105, 210, 420], sit: [48, 96, 192], idle: [140, 280, 560],
     });
   });
 
-  it.each(cases)('%s a %i px: tira con celdas de ancho entero', async (name, size, spec) => {
+  it.each(Object.entries(scales))('%s: 32 cuadros en 8 × 4 y sus cuadros dibujados en orden', (_name, spec) => {
+    expect([spec.frames, spec.grid]).toEqual([32, [8, 4]]);
+    expect(spec.keys[0]).toBe(0);
+    expect(spec.keys.every((k, i) => i === 0 || k > spec.keys[i - 1])).toBe(true);
+    expect(spec.keys.at(-1)).toBeLessThan(32);
+  });
+
+  it.each(cases)('%s a %i px: atlas de 8 × 4 con celdas de ancho entero', async (name, size, spec) => {
     const cell = (spec.cell[0] * size) / spec.cell[1];
-    expect(Number.isInteger(cell)).toBe(true);
+    expect(Number.isInteger(cell) && Number.isInteger((spec.box[0] * size) / spec.box[1])).toBe(true);
     expect(existsSync(file(name, size)), file(name, size)).toBe(true);
     const meta = await sharp(file(name, size)).metadata();
-    expect([meta.width, meta.height]).toEqual([spec.frames * cell, size]);
+    expect([meta.width, meta.height]).toEqual([spec.grid[0] * cell, spec.grid[1] * size]);
     expect(meta.hasAlpha).toBe(true);
   });
 
-  // D88: el tercer cuadro del dibujo original de la sentada viene corrido y parpadeaba; se salta.
-  it('la sentada se arma sin el cuadro corrido: 7 cuadros, y el tercero es el cuarto del dibujo', async () => {
-    expect([scales.sit.frames, scales.sit.source]).toEqual([7, { frames: 8, skip: [2] }]);
-    const [cellW, cellH] = scales.sit.cell;
-    const cut = (path, index) => sharp(path).extract({ left: index * cellW, top: 0, width: cellW, height: cellH }).raw().toBuffer();
-    const strip = join(root, 'public/assets/avatar/sit/sit_strip.webp');
-    const distance = (a, b) => a.reduce((sum, value, i) => sum + Math.abs(value - b[i]), 0) / a.length;
-    const third = await cut(file('sit', cellH), 2);
-    expect(distance(third, await cut(strip, 3))).toBeLessThan(6);
-    expect(distance(third, await cut(strip, 2))).toBeGreaterThan(12);
-  });
+  // Revisión de sprites32: nada comprobaba que el atlas saliera del ciclo maestro de hoy. Cada celda
+  // es su cuadro reducido como en build_sprite_scales.mjs (lanczos3); la compresión con pérdida
+  // aparta a lo sumo un 0,1 % de los píxeles más de 64 niveles (medido); un maestro cambiado sin
+  // rehacer el atlas, en torno al 16 % (la carrera con las piernas nuevas).
+  it.each(cases)('%s a %i px: cada celda es su cuadro del ciclo maestro de hoy', async (name, size, spec) => {
+    const { frames, w, h } = await readCycle(name);
+    const cw = (w * size) / h;
+    const decoded = await sharp(file(name, size)).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    const cells = cellsOf(decoded, spec.grid[0], cw, size, frames.length);
+    for (const [n, frame] of frames.entries()) {
+      const want = size === h ? frame : await sharp(frame, { raw: { width: w, height: h, channels: 4 } })
+        .resize(cw, size, { kernel: 'lanczos3' }).raw().toBuffer();
+      expect(offShare(cells[n], want, 64), `${name}_${size}: celda ${n}`).toBeLessThanOrEqual(0.005);
+    }
+  }, 120_000);
 
-  // Medido: WebP al 90 % se ve igual que sin pérdida a ×4 de aumento y pesa 3,8 veces menos.
-  it.each(cases)('%s a %i px: pesa poco (≤ 160 KB; ≤ 320 KB la de 640 px)', (name, size) => {
-    const budgetKb = size > 420 ? 320 : 160;
+  // Medido (sprites32): 32 cuadros pesan de 3 a 4 veces lo que las tiras de 7 u 8 (el reposo, que era
+  // un solo cuadro, unas 25 veces); el tope deja un 10 % de holgura sobre lo medido.
+  const BUDGET_KB = { 48: 40, 80: 90, 96: 90, 105: 120, 140: 140, 160: 200, 192: 180, 210: 260, 280: 340, 320: 470, 420: 460, 560: 740, 640: 840 };
+  it.each(cases)('%s a %i px: no pesa de más', (name, size) => {
+    const budgetKb = BUDGET_KB[size];
     expect(statSync(file(name, size)).size / 1024).toBeLessThanOrEqual(budgetKb);
   });
 });

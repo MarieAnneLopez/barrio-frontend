@@ -2,43 +2,66 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { RUN, runPath, stepPx } from './loadingRun';
+import { offsetAt, RUN, runKeyframes, runPath, stridePx } from './loadingRun';
 import { cellWidth, FRAME_MS } from './sequences';
 
 const css = readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'loading-screen.css'), 'utf8');
 
 // Pantalla de carga: Mini Marie parecía ir hacia atrás. Corría en su sitio mientras el suelo pasaba a
 // 89 px/s, entre 2,5 y 5 veces más lento que su pie apoyado: el pie patinaba contra el suelo.
+// sprites32: el ciclo tiene 32 cuadros a 24 fps; avanza por cuadro la zancada / 32, redondeada.
 describe('carrera de la pantalla de carga', () => {
   it('avanza hacia la derecha y mira a la derecha (los cuadros dibujados ya miran a ese lado)', () => {
     expect(RUN.direction).toBe(1);
     expect(RUN.facing).toBe('right');
   });
 
-  it('el ciclo va a 10 cuadros por segundo, dentro de 8–12', () => {
-    expect(FRAME_MS.run).toBe(100);
-    expect(RUN.fps).toBe(10);
+  it('el ciclo de 32 cuadros va a 24 cuadros por segundo', () => {
+    expect(FRAME_MS.run).toBeCloseTo(1000 / 24);
+    expect(RUN.fps).toBeCloseTo(24);
   });
 
-  it('avanza por cuadro lo que retrocede el pie apoyado (38 px a 420 de alto, la mitad a 210): no patina', () => {
-    expect(stepPx(420)).toBe(38);
-    expect(stepPx(210)).toBe(19);
+  it('zancada medida en el ciclo: 304 px por ciclo a 420 de alto (9,5 por cuadro), 152 a 210 y 76 a 105', () => {
+    expect([stridePx(420), stridePx(210), stridePx(105)]).toEqual([304, 152, 76]);
   });
 
-  it('cruza toda la pantalla en pasos enteros de px, sincronizados con los cuadros', () => {
+  it('cada cuadro avanza zancada / 32 redondeada: px enteros que no acumulan error', () => {
+    for (const size of [105, 210, 420]) {
+      const per = stridePx(size) / 32;
+      for (let n = 1; n <= 96; n += 1) {
+        const x = offsetAt(n, size);
+        expect(Number.isInteger(x)).toBe(true);
+        expect(Math.abs(x - n * per)).toBeLessThanOrEqual(0.5); // nunca a más de medio px de la recta
+        expect([Math.floor(per), Math.ceil(per)]).toContain(x - offsetAt(n - 1, size));
+      }
+      expect(offsetAt(32, size)).toBe(stridePx(size)); // tras un ciclo, una zancada exacta
+    }
+    expect([...Array(9).keys()].map((n) => offsetAt(n, 105))).toEqual([0, 2, 5, 7, 10, 12, 14, 17, 19]);
+  });
+
+  it('cruza toda la pantalla, de fuera a fuera, en cuadros enteros', () => {
     const sprite = cellWidth('run', 210);
     const path = runPath(390, 210, sprite);
     expect(path.start).toBe(-98); // entra entera desde fuera, por la izquierda
+    expect(path.frames).toBe(103); // 488 px a 4,75 px por cuadro
+    expect(path.distance).toBe(offsetAt(103, 210));
     expect(path.distance).toBeGreaterThanOrEqual(390 + 98); // y sale entera por la derecha
-    expect(path.distance).toBe(path.steps * 19);
-    expect(path.durationMs).toBe(path.steps * FRAME_MS.run);
-    expect(Number.isInteger(path.start) && Number.isInteger(path.distance)).toBe(true);
+    expect(path.durationMs).toBeCloseTo(103 * FRAME_MS.run);
   });
 
-  it('el suelo es una línea quieta de 1 px; solo se mueve ella, con transform en pasos', () => {
+  it('un fotograma clave por cuadro, en px enteros, sostenido hasta el cuadro siguiente', () => {
+    const path = runPath(390, 210, 98);
+    const keys = runKeyframes(path, 210);
+    expect(keys).toHaveLength(path.frames + 1);
+    expect(keys[0]).toEqual({ offset: 0, easing: 'step-end', transform: 'translate3d(-98px, 0, 0)' });
+    expect(keys[1]?.transform).toBe('translate3d(-93px, 0, 0)'); // 4,75 → 5 px
+    expect(keys.at(-1)).toMatchObject({ offset: 1, transform: `translate3d(${path.distance - 98}px, 0, 0)` });
+    expect(keys.every((k) => /^translate3d\(-?\d+px, 0, 0\)$/.test(String(k.transform)))).toBe(true);
+  });
+
+  it('el suelo es una línea quieta de 1 px; solo se mueve ella, con transform', () => {
     expect(css).toMatch(/\.loading-screen__ground \{[^}]*height: 1px;/);
     expect(css).not.toMatch(/\.loading-screen__ground \{[^}]*animation/);
-    expect(css).toMatch(/@keyframes loading-run \{[\s\S]*translate3d\(var\(--run-start\)[\s\S]*translate3d\(var\(--run-end\)/);
     expect(css).not.toMatch(/\b(left|top):[^;]*var\(--run/);
   });
 });

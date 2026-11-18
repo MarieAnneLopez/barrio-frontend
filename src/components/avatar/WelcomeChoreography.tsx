@@ -18,9 +18,10 @@ const AUTO_CLOSE_MS = 3800;
 
 /**
  * Bienvenida (§11.4.3, D6, D11, H33, D82): exactamente 8 Mini Marie salen desde fuera de la
- * pantalla (4 esquinas y el centro de cada borde), de cabeza hacia adentro, y saludan con sus
- * 7 cuadros; el letrero "Hola" al centro. Espera a la pantalla de carga. Escala entera (D86):
- * 160 px de alto, u 80 px en pantallas de menos de 640 px; lo que asoma, en píxeles enteros.
+ * pantalla (4 esquinas y el centro de cada borde), de cabeza hacia adentro, y saludan con su ciclo
+ * de 32 cuadros (sprites32); el letrero "Hola" al centro. Espera a la pantalla de carga. Escala
+ * entera (D86): 160 px de alto, u 80 px en pantallas de menos de 640 px; lo que asoma, en píxeles
+ * enteros, y la mano que saluda (sale por la derecha de la caja) tampoco pisa nada.
  */
 export function WelcomeChoreography() {
   const { t } = useTranslation();

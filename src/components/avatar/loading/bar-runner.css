@@ -1,0 +1,8 @@
+/* La Mini Marie de la barra: de pie sobre ella, con su frente 2 px antes de la punta (las chispas
+   amarillas saltan hacia adelante y nunca la tocan). La punta (loading-bar__head) mide 0 × 0. */
+.bar-runner {
+  position: absolute;
+  right: 2px;
+  bottom: 10px;
+  pointer-events: none;
+}

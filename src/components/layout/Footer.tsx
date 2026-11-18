@@ -31,7 +31,7 @@ export function Footer() {
         >
           <FooterContact />
         </section>
-        {withCreator ? <CreatorProfileSection headingLevel={2} tone={tones.creator} /> : null}
+        {withCreator ? <CreatorProfileSection headingLevel={2} tone={tones.creator} lazy /> : null}
       </div>
       <div className="tone-papel md:bg-pink">
         <div className={`${COLUMN} py-10`}>

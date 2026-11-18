@@ -2,7 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { useLoadingScreenStore } from '../store/loadingScreenStore';
 import { loadingSnapshot, useLoadingStore } from '../store/loadingStore';
 
-/** Tiempo mínimo en pantalla (H33): la zancada completa se ve al menos una vez. */
+/**
+ * Tiempo mínimo en pantalla (H33). Con el ciclo de 32 cuadros a 24 fps (sprites32) es algo más de
+ * media zancada (el ciclo dura 1,33 s), y Mini Marie, que entra desde fuera, aún no asoma entera.
+ */
 export const SCREEN_MIN_MS = 700;
 /** Salida con fundido, más corta que la entrada. */
 export const SCREEN_LEAVE_MS = 240;

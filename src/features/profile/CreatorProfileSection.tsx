@@ -12,13 +12,16 @@ interface CreatorProfileSectionProps {
   headingLevel?: 2 | 3;
   /** Tono en el celular y desde 768 px (en el pie, según el plan de color de la ruta; D100). */
   tone?: ToneByWidth;
+  /** En el pie de página: Mini Marie se baja solo cuando el pie se acerca a la pantalla. */
+  lazy?: boolean;
 }
 
 /**
- * Tarjeta "Perfil de la Creadora" (§11.5) con Mini Marie de pie y el contacto. Mini Marie va a
- * escala entera como en el resto del sitio (D88): 64 × 140 px, con su recurso doble o cuádruple.
+ * Tarjeta "Perfil de la Creadora" (§11.5) con Mini Marie de pie, respirando (ciclo de 32 cuadros,
+ * sprites32), y el contacto. Mini Marie va a escala entera como en el resto del sitio (D88):
+ * 64 × 140 px, con su recurso doble o cuádruple.
  */
-export function CreatorProfileSection({ headingLevel = 2, tone }: CreatorProfileSectionProps) {
+export function CreatorProfileSection({ headingLevel = 2, tone, lazy = false }: CreatorProfileSectionProps) {
   const { t } = useTranslation();
   const Heading = `h${headingLevel}` as const;
   const titleId = useId();
@@ -31,7 +34,7 @@ export function CreatorProfileSection({ headingLevel = 2, tone }: CreatorProfile
       {...(tone ? toneAttrs(tone) : {})}
     >
       <span role="img" aria-label={t('creator.avatarAlt')} className="self-center leading-none sm:self-start">
-        <SequenceSprite name="idle" size={140} playing={false} />
+        <SequenceSprite name="idle" size={140} lazy={lazy} />
       </span>
       <div className="flex flex-col gap-3">
         <p className="ui-eyebrow m-0 text-fg-muted">{t('creator.title')}</p>
