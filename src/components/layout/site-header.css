@@ -2,8 +2,10 @@
    (data-tone; ver toneRegistry.ts) y, si esa sección lo pide, flota transparente (data-float).
    El cambio de tono es instantáneo: solo se animan transform y opacity. */
 /* Paleta D100: la cabecera es rosa (realce) con un degradado sutil hacia rosa claro, el único
-   permitido junto al del hero; la selección de dentro (ES/EN, menú) pasa a crema para seguir
-   viéndose. Sus controles usan la línea negra: el marrón no llega a 3:1 sobre los rosas.
+   permitido junto al del hero; la selección de dentro (ES/EN) pasa a crema, o a rosa sobre la crema,
+   y lleva además la línea negra (headerContrast.test.tsx). Sus controles usan la línea negra: el
+   marrón no llega a 3:1 sobre los rosas. En alto contraste esos fondos valen negro y la selección
+   se queda en la de la raíz: blanca con texto negro (PAL-02).
    [data-tone] sube la especificidad para no depender del orden de las hojas (D93). */
 .site-header {
   border-bottom: 1px solid var(--border-subtle);
@@ -13,11 +15,17 @@
 
 .site-header[data-tone] {
   --border-strong: var(--text-on-accent);
+}
+
+:root:not(.high-contrast) .site-header[data-tone] {
   --interactive-active: var(--bg-primary);
 }
 
-.site-header[data-tone='papel'] {
+:root:not(.high-contrast) .site-header[data-tone='papel'] {
   --interactive-active: var(--bg-strong);
+}
+
+.site-header[data-tone='papel'] {
   background-color: var(--bg-primary);
   background-image: none;
 }
