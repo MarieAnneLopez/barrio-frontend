@@ -52,7 +52,7 @@ describe('Inicio: película de 4 capítulos (etapa 3)', () => {
     await screen.findByTestId('escena-3d');
     expect(within(hero()).getByText('4,653° N · 74,157° O')).toBeInTheDocument();
     for (const name of ['Recentrar', 'Pausar la órbita']) expect(within(hero()).getByRole('button', { name })).toBeInTheDocument();
-    expect(within(hero()).getByText('Datos © OpenStreetMap (ODbL)')).toBeInTheDocument();
+    expect(within(hero()).getByText('Datos © UAECD (Catastro Bogotá, CC BY 4.0) · © OpenStreetMap (ODbL)')).toBeInTheDocument();
     expect(within(hero()).queryByRole('button', { name: 'Leyenda y filtro' })).toBeNull();
     expect(within(hero()).queryByText(/usa la rueda para acercar/)).toBeNull(); // aquí la rueda desplaza la página
   });

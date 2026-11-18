@@ -382,7 +382,7 @@
     "placeCard": "Lugar seleccionado",
     "openModule": "Ver en {{module}}",
     "closePlace": "Cerrar ficha",
-    "source": "Datos © OpenStreetMap (ODbL)",
+    "source": "Datos © UAECD (Catastro Bogotá, CC BY 4.0) · © OpenStreetMap (ODbL)",
     "legend": {
       "title": "Leyenda y filtro",
       "noData": "sin datos",
