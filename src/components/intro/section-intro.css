@@ -6,7 +6,8 @@
   --gutter: clamp(1.25rem, 4vw, 2.5rem);
   position: relative;
   overflow: hidden;
-  container-type: inline-size;
+  container-type: inline-size; /* su ancho propio es 0: */
+  align-self: stretch; /* en un flex items-start (la 404) desaparecía */
   border-radius: var(--r-sm);
   background-color: var(--intro-reveal);
 }

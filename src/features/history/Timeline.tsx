@@ -12,6 +12,9 @@ function badgeOf(hito: Hito, press: Set<string>) {
   return refs.some((ref) => press.has(ref)) ? 'press' : 'unverified';
 }
 
+// Paleta D100: tarjetas alternas rosa claro y crema; el año va en una etiqueta amarilla (texto negro).
+const TONE = 'ui-card--paper tone-papel';
+
 /** Línea de tiempo vertical (§11.3.1) con ScrollTrigger; cada hito muestra su fuente. */
 export function Timeline({ hitos, fuentes }: { hitos: Hito[]; fuentes: Fuente[] }) {
   const { t } = useTranslation();
@@ -22,14 +25,14 @@ export function Timeline({ hitos, fuentes }: { hitos: Hito[]; fuentes: Fuente[] 
 
   return (
     <ol ref={root} aria-label={t('history.timeline')} className="m-0 flex list-none flex-col gap-0 p-0">
-      {hitos.map((hito) => {
+      {hitos.map((hito, index) => {
         const key = `content:history.${hito.anio}-${hito.orden}`;
         const badge = badgeOf(hito, press);
         return (
           <li key={hito.id} data-reveal className="relative flex gap-4 border-l border-line-strong pb-6 pl-6 last:pb-0">
             <span aria-hidden="true" className="absolute top-7 -left-[5px] size-[9px] rounded-full bg-highlight" />
-            <div className="ui-card flex min-w-0 max-w-3xl flex-1 flex-col gap-2 p-5">
-              <p className="m-0 font-display text-step-3 text-highlight">{hito.anio}</p>
+            <div className={`ui-card flex min-w-0 max-w-3xl flex-1 flex-col gap-2 p-5 ${index % 2 ? '' : TONE}`}>
+              <p className="m-0 self-start rounded-sm bg-mark px-3 font-display text-step-3 text-on-mark">{hito.anio}</p>
               <h3 className="m-0 text-step-1 text-fg">{t(`${key}.title`, { defaultValue: hito.titulo })}</h3>
               <p className="m-0 max-w-prose text-fg-secondary">
                 {t(`${key}.description`, { defaultValue: hito.descripcion })}

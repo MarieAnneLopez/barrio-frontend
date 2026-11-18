@@ -14,10 +14,15 @@
   background-color: var(--bg-accent);
 }
 
-/* Tarjeta rosa (D100: banners destacados); también va junto a .tone-papel (texto negro, 11,22:1). */
-.ui-card--rosa {
-  border-color: transparent;
-  background-color: var(--bg-strong);
+/* Tarjetas del pie (D100): tono en el celular (data-m) y desde 768 px (data-d), según el plan de
+   color de la ruta; van con .tone-papel: texto negro sobre rosa claro (14,96) y rosa (11,22). */
+.foot-card { border: 1px solid var(--border-subtle); border-radius: var(--r-sm); background-color: var(--bg-surface); }
+.foot-card[data-m='rosa-claro'] { border-color: transparent; background-color: var(--bg-accent); }
+.foot-card[data-m='rosa'] { border-color: transparent; background-color: var(--bg-strong); }
+@media (min-width: 768px) {
+  .foot-card[data-d='crema'] { border-color: var(--border-subtle); background-color: var(--bg-surface); }
+  .foot-card[data-d='rosa-claro'] { border-color: transparent; background-color: var(--bg-accent); }
+  .foot-card[data-d='rosa'] { border-color: transparent; background-color: var(--bg-strong); }
 }
 
 /* Lo que flota sobre el contenido: modal, menú, paneles de la maqueta. */

@@ -3,16 +3,17 @@ import { Link, useLocation } from 'react-router-dom';
 import { CreatorProfileSection } from '../../features/profile/CreatorProfileSection';
 import { FooterContact } from './FooterContact';
 import { FooterNav } from './FooterNav';
-import { footerTones, TONE_CLASS } from './footerTones';
+import { footerTones, toneAttrs } from './footerTones';
 
 const COLUMN = 'mx-auto w-full max-w-[1200px] px-4 md:pr-20 md:pl-10 xl:px-10';
 
 /**
  * Pie institucional (§11.5, D2: al final de cada página, no fijo), compacto y en la paleta D100:
- * dos tarjetas sobre crema (contacto y Perfil de la Creadora) con los tonos que la entrada de la
- * ruta no usó (footerTones), una franja rosa claro con los 14 módulos, la ubicación y el acceso a
- * Preguntas Frecuentes, una barra amarilla con los créditos y la banda marrón con el nombre del
- * sitio en crema grande (3,56:1 solo vale para texto grande). En /creadora omite su tarjeta.
+ * dos tarjetas sobre crema (contacto y Perfil de la Creadora) con el tono que pide el plan de color
+ * de la ruta (footerTones), una franja (rosa claro desde 768 px; en el celular sería casi una
+ * pantalla de rosa claro) con los 14 módulos, la ubicación y el acceso a Preguntas Frecuentes,
+ * una barra amarilla con los créditos y la banda marrón con el nombre del sitio en crema grande
+ * (3,56:1 solo vale para texto grande). En /creadora omite su tarjeta.
  */
 export function Footer() {
   const { t } = useTranslation();
@@ -23,12 +24,16 @@ export function Footer() {
   return (
     <footer aria-label={t('footer.label')} className="mt-16">
       <div className={`${COLUMN} grid gap-6 pb-12 ${withCreator ? 'lg:grid-cols-2' : ''}`}>
-        <section aria-labelledby="footer-contact" className={`ui-card flex flex-col justify-center p-6 ${TONE_CLASS[tones.contact]}`}>
+        <section
+          aria-labelledby="footer-contact"
+          className="foot-card tone-papel flex flex-col justify-center p-6"
+          {...toneAttrs(tones.contact)}
+        >
           <FooterContact />
         </section>
-        {withCreator ? <CreatorProfileSection headingLevel={2} className={TONE_CLASS[tones.creator]} /> : null}
+        {withCreator ? <CreatorProfileSection headingLevel={2} tone={tones.creator} /> : null}
       </div>
-      <div className="tone-papel bg-pink">
+      <div className="tone-papel md:bg-pink">
         <div className={`${COLUMN} py-10`}>
           <FooterNav />
         </div>
@@ -43,7 +48,7 @@ export function Footer() {
         </p>
       </div>
       <div className="bg-band">
-        <p className={`${COLUMN} m-0 py-8 font-display text-step-4 text-on-band`}>{t('app.title')}</p>
+        <p className={`${COLUMN} m-0 py-5 font-display text-step-4 text-on-band`}>{t('app.title')}</p>
       </div>
     </footer>
   );

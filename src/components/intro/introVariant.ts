@@ -4,6 +4,7 @@
 // están en el menú toman un índice estable a partir de su texto.
 import { CATEGORIES, categoryPath } from '../../lib/categoryConfig';
 import { NAV_AFTER_CATEGORIES, NAV_BEFORE_CATEGORIES } from '../../lib/navigation';
+import { palettePlan } from '../layout/palettePlan';
 import type { Corner, WordOrder } from './introMath';
 
 export type RevealColor = 'crema' | 'rosa-claro' | 'rosa';
@@ -39,5 +40,6 @@ export function introVariant(pathname: string): IntroVariant {
   const path = normalize(pathname);
   const found = MENU_PATHS.indexOf(path);
   const at = found >= 0 ? found : hashIndex(path);
-  return { corner: pick(CORNERS, at), order: pick(ORDERS, at), indents: pick(INDENTS, at), reveal: pick(REVEALS, at) };
+  const reveal = palettePlan(path)?.reveal ?? pick(REVEALS, at); // el plan medido de la ruta manda (D100)
+  return { corner: pick(CORNERS, at), order: pick(ORDERS, at), indents: pick(INDENTS, at), reveal };
 }

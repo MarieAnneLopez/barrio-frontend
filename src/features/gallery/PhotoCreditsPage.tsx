@@ -7,6 +7,9 @@ import { photoAlt } from '../../lib/photoUrls';
 import { PageHeader } from '../pages/PageHeader';
 import { PhotoCredit } from './PhotoCredit';
 
+// Paleta D100: cada foto es una fila de registro; el lugar va en una celda rosa claro.
+const ROW = 'grid gap-x-6 gap-y-2 border-b border-line pb-3 md:grid-cols-[minmax(0,1fr)_minmax(0,2.2fr)]';
+
 /**
  * Créditos de fotos (H35): cada foto publicada con su lugar, autor, licencia y página
  * de origen (Commons o Mapillary). Aclara el único cambio hecho: tamaño y formato.
@@ -31,12 +34,16 @@ export function PhotoCreditsPage() {
           <p className="m-0 text-step--1 text-fg-muted">{t('credits.count', { count: photos.items.length })}</p>
           <ol className="m-0 flex list-none flex-col gap-3 p-0">
             {photos.items.map((photo) => (
-              <li key={photo.id} className="flex flex-col gap-1 border-b border-line pb-3">
-                <Link to={`/categorias/${photo.categoria_slug}`} className="text-step-0 text-fg underline underline-offset-2">
-                  {photo.nombre}
-                </Link>
-                <span className="text-step--1 text-fg-secondary">{photoAlt(photo, i18n.language)}</span>
-                <PhotoCredit author={photo.autor} license={photo.licencia} source={photo.source_ref} />
+              <li key={photo.id} className={ROW}>
+                <div className="tone-papel rounded-sm bg-pink px-4 py-2">
+                  <Link to={`/categorias/${photo.categoria_slug}`} className="text-step-0 text-fg underline underline-offset-2">
+                    {photo.nombre}
+                  </Link>
+                </div>
+                <div className="flex min-w-0 flex-col gap-1">
+                  <span className="text-step--1 text-fg-secondary">{photoAlt(photo, i18n.language)}</span>
+                  <PhotoCredit author={photo.autor} license={photo.licencia} source={photo.source_ref} badges />
+                </div>
               </li>
             ))}
           </ol>
