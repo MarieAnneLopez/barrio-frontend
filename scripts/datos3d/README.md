@@ -117,21 +117,22 @@ coinciden una a una (código, textos, lote y tipo, sin contar espacios al final)
 | Con pisos de Catastro | 20 381 (99,9 %; los 13 de OSM: 1 con `building:levels`, 12 sin dato) |
 | Con placa oficial de su lote | 20 356 (99,8 %): 9 907 dentro de la huella, 10 449 la más cercana del lote |
 | Placa de la manzana / sin placa | 14 / 24 |
+| Dirección del conjunto (sin casa ni torre ajenas) | 1 312: 297 huellas con varias casas, 1 007 con la placa más cercana de otro edificio o lejana, 8 de la manzana |
 | Con nombre de conjunto o lugar | 11 942 (58,6 %), 48 de ellos con nombre del propio edificio |
 | Vías | 1 483 tramos y 5 310 nodos: 528 service, 355 footway, 203 residential, 98 tertiary, 68 sidewalk, 67 crossing, 50 cycleway, 33 secondary, 27 construction, 24 primary, 10 pedestrian, 8 unclassified, 4 track, 4 path, 3 trunk, 1 steps |
-| Cruces peatonales | 172 (13 cebra, 106 marcados, 11 sin marcas, 42 sin dato; 60 con semáforo) y 50 semáforos |
+| Cruces | 178 (14 cebra, 121 marcados, 11 sin marcas, 32 sin dato; 62 con semáforo, 19 de ciclorruta) y 50 semáforos |
 | Suelo | 249 áreas (77 pasto, 57 parques, 55 canchas, 24 agua, 23 juegos…) y 32 líneas de agua |
 | Árboles reales | 248 sueltos y 20 hileras |
 | Faroles reales | 0 (OSM no tiene `highway=street_lamp` en el barrio: ver FORMATO.md §6) |
 
 | Archivo | Bytes |
 |---|---|
-| `edificios.bin.gz` | 455 034 (1 673 984 sin comprimir) |
-| `vias.bin.gz` | 47 106 (89 240) |
+| `edificios.bin.gz` | 451 954 (1 661 792 sin comprimir) |
+| `vias.bin.gz` | 47 206 (89 352) |
 | `suelo.bin.gz` | 12 350 (18 912) |
 | `puntos.bin.gz` | 1 741 (3 520) |
-| `manifest.json` | ~8 KB |
-| **Total** | **≈ 0,50 MB** (meta ≤ 6 MB) |
+| `manifest.json` | 8 560 |
+| **Total** | **521 811 (≈ 0,50 MB)** (meta ≤ 6 MB) |
 
 ## Pruebas
 
