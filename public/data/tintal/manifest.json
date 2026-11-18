@@ -1,7 +1,7 @@
 {
   "version": 1,
   "formato": "TNT3 (scripts/datos3d/FORMATO.md)",
-  "generado": "2026-11-18T04:34:23.308Z",
+  "generado": "2026-11-18T06:07:41.542Z",
   "barrio": {
     "nombre": "El Tintal",
     "definicion": "UPZ 78 Tintal Norte + UPZ 79 Calandaima",
@@ -203,9 +203,9 @@
       "licenciaUrl": "https://www.openstreetmap.org/copyright",
       "atribucion": "© OpenStreetMap contributors",
       "avisoDelServicio": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
-      "version": "datos OSM al 2026-11-18T04:33:05Z",
-      "consultado": "2026-11-18T04:34:23.308Z",
-      "entidades": 5042
+      "version": "datos OSM al 2026-11-18T06:06:13Z",
+      "consultado": "2026-11-18T06:07:41.542Z",
+      "entidades": 4812
     }
   ]
 }

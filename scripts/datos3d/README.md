@@ -23,7 +23,7 @@ nuevas. Tarda ~75 s descargando y ~3 s desde la caché.
 | `TINTAL_POLIGONO` | `https://reconoce-el-tintal.pages.dev/api/v1/barrio/poligono` | URL o archivo GeoJSON del polígono |
 | `OVERPASS_URL` | overpass-api.de, luego private.coffee y kumi.systems | servidores Overpass separados por comas |
 
-## Fuentes (consultadas el 2026-11-18 04:33 UTC, 17 de noviembre 23:33 en Bogotá)
+## Fuentes (Catastro y polígono consultados el 2026-11-18 04:33 UTC, 17 de noviembre 23:33 en Bogotá; OSM, el 2026-11-18 06:07 UTC, 01:07 en Bogotá)
 
 | Capa | Entidad | Consulta | Conjunto en el portal | Versión |
 |---|---|---|---|---|
@@ -32,7 +32,7 @@ nuevas. Tarda ~75 s descargando y ~3 s desde la caché.
 | Lote | UAECD | `…/catastro/lote/MapServer/0` | https://datosabiertos.bogota.gov.co/dataset/lote | servicio vigente; última publicación 10.26 |
 | Placa Domiciliaria | UAECD | `…/catastro/placadomiciliaria/MapServer/0` | https://datosabiertos.bogota.gov.co/dataset/placa-domiciliaria | 10.26 (verificado, abajo) |
 | Sector Catastral | UAECD | `…/catastro/sectorcatastral/MapServer/0` | https://datosabiertos.bogota.gov.co/dataset/sector-catastral | servicio vigente; última publicación 10.26 |
-| OpenStreetMap | OSMF y colaboradores | `https://overpass-api.de/api/interpreter` | https://www.openstreetmap.org | datos OSM al 2026-11-18T04:33:05Z |
+| OpenStreetMap | OSMF y colaboradores | `https://overpass-api.de/api/interpreter` | https://www.openstreetmap.org | datos OSM al 2026-11-18T06:06:13Z |
 
 **Licencias, con el texto tal como lo publica cada fuente:**
 
@@ -102,8 +102,11 @@ modificados (`manifest.licenciaDeLosArchivos`).
    colegios, parques, comercio). El sector catastral (`SCANOMBRE`) va aparte, por el código de lote.
 7. **OSM por Overpass** (una consulta con la caja del barrio): vías y caminos recortados al
    polígono con nodos compartidos (grafo), sentido, carriles, velocidad, nivel, puentes y accesos;
-   cruces peatonales con eje de la calle, largo y marcas; semáforos; parques, pasto y agua
-   recortados al barrio; canales; árboles, hileras y faroles reales.
+   cruces con eje de la calle, largo y marcas; semáforos; parques, pasto y agua recortados al
+   barrio; canales; árboles, hileras y faroles reales. Solo pide lo que usa el script: los nombres
+   van con sus claves de lugar, no `name` a secas, que traía límites (Cundinamarca, Bogotá, UPZ) y
+   152 rutas de bus. La respuesta baja de 17,2 MB (5 042 elementos) a 3,0 MB (4 812); con la
+   respuesta vieja filtrada así, los cuatro `.bin.gz` salen idénticos.
 
 **Verificación de versión (2026-11-17):** las 16 753 placas del servicio REST dentro del polígono
 coinciden una a una (código, textos, lote y tipo, sin contar espacios al final) con el GeoPackage

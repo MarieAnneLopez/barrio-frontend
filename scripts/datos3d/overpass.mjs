@@ -2,12 +2,16 @@
 // polígono se hace aquí). Si el servidor principal no responde se prueban los espejos.
 import { OVERPASS } from './config.mjs';
 
+// Nombres de conjunto o lugar (nombres.mjs) con claves que no salen en las otras sentencias. Sin
+// `name` a secas: traía límites (Cundinamarca, Bogotá, UPZ) y rutas de bus que no se usan.
+const NAMED = ['relation["shop"]', ...['office', 'tourism', 'healthcare', 'club'].flatMap((k) => [`way["${k}"]`, `relation["${k}"]`])];
+
 const SELECTORS = [
   'way["highway"]', 'node["highway"~"^(crossing|street_lamp|traffic_signals)$"]',
   'node["natural"="tree"]', 'way["natural"]', 'relation["natural"]', 'way["waterway"]',
   'way["building"]', 'relation["building"]', 'way["leisure"]', 'relation["leisure"]',
   'way["landuse"]', 'relation["landuse"]', 'way["amenity"]', 'relation["amenity"]',
-  'way["shop"]', 'way["name"]', 'relation["name"]',
+  'way["shop"]', ...NAMED.map((s) => `${s}["name"]`),
 ];
 
 /** La caja va en cada sentencia (no global) para que `out geom` traiga las geometrías completas. */
