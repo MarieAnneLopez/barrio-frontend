@@ -1,9 +1,10 @@
 import '../vidrio.css';
-import { useCallback, useId, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Skeleton } from '../../../components/ui/Skeleton';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useTintal3D } from '../../../three/data/useTintal3D';
+import { useSelectionStore } from '../../../three/selection/selectionStore';
 import { useSkyClock } from '../../../three/sky/useSkyClock';
 import { SittingMarie } from '../../home/SittingMarie';
 import { SelectionCard } from '../card/SelectionCard';
@@ -52,6 +53,15 @@ export function MapStage({ label, title, emoji, children, onOpenPlace, mascot = 
     menu.current?.focus();
   }, []);
   useStageEffects(title, open, close, menu);
+  // En el celular la hoja del panel tapa el centro, donde la cámara deja lo elegido: al elegir algo se
+  // cierra en el mismo render que abre la ficha (el foco pasa a la ficha, useCardFocus, y no se pierde).
+  useEffect(() => {
+    if (wide) return undefined;
+    if (useSelectionStore.getState().selected) setOpen(false);
+    return useSelectionStore.subscribe((state, prev) => {
+      if (state.selected && state.selected !== prev.selected) setOpen(false);
+    });
+  }, [wide]);
 
   return (
     // El relleno de arriba (no un margen) deja a Mini Marie medir desde lo alto de la página, como en el Inicio.
