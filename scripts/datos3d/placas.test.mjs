@@ -28,6 +28,15 @@ describe('formatPlaca', () => {
     expect(formatPlaca({ PDONVIAL: 'CL 7', PDOTEXTO: '87B 40 ', PDOCINTERI: null })).toBe('CL 7 # 87B-40');
     expect(formatPlaca({ PDONVIAL: null, PDOTEXTO: '6D 20', PDOCINTERI: null })).toBe('6D-20');
   });
+
+  it('un PDOCINTERI sin forma de cruce y distancia no es el número del conjunto', () => {
+    expect(formatPlaca({ PDONVIAL: 'CL 34A S', PDOTEXTO: 'IN 8', PDOCINTERI: '8' })).toBe('CL 34A S IN 8');
+    expect(formatPlaca({ PDONVIAL: 'KR 95A', PDOTEXTO: 'MJ 34', PDOCINTERI: 'MJ 34' })).toBe('KR 95A MJ 34');
+  });
+
+  it('sin vía ni número, un interior solo no es una dirección', () => {
+    expect(formatPlaca({ PDONVIAL: null, PDOTEXTO: 'IN 1', PDOCINTERI: 'IN 1' })).toBe('');
+  });
 });
 
 describe('choosePlaca', () => {

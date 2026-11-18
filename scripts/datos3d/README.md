@@ -67,6 +67,9 @@ los muestre debe citar las dos atribuciones (`manifest.licenciaDeLosArchivos`).
    lote; si el lote no tiene, la más cercana de su manzana (9 primeros dígitos). Empate: principal
    antes que secundaria. Texto: `PDONVIAL # PDOTEXTO` con guion (`KR 87B # 6D-20`); en placas
    interiores, el número del conjunto (`PDOCINTERI`) y luego el interior (`KR 88D # 6D-27 TO 6`).
+   `PDOCINTERI` solo cuenta como número si tiene la forma «cruce distancia» (en 22 placas trae
+   `8` o `MJ 34`): si no, queda vía e interior (`CL 34A S IN 8`), y un interior sin vía ni número
+   no es dirección.
    La unión es por código y no por posición: medido en el barrio, solo el 86,7 % de las placas cae
    dentro del polígono de su propio lote (7,7 % en el lote vecino y 5,6 % en el andén o la vía).
 6. **Nombre de conjunto o lugar** (Catastro no publica nombres): el edificio OSM con nombre que lo

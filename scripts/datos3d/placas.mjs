@@ -7,6 +7,7 @@ import { SPEC } from './spec.mjs';
 import { distanceToRings } from './inside.mjs';
 
 const clean = (text) => (text ?? '').replace(/\s+/g, ' ').trim();
+const CROSS_DISTANCE = /^\d+[A-Z]*(?: ?BIS)? \d+/; // «6D 27», «34A 17 S»; no «8» ni «MJ 34»
 
 /** «6D 27» → «6D-27»; «34 17 S» → «34-17 S». */
 function number(text) {
@@ -15,13 +16,16 @@ function number(text) {
   return [`${cross}-${distance}`, ...rest].join(' ');
 }
 
+/** PDOCINTERI solo sirve de número del conjunto si tiene la forma «cruce distancia». */
+const conjunto = (text) => (CROSS_DISTANCE.test(clean(text)) ? number(text) : '');
+
 export function formatPlaca({ PDONVIAL, PDOTEXTO, PDOCINTERI }) {
   const via = clean(PDONVIAL);
   const text = clean(PDOTEXTO);
   const isInterior = /^[A-ZÑ]+( |$)/.test(text); // «TO 6», «CA 12», «IN 3», «MJ»
-  const main = isInterior ? number(PDOCINTERI) : number(text || PDOCINTERI);
+  const main = isInterior ? conjunto(PDOCINTERI) : number(text) || conjunto(PDOCINTERI);
   const address = via && main ? `${via} # ${main}` : via || main;
-  return clean(`${address} ${isInterior ? text : ''}`);
+  return address ? clean(`${address} ${isInterior ? text : ''}`) : ''; // un interior solo no es dirección
 }
 
 const manzana = (lote) => (lote ?? '').slice(0, 9);
