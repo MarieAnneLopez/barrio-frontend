@@ -13,6 +13,8 @@ export const VISIBLE = 0.46;
 
 export interface Rect { left: number; top: number; right: number; bottom: number }
 export interface Size { w: number; h: number }
+/** Caja de Mini Marie; reach: px que la ventana del atlas sale por la derecha de la caja (la mano que saluda). */
+export interface Sprite extends Size { reach?: number }
 /** rotation: la de su ranura; si una de esquina se corre por un borde, toma la de ese borde. */
 export interface Placement { x: number; y: number; shifted: number; rotation: number }
 
@@ -30,11 +32,12 @@ function along(slot: PeekSlot): [number, number] {
 }
 
 /** Caja visible (dentro de la pantalla) de una Mini Marie anclada en (x, y); null si no asoma. */
-export function visibleBox(rotation: number, x: number, y: number, sprite: Size, view: Size): Rect | null {
+export function visibleBox(rotation: number, x: number, y: number, sprite: Sprite, view: Size): Rect | null {
   const rad = (rotation * Math.PI) / 180;
   const [cos, sin] = [Math.cos(rad), Math.sin(rad)];
   const v = sprite.h * VISIBLE;
-  const corners = [[-sprite.w / 2, -v], [sprite.w / 2, -v], [-sprite.w / 2, 0], [sprite.w / 2, 0]] as const;
+  const [left, right] = [-sprite.w / 2, sprite.w / 2 + (sprite.reach ?? 0)];
+  const corners = [[left, -v], [right, -v], [left, 0], [right, 0]] as const;
   const xs = corners.map(([cx, cy]) => x + cx * cos - cy * sin);
   const ys = corners.map(([cx, cy]) => y + cx * sin + cy * cos);
   const box = {
@@ -49,7 +52,7 @@ const hits = (a: Rect, b: Rect) =>
   a.left < b.right + GAP && b.left < a.right + GAP && a.top < b.bottom + GAP && b.top < a.bottom + GAP;
 
 /** Coloca las 8 sin tapar obstáculos (letrero, botones, chat) ni a las demás; si chocan, se deslizan. */
-export function placePeeks(view: Size, sprite: Size, obstacles: readonly Rect[]): Record<PeekSlot, Placement> {
+export function placePeeks(view: Size, sprite: Sprite, obstacles: readonly Rect[]): Record<PeekSlot, Placement> {
   const taken: Rect[] = [];
   const result = {} as Record<PeekSlot, Placement>;
   for (const slot of SLOTS) {

@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { placePeeks, SLOTS, visibleBox, type Rect, type Size } from './welcomePeeks';
+import { placePeeks, SLOTS, visibleBox, type Rect, type Size, type Sprite } from './welcomePeeks';
 
 // D82: 8 Mini Marie, ninguna tapa letrero, botón ni chat, ni se pisan; ≤ 12 % de la pantalla.
-/** Igual que la bienvenida (D86): 82 × 160 px desde 640 px de ancho de pantalla; 41 × 80 px por debajo. */
-const spriteFor = ({ w }: Size): Size => (w >= 640 ? { w: 82, h: 160 } : { w: 41, h: 80 });
+/**
+ * Igual que la bienvenida (D86): 82 × 160 px desde 640 px de ancho de pantalla; 41 × 80 px por debajo.
+ * La ventana del atlas mide 98 (o 49) px: la mano que saluda sale hasta 16 (u 8) px por la derecha.
+ */
+const spriteFor = ({ w }: Size): Sprite => (w >= 640 ? { w: 82, h: 160, reach: 16 } : { w: 41, h: 80, reach: 8 });
 const rect = (left: number, top: number, width: number, height: number): Rect =>
   ({ left, top, right: left + width, bottom: top + height });
 
@@ -41,5 +44,24 @@ describe.each(CASES)('bienvenida a %o', (view, obstacles) => {
   it('la suma de lo visible es ≤ 12 % de la pantalla', () => {
     const total = boxes.reduce((sum, box) => sum + (box ? area(box) : 0), 0);
     expect(total / (view.w * view.h)).toBeLessThanOrEqual(0.12);
+  });
+});
+
+// Revisión de sprites32: la colocación medía solo la caja (82 px) y la mano, que en 3 de los 32
+// cuadros sale hasta 13,5 px por su derecha, podía pisar el chat, el WhatsApp o a otra Mini Marie.
+describe('la mano que saluda sale de la caja', () => {
+  const view = { w: 1440, h: 900 };
+  const sprite = { w: 82, h: 160, reach: 16 };
+
+  it('lo que asoma llega hasta donde llega la mano, a la derecha de la caja (sin girar)', () => {
+    expect(visibleBox(0, 720, 900, sprite, view)).toEqual({ left: 679, right: 777, top: 900 - 160 * 0.46, bottom: 900 });
+  });
+
+  it('se corre si un obstáculo queda al alcance de la mano, aunque no de la caja', () => {
+    const near = rect(720 + 41 + 10, 880, 20, 20); // a 10 px de la caja: fuera del margen de 8 px de la caja
+    const placed = placePeeks(view, sprite, [near]);
+    const box = visibleBox(placed.bottom.rotation, placed.bottom.x, placed.bottom.y, sprite, view);
+    expect(placed.bottom.shifted).not.toBe(0);
+    expect(box && overlap(box, near)).toBe(false);
   });
 });

@@ -1,5 +1,6 @@
 // Posiciones de la bienvenida (H33, D82): 8 Mini Marie que salen desde fuera de la pantalla
-// por sus esquinas y bordes, de cabeza hacia adentro, y saludan con los 7 cuadros de Marie.
+// por sus esquinas y bordes, de cabeza hacia adentro, y saludan con el ciclo de 32 cuadros
+// (sprites32: los 7 que dibujó Marie y sus intermedios).
 import type { WelcomeGeometry } from './welcomeTimeline';
 import { placePeeks, SLOTS, type PeekSlot, type Rect } from './welcomePeeks';
 
@@ -16,7 +17,10 @@ const OBSTACLES = '#welcome-sign, .welcome-cta, .chat-launcher, .ui-whatsapp, as
 /** Mide la pantalla y los obstáculos y ancla cada Mini Marie (left/top en px enteros, D86). */
 export function layoutPeeks(root: HTMLElement): void {
   const body = root.querySelector<HTMLElement>('.welcome-peek__body');
-  const sprite = { w: body?.offsetWidth ?? 0, h: body?.offsetHeight ?? 0 };
+  const w = body?.offsetWidth ?? 0;
+  // La ventana del atlas es más ancha que la caja: la mano que saluda sale por la derecha.
+  const atlasWindow = body?.querySelector<HTMLElement>('.sequence__window');
+  const sprite = { w, h: body?.offsetHeight ?? 0, reach: Math.max(0, (atlasWindow?.offsetWidth ?? w) - w) };
   const rects: Rect[] = [...document.querySelectorAll(OBSTACLES)]
     .map((el) => el.getBoundingClientRect())
     .filter((r) => r.width > 0 && r.height > 0);
