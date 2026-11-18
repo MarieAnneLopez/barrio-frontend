@@ -5,11 +5,11 @@ const INSTAGRAM = 'https://www.instagram.com/marieane_lop/';
 const LINK =
   'ui-pressable ui-btn--secondary inline-flex min-h-11 items-center gap-2 rounded-sm border border-fg bg-secondary px-4 font-medium text-on-mark no-underline';
 
-/** Contacto de la creadora (H32, D68): en el pie de todas las páginas. */
+/** Contacto de la creadora (H32, D68): en el pie de todas las páginas, dentro de su tarjeta. */
 export function FooterContact() {
   const { t } = useTranslation();
   return (
-    <section aria-labelledby="footer-contact" className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4">
       <h2 id="footer-contact" className="ui-eyebrow m-0">{t('footer.contact')}</h2>
       <p className="m-0 max-w-prose">{t('footer.contactText')}</p>
       <ul className="m-0 flex list-none flex-wrap gap-3 p-0">
@@ -27,6 +27,6 @@ export function FooterContact() {
           </a>
         </li>
       </ul>
-    </section>
+    </div>
   );
 }
