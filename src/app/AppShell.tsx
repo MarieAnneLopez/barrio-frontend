@@ -1,5 +1,5 @@
 import { Suspense, useEffect } from 'react';
-import { Outlet, useMatches } from 'react-router-dom';
+import { Outlet, ScrollRestoration, useMatches } from 'react-router-dom';
 import { LoadingScreen } from '../components/avatar/LoadingScreen';
 import { WelcomeGate } from '../components/avatar/WelcomeGate';
 import { ChatWidget } from '../components/chat/ChatWidget';
@@ -23,6 +23,8 @@ const COLUMN = 'mx-auto w-full max-w-[1200px] px-4 pt-24 pb-8 md:pr-20 md:pl-10 
  * pie, barra de accesibilidad, chat flotante y botón de WhatsApp. Ya no hay barra lateral.
  * Una ruta con `handle: { bleed: true }` ocupa todo el ancho y empieza bajo el header (Inicio, Mapa 3D
  * y los módulos); `bleed` también puede ser una función de los parámetros (un módulo inexistente no).
+ * ScrollRestoration: cada ruta nueva empieza arriba (con su entrada a la vista), un #ancla va a su
+ * sitio, y atrás y adelante vuelven a donde se estaba.
  */
 export function AppShell() {
   useApplyA11y();
@@ -38,6 +40,7 @@ export function AppShell() {
 
   return (
     <div className="flex min-h-dvh flex-col">
+      <ScrollRestoration />
       <SkipLink target={MAIN_ID} />
       <LoadingScreen />
       <Header />

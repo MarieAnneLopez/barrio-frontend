@@ -23,6 +23,8 @@ i18n.addResourceBundle('en', 'content', content);
 configure({ asyncUtilTimeout: 3000 });
 // Los reintentos del chat (D82) se prueban sin esperas reales.
 chatRetry.delaysMs = [0, 0];
+// jsdom no desplaza y avisa en cada window.scrollTo, que ScrollRestoration (AppShell) pide al navegar.
+if (typeof window !== 'undefined') window.scrollTo = () => undefined;
 
 // La bienvenida se abre en la primera visita de la sesión: en las pruebas del
 // resto de la app se da por vista; sus propias pruebas la vuelven a habilitar.
