@@ -1,11 +1,20 @@
 import { act } from '@testing-library/react';
-import type { Mesh, Scene, ShaderMaterial } from 'three';
+import { Color, type Mesh, type Scene, type ShaderMaterial } from 'three';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { renderers } from './ribbonGlKit';
 import { LABELS, mountRibbon } from './ribbonHarness';
 import { coverUv } from './ribbonShader';
 
+/** Dos juegos de tokens: el del modo estándar y el del alto contraste (clase en <html>). */
+const TOKENS = vi.hoisted((): Record<'standard' | 'high', Record<string, string>> => ({
+  standard: { '--text-primary': 'black', '--focus-ring': 'orange' },
+  high: { '--text-primary': 'white', '--focus-ring': 'yellow' },
+}));
 vi.mock('three', async (original) => (await import('./ribbonGlKit')).fakeThree(original));
+vi.mock('../../../lib/cssToken', () => ({
+  cssVar: (name: string, fallback = '') =>
+    TOKENS[document.documentElement.classList.contains('high-contrast') ? 'high' : 'standard'][name] ?? fallback,
+}));
 afterEach(() => {
   vi.restoreAllMocks();
   Reflect.deleteProperty(HTMLImageElement.prototype, 'decode');
@@ -64,15 +73,18 @@ describe('PhotoRibbon con WebGL: lo que se pinta', () => {
     expect((centered()?.uCover?.value as { toArray(): number[] }).toArray()).toEqual(coverUv(4 / 3, 1.6));
   });
 
-  it('alto contraste: al cambiar la clase de <html> se releen los colores y se repintan las etiquetas', async () => {
+  it('alto contraste: al cambiar la clase de <html> se releen los tokens, en las etiquetas y en los uniformes', async () => {
     const { painted, advance } = await mountRibbon();
     advance(2);
-    const before = painted.texts.length;
+    const ring = () => centered()?.uRing?.value as Color;
+    expect(painted.texts.at(-1)?.fill).toBe('black');
+    expect(ring().equals(new Color('orange'))).toBe(true);
     await act(async () => {
       document.documentElement.className = 'high-contrast';
       await Promise.resolve();
     });
     advance(1);
-    expect(painted.texts.length).toBeGreaterThan(before);
+    expect(painted.texts.at(-1)?.fill).toBe('white');
+    expect(ring().equals(new Color('yellow'))).toBe(true);
   });
 });

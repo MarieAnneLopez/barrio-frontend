@@ -21,7 +21,9 @@ function drag({ hit, group }: MountedRibbon, steps: number[], wait: number) {
   }
   clock += wait;
   fireEvent.pointerUp(group(), at(720 + (steps.at(-1) ?? 0)));
-  fireEvent.click(group(), { ...at(720), detail: 1 }); // el clic sintético que cierra el arrastre
+  // El clic sintético que cierra el arrastre, en el botón que se pulsó (así llega si el navegador no lo
+  // manda al contenedor que capturó el puntero): si no se descartara, centraría o abriría esa foto.
+  fireEvent.click(hit(0), { ...at(720), detail: 1 });
 }
 
 describe('PhotoRibbon con WebGL: arrastre, rueda y clics', () => {
@@ -47,8 +49,13 @@ describe('PhotoRibbon con WebGL: arrastre, rueda y clics', () => {
   });
 
   it('clic en una vecina la centra por el camino más corto; un segundo clic, ya en el centro, la abre', async () => {
-    const { hit, advance, live } = await mountRibbon();
+    const { hit, advance, live, frames } = await mountRibbon();
+    advance(2);
+    const left = () => Number(/translate\(([-\d.]+)px/.exec(hit(0).style.transform)?.[1]);
+    const before = left();
     fireEvent.click(hit(N - 1), { detail: 1 });
+    act(() => void frames.run(3));
+    expect(left()).toBeGreaterThan(before); // la del centro se aparta a la derecha: un paso atrás, no seis adelante
     advance();
     expect(live()).toHaveTextContent(`Foto ${N} de ${N}`);
     expect(screen.queryByRole('dialog')).toBeNull();

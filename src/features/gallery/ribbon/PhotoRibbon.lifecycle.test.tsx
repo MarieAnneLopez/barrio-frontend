@@ -8,6 +8,7 @@ vi.mock('three', async (original) => (await import('./ribbonGlKit')).fakeThree(o
 afterEach(() => {
   vi.restoreAllMocks();
   restoreHidden();
+  Reflect.deleteProperty(HTMLImageElement.prototype, 'decode');
 });
 
 describe('PhotoRibbon con WebGL: vida del lienzo', () => {
@@ -46,11 +47,16 @@ describe('PhotoRibbon con WebGL: vida del lienzo', () => {
     expect(frames.pending.size).toBe(1);
   });
 
-  it('al desmontar libera renderer, contexto, geometrías, materiales, texturas, observers, oyentes y rAF', async () => {
+  it('al desmontar libera renderer, contexto, geometrías, materiales, texturas (también las de las fotos), observers, oyentes y rAF', async () => {
+    const decoded: (() => void)[] = [];
+    HTMLImageElement.prototype.decode = () => new Promise<void>((resolve) => decoded.push(resolve));
     const [added, removed] = [vi.spyOn(EventTarget.prototype, 'addEventListener'), vi.spyOn(EventTarget.prototype, 'removeEventListener')];
     const stopWatching = vi.spyOn(MutationObserver.prototype, 'disconnect');
     const { group, unmount, frames, observers, advance } = await mountRibbon();
     advance(2);
+    const photos = decoded.length; // las fotos de las tarjetas que se ven
+    await act(async () => decoded.splice(0).forEach((resolve) => resolve()));
+    advance(1);
     const scene = renderers[0]?.render.mock.calls.at(-1)?.[0] as Scene;
     const meshes = scene.children.filter((child) => (child as Mesh).isMesh).length;
     const freed = [BufferGeometry, Material, Texture].map((kind) => vi.spyOn(kind.prototype, 'dispose'));
@@ -64,7 +70,8 @@ describe('PhotoRibbon con WebGL: vida del lienzo', () => {
     expect(renderer?.forceContextLoss).toHaveBeenCalledTimes(1);
     expect(canvas?.isConnected).toBe(false);
     expect(meshes).toBeGreaterThanOrEqual(4); // el suelo y las ranuras
-    expect(freed.map((spy) => spy.mock.calls.length)).toEqual([2, meshes, meshes - 1]); // planos, materiales, etiquetas
+    expect(photos).toBeGreaterThanOrEqual(3);
+    expect(freed.map((spy) => spy.mock.calls.length)).toEqual([2, meshes, meshes - 1 + photos]); // planos, materiales, etiquetas y fotos
     expect(frames.pending.size).toBe(0);
     for (const watcher of [...observers.created.intersection, ...observers.created.resize]) expect(watcher.disconnect).toHaveBeenCalledTimes(1);
     expect(stopWatching).toHaveBeenCalled();
