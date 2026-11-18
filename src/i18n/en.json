@@ -691,7 +691,7 @@
     "note": "Buildings, lots, address plates and sectors from Catastro Bogotá (UAECD) via Bogotá Open Data (CC BY 4.0, modified data); roads, parks and water from OpenStreetMap (ODbL). Here El Tintal is UPZ 78 plus UPZ 79 (662 ha): an operational definition, not an official administrative unit."
   },
   "galleryPage": {
-    "note": "Only real photos from Wikimedia Commons with a free license, stored on the platform with their author and license. Places without a free photo show none: no photos are made up.",
+    "note": "Only real photos with a free license, from Mapillary (CC BY-SA 4.0) and Wikimedia Commons (CC BY 4.0 or CC BY-SA 4.0), stored on the platform with their author and license. Places without a free photo show none: no photos are made up.",
     "places": "Neighborhood places",
     "module": "See in {{module}}",
     "views": "Views of the neighborhood",
