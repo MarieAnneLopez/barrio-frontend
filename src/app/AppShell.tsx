@@ -2,7 +2,7 @@ import { Suspense, useEffect } from 'react';
 import { Outlet, useMatches } from 'react-router-dom';
 import { LoadingScreen } from '../components/avatar/LoadingScreen';
 import { LoadingTask } from '../components/avatar/LoadingTask';
-import { WelcomeChoreography } from '../components/avatar/WelcomeChoreography';
+import { WelcomeGate } from '../components/avatar/WelcomeGate';
 import { ChatWidget } from '../components/chat/ChatWidget';
 import { AccessibilityRail } from '../components/layout/AccessibilityRail';
 import { Footer } from '../components/layout/Footer';
@@ -46,7 +46,7 @@ export function AppShell() {
       <AccessibilityRail />
       <ChatWidget />
       <WhatsAppFloat />
-      <WelcomeChoreography />
+      <WelcomeGate />
       <ScenePortal />
       <LoginModal />
     </div>
