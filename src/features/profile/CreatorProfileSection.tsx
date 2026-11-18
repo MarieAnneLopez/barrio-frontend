@@ -11,8 +11,9 @@ interface CreatorProfileSectionProps {
 }
 
 /**
- * Tarjeta "Perfil de la Creadora" (§11.5) con Mini Marie de pie y el contacto. Mini Marie va a
- * escala entera como en el resto del sitio (D88): 64 × 140 px, con su recurso doble o cuádruple.
+ * Tarjeta "Perfil de la Creadora" (§11.5) con Mini Marie de pie, respirando (ciclo de 32 cuadros,
+ * sprites32), y el contacto. Mini Marie va a escala entera como en el resto del sitio (D88):
+ * 64 × 140 px, con su recurso doble o cuádruple.
  */
 export function CreatorProfileSection({ headingLevel = 2 }: CreatorProfileSectionProps) {
   const { t } = useTranslation();
@@ -22,7 +23,7 @@ export function CreatorProfileSection({ headingLevel = 2 }: CreatorProfileSectio
   return (
     <Card as="section" aria-labelledby={titleId} className="flex flex-col gap-5 sm:flex-row">
       <span role="img" aria-label={t('creator.avatarAlt')} className="self-center leading-none sm:self-start">
-        <SequenceSprite name="idle" size={140} playing={false} />
+        <SequenceSprite name="idle" size={140} />
       </span>
       <div className="flex flex-col gap-3">
         <p className="ui-eyebrow m-0 text-fg-muted">{t('creator.title')}</p>

@@ -35,7 +35,7 @@ describe('Footer', () => {
     expect([...(sprite?.querySelectorAll('source') ?? [])].map((s) => s.getAttribute('srcset'))).toEqual([
       '/assets/avatar/idle/idle_560.webp', '/assets/avatar/idle/idle_280.webp',
     ]);
-    expect(sprite).not.toHaveAttribute('data-playing');
+    expect(sprite).toHaveAttribute('data-playing'); // sprites32: respira en un ciclo de 32 cuadros
     expect(within(card).getByRole('link', { name: /WhatsApp/ })).toHaveAttribute('href', SPEC_WHATSAPP);
   });
 
