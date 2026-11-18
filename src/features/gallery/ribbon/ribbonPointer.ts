@@ -31,11 +31,19 @@ interface Press {
 export function bindDrag(frame: HTMLElement, handlers: DragHandlers, now = () => performance.now()): () => void {
   let press: Press | null = null;
   let swallowUntil = 0;
+  /** Antes de capturar el puntero, el gesto puede acabar fuera del escenario: también se escucha en la ventana. */
+  const outside = (listen: boolean) => {
+    for (const type of ['pointerup', 'pointercancel'] as const) {
+      if (listen) window.addEventListener(type, end);
+      else window.removeEventListener(type, end);
+    }
+  };
 
   const down = (event: PointerEvent) => {
     if (press || event.button !== 0) return;
     swallowUntil = 0;
     press = { id: event.pointerId, x: event.clientX, y: event.clientY, dragging: false, lastX: event.clientX, lastDx: 0, lastAt: now() };
+    outside(true);
     handlers.onPress();
   };
   const move = (event: PointerEvent) => {
@@ -54,6 +62,7 @@ export function bindDrag(frame: HTMLElement, handlers: DragHandlers, now = () =>
     if (!press || event.pointerId !== press.id) return;
     const { dragging, lastDx, lastAt } = press;
     press = null;
+    outside(false);
     if (frame.hasPointerCapture(event.pointerId)) frame.releasePointerCapture(event.pointerId);
     delete frame.dataset.dragging;
     if (dragging) swallowUntil = now() + SWALLOW_MS;
@@ -72,6 +81,7 @@ export function bindDrag(frame: HTMLElement, handlers: DragHandlers, now = () =>
   frame.addEventListener('click', click, true);
   return () => {
     for (const [type, listener] of pointer) frame.removeEventListener(type, listener);
+    outside(false);
     frame.removeEventListener('click', click, true);
   };
 }
