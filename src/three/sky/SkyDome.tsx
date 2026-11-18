@@ -11,8 +11,8 @@ void main() {
 }
 `;
 
-// Degradado del horizonte al cenit; bajo el horizonte sigue el cielo (la maqueta flota en él).
-// De noche salen estrellas: celdas de la esfera que se encienden por azar fijo (hash).
+// Degradado del horizonte al cenit, igual hacia arriba y hacia abajo: la maqueta flota en medio del
+// cielo. De noche salen estrellas alrededor: celdas de la esfera que se encienden por azar fijo (hash).
 const FRAGMENT = /* glsl */ `
 uniform vec3 uZenith;
 uniform vec3 uHorizon;
@@ -22,8 +22,8 @@ varying vec3 vDir;
 float hash(vec3 p) { return fract(sin(dot(p, vec3(12.9898, 78.233, 37.719))) * 43758.5453); }
 void main() {
   vec3 dir = normalize(vDir);
-  float h = dir.y;
-  vec3 color = h > 0.0 ? mix(uHorizon, uZenith, pow(h, 0.55)) : mix(uHorizon, uHorizon * 0.82, pow(-h, 0.7));
+  float h = abs(dir.y);
+  vec3 color = mix(uHorizon, uZenith, pow(h, 0.55));
   float star = step(0.9972, hash(floor(dir * 220.0))) * smoothstep(0.04, 0.3, h) * uNight;
   gl_FragColor = vec4(mix(color, uStar, star), 1.0);
   #include <colorspace_fragment>

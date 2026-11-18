@@ -46,7 +46,7 @@ export function SunMoon({ distance, still }: { distance: number; still: boolean 
     place(sun.current, state.sunElevation, state.sunAzimuth, distance);
     place(moon.current, state.moonElevation, state.moonAzimuth, distance);
   });
-  const size = distance * 0.09;
+  const size = distance * 0.045; // ≈ 2,5°: estilizado, más grande que el real (0,5°)
   return (
     <>
       <sprite ref={sun} scale={[size * 1.6, size * 1.6, 1]} renderOrder={-9}>
