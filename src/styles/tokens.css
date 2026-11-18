@@ -50,6 +50,9 @@
   --text-on-hover: var(--c-negro);
   --interactive-active: var(--c-rosa);
   --text-on-active: var(--c-negro);
+  /* Dato resaltado de una figura (El Tintal en el mapa de ubicación de Historia): el mismo rosa que la
+     selección, pero propio, para que cambiar la selección no cambie la figura. Blanco en alto contraste. */
+  --figure-highlight: var(--c-rosa);
   --border-subtle: rgb(177 110 75 / 0.4);
   --border-strong: var(--c-marron); /* 3,56 sobre crema: líneas de 1 px */
   --border-ink: var(--c-marron);

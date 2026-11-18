@@ -61,4 +61,13 @@ describe('leyenda del mapa de ubicación', () => {
       expect(utility(classes(key), 'border')).toEqual(utility(classes(area), 'stroke'));
     }
   });
+
+  // Revisión de PAL-05: El Tintal es un dato de la figura, no una selección; con su propio token, cambiar
+  // el color de selección de la interfaz no cambia el mapa (sus contrastes los miden las pruebas de arriba).
+  it('El Tintal tiene su propio token, no el de selección', () => {
+    const { tintal } = draw();
+    const [name] = utility(classes(tintal), 'fill');
+    expect(THEME.get(name)).not.toBe('var(--interactive-active)');
+    expect(THEME.get(name)).toBe('var(--figure-highlight)');
+  });
 });
