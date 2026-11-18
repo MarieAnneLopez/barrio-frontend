@@ -1,9 +1,8 @@
 // @vitest-environment node
-// Direcciones: texto de la placa oficial (Catastro, capa Placa Domiciliaria) y elección de la
-// placa de cada edificio: la de su lote (dentro de la huella o la más cercana) o la más cercana de
-// su manzana.
+// Texto de la placa oficial (Catastro, capa Placa Domiciliaria). Qué placa toma cada edificio se
+// prueba en direcciones.test.mjs.
 import { describe, expect, it } from 'vitest';
-import { choosePlaca, formatPlaca, indexPlacas } from './placas.mjs';
+import { formatPlaca, placaBase } from './placas.mjs';
 
 describe('formatPlaca', () => {
   it('placa de la calle: vía # cruce-distancia', () => {
@@ -39,35 +38,10 @@ describe('formatPlaca', () => {
   });
 });
 
-describe('choosePlaca', () => {
-  const house = [[[0, 0], [10, 0], [10, -10], [0, -10]]];
-  const placa = (codigo, p, lote, pdoTipo = 1) => ({ codigo, p, lote, pdoTipo, texto: `placa ${codigo}` });
-  const index = indexPlacas([
-    placa('dentro', [5, -5], '004601018028', 2),
-    placa('cerca', [12, -5], '004601018028'),
-    placa('lejos', [40, -5], '004601018028'),
-    placa('vecina', [-3, -5], '004601018029'),
-    placa('otra-manzana', [0, 1], '004601019001'),
-  ]);
-
-  it('la placa del lote que cae dentro de la huella gana aunque sea secundaria', () => {
-    expect(choosePlaca(house, '004601018028', index)).toEqual({ tipo: 1, texto: 'placa dentro' });
-  });
-
-  it('si ninguna cae dentro, la más cercana del lote', () => {
-    const shifted = [[[20, 0], [30, 0], [30, -10], [20, -10]]];
-    expect(choosePlaca(shifted, '004601018028', index)).toEqual({ tipo: 2, texto: 'placa cerca' });
-  });
-
-  it('a igual distancia gana la principal', () => {
-    const twin = indexPlacas([placa('b-secundaria', [12, -5], 'L', 2), placa('a-principal', [-2, -5], 'L', 1)]);
-    expect(choosePlaca(house, 'L', twin).texto).toBe('placa a-principal');
-  });
-
-  it('un lote sin placas toma la más cercana de su manzana; sin manzana, nada', () => {
-    const west = [[[-20, 0], [-10, 0], [-10, -10], [-20, -10]]];
-    expect(choosePlaca(west, '004601018099', index)).toEqual({ tipo: 3, texto: 'placa vecina' });
-    expect(choosePlaca(house, '009999999001', index)).toEqual({ tipo: 0, texto: '' });
-    expect(choosePlaca(house, '', index)).toEqual({ tipo: 0, texto: '' });
+describe('placaBase', () => {
+  it('la dirección del conjunto: la placa sin casa, torre ni interior', () => {
+    expect(placaBase({ PDONVIAL: 'KR 88D', PDOTEXTO: 'TO 6', PDOCINTERI: '6D 27' })).toBe('KR 88D # 6D-27');
+    expect(placaBase({ PDONVIAL: 'CL 2', PDOTEXTO: 'TO 3', PDOCINTERI: null })).toBe('CL 2');
+    expect(placaBase({ PDONVIAL: 'KR 87B', PDOTEXTO: '6D 20', PDOCINTERI: null })).toBe('KR 87B # 6D-20');
   });
 });

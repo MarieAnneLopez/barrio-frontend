@@ -78,14 +78,14 @@ visto desde arriba con el norte arriba (área positiva en el plano x, −z) y lo
 | `BASE` | u8 | N | piso donde empieza el volumen: 0 en el suelo, ≥ 1 en voladizos (`base`) |
 | `SOTA` | u8 | N | sótanos (`sotanos`) |
 | `BAND` | u8 | N | banderas, abajo (`banderas`) |
-| `DIRT` | u8 | N | de dónde salió la placa: 0 ninguna, 1 dentro de la huella, 2 la más cercana de su lote, 3 la más cercana de su manzana (`tipoDireccion`) |
+| `DIRT` | u8 | N | de dónde salió la placa: 0 ninguna, 1 dentro de la huella, 2 la más cercana de su lote, 3 la más cercana de su manzana; la ficha debe decirlo (abajo) (`tipoDireccion`) |
 | `DIRE` | u32 | N | índice en `TDIR` (`direccion`) |
 | `NOMT` | u8 | N | 0 sin nombre, 1 nombre de un edificio OSM que lo contiene, 2 del área con nombre más pequeña que lo contiene (`tipoNombre`) |
 | `NOMB` | u32 | N | índice en `TNOM` y `TNRF` (`nombre`) |
 | `LOTE` | u32 | N | índice en `TLOT` (`lote`) |
 | `SECT` | u32 | N | índice en `TSEC` (`sector`) |
 | `OSMI` | f64 | N | id OSM del edificio: > 0 vía, < 0 relación, 0 si es de Catastro (`osm`) |
-| `TDIR` | utf8 | | direcciones oficiales, p. ej. `KR 88D # 6D-27 TO 6` (`textos.direcciones`) |
+| `TDIR` | utf8 | | texto de la placa oficial, p. ej. `KR 88D # 6D-27 TO 6`, o la dirección del conjunto sin casa ni torre, `KR 88D # 6D-27` (abajo) (`textos.direcciones`) |
 | `TNOM` | utf8 | | nombres de conjunto o lugar (`textos.nombres`) |
 | `TNRF` | utf8 | | origen de cada nombre, paralela a `TNOM`: `way/123`, `relation/456` (`textos.origenNombres`) |
 | `TLOT` | utf8 | | códigos de lote catastral de 12 dígitos (`textos.lotes`) |
@@ -101,10 +101,29 @@ el suelo: no asoma), 64 `enConstruccion` (OSM building=construction).
 puede darles una altura por regla, pero la ficha debe decir «pisos sin dato», nunca un número.
 Las construcciones `subterranea` no tienen volumen visible.
 
-**Ficha.** Nombre (`NOMT` > 0) o, si no hay, la dirección; además lote (`TLOT`), sector
-(`TSEC`) y fuente: Catastro (UAECD) o OSM. Origen trazable: Catastro →
+**Ficha.** Nombre (`NOMT` > 0) o, si no hay, la dirección; junto a la dirección, siempre lo que
+dice `DIRT`, porque solo con 1 la placa está en el propio edificio:
+
+| `DIRT` | De dónde sale la dirección | La ficha la presenta como |
+|---|---|---|
+| 1 | una placa oficial de su lote cae dentro de la huella | «Dirección oficial» |
+| 2 | la placa oficial más cercana de su mismo lote (la relación es por cercanía) | «Dirección de su lote (placa más cercana)» |
+| 3 | la placa más cercana de otro lote de su manzana | «Dirección aproximada (de la manzana)» |
+| 0 | no hay placa en su lote ni en su manzana | «Sin dirección» |
+
+El número de casa, torre o interior (`CA 5`, `TO 6`, `IN 3`, `MJ`) solo acompaña al edificio al
+que identifica: con `DIRT` 1, si es el único interior que cae en la huella; con 2, si este edificio
+es el del lote más cercano a esa placa y está a menos de 5 m. Si no (una huella con varias casas,
+una placa que es de otro edificio o que queda lejos) y siempre con 3, el texto es la dirección del
+conjunto: vía y número, sin interior (`KR 88D # 6D-27`). Por eso muchos edificios de un mismo
+conjunto comparten la dirección (el lote 004627077011 tiene 744 construcciones y una sola placa).
+
+Además lote (`TLOT`), sector (`TSEC`) y fuente: Catastro (UAECD) o OSM. Origen trazable: Catastro →
 `https://datosabiertos.bogota.gov.co/dataset/construccion#LOTECODIGO=<lote>`; OSM →
-`https://www.openstreetmap.org/way/<id>` (o `relation/<-id>`). Todo es dato real (`verified`).
+`https://www.openstreetmap.org/way/<id>` (o `relation/<-id>`). Los textos son datos reales
+(`verified`) de Catastro y OSM, pero la relación entre la placa y el edificio solo es directa con
+`DIRT` = 1: con 2 y 3 es una aproximación, y la ficha no la muestra como la placa verificada del
+edificio.
 
 ## 4. `vias.bin.gz` (tipo 2) — M nodos, W tramos, C cruces, S semáforos
 

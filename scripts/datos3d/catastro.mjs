@@ -3,7 +3,7 @@ import { bounds } from './geo.mjs';
 import { createGrid } from './grid.mjs';
 import { pointInPolygon, pointOnSurface } from './inside.mjs';
 import { geojsonPolygons } from './osm.mjs';
-import { formatPlaca } from './placas.mjs';
+import { formatPlaca, placaBase } from './placas.mjs';
 import { cleanPolygon } from './rings.mjs';
 import { SPEC } from './spec.mjs';
 
@@ -60,7 +60,7 @@ export function catastroPlacas(features, project) {
     .filter((f) => f.geometry?.type === 'Point')
     .map((f) => ({
       codigo: f.properties.PDOCODIGO ?? '', p: project(f.geometry.coordinates), lote: f.properties.PDOCLOTE ?? '',
-      pdoTipo: f.properties.PDOTIPO ?? 9, texto: formatPlaca(f.properties),
+      pdoTipo: f.properties.PDOTIPO ?? 9, texto: formatPlaca(f.properties), base: placaBase(f.properties),
     }))
     .filter((placa) => placa.texto);
 }

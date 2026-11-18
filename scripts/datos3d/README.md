@@ -64,8 +64,13 @@ los muestre debe citar las dos atribuciones (`manifest.licenciaDeLosArchivos`).
    construcciones de Catastro (rejilla de 8×8 puntos): 13 de 230. Su lote sale de la capa Lote.
 5. **Dirección oficial.** Por el código de lote (Construcción `LOTECODIGO` = Lote `LOTCODIGO` =
    Placa `PDOCLOTE`): la placa del lote que cae dentro de la huella; si no, la más cercana del
-   lote; si el lote no tiene, la más cercana de su manzana (9 primeros dígitos). Empate: principal
-   antes que secundaria. Texto: `PDONVIAL # PDOTEXTO` con guion (`KR 87B # 6D-20`); en placas
+   lote; si el lote no tiene, la más cercana de su manzana (9 primeros dígitos). Empate a igual
+   distancia: el `PDOTIPO` menor y luego `PDOCODIGO`. El número de casa, torre o interior solo
+   va con el edificio al que identifica: el único interior dentro de la huella, o el edificio del
+   lote más cercano a la placa y a menos de 5 m. Si no, y siempre con la placa de la manzana,
+   queda la dirección del conjunto (vía y número): así salen 1 312 edificios (297 huellas con
+   varias casas dentro, 1 007 cuya placa más cercana es de otro edificio o está lejos y 8 de la
+   manzana). Texto: `PDONVIAL # PDOTEXTO` con guion (`KR 87B # 6D-20`); en placas
    interiores, el número del conjunto (`PDOCINTERI`) y luego el interior (`KR 88D # 6D-27 TO 6`).
    `PDOCINTERI` solo cuenta como número si tiene la forma «cruce distancia» (en 22 placas trae
    `8` o `MJ 34`): si no, queda vía e interior (`CL 34A S IN 8`), y un interior sin vía ni número
