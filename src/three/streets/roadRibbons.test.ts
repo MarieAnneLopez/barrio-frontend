@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { TNT3 } from '../data/format';
 import { makeVias } from './fixtures';
-import { LEVEL, roadLevel } from './levels';
+import { LEVEL, roadLevel, sidewalkLevel } from './levels';
 import { buildNetwork, wayTags } from './network';
 import { roadSpec } from './roadClass';
-import { buildRoads, REVERSE_BIT, roadGeometry } from './roadRibbons';
+import { buildRoads, REVERSE_BIT, roadGeometry, SIDEWALK_CORNER } from './roadRibbons';
 
 const C = TNT3.clasesVia;
 const vias = makeVias([[0, 0], [-100, 0], [100, 0], [0, -100], [0, 100]], [
@@ -48,11 +48,33 @@ describe('calzadas y andenes', () => {
     expect(vertices(asphalt).some((p) => p.style >= REVERSE_BIT)).toBe(true);
   });
 
-  it('los andenes van a ambos lados, más anchos que la calzada y debajo de ella', () => {
+  it('los andenes van a ambos lados, más anchos que la calzada y debajo de toda calzada', () => {
     const spec = roadSpec(wayTags(vias, 0));
     const side = vertices(sidewalks).filter((p) => p.x === -100).map((p) => Math.abs(p.across));
     expect(side).toEqual([spec.half + spec.sidewalk, spec.half + spec.sidewalk]);
-    expect(vertices(sidewalks).every((p) => p.y === LEVEL.sidewalk)).toBe(true);
+    expect(vertices(sidewalks).every((p) => p.y >= LEVEL.sidewalk && p.y < roadLevel(0))).toBe(true);
+  });
+
+  it('dos andenes que se solapan no quedan en el mismo plano: el de la calle mayor encima, y por vía', () => {
+    for (let rank = 0; rank < 6; rank++) {
+      for (let w = 0; w < 50; w++) expect(sidewalkLevel(rank, w)).toBeLessThan(sidewalkLevel(rank + 1, w + 1 + (w % 3)));
+    }
+    expect(sidewalkLevel(6, 7)).toBeLessThan(roadLevel(0));
+    const y = (pick: (p: ReturnType<typeof vertices>[number]) => boolean) => vertices(sidewalks).find(pick)?.y ?? NaN;
+    const [avenue, north, south] = [y((p) => p.x === -100), y((p) => p.z === -100), y((p) => p.z === 100)];
+    expect(avenue).toBeGreaterThan(Math.max(north, south));
+    expect(north).not.toBe(south); // calles del mismo rango: unos milímetros por vía
+  });
+
+  it('el bordillo y el brillo del andén se apagan en la esquina con una calle igual o mayor, no en las menores', () => {
+    // En el cruce (0, 0): los andenes de las dos calles tienen sus vértices en x = ±5; los de la avenida, en x = 0.
+    const streets = vertices(sidewalks).filter((p) => p.z === 0 && p.x !== 0);
+    expect(streets).toHaveLength(4);
+    const avenueHalf = roadSpec(wayTags(vias, 0)).half;
+    for (const p of streets) expect(Math.min(p.back, p.ahead)).toBeCloseTo(-avenueHalf - SIDEWALK_CORNER);
+    const avenue = vertices(sidewalks).filter((p) => p.x === 0);
+    expect(avenue).toHaveLength(4);
+    for (const p of avenue) expect(Math.min(p.back, p.ahead)).toBeGreaterThan(50);
   });
 
   it('las caras miran hacia arriba', () => {

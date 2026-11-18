@@ -73,9 +73,10 @@ export const SIDEWALK_FRAGMENT = /* glsl */ `
   ${COMMON}
   void main() {
     float beyond = abs(vRoad.y) - vRoad.z;
+    float open = openness(); // 0 en la esquina con una calle igual o mayor (roadRibbons.SIDEWALK_CORNER)
     vec3 color = shade(uDay, uNightColor, UP);
-    color *= 1.0 - 0.28 * band(beyond - 0.15, 0.3); // bordillo
-    color += uGlow * exp(-max(beyond, 0.0) * 3.0) * vMeta.y * openness() * uNight * 1.4;
+    color *= 1.0 - 0.28 * band(beyond - 0.15, 0.3) * open; // bordillo
+    color += uGlow * exp(-max(beyond, 0.0) * 3.0) * vMeta.y * open * uNight * 1.4;
     gl_FragColor = vec4(color, 1.0);
     ${END_FRAGMENT}
   }`;

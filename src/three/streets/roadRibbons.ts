@@ -1,6 +1,6 @@
 import { BufferGeometry, Float32BufferAttribute, Uint32BufferAttribute } from 'three';
 import type { Vias } from '../data/format';
-import { LEVEL, roadLevel } from './levels';
+import { roadLevel, sidewalkLevel } from './levels';
 import { clearance, isJunction, type Network } from './network';
 import { rightNormals } from './polyline';
 import { isBridge, wayLine } from './wayLine';
@@ -16,6 +16,14 @@ const empty = (): RoadBuffers => ({ position: [], road: [], meta: [], index: [] 
 
 /** Bit de marcas para las vías de un sentido en contra del dibujo (las estelas de noche van al revés). */
 export const REVERSE_BIT = 16;
+
+/**
+ * El andén apaga su bordillo y su brillo hasta SIDEWALK_CORNER m más allá de la calzada de una calle
+ * igual o mayor que lo cruza: en la esquina se solapa con el de esa calle y así los dos quedan del
+ * mismo color. Frente a una calle menor sigue de largo (su andén queda encima, sidewalkLevel).
+ */
+export const SIDEWALK_CORNER = 3;
+const corner = (r: number) => (r > 0 ? r + SIDEWALK_CORNER : -1e4);
 
 export function buildRoads(v: Vias, net: Network): { asphalt: RoadBuffers; sidewalks: RoadBuffers } {
   const asphalt = empty();
@@ -36,7 +44,8 @@ export function buildRoads(v: Vias, net: Network): { asphalt: RoadBuffers; sidew
       const meta = [style, spec.glow] as const;
       pushPiece(asphalt, line, nrm, piece, spec.half, spec.half, spec.lanes, meta, roadLevel(spec.rank));
       if (spec.sidewalk > 0 && !isBridge(v, w)) {
-        pushPiece(sidewalks, line, nrm, piece, spec.half + spec.sidewalk, spec.half, spec.lanes, meta, LEVEL.sidewalk);
+        const walk = { ...piece, rFrom: corner(piece.rFrom), rTo: corner(piece.rTo) };
+        pushPiece(sidewalks, line, nrm, walk, spec.half + spec.sidewalk, spec.half, spec.lanes, meta, sidewalkLevel(spec.rank, w));
       }
       start = k;
     }
