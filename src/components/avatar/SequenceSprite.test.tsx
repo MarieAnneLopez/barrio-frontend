@@ -28,10 +28,11 @@ describe('SequenceSprite a escala entera (D86)', () => {
   });
 
   it('solo ofrece los múltiplos que existen (la carrera chica, de 105 px, tiene doble y cuádruple)', () => {
-    render(<SequenceSprite name="run" size={210} />);
+    const { unmount } = render(<SequenceSprite name="run" size={210} />);
     expect(sources().map(([, url]) => url)).toEqual(['/assets/avatar/run/run_420.webp']);
+    unmount();
     render(<SequenceSprite name="run" size={105} />);
-    expect(sources().map(([, url]) => url)).toContain('/assets/avatar/run/run_210.webp');
+    expect(sources().map(([, url]) => url)).toEqual(['/assets/avatar/run/run_420.webp', '/assets/avatar/run/run_210.webp']);
   });
 
   it.each([['wave', 640], ['run', 420], ['sit', 192], ['idle', 560]] as const)('%s a %i px (el mayor) no tiene recurso más denso', (name, size) => {
@@ -85,6 +86,8 @@ describe('SequenceSprite: ciclo de 32 cuadros en un atlas de 8 × 4 (sprites32)'
   });
 
   it('solo anima transform: columnas en X sobre la imagen, filas en Y sobre su contenedor', () => {
+    expect(css).toMatch(/\.sequence\[data-playing\] \.sequence__strip \{\s*animation-name: sequence-columns;/);
+    expect(css).toMatch(/\.sequence\[data-playing\] \.sequence__rows \{\s*animation-name: sequence-rows;/);
     expect(css).toMatch(/@keyframes sequence-columns \{\s*from \{\s*transform: translateX\(0\);\s*\}\s*to \{\s*transform: translateX\(-100%\);/);
     expect(css).toMatch(/@keyframes sequence-rows \{\s*from \{\s*transform: translateY\(0\);\s*\}\s*to \{\s*transform: translateY\(-100%\);/);
   });
