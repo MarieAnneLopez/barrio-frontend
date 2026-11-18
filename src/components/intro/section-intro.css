@@ -79,8 +79,8 @@
   text-wrap: balance;
 }
 
-/* --fit es el cuerpo en % del ancho (introMath.fitSize); el alto lo limita para no empujar el
-   contenido más de media pantalla, y 9rem es el techo en pantallas muy anchas. */
+/* --fit: cuerpo en % del ancho (introMath.fitSize; la cuenta en px es titleSize). El alto lo limita a
+   media pantalla sin bajar de 24 px reales (D110: en una pantalla baja crece la entrada); techo 9rem. */
 .intro__title {
   --leading: 0.96;
   --track: 0.035em;
@@ -89,7 +89,7 @@
   margin: 0.25rem 0 0;
   font-family: var(--ff-display);
   font-size: calc(var(--fit) * 1vw);
-  font-size: min(calc(var(--fit) * 1cqw), calc((52svh - 10rem) / (var(--lines) * var(--leading))), 9rem);
+  font-size: max(24px, min(calc(var(--fit) * 1cqw), calc((52svh - 10rem) / (var(--lines) * var(--leading))), 9rem));
   font-weight: 400;
   font-synthesis: none;
   line-height: var(--leading);

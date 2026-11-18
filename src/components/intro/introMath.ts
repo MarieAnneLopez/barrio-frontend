@@ -9,6 +9,8 @@ const AT: Record<Corner, string> = { br: '100% 100%', tl: '0% 0%', bl: '0% 100%'
 const MAX_SIZE = 16.2; // cuerpo del manifiesto en pantallas angostas (% del ancho)
 const ADVANCE = 0.56; // ancho medio de una mayúscula de Anton con el tracking del titular (em)
 const ROOM = 86; // % del ancho que puede ocupar una línea: descuenta el margen interior de la capa
+const LEADING = 0.96; // interlineado del titular (section-intro.css)
+const FLOOR = 24; // px reales: un título marrón sobre crema solo vale como texto grande (D110)
 
 const round = (value: number): number => Math.round(value * 1e4) / 1e4;
 
@@ -50,4 +52,25 @@ export function splitLines(words: readonly string[]): string[][] {
 export function fitSize(lines: readonly (readonly string[])[], indents: readonly number[]): number {
   const fits = lines.map((line, at) => (ROOM - (indents[at] ?? 0)) / (ADVANCE * letters(line) + 0.1));
   return round(Math.min(MAX_SIZE, ...fits));
+}
+
+export interface TitleBox {
+  /** Cuerpo por ancho (fitSize), en % del ancho de la entrada. */
+  fit: number;
+  lines: number;
+  /** Ancho de la entrada y alto visible de la pantalla (svh), en px. */
+  width: number;
+  height: number;
+  /** px de 1rem: la barra de accesibilidad lo cambia (16 por defecto). */
+  rem?: number;
+}
+
+/**
+ * Cuerpo del titular en px, la misma cuenta que section-intro.css (las pruebas atan las dos): manda el
+ * ancho; el alto lo limita para no empujar el contenido más de media pantalla, pero nunca por debajo de
+ * 24 px (en una pantalla baja crece la entrada en vez de encoger el título); 9rem es el techo.
+ */
+export function titleSize({ fit, lines, width, height, rem = 16 }: TitleBox): number {
+  const byHeight = (0.52 * height - 10 * rem) / (lines * LEADING);
+  return Math.max(FLOOR, Math.min((fit * width) / 100, byHeight, 9 * rem));
 }
