@@ -6,7 +6,7 @@ import { makeSuelo, makeVias } from '../streets/fixtures';
 import { LEVEL } from '../streets/levels';
 import { STROLL_Y } from './strolls';
 import { buildWalkPaths, type WalkPaths } from './walkPaths';
-import { createWalkers, stepWalkers } from './walkers';
+import { createWalkers, frameWalkers, stepWalkers } from './walkers';
 
 const C = TNT3.clasesVia;
 // Dos calles residenciales (calzada de 6 m, andenes de 2 m) que se cruzan en (100, 0), un sendero y
@@ -71,6 +71,16 @@ describe('caminos de las personitas', () => {
     stepWalkers(paths, people, 50, 0.5, 3, true);
     expect(Array.from(people.x)).toEqual(before);
     expect(Array.from(people.roll).every((r) => r === 0)).toBe(true);
+  });
+
+  it('si se activa en caliente a mitad de un paso, el primer cuadro quieto las pone de pie y los demás no escriben', () => {
+    const people = createWalkers(paths, 50);
+    for (let k = 0; k < 5; k++) expect(frameWalkers(paths, people, 50, 0.1, 0.37 * k, false)).toBe(true);
+    expect(Array.from(people.roll).some((r) => Math.abs(r) > 0.01)).toBe(true);
+    expect(frameWalkers(paths, people, 50, 0.1, 2, true)).toBe(true);
+    expect(Array.from(people.roll).every((r) => r === 0)).toBe(true);
+    expect(frameWalkers(paths, people, 50, 0.1, 2.1, true)).toBe(false);
+    expect(frameWalkers(paths, people, 40, 0.1, 2.2, true)).toBe(true); // cambió cuántas se dibujan
   });
 });
 

@@ -8,6 +8,8 @@ import type { WalkPaths } from './pathPack';
 export interface Walkers {
   path: Int32Array; s: Float32Array; dir: Int8Array; speed: Float32Array; side: Float32Array; phase: Float32Array;
   x: Float32Array; y: Float32Array; z: Float32Array; yaw: Float32Array; roll: Float32Array;
+  /** Cuántas quedaron de pie en el último cuadro quieto (−1 si el último cuadro caminaron). */
+  standing: number;
 }
 
 /** Paso y balanceo al caminar (rad/s y rad). */
@@ -18,7 +20,7 @@ export function createWalkers(p: WalkPaths, capacity: number): Walkers {
   const f = () => new Float32Array(capacity);
   const w: Walkers = {
     path: new Int32Array(capacity), s: f(), dir: new Int8Array(capacity), speed: f(), side: f(), phase: f(),
-    x: f(), y: f(), z: f(), yaw: f(), roll: f(),
+    x: f(), y: f(), z: f(), yaw: f(), roll: f(), standing: -1,
   };
   for (let i = 0; i < capacity; i++) {
     const path = p.count > 0 ? pickWeighted(p.spawn, hash01(i, 401)) : 0;
@@ -31,6 +33,18 @@ export function createWalkers(p: WalkPaths, capacity: number): Walkers {
   }
   stepWalkers(p, w, capacity, 0, 0, true);
   return w;
+}
+
+/**
+ * Un cuadro de la gente: caminando, avanza y deja su pose; con movimiento reducido las pone de pie una
+ * sola vez por cada cambio (también si se activa en caliente a mitad de un paso). Devuelve si cambió
+ * la pose, es decir, si hay que volver a escribir las matrices.
+ */
+export function frameWalkers(p: WalkPaths, w: Walkers, active: number, dt: number, time: number, still: boolean): boolean {
+  if (still && w.standing === active) return false;
+  stepWalkers(p, w, active, dt, time, still);
+  w.standing = still ? active : -1;
+  return true;
 }
 
 /** Avanza `active` personas `dt` s (en `still`, de pie y sin moverse) y deja su pose. */

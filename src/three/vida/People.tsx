@@ -7,7 +7,7 @@ import { partsMaterial } from '../streets/parts';
 import { personModel } from './models';
 import { instanceColors, type VidaPalette } from './vidaPalette';
 import { buildWalkPaths } from './walkPaths';
-import { createWalkers, stepWalkers } from './walkers';
+import { createWalkers, frameWalkers } from './walkers';
 
 /** Más grandes que las reales para que se lean a la distancia de la maqueta (≈ 3 m). */
 export const PERSON_SCALE = 2.1;
@@ -44,7 +44,6 @@ export function People({ world, capacity, count: wanted, still, palette }: Props
     return m;
   }, [assets, capacity, palette]);
   const ref = useRef<InstancedMesh>(null);
-  const written = useRef(-1);
   useEffect(() => () => void mesh.dispose(), [mesh]);
   useEffect(() => () => {
     assets.model.dispose();
@@ -53,8 +52,7 @@ export function People({ world, capacity, count: wanted, still, palette }: Props
 
   useFrame((state, delta) => {
     const m = ref.current;
-    if (!m || (still && written.current === count)) return;
-    stepWalkers(paths, walkers, count, Math.min(delta, 0.1), state.clock.elapsedTime, still);
+    if (!m || !frameWalkers(paths, walkers, count, Math.min(delta, 0.1), state.clock.elapsedTime, still)) return;
     const out = m.instanceMatrix.array as Float32Array;
     const s = PERSON_SCALE;
     for (let i = 0; i < count; i++) {
@@ -63,7 +61,6 @@ export function People({ world, capacity, count: wanted, still, palette }: Props
     }
     m.instanceMatrix.needsUpdate = true;
     m.count = count;
-    written.current = count;
   });
 
   return <primitive ref={ref} object={mesh} />;
