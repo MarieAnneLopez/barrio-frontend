@@ -45,9 +45,17 @@ describe('hash de las ventanas (el shader usa el mismo, con uint de 32 bits)', (
     expect(changed / 10_000).toBeLessThan(0.02);
   });
 
+  it('cuando el reloj del cielo vuelve de 3600 s a 0 (SkyDriver, cada hora) no cambian todas a la vez', () => {
+    let changed = 0;
+    for (let b = 0; b < 400; b++) for (let c = 0; c < 25; c++) changed += windowLit(b, 3, c, 3599.5, 1) !== windowLit(b, 3, c, 0.5, 1) ? 1 : 0;
+    expect(changed / 10_000).toBeLessThan(0.02);
+  });
+
   it('el GLSL usa las mismas constantes que la versión en TypeScript', () => {
     expect(WINDOW_GLSL).toContain('0x9E3779B1u');
     expect(WINDOW_GLSL).toContain('0x846CA68Bu');
     expect(WINDOW_GLSL).toContain(`${LIT_FRACTION}`);
+    expect(WINDOW_GLSL).toContain('float slots = 15.0 + floor(r0 * 26.0);');
+    expect(WINDOW_GLSL).toContain('floor(uTime * slots / 3600.0 + r0)');
   });
 });

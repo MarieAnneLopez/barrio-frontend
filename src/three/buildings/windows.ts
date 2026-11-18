@@ -7,9 +7,15 @@
 export const WINDOW_SPACING = 3;
 /** Fracción de ventanas encendidas en plena noche (decorativo: no es un dato). */
 export const LIT_FRACTION = 0.42;
-/** Cada ventana revisa si cambia cada PERIOD_MIN … PERIOD_MIN + PERIOD_SPAN segundos. */
-export const PERIOD_MIN = 90;
-export const PERIOD_SPAN = 150;
+/** El reloj del shader (uTime, en [0, 3600)) vuelve a 0 cada hora: SkyDriver usa Date.now() % 3 600 000. */
+export const CLOCK_WRAP_S = 3600;
+/**
+ * Cada ventana revisa si cambia SLOTS_MIN … SLOTS_MIN + SLOTS_SPAN − 1 veces por hora (cada 90 a
+ * 240 s). Con un número entero de turnos por hora, el turno sigue igual cuando el reloj vuelve a 0:
+ * no hay un cambio de todas las ventanas a la vez cada hora en punto.
+ */
+export const SLOTS_MIN = 15;
+export const SLOTS_SPAN = 26;
 /** Separa piso y columna en una sola entrada del hash (columnas por edificio < 65 536). */
 const ROW_STRIDE = 65_536;
 
@@ -47,8 +53,11 @@ export const litFraction = (night: number): number => LIT_FRACTION * smoothstep(
 /** ¿La ventana (edificio, piso, columna) está encendida en el segundo `timeS` con la noche `night`? */
 export function windowLit(building: number, level: number, column: number, timeS: number, night: number): boolean {
   const r0 = hash01(building, level, column);
-  const period = PERIOD_MIN + PERIOD_SPAN * r0;
-  const slot = Math.floor((timeS + r0 * period) / period);
+  const slots = SLOTS_MIN + Math.floor(r0 * SLOTS_SPAN);
+  // El turno número `slots` (al final de la hora, por el desfase r0) es el mismo turno 0 de la hora
+  // siguiente. Se resta en vez de usar mod: en la GPU mod(x, x) puede dar x por redondeo.
+  const raw = Math.floor((timeS * slots) / CLOCK_WRAP_S + r0);
+  const slot = raw >= slots ? raw - slots : raw;
   return hash01(building, level * ROW_STRIDE + column, slot) < litFraction(night);
 }
 
@@ -73,8 +82,9 @@ float litFraction(float night) {
 }
 float windowLit(float building, float level, float column, float night) {
   float r0 = hash01(building, level, column);
-  float period = ${PERIOD_MIN.toFixed(1)} + ${PERIOD_SPAN.toFixed(1)} * r0;
-  float slot = floor((uTime + r0 * period) / period);
+  float slots = ${SLOTS_MIN.toFixed(1)} + floor(r0 * ${SLOTS_SPAN.toFixed(1)});
+  float raw = floor(uTime * slots / ${CLOCK_WRAP_S.toFixed(1)} + r0);
+  float slot = raw >= slots ? raw - slots : raw;
   return hash01(building, level * ${ROW_STRIDE.toFixed(1)} + column, slot) < litFraction(night) ? 1.0 : 0.0;
 }
 `;
