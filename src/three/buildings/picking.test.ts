@@ -10,10 +10,11 @@ import { tileGeometry } from './tileGeometry';
 const [tile] = buildAll(fakeSource([{ rings: [square(0, 0, 10)], pisos: 2 }, { rings: [square(20, 0, 10)], pisos: 3 }])).tiles;
 if (!tile) throw new Error('sin tesela');
 const mesh = new Mesh(tileGeometry(tile));
-/** Evento de r3f sobre la primera cara del edificio k de la tesela. */
-const on = (k: number, delta = 0) => ({
+/** Evento de r3f sobre la primera cara del edificio k de la tesela (`front`: lo más cercano al rayo). */
+const on = (k: number, delta = 0, front: object = mesh) => ({
   object: mesh,
   face: { a: tile.index[tile.ranges[k] ?? 0] ?? 0, b: 0, c: 0 },
+  intersections: [{ object: front }, { object: mesh }],
   delta,
   stopPropagation: vi.fn(),
 }) as unknown as ThreeEvent<PointerEvent> & ThreeEvent<MouseEvent>;
@@ -51,6 +52,20 @@ describe('selección de edificios con el puntero', () => {
     handlers.onClick(click);
     expect(useSelectionStore.getState().selected).toEqual({ kind: 'building', index: 1 });
     expect(click.stopPropagation).toHaveBeenCalledTimes(1);
+  });
+
+  it('si un lugar (otro objeto con eventos) queda delante, el edificio de atrás no le quita el puntero', () => {
+    const marker = new Mesh();
+    handlers.onPointerMove(on(1, 0, marker));
+    handlers.onClick(on(1, 0, marker));
+    expect([useSelectionStore.getState().hovered, useSelectionStore.getState().selected, cursor]).toEqual([null, null, '']);
+    // Si venía sobre el edificio, lo suelta; si el de delante ya marcó su lugar, no lo toca.
+    handlers.onPointerMove(on(1));
+    handlers.onPointerMove(on(1, 0, marker));
+    expect(useSelectionStore.getState().hovered).toBeNull();
+    useSelectionStore.getState().hover({ kind: 'place', slug: 'parques', id: 4 });
+    handlers.onPointerMove(on(1, 0, marker));
+    expect(useSelectionStore.getState().hovered).toEqual({ kind: 'place', slug: 'parques', id: 4 });
   });
 
   it('un arrastre de la cámara que termina sobre un edificio no lo elige', () => {
