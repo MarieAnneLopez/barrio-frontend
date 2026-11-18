@@ -6,8 +6,9 @@ import { describe, expect, it } from 'vitest';
 // Vitest va con `css: false`: las hojas se leen del disco.
 const here = dirname(fileURLToPath(import.meta.url));
 const read = (name: string) => readFileSync(join(here, name), 'utf8');
-const SHEETS = ['ribbon.css', 'ribbon-grid.css'] as const;
-const [ribbon, grid] = SHEETS.map((name) => read(name).replace(/\/\*[\s\S]*?\*\//g, '')) as [string, string];
+const SHEETS = ['ribbon.css', 'ribbon-grid.css', 'ribbon-caption.css'] as const;
+const sheets = SHEETS.map((name) => read(name).replace(/\/\*[\s\S]*?\*\//g, ''));
+const [ribbon = '', grid = ''] = sheets;
 /** Cuerpo de la primera regla cuyo selector es exactamente `selector`. */
 const rule = (css: string, selector: string) =>
   new RegExp(`(?:^|})\\s*${selector.replace(/[.[\]:'=()]/g, '\\$&')}\\s*\\{([^}]*)\\}`).exec(css)?.[1] ?? '';
@@ -39,7 +40,7 @@ describe('escenario de la cinta', () => {
     expect(grid).toMatch(/\.ribbon-tile:focus-visible \.ribbon-tile__label\s*\{[^}]*text-decoration: underline;/);
   });
 
-  it.each(SHEETS.map((name, at) => [name, [ribbon, grid][at] ?? '']))('%s: solo tokens, radio de 4 px, sin sombras ni animaciones', (_name, css) => {
+  it.each(SHEETS.map((name, at) => [name, sheets[at] ?? '']))('%s: solo tokens, radio de 4 px, sin sombras ni animaciones', (_name, css) => {
     expect(css).not.toMatch(/#[0-9a-f]{3,8}\b/i);
     expect(css).not.toMatch(/rgba?\(|hsla?\(/);
     expect(css).not.toMatch(/var\(--c-/);

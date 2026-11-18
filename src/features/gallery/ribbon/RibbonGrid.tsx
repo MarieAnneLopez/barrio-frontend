@@ -1,6 +1,6 @@
 import './ribbon-grid.css';
 import { useTranslation } from 'react-i18next';
-import { PhotoCredit } from '../PhotoCredit';
+import { PhotoMeta } from './RibbonCaption';
 import type { RibbonPhoto } from './ribbonPhotos';
 
 interface RibbonGridProps {
@@ -33,7 +33,7 @@ export function RibbonGrid({ photos, onOpen }: RibbonGridProps) {
             </button>
             <figcaption className="ribbon-grid__caption">
               <span>{photo.alt}</span>
-              <PhotoCredit author={photo.photo.autor} license={photo.photo.licencia} source={photo.photo.source_ref} />
+              <PhotoMeta photo={photo} />
             </figcaption>
           </figure>
         </li>

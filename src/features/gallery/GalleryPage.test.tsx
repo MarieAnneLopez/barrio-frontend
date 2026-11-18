@@ -39,6 +39,9 @@ describe('Galería General (/galeria, D66)', () => {
     expect(within(first).getByRole('link', { name: 'Licencia CC BY-SA 4.0' }))
       .toHaveAttribute('href', 'https://creativecommons.org/licenses/by-sa/4.0');
     expect(within(first).getByRole('link', { name: 'Ver en Wikimedia Commons' })).toHaveAttribute('href', COMMONS);
+    expect(within(first).getByRole('link', { name: /Ver en Estaciones/ })).toHaveAttribute('href', '/categorias/estaciones-transporte');
+    const view = buttons[2]?.closest('li') as HTMLElement;
+    expect(within(view).queryByRole('link', { name: /^Ver en (?!Wikimedia)/ })).toBeNull(); // las vistas no son de un módulo
     const { default: axe } = await import('axe-core');
     const result = await axe.run(container, { rules: { 'color-contrast': { enabled: false } } });
     expect(result.violations.map((v) => `${v.id}: ${v.nodes.length}`)).toEqual([]);

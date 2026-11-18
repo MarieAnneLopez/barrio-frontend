@@ -16,13 +16,16 @@ export interface RibbonPhoto {
   thumb: { src: string; srcSet?: string };
   /** Lo que abre el visor (con autor, licencia y fuente). */
   photo: Photo;
+  /** Módulo del lugar de la foto (para «Ver en …»); las vistas del barrio no son de ninguno. */
+  module: string | null;
 }
 
 type Translate = (key: string) => string;
 
 export function ribbonPhotos(places: GalleryPhoto[], t: Translate, lang: string): RibbonPhoto[] {
-  const own = places.map((photo) => ({
+  const own = places.map((photo): RibbonPhoto => ({
     key: `foto-${photo.id}`, label: photo.nombre, alt: photoAlt(photo, lang), src: photo.url, thumb: photoSet(photo.url), photo,
+    module: photo.categoria_slug,
   }));
   const views = neighborhoodViews(places).map((view, at): RibbonPhoto => {
     const sources = photoSources(view.id);
@@ -31,7 +34,7 @@ export function ribbonPhotos(places: GalleryPhoto[], t: Translate, lang: string)
     const photo: Photo = {
       id: -(at + 1), url: sources.src, alt_text: alt, orden: at, autor: view.author, licencia: view.license, source_ref: view.source,
     };
-    return { key: `vista-${view.id}`, label: t(`carousel.photos.${view.id}.caption`), alt, src: sources.src, thumb: sources, photo };
+    return { key: `vista-${view.id}`, label: t(`carousel.photos.${view.id}.caption`), alt, src: sources.src, thumb: sources, photo, module: null };
   });
   return [...own, ...views];
 }

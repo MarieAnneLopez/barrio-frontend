@@ -684,7 +684,7 @@
     "hint": "Drag, use the wheel or the arrow keys to browse the photos; a click or Enter enlarges the one in the center.",
     "hintReduced": "Drag or use the arrow keys to browse the photos; a click or Enter enlarges the one in the center.",
     "current": "Photo {{n}} of {{total}}: {{label}}. {{alt}} Press Enter to enlarge it.",
-    "credits": "Each photo's author and license appear when you enlarge it and in"
+    "credits": "Each photo shows its author and license when you enlarge it; the photos of places are also listed in"
   },
   "routeError": {
     "title": "Something went wrong showing this section",

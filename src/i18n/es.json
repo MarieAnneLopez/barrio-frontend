@@ -684,7 +684,7 @@
     "hint": "Arrastra, usa la rueda o las flechas para recorrer las fotos; un clic o Enter amplía la del centro.",
     "hintReduced": "Arrastra o usa las flechas para recorrer las fotos; un clic o Enter amplía la del centro.",
     "current": "Foto {{n}} de {{total}}: {{label}}. {{alt}} Pulsa Enter para ampliarla.",
-    "credits": "El autor y la licencia de cada foto aparecen al ampliarla y en"
+    "credits": "Cada foto muestra su autor y su licencia al ampliarla; las de los lugares, también en"
   },
   "routeError": {
     "title": "Algo salió mal al mostrar esta sección",

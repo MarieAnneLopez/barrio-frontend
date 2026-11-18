@@ -15,7 +15,7 @@ export const LABELS = ['Calle 6', 'Calle 8', 'Biblioteca El Tintal', 'Carrera 87
 export const PHOTOS: RibbonPhoto[] = LABELS.map((label, at) => {
   const src = `/assets/photos/mapillary/${at + 1}-1024.webp`;
   const photo = { id: at + 1, url: src, alt_text: `Vista ${at + 1} de ${label}.`, orden: at, autor: `Autor${at + 1}`, licencia: 'CC BY-SA 4.0', source_ref: `https://www.mapillary.com/app/?pKey=${at + 1}` };
-  return { key: `foto-${at + 1}`, label, alt: photo.alt_text, src, thumb: { src }, photo };
+  return { key: `foto-${at + 1}`, label, alt: photo.alt_text, src, thumb: { src }, photo, module: null };
 });
 
 interface MountOptions {

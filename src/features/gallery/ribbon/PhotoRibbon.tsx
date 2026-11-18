@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { GalleryLightbox } from '../../modules/GalleryLightbox';
+import { RibbonCaption } from './RibbonCaption';
 import { RibbonGrid } from './RibbonGrid';
 import type { RibbonPhoto } from './ribbonPhotos';
 import { useRibbon } from './useRibbon';
@@ -76,6 +77,7 @@ export function PhotoRibbon({ photos }: { photos: readonly RibbonPhoto[] }) {
       </div>
       {live ? (
         <>
+          <RibbonCaption photo={current} />
           <p id={hintId} className="ribbon-hint">{t(reduced ? 'galleryRibbon.hintReduced' : 'galleryRibbon.hint')}</p>
           <p aria-live="polite" className="sr-only">
             {current ? t('galleryRibbon.current', { n: ribbon.settled + 1, total: photos.length, label: current.label, alt: current.alt }) : ''}

@@ -37,6 +37,7 @@ describe('fotos de la cinta: las de la galería, con su cantidad, orden y etique
       licencia: expect.stringMatching(/^CC BY/), source_ref: expect.stringMatching(/^https:\/\/commons\.wikimedia\.org\//),
     });
     expect(view?.photo.autor).toBeTruthy();
+    expect([first?.module, view?.module]).toEqual(['estaciones-transporte', null]); // las vistas no son de un módulo
   });
 
   it('en inglés: texto alternativo y títulos de las vistas en inglés; el nombre del lugar no se traduce', () => {
