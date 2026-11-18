@@ -44,7 +44,9 @@ export function SequenceSprite<N extends SequenceName>(props: Props<N>) {
   const { sizes, grid: [cols, rows], keys } = sequenceSpec(name);
   const width = cellWidth(name, size);
   const cell = atlasCellWidth(name, size);
-  const animate = playing && !reduced;
+  // Con lazy, filas y columnas arrancan a la vez, cuando llega la imagen: si las filas corrieran
+  // desde el montaje, el cuadro mostrado (8 · fila + columna) saldría desordenado (auditoría MM-02).
+  const animate = playing && !reduced && near;
   const rowMs = cols * FRAME_MS[name];
   const delay = `${-phase * rows * rowMs}ms`;
   const drawn = keys[Math.min(Math.max(pose, 0), keys.length - 1)] ?? 0;

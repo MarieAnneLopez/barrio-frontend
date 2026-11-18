@@ -26,6 +26,23 @@ describe('SequenceSprite: recursos pesados solo cuando hacen falta (rendimiento)
     expect(container.querySelector('img')).toHaveAttribute('src', spriteUrl('idle', 140));
   });
 
+  // Auditoría MM-02: las filas arrancaban al montar y las columnas al llegar la imagen; desfasadas
+  // para siempre, el cuadro mostrado (8 · fila + columna) salía fuera de orden.
+  it('con lazy, filas y columnas arrancan juntas cuando llega la imagen, con el mismo retraso', () => {
+    vi.stubGlobal('IntersectionObserver', FakeObserver);
+    const { container } = render(<SequenceSprite name="idle" size={140} lazy phase={0.4} />);
+    const box = container.querySelector('.sequence');
+    const rows = () => container.querySelector<HTMLElement>('.sequence__rows');
+    expect(box).not.toHaveAttribute('data-playing'); // sin imagen, las filas no corren
+    expect(rows()?.style.animationDuration).toBe('');
+    act(() => notify([{ isIntersecting: true }]));
+    const strip = container.querySelector<HTMLElement>('.sequence__strip');
+    expect(box).toHaveAttribute('data-playing');
+    expect(rows()?.style.animationDuration).not.toBe('');
+    expect(strip?.style.animationDelay).not.toBe('');
+    expect(rows()?.style.animationDelay).toBe(strip?.style.animationDelay);
+  });
+
   it('con un atlas fijo usa solo ese archivo, sin fuentes por densidad', () => {
     const { container } = render(<SequenceSprite name="run" size={105} atlas={210} />);
     expect(container.querySelectorAll('source')).toHaveLength(0);
