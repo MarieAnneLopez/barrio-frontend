@@ -23,7 +23,11 @@ export function useShaderReady(material: Material): boolean {
       if (alive) setReady(material);
     };
     const timer = window.setTimeout(done, COMPILE_WAIT_MS);
-    gl.compileAsync(probe, camera, scene).then(done, done);
+    try {
+      gl.compileAsync(probe, camera, scene).then(done, done);
+    } catch {
+      done(); // contexto perdido u otro fallo síncrono: se muestra y three compila al dibujar
+    }
     return () => {
       alive = false;
       window.clearTimeout(timer);
