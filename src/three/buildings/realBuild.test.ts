@@ -16,9 +16,10 @@ let result: BuildResult;
 
 beforeAll(async () => {
   e = decodeEdificios(await gunzip(new Uint8Array(readFileSync(new URL('edificios.bin.gz', dir)))));
-  buildAll(sourceOf(e)); // calentamiento del JIT: la medida es la de la segunda vuelta
+  // En frío (como el worker recién creado) y en caliente (JIT ya optimizado).
+  const cold = buildAll(sourceOf(e)).stats.ms;
   result = buildAll(sourceOf(e));
-  console.info('[edificios] construcción con datos reales:', JSON.stringify(result.stats));
+  console.info('[edificios] construcción con datos reales:', JSON.stringify({ ...result.stats, msEnFrio: cold }));
 });
 
 describe('edificios reales de El Tintal', () => {
