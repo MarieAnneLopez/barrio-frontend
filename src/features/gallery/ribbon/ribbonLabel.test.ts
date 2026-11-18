@@ -22,7 +22,7 @@ describe('etiqueta pintada en la textura', () => {
   it('lee los tokens semánticos del design system, no colores sueltos', () => {
     expect(readLabelPalette()).toEqual({
       chip: 'token(--bg-primary)', ink: 'token(--text-primary)', mark: 'token(--bg-highlight)',
-      markInk: 'token(--text-on-accent)', fade: 'token(--bg-primary)', font: 'token(--ff-body)',
+      markInk: 'token(--text-on-highlight)', fade: 'token(--bg-primary)', font: 'token(--ff-body)',
     });
   });
 
@@ -79,6 +79,6 @@ describe.each([['estándar', base], ['alto contraste', high]])('contraste de la 
   });
 
   it('la flecha sobre su placa pasa 3:1 (gráfico)', () => {
-    expect(pair('--text-on-accent', '--bg-highlight')).toBeGreaterThanOrEqual(3);
+    expect(pair('--text-on-highlight', '--bg-highlight')).toBeGreaterThanOrEqual(3);
   });
 });

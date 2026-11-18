@@ -17,7 +17,7 @@ export function readLabelPalette(): LabelPalette {
     chip: cssVar('--bg-primary', 'white'),
     ink: cssVar('--text-primary', 'black'),
     mark: cssVar('--bg-highlight', 'white'),
-    markInk: cssVar('--text-on-accent', 'black'),
+    markInk: cssVar('--text-on-highlight', 'black'),
     fade: cssVar('--bg-primary', 'white'),
     font: cssVar('--ff-body', 'serif'),
   };
