@@ -61,6 +61,21 @@ export function runPath(viewport: number, size: number, sprite: number): RunPath
   return { start: -Math.round(sprite), frames, distance: offsetAt(frames, size), durationMs: frames * FRAME_MS.run };
 }
 
+/** Posición (px) en la que va a los `ms` de su recorrido en bucle: cada una se sostiene un cuadro. */
+export function positionAt(path: RunPath, size: number, ms: number): number {
+  const into = ((ms % path.durationMs) + path.durationMs) % path.durationMs;
+  return path.start + offsetAt(Math.floor(into / FRAME_MS.run + 1e-6), size);
+}
+
+/**
+ * Cuadro de `path` en el que llega a `x` (px): para rehacer el recorrido sin saltos al cambiar el
+ * ancho (auditoría MM-10). Si en esa pantalla ya habría salido, vuelve a entrar por la izquierda.
+ */
+export function frameAt(path: RunPath, size: number, x: number): number {
+  for (let n = 0; n < path.frames; n += 1) if (path.start + offsetAt(n, size) >= x) return n;
+  return 0;
+}
+
 /** Un fotograma clave por cuadro, en px enteros; cada posición se sostiene hasta el cuadro siguiente. */
 export function runKeyframes(path: RunPath, size: number): Keyframe[] {
   return Array.from({ length: path.frames + 1 }, (_, n) => ({

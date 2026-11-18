@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { offsetAt, RUN, runKeyframes, runPath, stridePx } from './loadingRun';
+import { frameAt, offsetAt, positionAt, RUN, runKeyframes, runPath, stridePx } from './loadingRun';
 import { cellWidth, FRAME_MS } from './sequences';
 
 const css = readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'loading-screen.css'), 'utf8');
@@ -57,6 +57,17 @@ describe('carrera de la pantalla de carga', () => {
       expect(path.start + offsetAt(path.frames - 1, size)).toBeGreaterThanOrEqual(viewport);
       expect(path.start + offsetAt(path.frames - 2, size)).toBeLessThan(viewport);
     });
+
+  // Auditoría MM-10: al girar el celular el recorrido seguía con el ancho de antes. Se rehace con el
+  // nuevo, desde la misma posición; si en la pantalla nueva ya habría salido, vuelve a entrar.
+  it('rehacer el recorrido conserva su posición, y en bucle cuenta desde la entrada', () => {
+    const [narrow, wide] = [runPath(390, 210, 98), runPath(844, 210, 98)];
+    const at = positionAt(narrow, 210, 50.5 * FRAME_MS.run);
+    expect(at).toBe(-98 + offsetAt(50, 210));
+    expect(frameAt(wide, 210, at)).toBe(50);
+    expect(frameAt(narrow, 210, positionAt(wide, 210, 150.5 * FRAME_MS.run))).toBe(0);
+    expect(positionAt(narrow, 210, narrow.durationMs + 2.5 * FRAME_MS.run)).toBe(-98 + offsetAt(2, 210));
+  });
 
   it('un fotograma clave por cuadro, en px enteros, sostenido hasta el cuadro siguiente', () => {
     const path = runPath(390, 210, 98);
