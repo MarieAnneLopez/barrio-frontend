@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { toneAttrs } from '../../components/layout/footerTones';
 import { PageHeader } from './PageHeader';
 
 /** Secciones de la ayuda (texto en help.sections.<key>) y el enlace que lleva a esa parte de la app. */
@@ -24,7 +25,12 @@ export function HelpPage() {
     <div className="flex max-w-3xl flex-col gap-6">
       <PageHeader title={t('nav.help')} description={t('pages.help')} />
       {SECTIONS.map(({ key, to, label }, index) => (
-        <section key={key} aria-labelledby={`ayuda-${key}`} className={`ui-card flex max-w-3xl flex-col gap-3 p-6 ${index % 2 ? '' : TONE}`}>
+        <section
+          key={key}
+          aria-labelledby={`ayuda-${key}`}
+          className={`ui-card flex max-w-3xl flex-col gap-3 p-6 ${index % 2 ? '' : TONE} ${index === 2 ? 'foot-card tone-papel' : ''}`}
+          {...(index === 2 ? toneAttrs(['rosa-claro', 'rosa']) : {})}
+        >
           <h2 id={`ayuda-${key}`} className="m-0 text-step-1 text-fg">{t(`help.sections.${key}.title`)}</h2>
           <p className="m-0 max-w-prose text-fg-secondary">{t(`help.sections.${key}.body`)}</p>
           {to && label ? (

@@ -21,7 +21,7 @@ export function RankingList({ entries }: { entries: RankingEntry[] }) {
             key={`${entry.categoria_slug}-${entry.objeto_id}`}
             className="flex flex-wrap items-center gap-4 rounded-md border border-line bg-surface p-4"
           >
-            <span className="w-8 font-mono text-step-1 text-accent" aria-hidden="true">
+            <span className="grid min-w-10 place-items-center rounded-sm bg-strong px-2 font-mono text-step-1 text-on-pink" aria-hidden="true">
               {index + 1}
             </span>
             <span className="sr-only">{t('ranking.position', { position: index + 1 })}</span>

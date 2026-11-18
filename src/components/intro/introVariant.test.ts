@@ -3,7 +3,7 @@ import { CATEGORIES, categoryPath } from '../../lib/categoryConfig';
 import { NAV_AFTER_CATEGORIES, NAV_BEFORE_CATEGORIES } from '../../lib/navigation';
 import { introVariant, MENU_PATHS } from './introVariant';
 
-const KEYS = ['corner', 'order', 'indents', 'reveal'] as const;
+const KEYS = ['corner', 'order', 'indents', 'reveal', 'revealWide'] as const;
 
 describe('variante de entrada por ruta (D101)', () => {
   it('sigue el orden del menú: secciones, los 14 módulos tras Historia y el resto', () => {
@@ -15,10 +15,12 @@ describe('variante de entrada por ruta (D101)', () => {
   });
 
   it('el Inicio es el manifiesto tal cual: abajo a la derecha, adelante, sangrías 0/26/4 y crema', () => {
-    expect(introVariant('/')).toEqual({ corner: 'br', order: 'forward', indents: [0, 26, 4], reveal: 'crema' });
+    expect(introVariant('/')).toEqual({
+      corner: 'br', order: 'forward', indents: [0, 26, 4], reveal: 'crema', revealWide: 'crema',
+    });
   });
 
-  it('dos secciones seguidas del menú no repiten esquina, orden, desfase ni color', () => {
+  it('dos secciones seguidas del menú no repiten esquina, orden, desfase ni color, en ningún ancho', () => {
     for (let at = 1; at < MENU_PATHS.length; at += 1) {
       const [before, now] = [introVariant(MENU_PATHS[at - 1] ?? ''), introVariant(MENU_PATHS[at] ?? '')];
       for (const key of KEYS) expect(now[key], `${MENU_PATHS[at]} · ${key}`).not.toEqual(before[key]);

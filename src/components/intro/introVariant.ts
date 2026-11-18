@@ -15,6 +15,8 @@ export interface IntroVariant {
   /** Sangría de cada línea, en % del ancho de la sección. */
   indents: readonly number[];
   reveal: RevealColor;
+  /** Color revelado desde 768 px (igual a `reveal` salvo que el plan de la ruta diga otro). */
+  revealWide: RevealColor;
 }
 
 const CORNERS: readonly Corner[] = ['br', 'tl', 'bl', 'tr'];
@@ -40,6 +42,8 @@ export function introVariant(pathname: string): IntroVariant {
   const path = normalize(pathname);
   const found = MENU_PATHS.indexOf(path);
   const at = found >= 0 ? found : hashIndex(path);
-  const reveal = palettePlan(path)?.reveal ?? pick(REVEALS, at); // el plan medido de la ruta manda (D100)
-  return { corner: pick(CORNERS, at), order: pick(ORDERS, at), indents: pick(INDENTS, at), reveal };
+  const plan = palettePlan(path); // el plan medido de la ruta manda (D100)
+  const reveal = plan?.reveal ?? pick(REVEALS, at);
+  const revealWide = plan?.revealWide ?? reveal;
+  return { corner: pick(CORNERS, at), order: pick(ORDERS, at), indents: pick(INDENTS, at), reveal, revealWide };
 }

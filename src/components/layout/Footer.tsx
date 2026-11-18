@@ -48,7 +48,7 @@ export function Footer() {
         </p>
       </div>
       <div className="bg-band">
-        <p className={`${COLUMN} m-0 py-5 font-display text-step-4 text-on-band`}>{t('app.title')}</p>
+        <p className={`${COLUMN} m-0 py-5 font-display text-step-4 text-on-band md:py-3 md:text-step-3`}>{t('app.title')}</p>
       </div>
     </footer>
   );

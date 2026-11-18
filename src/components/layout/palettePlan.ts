@@ -4,8 +4,10 @@ import type { RevealColor } from '../intro/introVariant';
 export type ToneByWidth = readonly [RevealColor, RevealColor];
 
 export interface PalettePlan {
-  /** Color que revela la entrada de la sección (D101). */
+  /** Color que revela la entrada de la sección (D101), en el celular… */
   reveal: RevealColor;
+  /** …y desde 768 px, si cambia (el reparto se mide por ancho; tampoco repite con sus vecinas). */
+  revealWide?: RevealColor;
   /** Tarjeta de contacto del pie. */
   contact: ToneByWidth;
   /** Tarjeta Perfil de la Creadora del pie. */
@@ -22,13 +24,13 @@ export interface PalettePlan {
 export const PALETTE_PLANS: Readonly<Record<string, PalettePlan>> = {
   '/': { reveal: 'crema', contact: ['rosa', 'rosa'], creator: ['rosa-claro', 'rosa'] },
   '/historia': { reveal: 'rosa', contact: ['rosa-claro', 'rosa-claro'], creator: ['rosa', 'rosa-claro'] },
-  '/ranking': { reveal: 'crema', contact: ['rosa', 'crema'], creator: ['rosa-claro', 'rosa'] },
+  '/ranking': { reveal: 'crema', contact: ['rosa', 'rosa'], creator: ['rosa-claro', 'crema'] },
   '/galeria': { reveal: 'rosa-claro', contact: ['rosa', 'rosa'], creator: ['crema', 'crema'] },
-  '/preguntas': { reveal: 'crema', contact: ['rosa', 'crema'], creator: ['rosa-claro', 'rosa'] },
-  '/creadora': { reveal: 'rosa', contact: ['rosa-claro', 'crema'], creator: ['crema', 'crema'] },
-  '/ayuda': { reveal: 'crema', contact: ['rosa', 'crema'], creator: ['crema', 'rosa'] },
-  '/acceso': { reveal: 'rosa', contact: ['rosa-claro', 'crema'], creator: ['crema', 'crema'] },
-  '/creditos-fotos': { reveal: 'rosa-claro', contact: ['crema', 'rosa-claro'], creator: ['crema', 'rosa-claro'] },
+  '/preguntas': { reveal: 'crema', revealWide: 'rosa', contact: ['rosa', 'crema'], creator: ['rosa-claro', 'crema'] },
+  '/creadora': { reveal: 'rosa-claro', revealWide: 'crema', contact: ['rosa', 'rosa'], creator: ['crema', 'crema'] },
+  '/ayuda': { reveal: 'rosa', contact: ['crema', 'crema'], creator: ['crema', 'crema'] },
+  '/acceso': { reveal: 'rosa-claro', revealWide: 'crema', contact: ['rosa', 'rosa'], creator: ['crema', 'crema'] },
+  '/creditos-fotos': { reveal: 'crema', contact: ['crema', 'rosa-claro'], creator: ['crema', 'rosa-claro'] },
   '/no-existe': { reveal: 'crema', contact: ['rosa', 'crema'], creator: ['rosa-claro', 'rosa'] },
 };
 

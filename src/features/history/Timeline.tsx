@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toneAttrs } from '../../components/layout/footerTones';
 import type { Fuente, Hito } from '../../lib/apiTypes';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { SourceLinks } from './SourceLinks';
@@ -14,6 +15,12 @@ function badgeOf(hito: Hito, press: Set<string>) {
 
 // Paleta D100: tarjetas alternas rosa claro y crema; el año va en una etiqueta amarilla (texto negro).
 const TONE = 'ui-card--paper tone-papel';
+/** Reparto D100 desde 768 px: una de cada cuatro tarjetas pasa a rosa (en el celular sigue crema). */
+const WIDE_ROSA = 'foot-card tone-papel';
+/** Título grande en marrón solo sobre crema (D100: ≥ 18,66 px en negrita); desde 768 px esa tarjeta puede ser rosa. */
+const TITLE_ON_CREMA = 'font-bold text-title';
+const titleTone = (index: number) =>
+  index % 2 === 0 ? 'text-fg' : index % 4 === 3 ? `${TITLE_ON_CREMA} md:text-fg` : TITLE_ON_CREMA;
 
 /** Línea de tiempo vertical (§11.3.1) con ScrollTrigger; cada hito muestra su fuente. */
 export function Timeline({ hitos, fuentes }: { hitos: Hito[]; fuentes: Fuente[] }) {
@@ -31,9 +38,12 @@ export function Timeline({ hitos, fuentes }: { hitos: Hito[]; fuentes: Fuente[] 
         return (
           <li key={hito.id} data-reveal className="relative flex gap-4 border-l border-line-strong pb-6 pl-6 last:pb-0">
             <span aria-hidden="true" className="absolute top-7 -left-[5px] size-[9px] rounded-full bg-highlight" />
-            <div className={`ui-card flex min-w-0 max-w-3xl flex-1 flex-col gap-2 p-5 ${index % 2 ? '' : TONE}`}>
-              <p className="m-0 self-start rounded-sm bg-mark px-3 font-display text-step-3 text-on-mark">{hito.anio}</p>
-              <h3 className="m-0 text-step-1 text-fg">{t(`${key}.title`, { defaultValue: hito.titulo })}</h3>
+            <div
+              className={`ui-card flex min-w-0 max-w-3xl flex-1 flex-col gap-2 p-5 ${index % 2 ? '' : TONE} ${index % 4 === 3 ? WIDE_ROSA : ''}`}
+              {...(index % 4 === 3 ? toneAttrs(['crema', 'rosa']) : {})}
+            >
+              <p className="m-0 self-start rounded-sm bg-mark px-3 font-display text-step-3 text-on-mark md:px-4 md:py-1">{hito.anio}</p>
+              <h3 className={`m-0 text-step-1 ${titleTone(index)}`}>{t(`${key}.title`, { defaultValue: hito.titulo })}</h3>
               <p className="m-0 max-w-prose text-fg-secondary">
                 {t(`${key}.description`, { defaultValue: hito.descripcion })}
               </p>

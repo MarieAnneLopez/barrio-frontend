@@ -1,5 +1,6 @@
 import './section-intro.css';
 import './section-intro-motion.css';
+import './section-intro-wide.css';
 import { type CSSProperties, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { playManifesto } from '../../features/home/film/manifesto/playManifesto';
@@ -45,7 +46,7 @@ export function SectionIntro(content: IntroContent) {
 
   const style = { '--fit': size, '--lines': lines.length, '--intro-at': cornerAt(variant.corner) } as CSSProperties;
   return (
-    <header ref={node} data-intro data-reveal={variant.reveal} data-done={done || undefined} className="intro" style={style}>
+    <header ref={node} data-intro data-reveal={variant.reveal} data-reveal-wide={variant.revealWide} data-done={done || undefined} className="intro" style={style}>
       {done ? null : <IntroLayer layer="base" lines={lines} indents={variant.indents} {...content} />}
       <IntroLayer layer="papel" lines={lines} indents={variant.indents} {...content} />
     </header>

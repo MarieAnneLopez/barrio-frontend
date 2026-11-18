@@ -20,5 +20,6 @@ describe('footerTones', () => {
     expect(footerTones(path)).toEqual({ contact: plan.contact, creator: plan.creator });
     expect(footerTones(`${path}/`)).toEqual({ contact: plan.contact, creator: plan.creator });
     expect(introVariant(path).reveal).toBe(plan.reveal);
+    expect(introVariant(path).revealWide).toBe(plan.revealWide ?? plan.reveal);
   });
 });

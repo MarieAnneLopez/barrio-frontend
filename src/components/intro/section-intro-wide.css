@@ -1,0 +1,25 @@
+/* Color revelado desde 768 px (D100): el reparto se mide por ancho y algunas rutas cambian de color
+   en el escritorio (palettePlan.revealWide). Mismos pares que section-intro.css; el selector doble
+   gana a los de un ancho sin depender del orden de los archivos. */
+@media (min-width: 768px) {
+  .intro.intro[data-reveal-wide='crema'] {
+    --intro-reveal: var(--bg-primary);
+    --intro-base: var(--bg-accent);
+    --intro-title: var(--text-title);
+    --intro-badge: var(--bg-strong);
+  }
+
+  .intro.intro[data-reveal-wide='rosa-claro'] {
+    --intro-reveal: var(--bg-accent);
+    --intro-base: var(--bg-primary);
+    --intro-title: var(--text-on-accent);
+    --intro-badge: var(--bg-strong);
+  }
+
+  .intro.intro[data-reveal-wide='rosa'] {
+    --intro-reveal: var(--bg-strong);
+    --intro-base: var(--bg-accent);
+    --intro-title: var(--text-on-accent);
+    --intro-badge: var(--bg-primary);
+  }
+}
