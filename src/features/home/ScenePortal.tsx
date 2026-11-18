@@ -3,6 +3,7 @@ import { Skeleton } from '../../components/ui/Skeleton';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { useA11yStore } from '../../store/a11yStore';
 import { useTintal3D } from '../../three/data/useTintal3D';
+import { usePlaceScope } from '../../three/places/placeScope';
 import { sceneHostElement, useSceneHost } from '../../three/sceneHost';
 import { useSceneModule } from '../../three/sceneModule';
 import { useTintalData } from '../../three/useTintalData';
@@ -10,7 +11,10 @@ import { useTintalData } from '../../three/useTintalData';
 function SceneMount() {
   const scene = useSceneModule(); // se pide a la vez que los datos, no después
   const world = useTintal3D();
-  const api = useTintalData();
+  // Los módulos densos (lotes, tramos) solo cuando la maqueta muestra los 14: Inicio o Mapa 3D (D121).
+  const attached = useSceneHost((s) => s.attached);
+  const scoped = usePlaceScope((s) => s.slug) !== null;
+  const api = useTintalData(attached && !scoped);
   const active = useSceneHost((s) => s.attached && s.visible);
   const systemReduced = useMediaQuery('(prefers-reduced-motion: reduce)', false);
   const reducedMotion = useA11yStore((s) => s.reducedMotion) || systemReduced;
