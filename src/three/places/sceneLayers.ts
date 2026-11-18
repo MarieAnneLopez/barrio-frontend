@@ -13,8 +13,11 @@ export interface PlaceScope {
   collection: ModuleCollection | null;
 }
 
-/** Módulos tan densos (un marcador por lote) que fuera de su sección solo muestran el contorno. */
-const DENSE = new Set(['datos-catastrales']);
+/**
+ * Módulos tan densos (un marcador por lote o por tramo de calle: cientos en el barrio) que fuera de su
+ * sección solo muestran su contorno o su trazo; dentro de ella sí llevan marcador para elegirlos.
+ */
+const DENSE = new Set(['datos-catastrales', 'estado-calles']);
 
 /** La localidad es una ficha (FICHA), no un lugar que se pueda señalar: solo su contorno. */
 const markable = (slug: string) => findCategory(slug)?.geometry !== 'FICHA';

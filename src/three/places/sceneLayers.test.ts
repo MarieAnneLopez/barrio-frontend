@@ -13,16 +13,20 @@ const polygons = (...ids: number[]): ModuleCollection => ({
 const PLACES = [
   { slug: 'zonas-verdes', emoji: '🌳', collection: polygons(1, 2) },
   { slug: 'datos-catastrales', emoji: '🏠', collection: polygons(3) },
+  { slug: 'estado-calles', emoji: '🛣️', collection: polygons(7) },
   { slug: 'localidad', emoji: '🏛️', collection: polygons(4) },
   { slug: 'barberias', emoji: '✂️', collection: null }, // la API de ese módulo falló
 ];
 const ALL = { slug: null, collection: null };
 
 describe('qué módulos dibuja la maqueta', () => {
-  it('en el Inicio y en Mapa 3D, todos los que tienen datos; los lotes y la localidad, sin marcadores', () => {
+  it('en el Inicio y en Mapa 3D, todos los que tienen datos; lotes, calles y localidad, sin marcadores', () => {
     const layers = sceneLayers(PLACES, ALL, project);
-    expect(layers.map((l) => [l.slug, l.ids])).toEqual([['zonas-verdes', [1, 2]], ['datos-catastrales', []], ['localidad', []]]);
-    expect(layers.map((l) => l.drawn)).toEqual([2, 1, 1]);
+    expect(layers.map((l) => [l.slug, l.ids])).toEqual([
+      ['zonas-verdes', [1, 2]], ['datos-catastrales', []], ['estado-calles', []], ['localidad', []],
+    ]);
+    expect(layers.map((l) => l.drawn)).toEqual([2, 1, 1, 1]);
+    expect(sceneLayers(PLACES, { slug: 'estado-calles', collection: null }, project)[0]?.ids).toEqual([7]); // en su sección sí
   });
 
   it('dentro de un módulo, solo los suyos y con la búsqueda y los filtros de su lista', () => {
