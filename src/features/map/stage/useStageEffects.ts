@@ -6,9 +6,9 @@ import { useSelectionStore } from '../../../three/selection/selectionStore';
 const onMap = (target: Element | null) => !target || target === document.body || target.closest('[data-scene-slot]') !== null;
 
 /**
- * Efectos del escenario: el título del documento, soltar lo elegido al salir de la sección (la
- * siguiente empieza sin ficha) y Escape con el foco en el mapa: cierra el panel si no hay ficha
- * abierta (la ficha se cierra primero) y devuelve el foco al botón de tres barras.
+ * Efectos del escenario: el título del documento, soltar lo elegido y lo resaltado al salir de la
+ * sección (la siguiente empieza sin ficha ni nombre en el pie) y Escape con el foco en el mapa:
+ * cierra el panel si no hay ficha abierta (la ficha se cierra primero) y devuelve el foco al botón.
  */
 export function useStageEffects(title: string, open: boolean, close: () => void, menu: RefObject<HTMLButtonElement>) {
   const { t } = useTranslation();
@@ -17,7 +17,14 @@ export function useStageEffects(title: string, open: boolean, close: () => void,
     document.title = `${title} · ${t('app.shortTitle')}`;
   }, [title, t]);
 
-  useEffect(() => () => useSelectionStore.getState().select(null), []);
+  useEffect(
+    () => () => {
+      const { select, hover } = useSelectionStore.getState();
+      select(null);
+      hover(null);
+    },
+    [],
+  );
 
   useEffect(() => {
     if (!open) return undefined;

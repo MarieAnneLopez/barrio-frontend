@@ -1,7 +1,20 @@
 import { useThree, type ThreeEvent } from '@react-three/fiber';
+import { useEffect } from 'react';
 import { useSelectionStore, type Selection } from '../selection/selectionStore';
 
 export type PlaceEvent = ThreeEvent<PointerEvent | MouseEvent>;
+
+/**
+ * Suelta lo resaltado de un módulo y el cursor de mano. r3f no llama onPointerOut si el objeto bajo
+ * el puntero se desmonta (al ocultar el módulo en la leyenda o al salir de la sección); lo de otro
+ * módulo o un edificio no se toca.
+ */
+export function releaseHover(slug: string, canvas: HTMLElement): void {
+  const { hovered, hover } = useSelectionStore.getState();
+  if (hovered?.kind !== 'place' || hovered.slug !== slug) return;
+  hover(null);
+  canvas.style.cursor = '';
+}
 
 /**
  * Puntero sobre los lugares de un módulo (sus marcadores o sus figuras en el suelo): el clic abre la
@@ -11,6 +24,7 @@ export type PlaceEvent = ThreeEvent<PointerEvent | MouseEvent>;
  */
 export function usePlacePointer(slug: string, idAt: (event: PlaceEvent) => number | undefined) {
   const get = useThree((s) => s.get);
+  useEffect(() => () => releaseHover(slug, get().gl.domElement), [slug, get]);
   const cursor = (value: string) => {
     get().gl.domElement.style.cursor = value;
   };
@@ -33,9 +47,6 @@ export function usePlacePointer(slug: string, idAt: (event: PlaceEvent) => numbe
       useSelectionStore.getState().hover(place);
       cursor('pointer');
     },
-    onPointerOut: () => {
-      useSelectionStore.getState().hover(null);
-      cursor('');
-    },
+    onPointerOut: () => releaseHover(slug, get().gl.domElement),
   };
 }

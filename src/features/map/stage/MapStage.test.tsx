@@ -86,4 +86,11 @@ describe('tono del ciclo y enlaces directos', () => {
     expect(useSelectionStore.getState().selected).toEqual({ kind: 'building', index: 0 });
     expect(useFocusStore.getState().target).toMatchObject({ x: 5, z: 5 });
   });
+
+  it('al salir de la sección no quedan lo elegido ni lo resaltado bajo el puntero', () => {
+    const { unmount } = renderStage();
+    act(() => useSelectionStore.setState({ selected: { kind: 'building', index: 0 }, hovered: { kind: 'building', index: 1 } }));
+    unmount();
+    expect(useSelectionStore.getState()).toMatchObject({ selected: null, hovered: null });
+  });
 });
