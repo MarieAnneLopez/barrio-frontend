@@ -33,10 +33,16 @@ vec3 facade(vec3 wall, vec3 trim, vec3 N, float building, float floors) {
   float fresnel = pow(1.0 - abs(dot(N, V)), 3.0);
   vec3 glass = lit(mix(uGlass, uZenith, 0.25 + 0.55 * fresnel), N);
   glass += uLightColor * pow(max(dot(reflect(-V, N), uLightDir), 0.0), 40.0) * 0.5;
-  float column = max(floor(vColumn), 0.0);
-  float on = mix(litFraction(uNight), windowLit(building, row, column, uNight), detail);
-  float tint = hash01(building, row + 101.0, column);
-  vec3 lamp = mix(uLamp, uLampSoft, step(0.72, tint)) * (0.8 + 0.4 * tint);
-  return mix(lit(base, N), mix(glass, lamp, on), panes * (1.0 - cornice));
+  vec3 pane = glass;
+  // De día (y al empezar el atardecer) no hay ventanas encendidas: se saltan sus hashes. La rama solo
+  // depende de un uniforme, así que todos los fragmentos toman el mismo camino.
+  float lights = litFraction(uNight);
+  if (lights > 0.0) {
+    float column = max(floor(vColumn), 0.0);
+    float on = mix(lights, windowLit(building, row, column, uNight), detail);
+    float tint = hash01(building, row + 101.0, column);
+    pane = mix(glass, mix(uLamp, uLampSoft, step(0.72, tint)) * (0.8 + 0.4 * tint), on);
+  }
+  return mix(lit(base, N), pane, panes * (1.0 - cornice));
 }
 `;

@@ -5,6 +5,7 @@ import { Color, DoubleSide } from 'three';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { LIGHT } from '../sky/lightUniforms';
 import { createBuildingMaterial, NO_BUILDING } from './material';
+import { FACADE_GLSL } from './shaderFacade';
 import { BUILDINGS_FRAGMENT } from './shaderFragment';
 import { BUILDINGS_VERTEX } from './shaderVertex';
 
@@ -44,5 +45,10 @@ describe('material de los edificios', () => {
     expect(BUILDINGS_FRAGMENT).toContain('#include <colorspace_fragment>');
     expect(BUILDINGS_VERTEX).toContain('#include <fog_vertex>');
     expect(BUILDINGS_VERTEX).not.toContain('flat '); // sin varyings planas (camino lento en ANGLE/D3D)
+  });
+
+  it('de día no calcula ventanas encendidas: sus hashes van en una rama que solo depende de uNight', () => {
+    expect(FACADE_GLSL).toMatch(/float lights = litFraction\(uNight\);\s+if \(lights > 0\.0\) \{[^}]*windowLit\(/);
+    expect(FACADE_GLSL.match(/windowLit\(|hash01\(/g)).toHaveLength(2); // los dos, dentro de esa rama
   });
 });
