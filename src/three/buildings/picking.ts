@@ -11,15 +11,19 @@ import { buildingOfFace } from './tileGeometry';
 /** Un clic que se movió más que esto (px) fue un arrastre de la cámara: no elige. */
 export const CLICK_SLOP_PX = 4;
 
-type Hit = Pick<ThreeEvent<PointerEvent>, 'object' | 'face' | 'intersections'>;
+type Hit = Pick<ThreeEvent<PointerEvent>, 'object' | 'eventObject' | 'face' | 'intersections'>;
+
+/** Lo más cercano es otra tesela de este mismo grupo: esa llamada ya respondió. */
+const BEHIND = 'behind';
 
 /**
- * Edificio bajo el puntero, o null si no hay cara o si otro objeto con eventos (un lugar de los
- * módulos) queda más cerca: r3f llama a todos los que cruza el rayo y el de atrás no debe ganar.
+ * Edificio bajo el puntero; null si no hay cara o si otro objeto con eventos (un lugar de los
+ * módulos) queda más cerca. r3f llama al grupo una vez por cada malla que cruza el rayo, en orden
+ * de distancia y siempre con eventObject = el grupo: solo responde la tesela más cercana (BEHIND).
  */
-const buildingOf = (event: Hit): number | null => {
+const buildingOf = (event: Hit): number | null | typeof BEHIND => {
   const nearest = event.intersections[0];
-  if (nearest && nearest.object !== event.object) return null;
+  if (nearest && nearest.object !== event.object) return nearest.eventObject === event.eventObject ? BEHIND : null;
   const geometry = (event.object as Partial<Mesh>).geometry;
   return geometry ? buildingOfFace(geometry, event.face) : null;
 };
@@ -39,6 +43,7 @@ export function createPickHandlers(setCursor: (cursor: string) => void): PickHan
   return {
     onPointerMove(event) {
       const index = buildingOf(event);
+      if (index === BEHIND) return;
       const { hovered, hover } = useSelectionStore.getState();
       if (index === null) {
         // Otro objeto quedó delante: suelta el edificio (el cursor es de quien está delante).
@@ -56,7 +61,7 @@ export function createPickHandlers(setCursor: (cursor: string) => void): PickHan
     onClick(event) {
       if (event.delta > CLICK_SLOP_PX) return;
       const index = buildingOf(event);
-      if (index === null) return;
+      if (index === null || index === BEHIND) return;
       event.stopPropagation();
       useSelectionStore.getState().select({ kind: 'building', index });
     },

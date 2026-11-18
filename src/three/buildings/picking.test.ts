@@ -1,5 +1,5 @@
 import type { ThreeEvent } from '@react-three/fiber';
-import { Mesh } from 'three';
+import { Group, Mesh } from 'three';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useSelectionStore } from '../selection/selectionStore';
 import { buildAll } from './builder';
@@ -10,11 +10,13 @@ import { tileGeometry } from './tileGeometry';
 const [tile] = buildAll(fakeSource([{ rings: [square(0, 0, 10)], pisos: 2 }, { rings: [square(20, 0, 10)], pisos: 3 }])).tiles;
 if (!tile) throw new Error('sin tesela');
 const mesh = new Mesh(tileGeometry(tile));
+const group = new Group().add(mesh); // r3f entrega los eventos al grupo (eventObject)
 /** Evento de r3f sobre la primera cara del edificio k de la tesela (`front`: lo más cercano al rayo). */
 const on = (k: number, delta = 0, front: object = mesh) => ({
   object: mesh,
+  eventObject: group,
   face: { a: tile.index[tile.ranges[k] ?? 0] ?? 0, b: 0, c: 0 },
-  intersections: [{ object: front }, { object: mesh }],
+  intersections: [{ object: front, eventObject: front === mesh ? group : front }, { object: mesh, eventObject: group }],
   delta,
   stopPropagation: vi.fn(),
 }) as unknown as ThreeEvent<PointerEvent> & ThreeEvent<MouseEvent>;
