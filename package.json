@@ -19,6 +19,7 @@
     "sprite": "node scripts/slice_spritesheet.mjs",
     "sprites": "node scripts/build_sprite_scales.mjs",
     "brand": "node scripts/build_brand_assets.mjs",
+    "datos:3d": "node scripts/datos3d/build.mjs",
     "e2e": "playwright test"
   },
   "dependencies": {

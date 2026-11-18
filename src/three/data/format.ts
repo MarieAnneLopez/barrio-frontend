@@ -83,8 +83,11 @@ export interface ManifestFile { ruta: string; bytes: number; bytesTnt3: number; 
 
 export interface TintalManifest {
   version: number;
+  /** Fecha de la consulta más reciente a las fuentes. */
   generado: string;
+  barrio: { nombre: string; definicion: string; areaKm2: number | null };
   proyeccion: { bbox: [number, number, number, number]; origen: [number, number]; unidadesPorMetro: number };
+  licenciaDeLosArchivos: string;
   archivos: Record<TintalFile, ManifestFile>;
   conteos: Record<string, Record<string, number>>;
   fuentes: { id: string; nombre: string; licencia: string; atribucion: string; consultado: string }[];
