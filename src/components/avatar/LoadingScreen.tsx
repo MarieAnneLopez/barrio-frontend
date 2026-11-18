@@ -1,6 +1,7 @@
 import './loading-screen.css';
 import { useCallback, useEffect, useLayoutEffect, useRef, type CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDensity } from '../../hooks/useDensity';
 import { useLoadingScreen } from '../../hooks/useLoadingScreen';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
@@ -8,7 +9,7 @@ import { useLoadingScreenStore } from '../../store/loadingScreenStore';
 import { BarRunner } from './loading/BarRunner';
 import { LoadingProgress } from './loading/LoadingProgress';
 import { LoadingScene } from './loading/LoadingScene';
-import { LOADER_WIDE, runKeyframes, runPath } from './loadingRun';
+import { LOADER_WIDE, loaderAtlas, runKeyframes, runPath } from './loadingRun';
 import { cellWidth } from './sequences';
 import { SequenceSprite } from './SequenceSprite';
 
@@ -18,7 +19,7 @@ import { SequenceSprite } from './SequenceSprite';
  * apoyado (loadingRun.ts): una posición entera por cuadro, con la API de animaciones, sobre un
  * barrio en capas con parallax lento (LoadingScene) y un suelo quieto. Debajo, la barra con el
  * progreso real (LoadingProgress) y una Mini Marie pequeña que corre con su punta. Al menos 700 ms.
- * Escala entera (D86): 420 px de alto si cabe sin que su cabeza llegue al sol; si no, la mitad.
+ * Escala entera (D86): 420 px de alto si la pantalla da para ello (LOADER_WIDE); si no, la mitad.
  * Movimiento reducido: pose fija al centro mirando a la derecha, barrio quieto y barra sin adornos.
  */
 export function LoadingScreen() {
@@ -26,12 +27,13 @@ export function LoadingScreen() {
   const { visible, leaving, busy } = useLoadingScreen();
   const setVisible = useLoadingScreenStore((s) => s.setVisible);
   const size = useMediaQuery(LOADER_WIDE, true) ? 420 : 210;
+  // Las dos Mini Marie comparten un solo atlas, elegido por la densidad real (D111; auditoría MM-01):
+  // el de 210 solo a 1× donde la grande mide 210; el de 420 en todo lo demás. Una sola descarga, la
+  // que precarga index.html. La de la barra (105 px) siempre lo reduce, con suavizado (bar-runner.css).
+  const atlas = loaderAtlas(size, useDensity());
   const reduced = useReducedMotion();
   const track = useRef<HTMLDivElement>(null);
-  // En el celular las dos Mini Marie comparten el atlas de 210 (D111; la de la barra lo reduce a la
-  // mitad exacta): bajar además el doble costaba ~400 KB antes de ver la página. En pantallas grandes
-  // la de la barra usa el suyo (reducir el de 420 a la cuarta parte la dejaba dentada).
-  const rider = useCallback((shown: number) => <BarRunner shown={shown} atlas={size === 210 ? 210 : undefined} />, [size]);
+  const rider = useCallback((shown: number) => <BarRunner shown={shown} atlas={atlas} />, [atlas]);
 
   useEffect(() => setVisible(visible), [visible, setVisible]);
 
@@ -51,7 +53,7 @@ export function LoadingScreen() {
       <div className="loading-screen__stage" style={{ '--runner': `${size}px` } as CSSProperties}>
         <LoadingScene />
         <div ref={track} className="loading-screen__track">
-          <SequenceSprite name="run" size={size} atlas={size} pose={3} className="loading-screen__runner" />
+          <SequenceSprite name="run" size={size} atlas={atlas} pose={3} className="loading-screen__runner" />
         </div>
       </div>
       <div className="loading-screen__ground" aria-hidden="true" />

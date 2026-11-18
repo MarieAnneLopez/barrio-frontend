@@ -8,3 +8,9 @@
   line-height: 0;
   pointer-events: none;
 }
+
+/* Comparte el atlas de la grande (210 o 420, D111) y siempre lo reduce (a 105 px CSS): con suavizado.
+   El vecino más cercano, que sequence.css pone a 1× y 2×, le dentaba el contorno al reducir. */
+.bar-runner .sequence__strip {
+  image-rendering: auto;
+}

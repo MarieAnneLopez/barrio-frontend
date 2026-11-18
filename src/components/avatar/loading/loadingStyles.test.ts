@@ -30,6 +30,12 @@ describe('la Mini Marie de la barra, en su sitio', () => {
   it('de pie sobre la barra: sin hueco de interlineado bajo ella', () => {
     expect(runnerCss).toMatch(/\.bar-runner \{[^}]*line-height: 0;/);
   });
+
+  // Auditoría MM-01: comparte el atlas de la grande (D111) y siempre lo reduce; el vecino más cercano
+  // (pixelated, que sequence.css pone a 1× y 2×) le dentaba el contorno al reducir.
+  it('reduce el atlas compartido con suavizado, no con el vecino más cercano', () => {
+    expect(runnerCss).toMatch(/\.bar-runner \.sequence__strip \{[^}]*image-rendering: auto;/);
+  });
 });
 
 // Auditoría MM-05 y PAL-12: en Alto Contraste relleno y pista eran los dos #000 (1:1) y el brillo,

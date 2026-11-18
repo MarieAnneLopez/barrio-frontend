@@ -41,9 +41,9 @@ describe('la Mini Marie de la barra de carga', () => {
     expect(container.querySelectorAll('source')).toHaveLength(0);
   });
 
-  it('sin atlas compartido (pantallas grandes) usa sus fuentes por densidad, sin reducir el de 420', () => {
-    const { container } = render(<BarRunner shown={0.5} />);
-    expect(container.querySelector('img')).toHaveAttribute('src', spriteUrl('run', 105));
-    expect(container.querySelectorAll('source')).toHaveLength(2);
+  it('con el atlas de 420 (pantalla grande o densa) también comparte ese archivo, sin fuentes propias', () => {
+    const { container } = render(<BarRunner shown={0.5} atlas={420} />);
+    expect(container.querySelector('img')).toHaveAttribute('src', spriteUrl('run', 420));
+    expect(container.querySelectorAll('source')).toHaveLength(0);
   });
 });

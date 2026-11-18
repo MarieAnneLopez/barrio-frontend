@@ -1,4 +1,4 @@
-import { FRAME_MS, sequenceSpec } from './sequences';
+import { FRAME_MS, SIZES, sequenceSpec, type SpriteSize } from './sequences';
 
 /**
  * Carrera de la pantalla de carga. Los cuadros de «corriendo» miran a la derecha, así que avanza
@@ -11,10 +11,19 @@ import { FRAME_MS, sequenceSpec } from './sequences';
 export const RUN = { direction: 1, facing: 'right', fps: 1000 / FRAME_MS.run } as const;
 
 /**
- * Pantalla donde cabe a 420 px de alto sin que su cabeza llegue al sol del barrio en capas (si no,
- * 210). index.html precarga el atlas con esta misma condición.
+ * Pantalla donde cabe a 420 px de alto (si no, 210). index.html precarga el atlas con esta condición
+ * y la de densidad (loaderAtlas).
  */
 export const LOADER_WIDE = '(min-width: 640px) and (min-height: 860px)';
+
+/**
+ * Atlas que comparten las dos Mini Marie de la carga (D111; auditoría MM-01): el menor que cubre el
+ * alto de la grande por el múltiplo de densidad (useDensity); si ninguno alcanza, el mayor. La de la
+ * barra (105 px) siempre lo reduce; la grande solo se amplía donde no hay uno mayor (420).
+ */
+export function loaderAtlas(size: number, times: number): SpriteSize<'run'> {
+  return SIZES.run.find((atlas) => atlas >= size * times) ?? 420;
+}
 
 const STRIDE_AT_420 = 292;
 const FRAMES = sequenceSpec('run').frames;

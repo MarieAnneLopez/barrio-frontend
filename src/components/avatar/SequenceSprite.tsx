@@ -2,7 +2,7 @@ import './sequence.css';
 import { useRef, type CSSProperties } from 'react';
 import { useNearViewport } from '../../hooks/useNearViewport';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
-import { denserThan } from '../../lib/density';
+import { DENSER, denserThan } from '../../lib/density';
 import { atlasCellWidth, cellWidth, FRAME_MS, sequenceSpec, spriteUrl, type SequenceName, type SpriteSize } from './sequences';
 
 interface Props<N extends SequenceName> {
@@ -22,9 +22,6 @@ interface Props<N extends SequenceName> {
   atlas?: SpriteSize<N>;
   className?: string;
 }
-
-/** Densidad de pantalla desde la que conviene cada múltiplo: el cuádruple por encima de 2×, el doble por encima de 1×. */
-const DENSER = [[4, 2.01], [2, 1.01]] as const;
 
 /**
  * Secuencia de Mini Marie (H33; sprites32): un ciclo de 32 cuadros en un atlas de 8 columnas ×
