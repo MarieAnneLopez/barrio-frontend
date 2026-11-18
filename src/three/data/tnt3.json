@@ -1,0 +1,30 @@
+{
+  "magia": "TNT3",
+  "version": 1,
+  "unidadesPorMetro": 10,
+  "archivos": { "edificios": 1, "vias": 2, "suelo": 3, "puntos": 4 },
+  "tipos": { "u8": 1, "i8": 2, "u16": 3, "i16": 4, "u32": 5, "i32": 6, "f32": 7, "f64": 8, "utf8": 9 },
+  "banderasEdificio": {
+    "osm": 1, "pisosConocidos": 2, "voladizo": 4, "mejora": 8, "semisotano": 16,
+    "subterranea": 32, "enConstruccion": 64
+  },
+  "tipoDireccion": { "ninguna": 0, "enHuella": 1, "delLote": 2, "deManzana": 3 },
+  "tipoNombre": { "ninguno": 0, "edificio": 1, "area": 2 },
+  "clasesVia": {
+    "motorway": 1, "trunk": 2, "primary": 3, "secondary": 4, "tertiary": 5, "unclassified": 6,
+    "residential": 7, "living_street": 8, "service": 9, "busway": 10, "road": 11, "construction": 12,
+    "footway": 20, "sidewalk": 21, "crossing": 22, "path": 23, "pedestrian": 24, "steps": 25,
+    "cycleway": 26, "track": 27, "corridor": 28, "bridleway": 29
+  },
+  "banderasVia": {
+    "enlace": 1, "puente": 2, "tunel": 4, "accesoRestringido": 8, "glorieta": 16, "area": 32,
+    "soloBus": 64, "recortada": 128
+  },
+  "cruces": { "cebra": 1, "marcado": 2, "sinMarcas": 3, "semaforo": 4, "deVia": 8, "sinEje": 16, "ciclorruta": 32 },
+  "clasesSuelo": {
+    "barrio": 1, "park": 2, "garden": 3, "playground": 4, "pitch": 5, "track": 6, "sports_centre": 7,
+    "grass": 8, "recreation_ground": 9, "village_green": 10, "meadow": 11, "forest": 12, "wood": 13,
+    "scrub": 14, "grassland": 15, "water": 16, "wetland": 17, "basin": 18, "riverbank": 19
+  },
+  "clasesAgua": { "canal": 1, "river": 2, "stream": 3, "drain": 4, "ditch": 5 }
+}
