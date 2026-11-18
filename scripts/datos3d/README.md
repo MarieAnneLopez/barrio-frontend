@@ -67,6 +67,8 @@ los muestre debe citar las dos atribuciones (`manifest.licenciaDeLosArchivos`).
    lote; si el lote no tiene, la más cercana de su manzana (9 primeros dígitos). Empate: principal
    antes que secundaria. Texto: `PDONVIAL # PDOTEXTO` con guion (`KR 87B # 6D-20`); en placas
    interiores, el número del conjunto (`PDOCINTERI`) y luego el interior (`KR 88D # 6D-27 TO 6`).
+   La unión es por código y no por posición: medido en el barrio, solo el 86,7 % de las placas cae
+   dentro del polígono de su propio lote (7,7 % en el lote vecino y 5,6 % en el andén o la vía).
 6. **Nombre de conjunto o lugar** (Catastro no publica nombres): el edificio OSM con nombre que lo
    contiene o, si no, el área OSM con nombre más pequeña que lo contiene (conjuntos residenciales,
    colegios, parques, comercio). El sector catastral (`SCANOMBRE`) va aparte, por el código de lote.
