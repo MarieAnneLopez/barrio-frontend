@@ -382,7 +382,7 @@
     "placeCard": "Selected place",
     "openModule": "View in {{module}}",
     "closePlace": "Close card",
-    "source": "Data © UAECD (Bogotá Cadastre, CC BY 4.0) · © OpenStreetMap (ODbL)",
+    "source": "Catastro Bogotá (UAECD) – Datos Abiertos Bogotá, CC BY 4.0, modified data · © OpenStreetMap contributors (ODbL)",
     "legend": {
       "title": "Legend and filter",
       "noData": "no data",
