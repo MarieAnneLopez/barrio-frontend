@@ -2,11 +2,12 @@
 // Su fecha es la de la consulta más reciente a las fuentes: con la misma caché, sale idéntico.
 import { SPEC } from './spec.mjs';
 
-export const LICENCIA_ARCHIVOS = 'Los archivos combinan datos de Catastro Bogotá (UAECD, Creative Commons Attribution 4.0) '
-  + 'y de OpenStreetMap (ODbL 1.0). Lo que deriva de OSM (vías, cruces, semáforos, suelo, árboles, nombres y '
-  + 'edificios complementados) es una base de datos derivada bajo ODbL 1.0; los datos de Catastro conservan su '
-  + 'licencia CC BY 4.0 con atribución a la UAECD. Toda vista que los muestre debe citar «© OpenStreetMap '
-  + 'contributors» y «Unidad Administrativa Especial de Catastro Distrital - UAECD».';
+export const LICENCIA_ARCHIVOS = 'Los archivos combinan datos de Catastro Bogotá (UAECD, Creative Commons Attribution 4.0, '
+  + 'https://creativecommons.org/licenses/by/4.0/) y de OpenStreetMap (Open Database License 1.0, '
+  + 'https://opendatacommons.org/licenses/odbl/1-0/). Lo que deriva de OSM (vías, cruces, semáforos, suelo, '
+  + 'árboles, nombres y edificios complementados) es una base de datos derivada bajo ODbL 1.0; los datos de '
+  + 'Catastro conservan su licencia CC BY 4.0 con atribución a la UAECD. Toda vista que los muestre debe citar '
+  + '«© OpenStreetMap contributors» y «Unidad Administrativa Especial de Catastro Distrital - UAECD».';
 
 export function buildManifest({ feature, info, files, conteos, fuentes }) {
   const props = feature.properties ?? {};

@@ -1,0 +1,210 @@
+{
+  "version": 1,
+  "formato": "TNT3 (scripts/datos3d/FORMATO.md)",
+  "generado": "2026-11-18T04:34:23.308Z",
+  "barrio": {
+    "nombre": "El Tintal",
+    "definicion": "UPZ 78 Tintal Norte + UPZ 79 Calandaima",
+    "areaKm2": 6.4966
+  },
+  "proyeccion": {
+    "metodo": "equirectangular local, la misma de src/three/projection.ts (createProjection(bbox))",
+    "bbox": [
+      -74.177402,
+      4.639954,
+      -74.137115,
+      4.664206
+    ],
+    "origen": [
+      -74.1572585,
+      4.65208
+    ],
+    "metrosPorGradoLon": 110953.26388234308,
+    "metrosPorGradoLat": 110574,
+    "ejes": "x hacia el este y z hacia el sur (el norte es -z), en metros",
+    "unidadesPorMetro": 10
+  },
+  "archivos": {
+    "edificios": {
+      "ruta": "edificios.bin.gz",
+      "bytes": 455034,
+      "bytesTnt3": 1673984,
+      "sha256": "4b3b8f81367a338955ddbc1e0f7217d8cbe0c67956f220d76c0682edbadb5b67"
+    },
+    "vias": {
+      "ruta": "vias.bin.gz",
+      "bytes": 47106,
+      "bytesTnt3": 89240,
+      "sha256": "6a579abfd59681c0f51658e82e89100b95b7ed8d10c72d6ec6d73d3fe6199663"
+    },
+    "suelo": {
+      "ruta": "suelo.bin.gz",
+      "bytes": 12350,
+      "bytesTnt3": 18912,
+      "sha256": "fe6274dae30c3dde7be74009ae20525a3d3092e9c1e4f4c77c80b77034ae7893"
+    },
+    "puntos": {
+      "ruta": "puntos.bin.gz",
+      "bytes": 1741,
+      "bytesTnt3": 3520,
+      "sha256": "402f15c3cac8ffc72292a9f8891a5bc5983ff2d72d51b59c7d5b131a6511911e"
+    }
+  },
+  "conteos": {
+    "edificios": {
+      "total": 20394,
+      "catastro": 20381,
+      "osm": 13,
+      "pisosCatastro": 20381,
+      "pisosCatastroPct": 99.9,
+      "placaOficial": 20356,
+      "placaOficialPct": 99.8,
+      "placaEnHuella": 9907,
+      "placaDelLote": 10449,
+      "placaDeManzana": 14,
+      "sinPlaca": 24,
+      "conNombre": 11942,
+      "conNombrePct": 58.6,
+      "nombreDeEdificio": 48,
+      "voladizos": 2908,
+      "subterraneas": 98
+    },
+    "vias": {
+      "tramos": 1483,
+      "nodos": 5310,
+      "porClase": {
+        "service": 528,
+        "footway": 355,
+        "residential": 203,
+        "tertiary": 98,
+        "sidewalk": 68,
+        "crossing": 67,
+        "cycleway": 50,
+        "secondary": 33,
+        "construction": 27,
+        "primary": 24,
+        "pedestrian": 10,
+        "unclassified": 8,
+        "track": 4,
+        "path": 4,
+        "trunk": 3,
+        "steps": 1
+      },
+      "sentidoUnico": 193,
+      "conCarriles": 210,
+      "recortados": 65,
+      "cruces": 172,
+      "crucesPorMarca": {
+        "sinMarcas": 11,
+        "marcado": 106,
+        "desconocidas": 42,
+        "cebra": 13
+      },
+      "crucesConSemaforo": 60,
+      "semaforos": 50
+    },
+    "suelo": {
+      "areas": 249,
+      "areasPorClase": {
+        "grass": 77,
+        "park": 57,
+        "pitch": 55,
+        "water": 24,
+        "playground": 23,
+        "meadow": 3,
+        "grassland": 3,
+        "track": 3,
+        "barrio": 1,
+        "recreation_ground": 1,
+        "forest": 1,
+        "wetland": 1
+      },
+      "lineasDeAgua": 32,
+      "arboles": 248,
+      "hilerasDeArboles": 20,
+      "faroles": 0
+    }
+  },
+  "licenciaDeLosArchivos": "Los archivos combinan datos de Catastro Bogotá (UAECD, Creative Commons Attribution 4.0, https://creativecommons.org/licenses/by/4.0/) y de OpenStreetMap (Open Database License 1.0, https://opendatacommons.org/licenses/odbl/1-0/). Lo que deriva de OSM (vías, cruces, semáforos, suelo, árboles, nombres y edificios complementados) es una base de datos derivada bajo ODbL 1.0; los datos de Catastro conservan su licencia CC BY 4.0 con atribución a la UAECD. Toda vista que los muestre debe citar «© OpenStreetMap contributors» y «Unidad Administrativa Especial de Catastro Distrital - UAECD».",
+  "fuentes": [
+    {
+      "id": "poligono",
+      "nombre": "Polígono de El Tintal (UPZ 78 Tintal Norte + UPZ 79 Calandaima)",
+      "entidad": "OpenStreetMap (relaciones de las UPZ), servido por la API del proyecto",
+      "servicio": "https://reconoce-el-tintal.pages.dev/api/v1/barrio/poligono",
+      "origen": [
+        "https://www.openstreetmap.org/relation/11350645",
+        "https://www.openstreetmap.org/relation/11360088"
+      ],
+      "licencia": "© OpenStreetMap contributors, ODbL 1.0",
+      "atribucion": "© OpenStreetMap contributors",
+      "version": "2026-11-14T06:53:36Z",
+      "consultado": "2026-11-18T04:33:11.269Z"
+    },
+    {
+      "id": "catastro-construccion",
+      "nombre": "Construcción. Bogotá D.C",
+      "entidad": "Unidad Administrativa Especial de Catastro Distrital - UAECD",
+      "servicio": "https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/catastro/construccion/MapServer/0",
+      "conjunto": "https://datosabiertos.bogota.gov.co/dataset/construccion",
+      "licencia": "Creative Commons Attribution 4.0",
+      "licenciaUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "atribucion": "Unidad Administrativa Especial de Catastro Distrital - UAECD",
+      "version": "servicio vigente; última publicación del portal 10.26 (modificado 2026-11-04T20:25:47.299278)",
+      "consultado": "2026-11-18T04:33:13.736Z",
+      "entidades": 20381
+    },
+    {
+      "id": "catastro-lote",
+      "nombre": "Lote. Bogotá D.C.",
+      "entidad": "Unidad Administrativa Especial de Catastro Distrital - UAECD",
+      "servicio": "https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/catastro/lote/MapServer/0",
+      "conjunto": "https://datosabiertos.bogota.gov.co/dataset/lote",
+      "licencia": "Creative Commons Attribution 4.0",
+      "licenciaUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "atribucion": "Unidad Administrativa Especial de Catastro Distrital - UAECD",
+      "version": "servicio vigente; última publicación del portal 10.26 (modificado 2026-11-04T21:24:30.663335)",
+      "consultado": "2026-11-18T04:33:23.453Z",
+      "entidades": 3762
+    },
+    {
+      "id": "catastro-placa",
+      "nombre": "Placa Domiciliaria. Bogotá D.C",
+      "entidad": "Unidad Administrativa Especial de Catastro Distrital - UAECD",
+      "servicio": "https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/catastro/placadomiciliaria/MapServer/0",
+      "conjunto": "https://datosabiertos.bogota.gov.co/dataset/placa-domiciliaria",
+      "licencia": "Creative Commons Attribution 4.0",
+      "licenciaUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "atribucion": "Unidad Administrativa Especial de Catastro Distrital - UAECD",
+      "version": "servicio vigente; última publicación del portal 10.26 (modificado 2026-11-05T15:54:02.225104)",
+      "consultado": "2026-11-18T04:33:30.124Z",
+      "entidades": 16753
+    },
+    {
+      "id": "catastro-sector",
+      "nombre": "Sector Catastral. Bogotá D.C",
+      "entidad": "Unidad Administrativa Especial de Catastro Distrital - UAECD",
+      "servicio": "https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/catastro/sectorcatastral/MapServer/0",
+      "conjunto": "https://datosabiertos.bogota.gov.co/dataset/sector-catastral",
+      "licencia": "Creative Commons Attribution 4.0",
+      "licenciaUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "atribucion": "Unidad Administrativa Especial de Catastro Distrital - UAECD",
+      "version": "servicio vigente; última publicación del portal 10.26 (modificado 2026-11-05T15:42:17.889943)",
+      "consultado": "2026-11-18T04:33:37.272Z",
+      "entidades": 22
+    },
+    {
+      "id": "osm",
+      "nombre": "OpenStreetMap",
+      "entidad": "OpenStreetMap Foundation y colaboradores",
+      "servicio": "https://overpass-api.de/api/interpreter",
+      "licencia": "OpenStreetMap is open data, licensed under the Open Data Commons Open Database License (ODbL) by the OpenStreetMap Foundation (OSMF).",
+      "licenciaUrl": "https://www.openstreetmap.org/copyright",
+      "atribucion": "© OpenStreetMap contributors",
+      "avisoDelServicio": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
+      "version": "datos OSM al 2026-11-18T04:33:05Z",
+      "consultado": "2026-11-18T04:34:23.308Z",
+      "entidades": 5042
+    }
+  ]
+}
