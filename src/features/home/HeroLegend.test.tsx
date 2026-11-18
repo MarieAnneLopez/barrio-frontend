@@ -7,10 +7,12 @@ import { useHeroStore } from '../../three/heroStore';
 import { callsTo, mockApi } from '../../test/mockApi';
 import { BASE_MAP, FEATURES } from '../../test/moduleFixtures';
 import { renderRoute, setViewport } from '../../test/renderRoute';
+import { worldReady } from '../../test/emptyWorld';
 
 vi.mock('../../three/TintalScene', () => ({ default: () => <div data-testid="escena-3d" /> }));
 
 beforeEach(() => {
+  worldReady();
   clearBaseMapCache();
   setViewport(true);
   act(() => useHeroStore.setState({ hidden: [], drawn: {}, selected: null }));

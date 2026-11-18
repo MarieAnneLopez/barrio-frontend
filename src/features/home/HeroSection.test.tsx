@@ -6,6 +6,7 @@ import { useHeroStore } from '../../three/heroStore';
 import { mockApi } from '../../test/mockApi';
 import { BASE_MAP, FEATURES } from '../../test/moduleFixtures';
 import { renderRoute, setViewport } from '../../test/renderRoute';
+import { worldReady } from '../../test/emptyWorld';
 
 // jsdom no tiene WebGL: la escena se sustituye; aquí se prueba el Hero que la envuelve.
 vi.mock('../../three/TintalScene', () => ({
@@ -13,6 +14,7 @@ vi.mock('../../three/TintalScene', () => ({
 }));
 
 beforeEach(() => {
+  worldReady();
   window.localStorage.clear();
   clearBaseMapCache();
   setViewport(true);
@@ -81,14 +83,12 @@ describe('Hero 3D', () => {
     expect(top?.contains(screen.getByText('4,653° N · 74,157° O'))).toBe(true);
   });
 
-  it('si la API aún no responde, nunca muestra un error: reintenta sola y luego dibuja', async () => {
+  it('la maqueta no espera a la API: con la API dormida se dibuja igual (datos estáticos) y sin errores', async () => {
     mockApi({ '/barrio/poligono': { status: 502, body: {} } });
     renderRoute('/');
-    await new Promise((resolve) => setTimeout(resolve, 300)); // primer intento fallido
 
+    expect(await screen.findByTestId('escena-3d')).toBeInTheDocument();
     expect(screen.queryByRole('alert')).toBeNull();
     expect(screen.queryByText(/No se pudo cargar/)).toBeNull();
-    mockApi({ ...BASE_MAP, '/centros-educativos/geojson': FEATURES }); // la API despertó
-    expect(await screen.findByTestId('escena-3d', {}, { timeout: 4000 })).toBeInTheDocument();
-  }, 8000);
+  });
 });

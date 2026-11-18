@@ -10,6 +10,7 @@ import { useLoadingStore } from '../store/loadingStore';
 import { useWelcomeStore } from '../store/welcomeStore';
 import { resetSceneHost } from '../three/sceneHost';
 import { resetTintalData } from '../three/useTintalData';
+import { worldPending } from './emptyWorld';
 
 // El inglés baja en su propio chunk (rendimiento); en las pruebas está siempre a mano.
 i18n.addResourceBundle('en', 'translation', en);
@@ -31,6 +32,7 @@ beforeEach(() => {
   useLoadingStore.setState({ tasks: {} });
   // La maqueta 3D y sus datos son compartidos por toda la app (D83): cada prueba empieza de cero.
   resetTintalData();
+  worldPending();
   resetSceneHost();
 });
 

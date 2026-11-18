@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Skeleton } from '../../components/ui/Skeleton';
 import { useSceneHost } from '../../three/sceneHost';
-import { useTintalData } from '../../three/useTintalData';
+import { useTintal3D } from '../../three/data/useTintal3D';
 import { HeroHud } from './HeroHud';
 import { HeroLegend } from './HeroLegend';
 import { SittingMarie } from './SittingMarie';
@@ -29,7 +29,7 @@ function scrollsThePage(event: WheelEvent) {
  */
 export function HeroSection({ variant = 'page' }: { variant?: Variant }) {
   const { t } = useTranslation();
-  const state = useTintalData(); // reintenta sola: nunca muestra un error
+  const state = useTintal3D(); // datos estáticos; reintenta sola: nunca muestra un error
   const section = useRef<HTMLElement>(null);
   const slot = useRef<HTMLDivElement>(null);
   const stage = variant === 'stage';

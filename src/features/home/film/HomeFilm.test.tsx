@@ -4,11 +4,13 @@ import { clearBaseMapCache } from '../../../components/map/baseMapData';
 import { mockApi } from '../../../test/mockApi';
 import { BASE_MAP, FEATURES } from '../../../test/moduleFixtures';
 import { renderRoute, setViewport } from '../../../test/renderRoute';
+import { worldReady } from '../../../test/emptyWorld';
 
 // jsdom no tiene WebGL: la escena se sustituye; aquí se prueba el Inicio que la envuelve.
 vi.mock('../../../three/TintalScene', () => ({ default: () => <div data-testid="escena-3d" /> }));
 
 beforeEach(() => {
+  worldReady();
   window.localStorage.clear();
   clearBaseMapCache();
   setViewport(true);
