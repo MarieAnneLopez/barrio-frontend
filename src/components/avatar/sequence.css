@@ -1,11 +1,24 @@
-/* SequenceSprite (H33): ventana de un cuadro; la tira se desliza con transform. */
+/* SequenceSprite (H33; sprites32): la caja ocupa su sitio en la maqueta; la ventana muestra un
+   cuadro del atlas de 8 × 4. La imagen recorre las columnas y su contenedor baja las filas. */
 .sequence {
   display: inline-block;
   position: relative;
-  overflow: hidden;
   flex-shrink: 0;
 }
 
+/* Un cuadro: a veces más ancha que la caja (el brazo del saludo sale por la derecha). */
+.sequence__window {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+.sequence__rows {
+  display: block;
+}
+
+/* El atlas (se llama «strip» desde las tiras de antes; las hojas de estilo de otras vistas lo usan). */
 .sequence__strip {
   display: block;
   max-width: none;
@@ -26,11 +39,16 @@
 }
 
 .sequence[data-playing] .sequence__strip {
-  animation-name: sequence-play;
+  animation-name: sequence-columns;
   animation-iteration-count: infinite;
 }
 
-@keyframes sequence-play {
+.sequence[data-playing] .sequence__rows {
+  animation-name: sequence-rows;
+  animation-iteration-count: infinite;
+}
+
+@keyframes sequence-columns {
   from {
     transform: translateX(0);
   }
@@ -39,13 +57,24 @@
   }
 }
 
+@keyframes sequence-rows {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+
 /* Respaldo si el sistema pide menos movimiento antes de que React lo lea. */
 @media (prefers-reduced-motion: reduce) {
-  .sequence[data-playing] .sequence__strip {
+  .sequence[data-playing] .sequence__strip,
+  .sequence[data-playing] .sequence__rows {
     animation: none;
   }
 }
 
-:root.reduce-motion .sequence[data-playing] .sequence__strip {
+:root.reduce-motion .sequence[data-playing] .sequence__strip,
+:root.reduce-motion .sequence[data-playing] .sequence__rows {
   animation: none;
 }

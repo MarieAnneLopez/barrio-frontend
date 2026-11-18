@@ -23,20 +23,10 @@
   overflow: hidden;
 }
 
-/* Avanza en pasos enteros, uno por cuadro (duración y steps() los pone LoadingScreen). */
+/* Avanza un cuadro cada vez, en px enteros: LoadingScreen le pone una posición redondeada por cuadro
+   con la API de animaciones (sprites32: zancada / 32 por cuadro, sin acumular error). */
 .loading-screen__track {
-  animation-name: loading-run;
-  animation-iteration-count: infinite;
   will-change: transform;
-}
-
-@keyframes loading-run {
-  from {
-    transform: translate3d(var(--run-start), 0, 0);
-  }
-  to {
-    transform: translate3d(var(--run-end), 0, 0);
-  }
 }
 
 /* Suelo: una línea marrón quieta de 1 px; solo se mueve ella. */
@@ -59,12 +49,10 @@
 /* Movimiento reducido: pose fija al centro; el fundido de salida se mantiene. */
 @media (prefers-reduced-motion: reduce) {
   .loading-screen__track {
-    animation: none;
     margin-inline: auto;
   }
 }
 
 :root.reduce-motion .loading-screen__track {
-  animation: none;
   margin-inline: auto;
 }

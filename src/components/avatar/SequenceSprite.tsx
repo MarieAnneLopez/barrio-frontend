@@ -2,13 +2,13 @@ import './sequence.css';
 import type { CSSProperties } from 'react';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { denserThan } from '../../lib/density';
-import { cellWidth, FRAME_MS, sequenceSpec, spriteUrl, type SequenceName, type SpriteSize } from './sequences';
+import { atlasCellWidth, cellWidth, FRAME_MS, sequenceSpec, spriteUrl, type SequenceName, type SpriteSize } from './sequences';
 
 interface Props<N extends SequenceName> {
   name: N;
   /** Alto en px: uno de los tamaños fijos de la secuencia (escala entera, D86); otro no compila. */
   size: SpriteSize<N>;
-  /** Pose fija (índice desde 0) con movimiento reducido o si playing = false. */
+  /** Cuadro dibujado (índice desde 0) que queda fijo con movimiento reducido o si playing = false. */
   pose?: number;
   playing?: boolean;
   /** Desfase dentro del ciclo (0–1): varias a la vez no se mueven al unísono. */
@@ -20,36 +20,48 @@ interface Props<N extends SequenceName> {
 const DENSER = [[4, 2.01], [2, 1.01]] as const;
 
 /**
- * Secuencia de Mini Marie dibujada por Marie (H33): una tira de cuadros que se desliza con
- * transform y steps(), así nunca se repinta. Escala entera (D86): la caja mide exactamente el
- * recurso a 1× y el paso entre cuadros es un número entero de píxeles; en pantallas más densas
- * <picture> elige el doble o el cuádruple exactos (con srcset, a 125 % el navegador se quedaría
- * con el pequeño y lo estiraría). Movimiento reducido: pose estática. Decorativa: el texto lo da
- * quien la usa.
+ * Secuencia de Mini Marie (H33; sprites32): un ciclo de 32 cuadros en un atlas de 8 columnas ×
+ * 4 filas. Dos animaciones con steps() y solo transform, así nunca se repinta: la imagen recorre
+ * las columnas de una fila y su contenedor baja de fila en fila, a la misma hora. Escala entera
+ * (D86): la caja mide exactamente el recurso a 1× y cada paso es un número entero de píxeles; en
+ * pantallas más densas <picture> elige el doble o el cuádruple exactos (con srcset, a 125 % el
+ * navegador se quedaría con el pequeño y lo estiraría). La ventana de un cuadro puede ser más ancha
+ * que la caja (el brazo del saludo sale por la derecha) sin mover la maqueta. Movimiento reducido:
+ * el cuadro dibujado `pose`, quieto. Decorativa: el texto lo da quien la usa.
  */
 export function SequenceSprite<N extends SequenceName>({ name, size, pose = 0, playing = true, phase = 0, className = '' }: Props<N>) {
   const reduced = useReducedMotion();
-  const { frames, sizes } = sequenceSpec(name);
+  const { sizes, grid: [cols, rows], keys } = sequenceSpec(name);
   const width = cellWidth(name, size);
+  const cell = atlasCellWidth(name, size);
   const animate = playing && !reduced;
-  const cycle = frames * FRAME_MS[name];
-  const motion: CSSProperties = animate
-    ? { animationDuration: `${cycle}ms`, animationTimingFunction: `steps(${frames})`, animationDelay: `${-phase * cycle}ms` }
-    : { transform: `translateX(${-pose * width}px)` };
+  const rowMs = cols * FRAME_MS[name];
+  const delay = `${-phase * rows * rowMs}ms`;
+  const frame = keys[Math.min(Math.max(pose, 0), keys.length - 1)] ?? 0;
+  const across: CSSProperties = animate
+    ? { animationDuration: `${rowMs}ms`, animationTimingFunction: `steps(${cols})`, animationDelay: delay }
+    : { transform: `translateX(${-(frame % cols) * cell}px)` };
+  const down: CSSProperties = animate
+    ? { animationDuration: `${rows * rowMs}ms`, animationTimingFunction: `steps(${rows})`, animationDelay: delay }
+    : { transform: `translateY(${-Math.floor(frame / cols) * size}px)` };
   return (
     <span className={`sequence ${className}`} style={{ width, height: size }} data-sequence={name} data-playing={animate || undefined} aria-hidden="true">
-      <picture>
-        {DENSER.filter(([times]) => sizes.includes(size * times)).map(([times, dppx]) => (
-          <source key={times} media={denserThan(dppx)} srcSet={spriteUrl(name, size * times)} />
-        ))}
-        <img
-          className="sequence__strip"
-          src={spriteUrl(name, size)}
-          alt=""
-          draggable={false}
-          style={{ ...motion, width: frames * width, height: size }}
-        />
-      </picture>
+      <span className="sequence__window" style={{ width: cell, height: size }}>
+        <span className="sequence__rows" style={down}>
+          <picture>
+            {DENSER.filter(([times]) => sizes.includes(size * times)).map(([times, dppx]) => (
+              <source key={times} media={denserThan(dppx)} srcSet={spriteUrl(name, size * times)} />
+            ))}
+            <img
+              className="sequence__strip"
+              src={spriteUrl(name, size)}
+              alt=""
+              draggable={false}
+              style={{ ...across, width: cols * cell, height: rows * size }}
+            />
+          </picture>
+        </span>
+      </span>
     </span>
   );
 }

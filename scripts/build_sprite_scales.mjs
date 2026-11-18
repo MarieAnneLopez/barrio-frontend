@@ -1,57 +1,58 @@
 #!/usr/bin/env node
-// Tamaños fijos de Mini Marie (D86, «escala entera»). Sus dibujos no siguen una rejilla de píxel
-// regular, así que cada secuencia se genera una sola vez en sus tamaños de uso, con celdas de
-// ancho entero, para mostrarla 1:1 (o 2:1 exacto en pantallas 2×) con image-rendering: pixelated.
+// Atlas de Mini Marie en sus tamaños fijos (D86, «escala entera»; sprites32). Cada secuencia es un
+// ciclo de 32 cuadros (8 columnas × 4 filas) guardado sin pérdida, al tamaño mayor, en
+// scripts/sprite-cycles/<nombre>_ciclo.webp: los cuadros que dibujó Marie (intactos) y los
+// intermedios generados por piezas o flujo óptico, cuantizados a la paleta de esos cuadros
+// (método de cada cuadro en scripts/sprite-cycles/metodos.json). Sus dibujos no siguen una rejilla
+// de píxel regular, así que cada tamaño se genera una sola vez, celda a celda (lanczos3 al
+// reducir), con celdas de ancho entero, para mostrarlo 1:1 (o 2:1 exacto en pantallas 2×) con
+// image-rendering: pixelated. La celda del saludo es más ancha que su caja (392 frente a 328 px a
+// 640 de alto): el brazo sale por la derecha al subir y bajar.
 // WebP al 90 %: medido, a ×4 de aumento se ve igual que sin pérdida y pesa 3,8 veces menos.
-// Lee los cuadros ya recortados de public/assets/avatar (copias): nunca "MINI MARIE.png".
-// La sentada no tiene cuadros sueltos: sale de sit_strip.webp, hecha una sola vez a partir de
-// «Mini marie sentada.jpeg» con un script puntual; ningún script la regenera (no borrar).
+// Nunca lee "MINI MARIE.png" ni los dibujos originales: solo los ciclos ya hechos.
 // Uso: node scripts/build_sprite_scales.mjs
-import { existsSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const avatar = join(root, 'public', 'assets', 'avatar');
+const cycles = join(root, 'scripts', 'sprite-cycles');
 const scales = JSON.parse(readFileSync(join(root, 'src', 'components', 'avatar', 'spriteScales.json'), 'utf8'));
 const CLEAR = { r: 0, g: 0, b: 0, alpha: 0 };
 const WEBP = { quality: 90, alphaQuality: 100, effort: 6 }; // sin smartSubsample: deja un filo violeta
 
-/** Cuadro i (desde 0) de una secuencia: su PNG si existe; si no, el recorte de la tira. */
-async function frame(name, i, frames) {
-  const png = join(avatar, name, `${name}_${i + 1}.png`);
-  if (existsSync(png)) return sharp(png).png().toBuffer();
-  const strip = sharp(join(avatar, name, `${name}_strip.webp`));
-  const { width, height } = await strip.metadata();
-  const w = width / frames;
-  return strip.extract({ left: i * w, top: 0, width: w, height }).png().toBuffer();
+/** Las celdas del ciclo maestro, en orden (fila a fila), como PNG. */
+async function cells(name, cols, rows, cellW, cellH) {
+  const path = join(cycles, `${name}_ciclo.webp`);
+  const { width, height } = await sharp(path).metadata();
+  if (width !== cols * cellW || height !== rows * cellH) {
+    throw new Error(`${name}: el ciclo mide ${width}×${height}, se esperaba ${cols * cellW}×${rows * cellH}`);
+  }
+  const out = [];
+  for (let n = 0; n < cols * rows; n += 1) {
+    const box = { left: (n % cols) * cellW, top: Math.floor(n / cols) * cellH, width: cellW, height: cellH };
+    out.push(await sharp(path).extract(box).png().toBuffer());
+  }
+  return out;
 }
 
-for (const [name, { frames, cell, sizes, source: origin }] of Object.entries(scales)) {
+for (const [name, { frames, grid, cell, sizes }] of Object.entries(scales)) {
+  const [cols, rows] = grid;
   const [cellW, cellH] = cell;
-  // `source` (solo la sentada): cuántos cuadros trae el dibujo y cuáles se saltan. Su tercer
-  // cuadro viene corrido en «Mini marie sentada.jpeg» y parpadeaba (D88).
-  const total = origin?.frames ?? frames;
-  const kept = [...Array(total).keys()].filter((i) => !origin?.skip?.includes(i));
-  if (kept.length !== frames) throw new Error(`${name}: ${kept.length} cuadros útiles, se esperaban ${frames}`);
-  const cells = [];
-  for (const i of kept) {
-    const source = await frame(name, i, total);
-    const meta = await sharp(source).metadata();
-    // La celda se completa con transparente (wave: 327 → 328 px de ancho) para que sea divisible.
-    cells.push(await sharp({ create: { width: cellW, height: cellH, channels: 4, background: CLEAR } })
-      .composite([{ input: source, left: 0, top: cellH - meta.height }]).png().toBuffer());
-  }
+  if (cols * rows !== frames) throw new Error(`${name}: ${cols}×${rows} celdas para ${frames} cuadros`);
+  const full = await cells(name, cols, rows, cellW, cellH);
   for (const size of sizes) {
     const w = (cellW * size) / cellH;
     const parts = [];
-    for (const [i, full] of cells.entries()) {
-      const input = size === cellH ? full : await sharp(full).resize(w, size, { kernel: 'lanczos3' }).png().toBuffer();
-      parts.push({ input, left: i * w, top: 0 });
+    for (const [n, input] of full.entries()) {
+      const scaled = size === cellH ? input : await sharp(input).resize(w, size, { kernel: 'lanczos3' }).png().toBuffer();
+      parts.push({ input: scaled, left: (n % cols) * w, top: Math.floor(n / cols) * size });
     }
-    await sharp({ create: { width: w * frames, height: size, channels: 4, background: CLEAR } })
-      .composite(parts).webp(WEBP).toFile(join(avatar, name, `${name}_${size}.webp`));
-    console.log(`${name}_${size}.webp: ${frames} cuadros de ${w}×${size}`);
+    const out = join(avatar, name, `${name}_${size}.webp`);
+    await sharp({ create: { width: cols * w, height: rows * size, channels: 4, background: CLEAR } })
+      .composite(parts).webp(WEBP).toFile(out);
+    console.log(`${name}_${size}.webp: ${frames} cuadros de ${w}×${size} en ${cols}×${rows}`);
   }
 }
