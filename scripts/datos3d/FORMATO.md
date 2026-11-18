@@ -120,6 +120,10 @@ es el del lote más cercano a esa placa y está a menos de 5 m. Si no (una huell
 una placa que es de otro edificio o que queda lejos) y siempre con 3, el texto es la dirección del
 conjunto: vía y número, sin interior (`KR 88D # 6D-27`). Por eso muchos edificios de un mismo
 conjunto comparten la dirección (el lote 004627077011 tiene 744 construcciones y una sola placa).
+Además, el texto oficial se repite a veces dentro del lote: 325 textos con interior están en 1 469
+placas, siempre a 5 m o más unas de otras (p. ej. `KR 95A # 26-85 S CA 23` en cinco placas cuyo
+`PDOCODIGO` solo cambia en la segunda letra, de `SA…` a `SE…`). El texto no dice la etapa, así
+que dos edificios pueden mostrar la misma dirección sin error.
 
 Además lote (`TLOT`), sector (`TSEC`) y fuente. Origen trazable: Catastro → el texto «Catastro
 (UAECD), lote <código>» con enlace al conjunto, sin fragmento
