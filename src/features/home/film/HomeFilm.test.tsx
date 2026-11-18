@@ -1,6 +1,5 @@
 import { screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { clearBaseMapCache } from '../../../components/map/baseMapData';
 import { mockApi } from '../../../test/mockApi';
 import { BASE_MAP, FEATURES } from '../../../test/moduleFixtures';
 import { renderRoute, setViewport } from '../../../test/renderRoute';
@@ -12,7 +11,6 @@ vi.mock('../../../three/TintalScene', () => ({ default: () => <div data-testid="
 beforeEach(() => {
   worldReady();
   window.localStorage.clear();
-  clearBaseMapCache();
   setViewport(true);
   mockApi({ ...BASE_MAP, '/centros-educativos/geojson': FEATURES });
 });
@@ -52,9 +50,11 @@ describe('Inicio: película de 4 capítulos (etapa 3)', () => {
     await screen.findByTestId('escena-3d');
     expect(within(hero()).getByText('4,653° N · 74,157° O')).toBeInTheDocument();
     for (const name of ['Recentrar', 'Pausar la órbita']) expect(within(hero()).getByRole('button', { name })).toBeInTheDocument();
-    // Citas de D105, más «datos modificados» (FORMATO §8: CC BY 4.0 §3(a)(1)(B)).
-    const source = 'Catastro Bogotá (UAECD) – Datos Abiertos Bogotá, CC BY 4.0, datos modificados · © colaboradores de OpenStreetMap (ODbL)';
-    expect(within(hero()).getByText(source)).toBeInTheDocument();
+    // La atribución es la misma de las fichas (D105, FORMATO.md §8): licencia enlazada y «datos modificados».
+    const sources = within(hero()).getByText(/Datos del mapa/).closest('p') as HTMLElement;
+    expect(sources).toHaveTextContent('Catastro Bogotá (UAECD) – Datos Abiertos Bogotá, CC BY 4.0, datos modificados');
+    expect(within(sources).getByRole('link', { name: 'CC BY 4.0' })).toHaveAttribute('href', 'https://creativecommons.org/licenses/by/4.0/deed.es');
+    expect(within(sources).getByRole('link', { name: '© colaboradores de OpenStreetMap (ODbL)' })).toBeInTheDocument();
     expect(within(hero()).queryByRole('button', { name: 'Leyenda y filtro' })).toBeNull();
     expect(within(hero()).queryByText(/usa la rueda para acercar/)).toBeNull(); // aquí la rueda desplaza la página
   });
@@ -87,7 +87,7 @@ describe('Inicio: película de 4 capítulos (etapa 3)', () => {
   it('enlace discreto a los créditos de las fotos, fuera de los capítulos', async () => {
     renderRoute('/');
     await screen.findByTestId('escena-3d');
-    const credits = within(screen.getByRole('main')).getByRole('link', { name: 'Créditos de fotos' });
+    const credits = within(screen.getByRole('main')).getByRole('link', { name: 'Créditos de fotos y mapas' });
     expect(credits).toHaveAttribute('href', '/creditos-fotos');
     expect(credits.closest('[data-chapter]')).toBeNull();
   });

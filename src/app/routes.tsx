@@ -1,7 +1,8 @@
 import { lazy, type ReactNode } from 'react';
-import type { RouteObject } from 'react-router-dom';
+import type { Params, RouteObject } from 'react-router-dom';
 import { HistoryPage } from '../features/history/HistoryPage';
 import { HomePage } from '../features/pages/HomePage';
+import { findCategory } from '../lib/categoryConfig';
 import { SECTION_PAGES } from '../lib/navigation';
 import { AppShell } from './AppShell';
 import { RouteError } from './RouteError';
@@ -52,8 +53,11 @@ export const routes: RouteObject[] = [
           ...SECTION_PAGES.map((item) => ({
             path: item.path.slice(1),
             element: DEDICATED[item.key] ?? <SectionPage section={item.key} />,
+            // Mapa 3D es el escenario del mapa a pantalla completa (features/map/stage).
+            ...(item.key === 'map' ? { handle: { bleed: true } } : {}),
           })),
-          { path: 'categorias/:slug', element: <ModulePage /> },
+          // Cada módulo es su escenario del mapa; un slug que no existe da 404 en la columna normal.
+          { path: 'categorias/:slug', element: <ModulePage />, handle: { bleed: (params: Params) => Boolean(findCategory(params.slug)) } },
           { path: 'creditos-fotos', element: <PhotoCreditsPage /> },
           { path: '*', element: <NotFoundPage /> },
         ],

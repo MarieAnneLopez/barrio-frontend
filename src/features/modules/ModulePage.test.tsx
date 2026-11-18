@@ -5,7 +5,7 @@ import { callsTo, mockApi } from '../../test/mockApi';
 import { BASE_MAP, FEATURES, ITEMS, page } from '../../test/moduleFixtures';
 import { renderRoute, setViewport } from '../../test/renderRoute';
 
-const PATH = '/categorias/centros-educativos';
+const PATH = '/categorias/centros-educativos?panel=abierto';
 const list = () => screen.findByRole('list', { name: 'Lista de lugares' });
 const card = (name: string) => screen.getByRole('heading', { name }).closest('li') as HTMLElement;
 
@@ -48,21 +48,20 @@ describe('Módulo Centros Educativos', () => {
     });
   });
 
-  it('sincroniza la lista y el mapa al seleccionar', async () => {
+  it('es el escenario del mapa: título visible y la lista en el panel, que empieza oculto', async () => {
     mockApi({ ...BASE_MAP, '/centros-educativos': page(ITEMS), '/centros-educativos/geojson': FEATURES });
-    renderRoute(PATH);
-    await list();
-    const map = await screen.findByRole('region', { name: 'Mapa de Centros Educativos' });
-    const marker = await within(map).findByRole('button', { name: 'Colegio Codema IED' });
-
-    await userEvent.click(marker);
-    expect(marker).toHaveAttribute('aria-current', 'true');
-    expect(screen.getByRole('button', { name: 'Seleccionado en el mapa' })).toHaveAttribute('aria-pressed', 'true');
+    renderRoute('/categorias/centros-educativos');
+    expect(await screen.findByRole('heading', { level: 1, name: 'Centros Educativos' })).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Mapa de Centros Educativos' })).toHaveAttribute('data-hero');
+    expect(screen.queryByRole('list', { name: 'Lista de lugares' })).toBeNull();
+    await userEvent.click(screen.getByRole('button', { name: 'Panel de información' }));
+    expect(within(await list()).getAllByRole('listitem')).toHaveLength(2);
+    expect(screen.getByText('Módulo 1')).toBeInTheDocument();
   });
 
   it('distingue módulo sin datos (404), error con reintento y lista vacía', async () => {
     mockApi({ ...BASE_MAP });
-    const { unmount } = renderRoute('/categorias/barberias');
+    const { unmount } = renderRoute('/categorias/barberias?panel=abierto');
     expect(await screen.findByText(/se cargan en la siguiente fase/)).toBeInTheDocument();
     unmount();
 
@@ -84,7 +83,6 @@ describe('axe', () => {
     mockApi({ ...BASE_MAP, '/centros-educativos': page(ITEMS), '/centros-educativos/geojson': FEATURES });
     const { container } = renderRoute(PATH);
     await list();
-    await screen.findByRole('button', { name: 'Colegio Codema IED' });
 
     const result = await axe.run(container, { rules: { 'color-contrast': { enabled: false } } });
     expect(result.violations.map((v) => `${v.id}: ${v.nodes.length}`)).toEqual([]);

@@ -12,7 +12,7 @@ beforeEach(() => {
 });
 
 async function openDetail() {
-  renderRoute('/categorias/barberias');
+  renderRoute('/categorias/barberias?panel=abierto');
   await userEvent.click(await screen.findByRole('button', { name: 'Ver detalle de Barbería Kings' }));
   return screen.findByRole('dialog', { name: 'Barbería Kings' });
 }

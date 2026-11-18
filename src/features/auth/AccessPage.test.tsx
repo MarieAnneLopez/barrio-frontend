@@ -28,7 +28,7 @@ describe('/acceso y botones por rol', () => {
   it('sin sesión o como visitante no muestra crear, editar ni eliminar', async () => {
     for (const user of [null, VISITANTE]) {
       mockApi(barberiaRoutes(() => ({ body: {} }), undefined, user));
-      const { unmount } = renderRoute('/categorias/barberias');
+      const { unmount } = renderRoute('/categorias/barberias?panel=abierto');
       await userEvent.click(await screen.findByRole('button', { name: 'Ver detalle de Barbería Kings' }));
       expect(await screen.findByRole('dialog', { name: 'Barbería Kings' })).toBeInTheDocument();
       expect(screen.queryByRole('button', { name: 'Agregar lugar' })).not.toBeInTheDocument();
@@ -40,7 +40,7 @@ describe('/acceso y botones por rol', () => {
 
   it('con la cuenta de administración aparecen los botones de escritura', async () => {
     mockApi(barberiaRoutes(() => ({ body: {} }), undefined, ADMIN));
-    renderRoute('/categorias/barberias');
+    renderRoute('/categorias/barberias?panel=abierto');
 
     expect(await screen.findByRole('button', { name: 'Agregar lugar' })).toBeInTheDocument();
     await userEvent.click(await screen.findByRole('button', { name: 'Ver detalle de Barbería Kings' }));

@@ -216,7 +216,6 @@
     "emptyModule": "This module has no registered places yet.",
     "notLoaded": "Data for this module is loaded in the next project phase.",
     "error": "The data could not be loaded.",
-    "mapError": "The base map could not be loaded.",
     "retry": "Try again",
     "showOnMap": "Show on map",
     "selected": "Selected on the map",
@@ -237,19 +236,6 @@
       "datos_abiertos": "Bogotá open data",
       "seed": "Sample data",
       "sitio_oficial": "Establishment's official website"
-    },
-    "recenter": "Recenter the map on El Tintal",
-    "gestures": {
-      "windows": "Use Ctrl + scroll to zoom the map",
-      "mac": "Use ⌘ + scroll to zoom the map",
-      "mobile": "Use two fingers to move the map"
-    },
-    "maps": {
-      "section": "Location on Google Maps",
-      "cta": "View on Google Maps",
-      "streetView": "Open Street View",
-      "newTab": "(opens in a new tab)",
-      "attribution": "Preview: the platform's own map with data © OpenStreetMap."
     }
   },
   "fields": {
@@ -359,38 +345,67 @@
   },
   "hero": {
     "label": "3D model of El Tintal",
-    "description": "3D model with the blocks, roads, parks and buildings from OpenStreetMap. Move the pointer to look around and pick a place to see its card.",
+    "description": "3D model of the real neighborhood: buildings from Catastro Bogotá and roads, parks and water from OpenStreetMap. Move the pointer to look around and pick a place to see its card.",
     "eyebrow": "El Tintal · Kennedy",
     "coords": "4.653° N · 74.157° W",
     "pause": "Pause the orbit",
     "play": "Resume the orbit",
-    "building": "Building",
-    "buildingKind": {
-      "school": "school",
-      "apartments": "apartments",
-      "yes": "unclassified",
-      "construction": "under construction",
-      "commercial": "commercial",
-      "retail": "commercial",
-      "house": "house",
-      "industrial": "industrial"
-    },
-    "levels_one": "{{count}} floor",
-    "levels_other": "{{count}} floors",
-    "area": "{{value}} m² footprint",
     "hint": "Drag to move, use the wheel to zoom and the right button to rotate. Hover over a building or pick a place to see its details.",
-    "placeCard": "Selected place",
     "openModule": "View in {{module}}",
-    "closePlace": "Close card",
-    "source": "Catastro Bogotá (UAECD) – Datos Abiertos Bogotá, CC BY 4.0, modified data · © OpenStreetMap contributors (ODbL)",
     "legend": {
       "title": "Legend and filter",
       "noData": "no data",
       "visible": "(shown on the model)",
-      "hidden": "(hidden)"
+      "hidden": "(hidden)",
+      "notDrawn": "not drawn"
     },
     "recenter": "Recenter",
     "touchHint": "Use two fingers to zoom or rotate the model; one finger keeps scrolling the page."
+  },
+  "card": {
+    "close": "Close details",
+    "building": "Building",
+    "noAddress": "Building without an address",
+    "addressKind": {
+      "0": "Address",
+      "1": "Official address",
+      "2": "Address of its lot (nearest plate)",
+      "3": "Approximate address (from the block)"
+    },
+    "none": "No address",
+    "floors": "Floors",
+    "floorCount_one": "{{count}} floor",
+    "floorCount_other": "{{count}} floors",
+    "floorsUnknown": "Floors: no data",
+    "overhang": "from floor {{base}} (overhang)",
+    "basements_one": "{{count}} basement",
+    "basements_other": "{{count}} basements",
+    "underConstruction": "under construction",
+    "lot": "Cadastral lot",
+    "sector": "Cadastral sector",
+    "source": "Source",
+    "catastroLot": "Catastro (UAECD), lot {{lot}}",
+    "catastro": "Catastro (UAECD)",
+    "osmRef": "OpenStreetMap ({{ref}})",
+    "nameSource": "Name",
+    "mapData": "Map data",
+    "catastroCite": "Catastro Bogotá (UAECD) – Bogotá Open Data",
+    "ccBy": "CC BY 4.0",
+    "osmCite": "© OpenStreetMap contributors (ODbL)",
+    "fullDetail": "Open full details",
+    "missing": "This place is no longer in the module data.",
+    "modified": "modified data"
+  },
+  "stage": {
+    "menu": "Information panel",
+    "panel": "Map information",
+    "hint": "Drag to move the map, use the wheel to zoom and the right button to rotate. Pick a place or a building to see its details.",
+    "legendHint": "Hide or show each module's places on the model; the arrow opens its section.",
+    "openModule": "Open the {{module}} section",
+    "sample": "Sample record: not drawn on the model.",
+    "noPlace": "No location on the map.",
+    "wholeArea": "It covers the whole neighborhood and more: the model does not mark it.",
+    "showOnModel": "Show on the model"
   },
   "carousel": {
     "creditsHeading": "Neighbourhood views (home photo flight and gallery)",
@@ -672,10 +687,8 @@
     }
   },
   "mapPage": {
-    "explore": "Drag the pointer to look around, hover a building to see its data and use «Pause the orbit» if you prefer a still camera. With reduced motion the camera doesn't rotate on its own.",
-    "thematic": "Thematic maps",
-    "thematicIntro": "Each module has its own map with places marked by their emoji, filters and a detail view for every site.",
-    "note": "Blocks, streets, parks and buildings from OpenStreetMap (ODbL). Here El Tintal is UPZ 78 plus UPZ 79 (662 ha): an operational definition, not an official administrative unit."
+    "explore": "Drag to move the map, use the wheel or two fingers to zoom and pick a place or a building to see its details.",
+    "note": "Buildings, lots, address plates and sectors from Catastro Bogotá (UAECD) via Bogotá Open Data (CC BY 4.0, modified data); roads, parks and water from OpenStreetMap (ODbL). Here El Tintal is UPZ 78 plus UPZ 79 (662 ha): an operational definition, not an official administrative unit."
   },
   "galleryPage": {
     "note": "Only real photos from Wikimedia Commons with a free license, stored on the platform with their author and license. Places without a free photo show none: no photos are made up.",
@@ -698,12 +711,31 @@
     "reload": "Reload the page"
   },
   "credits": {
-    "title": "Photo credits",
-    "description": "Every photo on the platform, with its place, author, free license and the page holding the original.",
+    "title": "Photo and map credits",
+    "description": "The sources and licenses of the map data, and every photo on the platform with its place, author, free license and the page holding the original.",
     "changes": "Photos come from Wikimedia Commons and Mapillary (CC BY-SA 4.0). The only change made is size and format (WebP), so they load fast; the content is the original.",
     "count_one": "{{count}} photo",
     "count_other": "{{count}} photos",
-    "link": "Photo credits"
+    "link": "Photo and map credits",
+    "map": {
+      "title": "Map data",
+      "intro": "The 3D model in every section with a map uses official open data, processed once when the site is built. The places of the 14 modules cite their own source in their details.",
+      "entity": "Unidad Administrativa Especial de Catastro Distrital (UAECD), published on Bogotá Open Data.",
+      "ccBy": "Creative Commons Attribution 4.0 (CC BY 4.0)",
+      "license": "License:",
+      "datasets": "Datasets used:",
+      "dataset": {
+        "construccion": "Buildings (Construcción)",
+        "lote": "Lots (Lote)",
+        "placa-domiciliaria": "Address plates (Placa domiciliaria)",
+        "sector-catastral": "Cadastral sectors (Sector catastral)"
+      },
+      "catastroUse": "Buildings (footprint, floors and basements), lots, address plates and cadastral sectors.",
+      "modified": "Modified data: clipped to the neighborhood, footprints cleaned and rounded to 10 cm in a local projection, addresses built from the plates and joined to each building by its lot, and converted to the model's format.",
+      "osmUse": "Roads, crossings and traffic lights, parks, water and trees, building names, the buildings missing from Catastro and the neighborhood outline (UPZ 78 and 79).",
+      "odbl": "Open Database License 1.0 (ODbL)",
+      "osmShare": "What the model derives from OpenStreetMap is a derivative database under the same license."
+    }
   },
   "home": {
     "manifesto": {

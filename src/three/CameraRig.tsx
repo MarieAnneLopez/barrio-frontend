@@ -1,63 +1,60 @@
 import { MapControls } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
-import { useEffect, useMemo, useRef } from 'react';
-import { MathUtils, TOUCH, Vector3, type Fog, type PerspectiveCamera } from 'three';
+import { useMemo, useRef } from 'react';
+import { MathUtils, TOUCH, type Fog, type PerspectiveCamera } from 'three';
 import type { MapControls as MapControlsImpl } from 'three-stdlib';
+import { mapView } from './camera/mapView';
+import { MAP_REACH, MAX_POLAR_DEG, rigLimits } from './camera/rigMode';
+import { useCameraGoal } from './camera/useCameraGoal';
 import { useHeroStore } from './heroStore';
 import { homeView } from './referenceView';
+import { useSceneHost } from './sceneHost';
+import { useSelectionStore } from './selection/selectionStore';
 
 const AUTO_ROTATE_SPEED = 0.33; // unidades de three: ~una vuelta cada 3 minutos
-const EASE = 3; // ease-out exponencial: ~95 % del recorrido en ~1 s
-const NO_GESTURE = -1 as TOUCH; // un dedo no mueve la maqueta: desplaza la página
 
 interface Props {
   radius: number;
-  /** Malla vial, zona con más edificios y manzana mediana (de los datos): definen el encuadre. */
-  view: { grid: number; spot: readonly [number, number]; blockSize: number };
+  /** Malla vial, zona con más edificios, manzana mediana y caja del barrio (de los datos): los encuadres. */
+  view: {
+    grid: number;
+    spot: readonly [number, number];
+    blockSize: number;
+    center: readonly [number, number];
+    size: readonly [number, number];
+  };
   reducedMotion: boolean;
 }
 
 /**
- * Cámara de la maqueta (H34, D83): encuadre inicial con la inclinación, el giro y las calles por
- * ancho medidos en la referencia. Arrastrar mueve (botón derecho gira), rueda y pellizco acercan;
- * en táctil un dedo deja pasar el scroll y dos manejan la maqueta. Órbita pausable, vuelo hacia
- * el lugar elegido y recentrar. Movimiento reducido: sin órbita y saltos directos.
+ * Cámara de la maqueta (H34, D83; gran actualización). En el Inicio («cine»): el encuadre con la
+ * inclinación, el giro y las calles por ancho medidos en la referencia, órbita pausable y, en
+ * táctil, un dedo que deja pasar el scroll. En las secciones con mapa («mapa», sceneHost): norte
+ * arriba con el barrio entero, sin órbita, un dedo mueve y dos acercan o giran. Arrastrar mueve
+ * (botón derecho gira) y la rueda acerca. Vuelos al encuadre y al lugar pedido (focusStore); la
+ * cámara nunca baja de 50 m. Movimiento reducido: sin órbita y saltos directos.
  */
 export function CameraRig({ radius, view, reducedMotion }: Props) {
   const controls = useRef<MapControlsImpl>(null);
-  const camera = useThree((s) => s.camera);
   const aspect = useThree((s) => s.size.width / Math.max(1, s.size.height));
-  const home = useMemo(() => homeView(view.grid, view.spot, view.blockSize, aspect), [view, aspect]);
-  const goal = useRef<{ target: Vector3; position: Vector3 } | null>(null);
-  const placed = useRef(false);
+  const mode = useSceneHost((s) => s.mode);
+  const home = useMemo(
+    () => (mode === 'mapa' ? mapView(view, aspect, radius * MAP_REACH) : homeView(view.grid, view.spot, view.blockSize, aspect)),
+    [mode, view, aspect, radius],
+  );
+  const limits = rigLimits(mode, home.distance, radius);
+  const cancel = useCameraGoal(controls, home, mode, reducedMotion);
   const paused = useHeroStore((s) => s.paused);
   const interacting = useHeroStore((s) => s.interacting);
-  const selected = useHeroStore((s) => s.selected);
-  const recenterTick = useHeroStore((s) => s.recenterTick);
+  const selected = useSelectionStore((s) => s.selected);
 
-  // Vuelo hacia el lugar elegido o de vuelta al encuadre inicial (recentrar).
-  useEffect(() => {
-    if (selected) {
-      const target = new Vector3(...selected.position).setY(0);
-      const away = camera.position.clone().sub(controls.current?.target ?? home.target).setLength(home.distance * 0.45);
-      goal.current = { target, position: target.clone().add(away) };
-    } else {
-      goal.current = { target: home.target.clone(), position: home.position.clone() };
-    }
-  }, [selected, recenterTick, camera, home]);
-
-  useFrame((state, delta) => {
-    // MapControls pone touch-action: none en el elemento de eventos de r3f y en el canvas
-    // (atrapan el scroll); pan-y lo devuelve a la página: un dedo baja, dos manejan la maqueta.
+  useFrame((state) => {
+    // MapControls pone touch-action: none en el elemento de eventos de r3f y en el canvas. En el
+    // Inicio, pan-y devuelve el scroll a la página (un dedo baja, dos manejan la maqueta).
     const surfaces = [state.gl.domElement, state.events.connected as HTMLElement | undefined];
-    for (const el of surfaces) if (el && el.style.touchAction !== 'pan-y') el.style.touchAction = 'pan-y';
+    for (const el of surfaces) if (el && el.style.touchAction !== limits.touchAction) el.style.touchAction = limits.touchAction;
     const c = controls.current;
     if (!c) return;
-    if (!placed.current) {
-      state.camera.position.copy(home.position);
-      c.target.copy(home.target);
-      placed.current = true;
-    }
     // Recorte y niebla relativos a la distancia: con el plano cercano a media distancia las capas
     // a ras de suelo no parpadean, y la niebla da ≈ 15 % al fondo del encuadre (como la referencia).
     const distance = state.camera.position.distanceTo(c.target);
@@ -68,12 +65,6 @@ export function CameraRig({ radius, view, reducedMotion }: Props) {
     }
     const fog = state.scene.fog as Fog | null;
     if (fog) [fog.near, fog.far] = [distance * 0.95, distance * 2.2];
-    const g = goal.current;
-    if (!g) return;
-    const k = reducedMotion ? 1 : 1 - Math.exp(-EASE * delta);
-    c.target.lerp(g.target, k);
-    camera.position.lerp(g.position, k);
-    if (c.target.distanceTo(g.target) < 0.5 && camera.position.distanceTo(g.position) < 0.5) goal.current = null;
   });
 
   return (
@@ -81,15 +72,13 @@ export function CameraRig({ radius, view, reducedMotion }: Props) {
       ref={controls}
       makeDefault
       enableDamping={!reducedMotion}
-      autoRotate={!reducedMotion && !paused && !interacting && !selected}
+      autoRotate={limits.orbit && !reducedMotion && !paused && !interacting && !selected}
       autoRotateSpeed={AUTO_ROTATE_SPEED}
-      minDistance={home.distance * 0.25}
-      maxDistance={radius * 4.5}
-      maxPolarAngle={MathUtils.degToRad(78)}
-      touches={{ ONE: NO_GESTURE, TWO: TOUCH.DOLLY_ROTATE }}
-      onStart={() => {
-        goal.current = null; // el usuario manda: se interrumpe el vuelo
-      }}
+      minDistance={limits.minDistance}
+      maxDistance={limits.maxDistance}
+      maxPolarAngle={MathUtils.degToRad(MAX_POLAR_DEG)}
+      touches={{ ONE: limits.oneFinger, TWO: TOUCH.DOLLY_ROTATE }}
+      onStart={cancel} // el usuario manda: se interrumpe el vuelo
     />
   );
 }

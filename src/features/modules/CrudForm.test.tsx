@@ -32,7 +32,7 @@ describe('Crear, editar y eliminar', () => {
   it('crea con validación y vuelve a pedir la lista', async () => {
     const sent: Sent[] = [];
     const fetchMock = mockApi(writableRoutes(sent));
-    renderRoute('/categorias/barberias');
+    renderRoute('/categorias/barberias?panel=abierto');
 
     await userEvent.click(await screen.findByRole('button', { name: 'Agregar lugar' }));
     const form = await screen.findByRole('dialog', { name: 'Agregar lugar' });
@@ -54,7 +54,7 @@ describe('Crear, editar y eliminar', () => {
 
   it('si la sesión vence (401) abre el diálogo para iniciarla de nuevo', async () => {
     mockApi(writableRoutes([], { status: 401, body: { error: { code: 'AUTH_REQUIRED', message: 'x' } } }));
-    renderRoute('/categorias/barberias');
+    renderRoute('/categorias/barberias?panel=abierto');
     await userEvent.click(await screen.findByRole('button', { name: 'Agregar lugar' }));
     const form = await screen.findByRole('dialog', { name: 'Agregar lugar' });
 
@@ -70,7 +70,7 @@ describe('Crear, editar y eliminar', () => {
   it('edita desde la ficha con los datos precargados y elimina con confirmación', async () => {
     const sent: Sent[] = [];
     mockApi(writableRoutes(sent, { body: BARBERIA }));
-    renderRoute('/categorias/barberias');
+    renderRoute('/categorias/barberias?panel=abierto');
     await userEvent.click(await screen.findByRole('button', { name: 'Ver detalle de Barbería Kings' }));
     await userEvent.click(await screen.findByRole('button', { name: 'Editar' }));
 

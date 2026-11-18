@@ -216,7 +216,6 @@
     "emptyModule": "Este módulo todavía no tiene lugares registrados.",
     "notLoaded": "Los datos de este módulo se cargan en la siguiente fase del proyecto.",
     "error": "No se pudieron cargar los datos.",
-    "mapError": "No se pudo cargar el mapa base.",
     "retry": "Reintentar",
     "showOnMap": "Ver en el mapa",
     "selected": "Seleccionado en el mapa",
@@ -237,19 +236,6 @@
       "datos_abiertos": "Datos abiertos de Bogotá",
       "seed": "Dato de ejemplo",
       "sitio_oficial": "Sitio oficial del establecimiento"
-    },
-    "recenter": "Recentrar el mapa en El Tintal",
-    "gestures": {
-      "windows": "Usa Ctrl + rueda para acercar el mapa",
-      "mac": "Usa ⌘ + rueda para acercar el mapa",
-      "mobile": "Usa dos dedos para mover el mapa"
-    },
-    "maps": {
-      "section": "Ubicación en Google Maps",
-      "cta": "Ver en Google Maps",
-      "streetView": "Abrir Street View",
-      "newTab": "(se abre en una pestaña nueva)",
-      "attribution": "Vista previa: mapa de la plataforma con datos © OpenStreetMap."
     }
   },
   "fields": {
@@ -359,38 +345,67 @@
   },
   "hero": {
     "label": "Maqueta 3D de El Tintal",
-    "description": "Modelo 3D con las manzanas, vías, parques y edificios de OpenStreetMap. Arrastra el puntero para mirar alrededor y elige un lugar para ver su ficha.",
+    "description": "Maqueta 3D del barrio real: edificios de Catastro Bogotá y vías, parques y agua de OpenStreetMap. Arrastra el puntero para mirar alrededor y elige un lugar para ver su ficha.",
     "eyebrow": "El Tintal · Kennedy",
     "coords": "4,653° N · 74,157° O",
     "pause": "Pausar la órbita",
     "play": "Reanudar la órbita",
-    "building": "Edificio",
-    "buildingKind": {
-      "school": "colegio",
-      "apartments": "apartamentos",
-      "yes": "sin clasificar",
-      "construction": "en construcción",
-      "commercial": "comercial",
-      "retail": "comercial",
-      "house": "casa",
-      "industrial": "industrial"
-    },
-    "levels_one": "{{count}} piso",
-    "levels_other": "{{count}} pisos",
-    "area": "{{value}} m² de planta",
     "hint": "Arrastra para mover, usa la rueda para acercar y el botón derecho para girar. Pasa el puntero sobre un edificio o elige un lugar para ver su ficha.",
-    "placeCard": "Lugar seleccionado",
     "openModule": "Ver en {{module}}",
-    "closePlace": "Cerrar ficha",
-    "source": "Catastro Bogotá (UAECD) – Datos Abiertos Bogotá, CC BY 4.0, datos modificados · © colaboradores de OpenStreetMap (ODbL)",
     "legend": {
       "title": "Leyenda y filtro",
       "noData": "sin datos",
       "visible": "(visible en la maqueta)",
-      "hidden": "(oculta)"
+      "hidden": "(oculta)",
+      "notDrawn": "no se dibuja"
     },
     "recenter": "Recentrar",
     "touchHint": "Usa dos dedos para acercar o girar la maqueta; con un dedo sigues bajando por la página."
+  },
+  "card": {
+    "close": "Cerrar ficha",
+    "building": "Edificio",
+    "noAddress": "Edificio sin dirección",
+    "addressKind": {
+      "0": "Dirección",
+      "1": "Dirección oficial",
+      "2": "Dirección de su lote (placa más cercana)",
+      "3": "Dirección aproximada (de la manzana)"
+    },
+    "none": "Sin dirección",
+    "floors": "Pisos",
+    "floorCount_one": "{{count}} piso",
+    "floorCount_other": "{{count}} pisos",
+    "floorsUnknown": "Pisos sin dato",
+    "overhang": "desde el piso {{base}} (voladizo)",
+    "basements_one": "{{count}} sótano",
+    "basements_other": "{{count}} sótanos",
+    "underConstruction": "en construcción",
+    "lot": "Lote catastral",
+    "sector": "Sector catastral",
+    "source": "Fuente",
+    "catastroLot": "Catastro (UAECD), lote {{lot}}",
+    "catastro": "Catastro (UAECD)",
+    "osmRef": "OpenStreetMap ({{ref}})",
+    "nameSource": "Nombre",
+    "mapData": "Datos del mapa",
+    "catastroCite": "Catastro Bogotá (UAECD) – Datos Abiertos Bogotá",
+    "ccBy": "CC BY 4.0",
+    "osmCite": "© colaboradores de OpenStreetMap (ODbL)",
+    "fullDetail": "Ver ficha completa",
+    "missing": "Este lugar ya no está en los datos del módulo.",
+    "modified": "datos modificados"
+  },
+  "stage": {
+    "menu": "Panel de información",
+    "panel": "Información del mapa",
+    "hint": "Arrastra para mover el mapa, usa la rueda para acercar y el botón derecho para girar. Elige un lugar o un edificio para ver su ficha.",
+    "legendHint": "Oculta o muestra los lugares de cada módulo en la maqueta; la flecha abre su sección.",
+    "openModule": "Abrir la sección de {{module}}",
+    "sample": "Dato de ejemplo: no se dibuja en la maqueta.",
+    "noPlace": "Sin ubicación en el mapa.",
+    "wholeArea": "Abarca el barrio entero y más: la maqueta no la señala.",
+    "showOnModel": "Ver en la maqueta"
   },
   "carousel": {
     "creditsHeading": "Vistas del barrio (vuelo del Inicio y Galería)",
@@ -672,10 +687,8 @@
     }
   },
   "mapPage": {
-    "explore": "Arrastra el puntero para mirar alrededor, pasa el puntero sobre un edificio para ver sus datos y usa «Pausar la órbita» si prefieres que la cámara quede quieta. Con movimiento reducido la cámara no gira sola.",
-    "thematic": "Mapas temáticos",
-    "thematicIntro": "Cada módulo tiene su propio mapa con los lugares marcados con su emoji, filtros y la ficha de cada sitio.",
-    "note": "Manzanas, vías, parques y edificios de OpenStreetMap (ODbL). El Tintal es aquí la suma de las UPZ 78 y 79 (662 ha): una definición operativa, no una unidad administrativa oficial."
+    "explore": "Arrastra para mover el mapa, usa la rueda o dos dedos para acercar y elige un lugar o un edificio para ver su ficha.",
+    "note": "Edificios, lotes, placas y sectores de Catastro Bogotá (UAECD) por Datos Abiertos Bogotá (CC BY 4.0, datos modificados); vías, parques y agua de OpenStreetMap (ODbL). El Tintal es aquí la suma de las UPZ 78 y 79 (662 ha): una definición operativa, no una unidad administrativa oficial."
   },
   "galleryPage": {
     "note": "Solo fotos reales de Wikimedia Commons con licencia libre, guardadas en la plataforma con su autor y su licencia. Los lugares que no tienen una foto libre no muestran ninguna: no se inventan fotos.",
@@ -698,12 +711,31 @@
     "reload": "Recargar la página"
   },
   "credits": {
-    "title": "Créditos de fotos",
-    "description": "Cada foto de la plataforma, con su lugar, su autor, su licencia libre y la página donde está el original.",
+    "title": "Créditos de fotos y mapas",
+    "description": "Las fuentes y licencias de los datos de los mapas, y cada foto de la plataforma con su lugar, su autor, su licencia libre y la página donde está el original.",
     "changes": "Las fotos vienen de Wikimedia Commons y de Mapillary (CC BY-SA 4.0). El único cambio que se les hizo es el tamaño y el formato (WebP), para que carguen rápido; el contenido es el original.",
     "count_one": "{{count}} foto",
     "count_other": "{{count}} fotos",
-    "link": "Créditos de fotos"
+    "link": "Créditos de fotos y mapas",
+    "map": {
+      "title": "Datos de los mapas",
+      "intro": "La maqueta 3D de todas las secciones con mapa usa datos oficiales y abiertos, procesados una sola vez al construir el sitio. Los lugares de los 14 módulos citan su propia fuente en su ficha.",
+      "entity": "Unidad Administrativa Especial de Catastro Distrital (UAECD), publicado en Datos Abiertos Bogotá.",
+      "ccBy": "Creative Commons Atribución 4.0 (CC BY 4.0)",
+      "license": "Licencia:",
+      "datasets": "Conjuntos usados:",
+      "dataset": {
+        "construccion": "Construcción",
+        "lote": "Lote",
+        "placa-domiciliaria": "Placa domiciliaria",
+        "sector-catastral": "Sector catastral"
+      },
+      "catastroUse": "Edificios (huella, pisos y sótanos), lotes, placas domiciliarias y sectores catastrales.",
+      "modified": "Datos modificados: recortados al barrio, huellas limpiadas y redondeadas a 10 cm en una proyección local, direcciones armadas desde las placas y unidas a cada edificio por su lote, y convertidos al formato de la maqueta.",
+      "osmUse": "Vías, cruces y semáforos, parques, agua y árboles, nombres de edificios, los edificios que faltan en Catastro y el contorno del barrio (UPZ 78 y 79).",
+      "odbl": "Open Database License 1.0 (ODbL)",
+      "osmShare": "Lo que la maqueta deriva de OpenStreetMap es una base de datos derivada bajo la misma licencia."
+    }
   },
   "home": {
     "manifesto": {

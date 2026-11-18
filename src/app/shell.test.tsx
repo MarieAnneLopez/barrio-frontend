@@ -50,9 +50,22 @@ describe('Rutas', () => {
     expect(await screen.findByRole('heading', { level: 1, name: 'Esta página no existe' })).toBeVisible();
   });
 
-  it('un slug de módulo desconocido también da 404', async () => {
+  it('un slug de módulo desconocido también da 404, en la columna de las páginas de texto', async () => {
     renderRoute('/categorias/no-existe');
     expect(await screen.findByRole('heading', { level: 1, name: 'Esta página no existe' })).toBeVisible();
+    expect(screen.getByRole('main').className).toMatch(/max-w-\[1200px\]/);
+  });
+
+  it.each([
+    ['/mapa', 'Maqueta 3D de El Tintal'],
+    ['/categorias/zonas-verdes', 'Mapa de Zonas Verdes'],
+  ])('%s es el escenario del mapa a todo el ancho, bajo el header', async (path, region) => {
+    renderRoute(path);
+    const stage = await screen.findByRole('region', { name: region });
+    expect(stage.parentElement?.className).toMatch(/\bpt-16\b/); // empieza justo bajo el header de 64 px
+    expect(stage.className).toMatch(/h-\[calc\(100svh-4rem\)\]/);
+    expect(screen.getByRole('main').className).not.toMatch(/max-w-\[1200px\]/);
+    expect(screen.getByRole('button', { name: 'Panel de información' })).toHaveAttribute('aria-expanded', 'false');
   });
 });
 

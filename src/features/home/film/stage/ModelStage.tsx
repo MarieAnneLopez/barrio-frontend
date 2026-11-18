@@ -18,7 +18,7 @@ export function ModelStage() {
   return (
     <section ref={section} data-chapter="3" data-tone="noche" className="relative h-[200svh]">
       <div className="sticky top-0 h-svh">
-        {near ? <HeroSection variant="stage" /> : <div className="h-full bg-[var(--map-fondo)]" />}
+        {near ? <HeroSection /> : <div className="h-full bg-[var(--map-fondo)]" />}
       </div>
     </section>
   );

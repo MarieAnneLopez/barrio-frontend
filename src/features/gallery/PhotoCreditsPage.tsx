@@ -6,6 +6,7 @@ import { useAllPhotos } from '../../hooks/useAllPhotos';
 import { photoAlt } from '../../lib/photoUrls';
 import { PageHeader } from '../pages/PageHeader';
 import { CarouselCredits } from './CarouselCredits';
+import { MapDataCredits } from './MapDataCredits';
 import { PhotoCredit } from './PhotoCredit';
 
 // Paleta D100: cada foto es una fila de registro; el lugar va en una celda rosa claro.
@@ -14,6 +15,7 @@ const ROW = 'grid gap-x-6 gap-y-2 border-b border-line pb-3 md:grid-cols-[minmax
 /**
  * Créditos de fotos (H35): cada foto publicada con su lugar, autor, licencia y página
  * de origen (Commons o Mapillary). Aclara el único cambio hecho: tamaño y formato.
+ * Al final, las fuentes y licencias de los datos de los mapas (D105, MapDataCredits).
  */
 export function PhotoCreditsPage() {
   const { t, i18n } = useTranslation();
@@ -51,6 +53,7 @@ export function PhotoCreditsPage() {
         </div>
       ) : null}
       <CarouselCredits />
+      <MapDataCredits />
     </div>
   );
 }

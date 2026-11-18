@@ -1,6 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import type { ModuleItem } from '../../lib/apiTypes';
+import { onTheModel } from '../../lib/categoryConfig';
 import { labelOf, moduleFields } from '../../lib/moduleFields';
+import { isSampleRecord } from '../../lib/verification';
+import { useStage } from '../map/stage/stageContext';
 import { displayValue, hasValue } from './displayValue';
 import { VerifiedBadge } from './VerifiedBadge';
 
@@ -12,16 +15,22 @@ interface ItemCardProps {
   onOpen: (id: number) => void;
 }
 
-/** Tarjeta de un lugar: nombre, datos clave, estado de verificación, mapa y detalle. */
+/**
+ * Tarjeta de un lugar en el panel del módulo: nombre, datos clave, verificación, detalle y «Ver en el
+ * mapa» (lo elige y lleva la cámara hasta él). Un dato de ejemplo no se dibuja en la maqueta: lo dice.
+ * La localidad (la ficha de toda la zona) no se señala en la maqueta: sin «Ver en el mapa».
+ */
 export function ItemCard({ slug, item, selected, onShowOnMap, onOpen }: ItemCardProps) {
   const { t, i18n } = useTranslation();
+  const { reveal } = useStage();
   const rows = moduleFields(slug).summary.filter((field) => hasValue(item[field]));
   const name = labelOf(item, slug);
+  const sample = isSampleRecord(item);
 
   return (
     <li
-      className={`flex flex-col gap-3 rounded-md border p-4 ${
-        selected ? 'border-active bg-glass shadow-[var(--glow-active)]' : 'tone-papel border-line bg-pink'
+      className={`tone-papel flex flex-col gap-3 rounded-md border bg-pink p-4 ${
+        selected ? 'border-active shadow-[var(--glow-active)]' : 'border-line'
       }`}
     >
       <div className="flex flex-wrap items-start justify-between gap-2">
@@ -40,21 +49,25 @@ export function ItemCard({ slug, item, selected, onShowOnMap, onOpen }: ItemCard
           ))}
         </dl>
       ) : null}
+      {sample ? <p className="m-0 text-step--1 text-fg">{t('stage.sample')}</p> : null}
       <div className="flex flex-wrap gap-2">
         <button
           type="button"
           onClick={() => onOpen(item.id)}
-          className="ui-pressable ui-btn--ghost rounded-sm border border-line px-2 py-1 text-step--1 text-fg"
+          className="ui-pressable ui-btn--ghost min-h-11 rounded-sm border border-line px-2 py-1 text-step--1 text-fg"
         >
           {t('modules.detail')}{' '}
           <span className="sr-only">{t('modules.detailOf', { name })}</span>
         </button>
-        {item.geometry ? (
+        {item.geometry && !sample && onTheModel(slug) ? (
           <button
             type="button"
             aria-pressed={selected}
-            onClick={() => onShowOnMap(item.id)}
-            className="ui-pressable ui-btn--ghost rounded-sm border border-transparent px-2 py-1 text-step--1 text-accent underline underline-offset-4"
+            onClick={() => {
+              onShowOnMap(item.id);
+              reveal();
+            }}
+            className="ui-pressable ui-btn--ghost min-h-11 rounded-sm border border-transparent px-2 py-1 text-step--1 text-accent underline underline-offset-4"
           >
             {selected ? t('modules.selected') : t('modules.showOnMap')}
           </button>

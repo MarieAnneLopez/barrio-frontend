@@ -1,5 +1,5 @@
 import { CanvasTexture, SRGBColorSpace } from 'three';
-import { mapColor } from '../lib/cssToken';
+import { mapColor, type MapToken } from '../lib/cssToken';
 import type { MarkerShape } from '../lib/markerShape';
 
 const SIZE = 64;
@@ -21,9 +21,10 @@ function plate(ctx: CanvasRenderingContext2D, shape: MarkerShape): void {
 
 /**
  * Placa del marcador (D82, D83): placa clara con aro oscuro del tema (círculo, cuadrado o rombo) y el
- * emoji del módulo, hecha en un canvas local (sin imágenes externas).
+ * emoji del módulo, hecha en un canvas local (sin imágenes externas). `ring` cambia el aro por uno
+ * más grueso de otro color del tema (el lugar elegido lleva el del sol).
  */
-export function emojiTexture(emoji: string, shape: MarkerShape = 'circulo'): CanvasTexture {
+export function emojiTexture(emoji: string, shape: MarkerShape = 'circulo', ring?: MapToken): CanvasTexture {
   const canvas = document.createElement('canvas');
   canvas.width = SIZE;
   canvas.height = SIZE;
@@ -32,8 +33,8 @@ export function emojiTexture(emoji: string, shape: MarkerShape = 'circulo'): Can
     plate(ctx, shape);
     ctx.fillStyle = mapColor('contorno');
     ctx.fill();
-    ctx.lineWidth = 4;
-    ctx.strokeStyle = mapColor('fondo');
+    ctx.lineWidth = ring ? 7 : 4;
+    ctx.strokeStyle = mapColor(ring ?? 'fondo');
     ctx.stroke();
     ctx.font = `${SIZE * (shape === 'rombo' ? 0.4 : 0.5)}px system-ui, "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
     ctx.textAlign = 'center';

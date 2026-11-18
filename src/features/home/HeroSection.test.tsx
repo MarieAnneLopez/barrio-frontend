@@ -1,8 +1,9 @@
 import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { clearBaseMapCache } from '../../components/map/baseMapData';
 import { useHeroStore } from '../../three/heroStore';
+import { useSceneHost } from '../../three/sceneHost';
+import { useSelectionStore } from '../../three/selection/selectionStore';
 import { mockApi } from '../../test/mockApi';
 import { BASE_MAP, FEATURES } from '../../test/moduleFixtures';
 import { renderRoute, setViewport } from '../../test/renderRoute';
@@ -16,9 +17,9 @@ vi.mock('../../three/TintalScene', () => ({
 beforeEach(() => {
   worldReady();
   window.localStorage.clear();
-  clearBaseMapCache();
   setViewport(true);
-  act(() => useHeroStore.setState({ paused: false, selected: null, hovered: null }));
+  act(() => useHeroStore.setState({ paused: false }));
+  act(() => useSelectionStore.setState({ selected: null, hovered: null }));
 });
 
 describe('Hero 3D', () => {
@@ -28,7 +29,8 @@ describe('Hero 3D', () => {
 
     expect(await screen.findByTestId('escena-3d')).toBeInTheDocument();
     const hero = screen.getByRole('region', { name: 'Maqueta 3D de El Tintal' });
-    expect(hero).toHaveAccessibleDescription(/manzanas, vías, parques y edificios/);
+    expect(hero).toHaveAccessibleDescription(/edificios de Catastro Bogotá y vías, parques y agua de OpenStreetMap/);
+    expect(useSceneHost.getState().mode).toBe('cine'); // el Inicio conserva su órbita
     expect(screen.getByText('4,653° N · 74,157° O')).toBeInTheDocument();
   });
 
@@ -42,40 +44,35 @@ describe('Hero 3D', () => {
     expect(useHeroStore.getState().paused).toBe(true);
   });
 
-  it('el lugar seleccionado abre su ficha con enlace al módulo y se cierra', async () => {
+  it('el lugar elegido en la maqueta abre su ficha (selectionStore) con enlace al módulo y se cierra', async () => {
     mockApi({ ...BASE_MAP, '/centros-educativos/geojson': FEATURES });
     renderRoute('/');
     await screen.findByTestId('escena-3d');
 
-    act(() => useHeroStore.getState().select({
-      id: 2, name: 'Colegio Codema IED', slug: 'centros-educativos', emoji: '🎓', position: [0, 70, 0],
-    }));
-    const card = screen.getByRole('region', { name: 'Lugar seleccionado' });
-    expect(card).toHaveTextContent('Colegio Codema IED');
+    act(() => useSelectionStore.getState().select({ kind: 'place', slug: 'centros-educativos', id: 2 }));
+    const card = await screen.findByRole('complementary', { name: 'Colegio Codema IED' });
     expect(screen.getByRole('link', { name: 'Ver en Centros Educativos' })).toHaveAttribute(
-      'href', '/categorias/centros-educativos',
+      'href', '/categorias/centros-educativos?enfoque=2',
     );
     // La ficha comparte la fila de abajo con la pista: si no caben, saltan de línea en vez de montarse.
     const hint = screen.getByRole('region', { name: 'Maqueta 3D de El Tintal' }).querySelector('[aria-live="polite"]');
     expect(card.parentElement).toBe(hint?.parentElement);
     expect(card.className).not.toMatch(/\babsolute\b/);
     await userEvent.click(screen.getByRole('button', { name: 'Cerrar ficha' }));
-    expect(screen.queryByRole('region', { name: 'Lugar seleccionado' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('complementary', { name: 'Colegio Codema IED' })).not.toBeInTheDocument();
   });
 
-  it('ningún panel del HUD se monta sobre otro: una columna con filas que saltan y una leyenda que cede el alto', async () => {
+  it('ningún panel del HUD se monta sobre otro: una columna con filas que saltan de línea', async () => {
     mockApi({ ...BASE_MAP, '/centros-educativos/geojson': FEATURES });
-    renderRoute('/mapa');
+    renderRoute('/');
     await screen.findByTestId('escena-3d');
     const hero = screen.getByRole('region', { name: 'Maqueta 3D de El Tintal' });
     const hint = hero.querySelector('[aria-live="polite"]');
-    const legend = screen.getByRole('list', { name: 'Leyenda y filtro' }).parentElement;
-    const [column, bottom] = [legend?.parentElement, hint?.parentElement];
+    const bottom = hint?.parentElement;
+    const column = bottom?.parentElement;
     expect(column?.className).toMatch(/\bflex-col\b/);
-    expect([bottom?.parentElement, column?.lastElementChild]).toEqual([column, bottom]);
+    expect(column?.lastElementChild).toBe(bottom);
     expect(bottom?.className).toMatch(/\bmt-auto\b.*\bflex-wrap\b/);
-    expect(legend?.className).toMatch(/\bmin-h-0\b/);
-    expect(legend?.className).not.toMatch(/\babsolute\b/);
     // Arriba, coordenadas y botones van en una fila que salta de línea: a 390 px se montaban.
     const top = column?.firstElementChild;
     expect(top?.className).toMatch(/\bflex-wrap\b/);

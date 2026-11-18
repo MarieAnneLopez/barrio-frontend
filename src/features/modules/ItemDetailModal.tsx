@@ -8,7 +8,7 @@ import { AuthGuard } from '../auth/AuthGuard';
 import { displayValue, hasValue } from './displayValue';
 import { Gallery } from './Gallery';
 import { ItemActions } from './ItemActions';
-import { MapsPreview } from './MapsPreview';
+import { PlaceOnModel } from './PlaceOnModel';
 import { RatingPanel } from './RatingPanel';
 import { SourceLine } from './SourceLine';
 import { VerifiedBadge } from './VerifiedBadge';
@@ -20,12 +20,14 @@ interface ItemDetailModalProps {
   slug: string;
   itemId: number | null;
   onClose: () => void;
+  /** Cierra la ficha y muestra el lugar en la maqueta de la sección. */
+  onShowOnMap: (id: number) => void;
   onEdit: (item: ModuleItem) => void;
   onDeleted: () => void;
 }
 
-/** Ficha completa de un lugar: campos, verificación, fuente, galería y calificaciones. */
-export function ItemDetailModal({ slug, itemId, onClose, onEdit, onDeleted }: ItemDetailModalProps) {
+/** Ficha completa de un lugar: campos, verificación, fuente, ubicación en la maqueta, galería y calificaciones. */
+export function ItemDetailModal({ slug, itemId, onClose, onShowOnMap, onEdit, onDeleted }: ItemDetailModalProps) {
   const { t, i18n } = useTranslation();
   const item = useApi<ModuleItem>(itemId === null ? null : `/${slug}/${itemId}`);
   const data = item.status === 'success' ? item.data : undefined;
@@ -60,7 +62,7 @@ export function ItemDetailModal({ slug, itemId, onClose, onEdit, onDeleted }: It
               ))}
           </dl>
           <SourceLine item={data} />
-          <MapsPreview place={title} geometry={data.geometry} />
+          <PlaceOnModel slug={slug} item={data} onShow={onShowOnMap} />
           <Gallery slug={slug} itemId={data.id} place={title} />
           <RatingPanel slug={slug} itemId={data.id} />
           <AuthGuard role="admin">

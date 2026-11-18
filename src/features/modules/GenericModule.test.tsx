@@ -1,8 +1,11 @@
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
+import manifest from '../../../public/data/tintal/manifest.json';
 import type { ModuleItem } from '../../lib/apiTypes';
-import { Map } from '../../test/maplibreMapMock';
+import { useFocusStore } from '../../three/camera/focusStore';
+import { createProjection } from '../../three/projection';
+import { worldReady } from '../../test/emptyWorld';
 import { callsTo, mockApi } from '../../test/mockApi';
 import { BASE_MAP, page } from '../../test/moduleFixtures';
 import { renderRoute, setViewport } from '../../test/renderRoute';
@@ -32,7 +35,7 @@ beforeEach(() => {
 describe('Módulo genérico (catastro: polígonos, sin campo "nombre")', () => {
   it('titula con el campo del módulo y traduce los datos clave', async () => {
     mockApi(ROUTES);
-    renderRoute('/categorias/datos-catastrales');
+    renderRoute('/categorias/datos-catastrales?panel=abierto');
 
     const card = (await screen.findByRole('heading', { name: '004601001001' })).closest('li') as HTMLElement;
     expect(within(card).getByText('Estrato')).toBeInTheDocument();
@@ -42,7 +45,7 @@ describe('Módulo genérico (catastro: polígonos, sin campo "nombre")', () => {
 
   it('filtra por estrato con un parámetro de la API', async () => {
     const fetchMock = mockApi(ROUTES);
-    renderRoute('/categorias/datos-catastrales');
+    renderRoute('/categorias/datos-catastrales?panel=abierto');
     await screen.findByRole('heading', { name: '004601001001' });
 
     await userEvent.selectOptions(screen.getByLabelText('Estrato'), '2');
@@ -53,7 +56,7 @@ describe('Módulo genérico (catastro: polígonos, sin campo "nombre")', () => {
 
   it('abre la ficha con todos los campos y la fuente enlazada', async () => {
     mockApi(ROUTES);
-    renderRoute('/categorias/datos-catastrales');
+    renderRoute('/categorias/datos-catastrales?panel=abierto');
 
     await userEvent.click(await screen.findByRole('button', { name: 'Ver detalle de 004601001001' }));
 
@@ -65,18 +68,17 @@ describe('Módulo genérico (catastro: polígonos, sin campo "nombre")', () => {
     );
   });
 
-  it('dibuja los polígonos en el mapa y el clic selecciona la tarjeta', async () => {
+  it('un lote (polígono) se elige desde la lista: ficha a la derecha y la cámara al centro del lote', async () => {
+    worldReady();
     mockApi(ROUTES);
-    renderRoute('/categorias/datos-catastrales');
+    renderRoute('/categorias/datos-catastrales?panel=abierto');
     await screen.findByRole('heading', { name: '004601001001' });
-    await waitFor(() => expect(Map.instances.at(-1)?.layers).toContain('modulo-relleno'));
-    const map = Map.instances.at(-1) as Map;
-
-    map.clickLayer('modulo-relleno', 7);
-
+    await userEvent.click(screen.getByRole('button', { name: 'Ver en el mapa' }));
     expect(await screen.findByRole('button', { name: 'Seleccionado en el mapa' })).toHaveAttribute('aria-pressed', 'true');
-    expect(map.featureState['7']).toEqual({ selected: true });
-    expect(map.camera.bounds).toEqual([[-74.155, 4.643], [-74.154, 4.644]]);
+    expect(await screen.findByRole('complementary', { name: '004601001001' })).toBeInTheDocument();
+    const [x, z] = createProjection(manifest.proyeccion.bbox as [number, number, number, number])([-74.1545, 4.6435]);
+    expect(useFocusStore.getState().target?.x).toBeCloseTo(x);
+    expect(useFocusStore.getState().target?.z).toBeCloseTo(z);
   });
 });
 
@@ -84,7 +86,7 @@ describe('axe', () => {
   it('filtros, lista y ficha abierta sin violaciones', async () => {
     const { default: axe } = await import('axe-core');
     mockApi(ROUTES);
-    const { container } = renderRoute('/categorias/datos-catastrales');
+    const { container } = renderRoute('/categorias/datos-catastrales?panel=abierto');
     await userEvent.click(await screen.findByRole('button', { name: 'Ver detalle de 004601001001' }));
     const dialog = await screen.findByRole('dialog', { name: '004601001001' });
 

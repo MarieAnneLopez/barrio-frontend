@@ -8,7 +8,7 @@ import { NAV_AFTER_CATEGORIES, NAV_BEFORE_CATEGORIES } from '../../lib/navigatio
 import { renderRoute } from '../../test/renderRoute';
 
 // D82, D86, D88: Mini Marie sentada solo en Inicio y Mapa 3D; decorativa (sin eventos ni lector de
-// pantalla), a 48 px sin escalar, sobre el borde superior del recuadro y casi en su esquina derecha.
+// pantalla), a 48 px sin escalar, arriba a la derecha y casi en la esquina (los dos a pantalla completa).
 const css = readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'sitting.css'), 'utf8');
 const ROUTES = [
   ...[...NAV_BEFORE_CATEGORIES, ...NAV_AFTER_CATEGORIES].map((item) => item.path),
@@ -28,9 +28,9 @@ describe('Mini Marie sentada (D82)', () => {
       expect(node).toHaveAttribute('aria-hidden', 'true');
       const sprite = node.querySelector<HTMLElement>('.sequence[data-sequence="sit"]');
       expect([sprite?.style.width, sprite?.style.height]).toEqual(['29px', '48px']);
-      // En Mapa 3D su asiento es el borde del recuadro; en el Inicio (sin marco), una repisa de 1 px.
-      expect(node.querySelectorAll('.sitting-marie__ledge')).toHaveLength(path === '/' ? 1 : 0);
-      expect(node.classList.contains('sitting-marie--stage')).toBe(path === '/');
+      // Inicio y Mapa 3D van a pantalla completa y sin marco: se sienta en una repisa de 1 px bajo el header.
+      expect(node.querySelectorAll('.sitting-marie__ledge')).toHaveLength(1);
+      expect(node.classList.contains('sitting-marie--stage')).toBe(true);
     });
     cleanup();
   }, 15000);

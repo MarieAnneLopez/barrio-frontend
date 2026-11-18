@@ -2,7 +2,7 @@ import { useEffect, useSyncExternalStore } from 'react';
 import { apiGet } from '../lib/apiClient';
 import { quietly } from '../lib/loadingTracker';
 import { CATEGORIES } from '../lib/categoryConfig';
-import type { ModuleCollection } from './categoryLayers';
+import type { ModuleCollection } from './places/placeLayers';
 
 export interface CategoryData {
   slug: string;
@@ -65,6 +65,17 @@ export function resetTintalData(): void {
   started = false;
   window.clearTimeout(timer);
   state = { status: 'loading' };
+}
+
+/**
+ * Tras crear, editar o borrar un lugar: vuelve a pedir los 14 módulos en silencio. Mientras tanto la
+ * maqueta sigue con lo que tiene (sin pantalla de carga); así no se queda con un lugar borrado o viejo.
+ */
+export function refreshTintalData(): void {
+  if (!started) return;
+  generation += 1;
+  window.clearTimeout(timer);
+  run(1, generation);
 }
 
 function subscribe(listener: () => void): () => void {
