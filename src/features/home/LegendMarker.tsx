@@ -12,7 +12,7 @@ export function LegendMarker({ slug, emoji }: { slug: string; emoji: string }) {
   return (
     <span aria-hidden="true" data-shape={shape} className="relative inline-flex size-6 shrink-0 items-center justify-center">
       <span className={`absolute inset-0 border-2 border-[var(--map-fondo)] bg-[var(--map-contorno)] ${FRAME[shape]}`} />
-      <span className="relative text-[0.8rem] leading-none">{emoji}</span>
+      <span className="relative text-step--1 leading-none">{emoji}</span>
     </span>
   );
 }

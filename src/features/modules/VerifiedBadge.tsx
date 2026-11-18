@@ -16,7 +16,7 @@ export function VerifiedBadge({ item }: { item: Pick<ModuleItem, 'verified' | 's
   const kind = verificationKind(item);
   return (
     <span
-      className={`inline-flex items-center gap-1 rounded-sm border px-2 py-0.5 font-mono text-[0.75rem] tracking-wide uppercase ${STYLE[kind]}`}
+      className={`inline-flex items-center gap-1 rounded-sm border px-2 py-0.5 font-mono text-step--1 tracking-wide uppercase ${STYLE[kind]}`}
     >
       <span aria-hidden="true">{MARK[kind]}</span>
       {t(`modules.${kind}`)}

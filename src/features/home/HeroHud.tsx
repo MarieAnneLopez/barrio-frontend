@@ -6,7 +6,7 @@ import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { categoryPath } from '../../lib/categoryConfig';
 import { useHeroStore } from '../../three/heroStore';
 
-const label = 'font-mono text-[0.75rem] tracking-[0.18em] text-fg-muted uppercase';
+const label = 'font-mono text-step--1 tracking-[0.18em] text-fg-muted uppercase';
 const panel = 'ui-panel pointer-events-auto px-3 py-2';
 
 /**

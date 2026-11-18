@@ -21,7 +21,7 @@ export function PhotoCredit({ author, license, source }: PhotoCreditProps) {
   const page = sourcePage(source);
   const profile = authorPage(source, author);
   return (
-    <p className="m-0 flex flex-wrap items-center gap-x-3 font-mono text-[0.75rem] text-fg-secondary">
+    <p className="m-0 flex flex-wrap items-center gap-x-3 font-mono text-step--1 text-fg-secondary">
       {author && profile ? <a href={profile} {...external}>{t('carousel.credit', { author })}</a> : null}
       {author && !profile ? <span>{t('carousel.credit', { author })}</span> : null}
       {license && legal ? <a href={legal} {...external}>{t('carousel.license', { license })}</a> : null}

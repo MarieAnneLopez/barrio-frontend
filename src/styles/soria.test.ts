@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
@@ -31,6 +31,18 @@ describe('Soria para el texto que no es título (D98)', () => {
     expect(body).toContain('font-weight: 400;');
     const leading = Number(/line-height: ([\d.]+);/.exec(body)?.[1]);
     expect(leading).toBeGreaterThanOrEqual(1.55);
+  });
+
+  it('nada de texto por debajo de 16 px fuera de los mapas (Martín: las etiquetas pequeñas se leían mal)', () => {
+    expect(scale).toContain('--step--1: 1rem;');
+    expect(read('index.css')).toContain('--text-step--2: 1rem;');
+    const srcDir = join(here, '..');
+    const files = readdirSync(srcDir, { recursive: true, encoding: 'utf8' })
+      .filter((f) => /\.(css|tsx)$/.test(f) && !/test|marker\.css|map-palette|brick\.css|pixel\.css|bands\.css|Carousel/.test(f));
+    for (const f of files) {
+      const text = readFileSync(join(srcDir, f), 'utf8');
+      expect(text.match(/font-size: *0\.\d+rem|text-\[0\.\d+rem\]|font-size: *1[0-5]px/g), f).toBeNull();
+    }
   });
 
   it('los títulos conservan su fuente: h1 display, h2–h3 serif y h4–h6 en Inter', () => {
