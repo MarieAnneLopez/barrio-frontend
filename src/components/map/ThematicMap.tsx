@@ -44,11 +44,14 @@ export default function ThematicMap({ slug, label, features, emoji, selectedId, 
         </div>
       ) : null}
       {status === 'error' ? (
-        <div role="alert" className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center">
-          <p className="m-0 text-fg-secondary">{t('modules.mapError')}</p>
-          <Button variant="secondary" size="sm" onClick={() => setAttempt((n) => n + 1)}>
-            {t('modules.retry')}
-          </Button>
+        <div role="alert" className="absolute inset-0 flex items-center justify-center p-6 text-center">
+          {/* Caja crema: el fondo del mapa es de su propio tema (oscuro) y el texto es negro (D96). */}
+          <div className="flex flex-col items-center gap-3 rounded-sm border border-line-strong bg-surface p-6">
+            <p className="m-0 text-fg-secondary">{t('modules.mapError')}</p>
+            <Button variant="secondary" size="sm" onClick={() => setAttempt((n) => n + 1)}>
+              {t('modules.retry')}
+            </Button>
+          </div>
         </div>
       ) : null}
     </section>

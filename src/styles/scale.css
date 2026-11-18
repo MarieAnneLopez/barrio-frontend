@@ -44,9 +44,9 @@
   --press-scale: 1;
   --press-shift: 2px;
   --disabled-opacity: 0.45;
-  /* Sin sombras duras (D84): una sola sombra suave para lo que flota y un aro ámbar de 1 px */
-  --shadow-deep: 0 8px 24px rgb(0 0 0 / 0.18);
-  --glow-active: 0 0 0 1px var(--c-ambar);
+  /* Sin sombras (D96): lo que flota se separa con su línea de 1 px; aro marrón de 1 px */
+  --shadow-deep: none;
+  --glow-active: 0 0 0 1px var(--c-marron);
 }
 
 /* scroll-padding: lo que recibe el foco (o el destino de un ancla) no queda bajo el header fijo de

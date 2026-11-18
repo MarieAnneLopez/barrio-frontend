@@ -45,11 +45,11 @@ describe('portada tipográfica de un módulo', () => {
     const style = { getPropertyValue: (name: string) => ` token(${name}) ` };
     vi.spyOn(window, 'getComputedStyle').mockReturnValue(style as unknown as CSSStyleDeclaration);
     expect(readPalette()).toEqual({
-      card: 'token(--bg-primary)',
+      card: 'token(--bg-accent)',
       ink: 'token(--text-primary)',
       accent: 'token(--text-highlight)',
       line: 'token(--border-ink)',
-      gap: 'token(--bg-accent)',
+      gap: 'token(--bg-primary)',
       display: 'token(--ff-display)',
     });
   });

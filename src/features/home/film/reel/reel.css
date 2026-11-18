@@ -5,7 +5,7 @@
   position: relative;
   height: 300vh;
   height: 300svh;
-  background-color: var(--bg-accent);
+  background-color: var(--bg-primary); /* crema (D96) */
 }
 
 /* Pantalla fija: papel con grano de puntos de 6 px. Los 4rem de arriba son del header, que flota encima. */
@@ -17,7 +17,7 @@
   padding-top: 4rem;
   overflow: hidden;
   overflow: clip;
-  background-color: var(--bg-accent);
+  background-color: var(--bg-primary); /* crema (D96) */
   background-image: radial-gradient(circle, color-mix(in srgb, var(--text-on-accent) 22%, transparent) 0.6px, transparent 1.1px);
   background-size: 6px 6px;
 }

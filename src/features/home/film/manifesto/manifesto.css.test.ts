@@ -11,7 +11,7 @@ describe('hoja del manifiesto: composición', () => {
     const section = rule('.manifesto');
     expect(section).toContain('height: 100svh;');
     expect(section).toContain('container-type: inline-size;');
-    expect(section).toContain('background-color: var(--bg-primary);');
+    expect(section).toContain('background-color: var(--bg-accent);'); // base rosa claro (D96)
   });
 
   it('titular en display al 16,2 % del ancho (16,5 % desde 640 px), interlineado 1,16 (0,96), tracking −0,035em', () => {
@@ -37,15 +37,15 @@ describe('hoja del manifiesto: composición', () => {
     expect(rule('.manifesto__line:nth-child(3)')).toContain('padding-left: calc(1em * var(--indent-3) / var(--size));');
   });
 
-  it.each(MODES)('en modo %s las dos capas se leen: nunca noche sobre noche', (_mode, vars) => {
+  it.each(MODES)('en modo %s las dos capas se leen: el texto nunca se pierde en el revelado', (_mode, vars) => {
     for (const tone of ['noche', 'papel']) {
       const layer = rule(`.manifesto__layer--${tone}`);
       const background = /background-color: (var\(--[\w-]+\));/.exec(layer)?.[1] ?? '';
       const text = /(?:^|\s)color: (var\(--[\w-]+\));/.exec(layer)?.[1] ?? '';
       expect(tokenRatio(text, background, vars), `${text} sobre ${background}`).toBeGreaterThanOrEqual(4.5);
     }
-    expect(rule('.manifesto__layer--noche')).toContain('background-color: var(--bg-primary);');
-    expect(rule('.manifesto__layer--papel')).toContain('background-color: var(--bg-accent);');
+    expect(rule('.manifesto__layer--noche')).toContain('background-color: var(--bg-accent);'); // base rosa claro
+    expect(rule('.manifesto__layer--papel')).toContain('background-color: var(--bg-primary);'); // revelado crema
   });
 
   it('cada capa deja libres los 4rem del header, que flota encima', () => {

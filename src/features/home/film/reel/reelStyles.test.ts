@@ -25,9 +25,9 @@ describe('escenario del reel', () => {
     expect(rule(reel, '.reel-frame')).toMatch(/inset: 4rem 0 0;/);
   });
 
-  it('fondo papel con grano de puntos de 6 px', () => {
+  it('fondo crema con grano de puntos de 6 px (D96)', () => {
     const stage = rule(reel, '.reel-stage');
-    expect(stage).toMatch(/background-color: var\(--bg-accent\);/);
+    expect(stage).toMatch(/background-color: var\(--bg-primary\);/);
     expect(stage).toMatch(/background-image: radial-gradient\(/);
     expect(stage).toMatch(/background-size: 6px 6px;/);
   });

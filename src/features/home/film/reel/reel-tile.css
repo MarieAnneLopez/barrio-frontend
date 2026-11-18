@@ -1,4 +1,4 @@
-/* Portada de un módulo en la rejilla de enlaces: noche, con el número en ámbar y el nombre en papel
+/* Portada de un módulo en la rejilla de enlaces: rosa claro con línea marrón y texto negro (D96)
    (la clase tone-noche del enlace devuelve esos tokens a su valor de la raíz dentro de la sección
    papel). En teléfono va en una fila baja; desde 640 px, como la portada del reel: número arriba y
    nombre abajo. */
@@ -10,7 +10,7 @@
   padding: var(--space-2) var(--space-3);
   border: 1px solid var(--border-ink);
   border-radius: var(--r-sm);
-  background-color: var(--bg-primary);
+  background-color: var(--bg-accent);
   color: var(--text-primary);
   font-family: var(--ff-display);
   font-size: var(--step-0);

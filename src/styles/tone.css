@@ -1,6 +1,7 @@
-/* Tonos (D84, etapa 2). Una superficie papel reescopa los tokens de texto y de línea: dentro, todo
-   el texto pasa a noche y las líneas a acero, así cualquier componente se lee sobre los dos fondos.
-   Una superficie noche dentro de ella los devuelve a su valor de la raíz. Se apoyan en tokens
+/* Tonos (D84, etapa 2; paleta D96). «papel» es ahora la superficie rosa claro y «noche» la crema
+   (los nombres de clase se conservan). Dentro de .tone-papel el texto es negro y la línea fuerte
+   también, porque el marrón no llega a 3:1 sobre rosa claro. Una superficie «noche» dentro de ella
+   devuelve los tokens a su valor de la raíz. Se apoyan en tokens
    semánticos, no en colores fijos: en alto contraste siguen en blanco y negro. */
 :root {
   /* Valor de la raíz de cada token: aquí var() llega ya resuelto a los descendientes. */
@@ -21,8 +22,8 @@
   --text-muted: var(--text-on-accent);
   --text-highlight: var(--text-on-accent); /* ámbar nunca es texto sobre papel */
   --accent-soft: var(--text-on-accent);
-  --border-subtle: var(--border-ink);
-  --border-strong: var(--border-ink);
+  --border-subtle: var(--border-ink); /* marrón, decorativa: 2,88 sobre rosa claro */
+  --border-strong: var(--text-on-accent); /* negro: las líneas que delimitan controles pasan 3:1 */
   --skeleton-base: color-mix(in srgb, var(--text-on-accent) 10%, transparent);
   --skeleton-shine: color-mix(in srgb, var(--text-on-accent) 22%, transparent);
   color: var(--text-primary);

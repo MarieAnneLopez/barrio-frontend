@@ -1,6 +1,6 @@
 /* Capítulo 1 del Inicio: manifiesto elástico (docs/superpowers/specs, §6). Dos capas idénticas a
-   toda la sección: noche con texto papel y, encima, papel con texto noche, que un recorte en elipse
-   va destapando; así el texto nunca queda noche sobre noche. El header fijo (4rem) flota encima:
+   toda la sección: rosa claro de base y, encima, crema, que un recorte en elipse va destapando; el
+   texto es negro en las dos, así siempre se lee (D96). El header fijo (4rem) flota encima:
    cada capa deja libre esa franja. El titular va en manifesto-title.css y los estados de la
    animación, en manifesto-motion.css. */
 .manifesto {
@@ -9,7 +9,7 @@
   height: 100svh;
   overflow: hidden;
   container-type: inline-size; /* el titular se mide con el ancho de la sección (cqw) */
-  background-color: var(--bg-primary);
+  background-color: var(--bg-accent);
 }
 
 .manifesto__layer {
@@ -22,12 +22,12 @@
 }
 
 .manifesto__layer--noche {
-  background-color: var(--bg-primary);
+  background-color: var(--bg-accent); /* base rosa claro (D96) */
   color: var(--text-primary);
 }
 
 .manifesto__layer--papel {
-  background-color: var(--bg-accent);
+  background-color: var(--bg-primary); /* revelado crema (D96) */
   color: var(--text-on-accent);
 }
 

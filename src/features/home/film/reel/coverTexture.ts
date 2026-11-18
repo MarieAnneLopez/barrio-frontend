@@ -1,5 +1,5 @@
 // Portada tipográfica de cada módulo, generada en un canvas 2D local (sin imágenes externas):
-// número en ámbar, una regla fina y el nombre en la display, sobre fondo noche.
+// número y nombre en la display, con una regla fina, sobre rosa claro; el reel va en crema (D96).
 import { CanvasTexture, SRGBColorSpace } from 'three';
 import { cssVar } from '../../../../lib/cssToken';
 import { COVER, type Cover, fitLines, NAME_BOX } from './coverLayout';
@@ -19,11 +19,11 @@ export interface Palette {
 /** Colores y tipografía del design system, leídos al pintar: así las portadas siguen al alto contraste. */
 export function readPalette(): Palette {
   return {
-    card: cssVar('--bg-primary', 'black'),
+    card: cssVar('--bg-accent', 'black'),
     ink: cssVar('--text-primary', 'white'),
     accent: cssVar('--text-highlight', 'white'),
     line: cssVar('--border-ink', 'gray'),
-    gap: cssVar('--bg-accent', 'white'),
+    gap: cssVar('--bg-primary', 'white'),
     display: cssVar('--ff-display', 'sans-serif'),
   };
 }

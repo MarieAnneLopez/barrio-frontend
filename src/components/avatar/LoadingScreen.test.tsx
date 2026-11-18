@@ -50,12 +50,12 @@ describe('Pantalla de carga completa (H33)', () => {
       expect([runner()?.style.width, runner()?.style.height]).toEqual([width, height]);
     });
 
-  it('va en noche y ámbar: sin ladrillo, esquinas de píxel ni fuente de píxel (D84)', () => {
+  it('va en crema con suelo marrón: sin ladrillo, esquinas de píxel ni fuente de píxel (D96)', () => {
     render(<LoadingScreen />);
     expect(status()?.outerHTML).not.toMatch(/brick-|px-corners/);
     expect(css).not.toMatch(/--palette-|--ff-pixel|#fff|shadow/);
     expect(css).toMatch(/\.loading-screen \{[^}]*background-color: var\(--bg-primary\)/);
-    expect(css).toMatch(/\.loading-screen__ground \{[^}]*height: 1px;[^}]*var\(--text-highlight\)/);
+    expect(css).toMatch(/\.loading-screen__ground \{[^}]*height: 1px;[^}]*var\(--border-ink\)/);
   });
 
   it('vuelve mientras baja el código de una página', () => {

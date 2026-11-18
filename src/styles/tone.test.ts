@@ -9,16 +9,17 @@ const TEXT = ['text-primary', 'text-secondary', 'text-muted', 'text-highlight', 
 const LINES = ['border-subtle', 'border-strong'];
 
 describe('tonos de superficie', () => {
-  it('.tone-papel pone noche en todo el texto (el ámbar nunca es texto sobre papel) y acero en las líneas', () => {
+  it('.tone-papel pone negro en todo el texto y en la línea fuerte; la sutil queda marrón (D96)', () => {
     const papel = block('.tone-papel');
     for (const token of TEXT) expect(papel).toContain(`--${token}: var(--text-on-accent);`);
-    for (const token of LINES) expect(papel).toContain(`--${token}: var(--border-ink);`);
+    expect(papel).toContain('--border-subtle: var(--border-ink);');
+    expect(papel).toContain('--border-strong: var(--text-on-accent);');
     expect(papel).toContain('color: var(--text-primary);');
   });
 
   it.each(MODES)('en modo %s, el texto y las líneas de .tone-papel se distinguen sobre papel', (_mode, vars) => {
     expect(tokenRatio('var(--text-on-accent)', 'var(--bg-accent)', vars)).toBeGreaterThanOrEqual(4.5);
-    expect(tokenRatio('var(--border-ink)', 'var(--bg-accent)', vars)).toBeGreaterThanOrEqual(3);
+    expect(block('.tone-papel')).toContain('--border-strong: var(--text-on-accent);');
   });
 
   it('.tone-noche devuelve cada token a su valor de la raíz', () => {

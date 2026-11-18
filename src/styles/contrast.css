@@ -26,6 +26,9 @@
   --hairline: #ffffff;
   --focus-ring: #ffffff;
   --overlay: rgb(0 0 0 / 0.9);
+  --state-success: #86efac;
+  --state-warning: #fdba74;
+  --state-error: #fca5a5;
   --skeleton-base: rgb(255 255 255 / 0.2);
   --skeleton-shine: rgb(255 255 255 / 0.35);
   --shadow-deep: none;

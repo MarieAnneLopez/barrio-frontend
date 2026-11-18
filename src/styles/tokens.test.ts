@@ -17,12 +17,13 @@ const tokensCss = readFileSync(join(srcDir, 'styles', 'tokens.css'), 'utf8');
 const contrastCss = readFileSync(join(srcDir, 'styles', 'contrast.css'), 'utf8');
 
 const ALLOWED = new Set([
-  '283845', 'e8d8c9', 'ffa649', '4b607f', 'f3701e', // paleta D84: noche, papel, ámbar, acero, naranja
-  'ffffff', '000000', // alto contraste y sombras
-  '86efac', 'fdba74', 'fca5a5', // estados semánticos
+  'fcf0cf', 'f3d1dc', 'f6a7c1', 'fdcf76', 'b16e4b', // paleta D96: crema, rosa claro, rosa, amarillo, marrón
+  'ffffff', '000000', // texto negro y alto contraste
+  '166534', '9a3412', '991b1b', // estados semánticos sobre crema
+  '86efac', 'fdba74', 'fca5a5', // estados semánticos en alto contraste (sobre negro)
 ]);
 
-describe('paleta estricta (D84)', () => {
+describe('paleta estricta (D96)', () => {
   it('lee de verdad los estilos', () => {
     expect(sources('.css').length).toBeGreaterThanOrEqual(4);
     expect(tokensCss).toContain('--bg-primary');
@@ -79,17 +80,21 @@ describe.each([
 const ratio = (fg: string, bg: string) =>
   contrastRatio(resolveColor(`var(--c-${fg})`, base), resolveColor(`var(--c-${bg})`, base));
 
-describe('pares medidos del diseño V3 (D84)', () => {
+describe('pares medidos de la paleta D96 (calculados por Martín y reverificados aquí)', () => {
   it.each([
-    ['papel', 'noche', 8.67], ['ambar', 'noche', 6.2], ['naranja', 'noche', 4.1],
-    ['acero', 'noche', 1.88], ['acero', 'papel', 4.6],
+    ['negro', 'crema', 18.5], ['negro', 'rosa-claro', 14.96], ['negro', 'rosa', 11.22],
+    ['negro', 'amarillo', 14.36], ['negro', 'marron', 5.2], ['marron', 'crema', 3.56],
   ] as const)('%s sobre %s = %f', (fg, bg, expected) => {
     expect(Math.abs(ratio(fg, bg) - expected)).toBeLessThanOrEqual(0.02);
   });
 
-  it('sobre ámbar solo va texto noche, y ámbar nunca es texto sobre papel', () => {
-    expect(ratio('noche', 'ambar')).toBeGreaterThanOrEqual(4.5);
-    expect(ratio('papel', 'ambar')).toBeLessThan(3);
-    expect(ratio('ambar', 'papel')).toBeLessThan(3);
+  it('el marrón solo vale como texto grande (≥ 3:1) y nunca como texto normal sobre crema', () => {
+    expect(ratio('marron', 'crema')).toBeGreaterThanOrEqual(3);
+    expect(ratio('marron', 'crema')).toBeLessThan(4.5);
+  });
+
+  it('blanco sobre marrón: 4,04, solo texto grande', () => {
+    const white = resolveColor('#ffffff', base);
+    expect(contrastRatio(white, resolveColor('var(--c-marron)', base))).toBeCloseTo(4.04, 1);
   });
 });
