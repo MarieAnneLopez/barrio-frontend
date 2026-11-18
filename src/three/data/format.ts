@@ -89,7 +89,8 @@ export interface TintalManifest {
   proyeccion: { bbox: [number, number, number, number]; origen: [number, number]; unidadesPorMetro: number };
   licenciaDeLosArchivos: string;
   archivos: Record<TintalFile, ManifestFile>;
-  conteos: Record<string, Record<string, number>>;
+  /** edificios, vias y suelo: números y, en `porClase` y similares, conteos por clave. */
+  conteos: Record<string, Record<string, number | Record<string, number>>>;
   fuentes: { id: string; nombre: string; licencia: string; atribucion: string; consultado: string }[];
 }
 
