@@ -27,7 +27,7 @@ interface StarsProps {
   size?: number;
 }
 
-/** Calificación de solo lectura (D13: relleno azure, borde sky). */
+/** Calificación de solo lectura (D100: llenas en amarillo con contorno negro; colores en stars.css). */
 export function Stars({ value, label, size }: StarsProps) {
   const rounded = value === null ? 0 : Math.round(value * 2) / 2;
   return (
