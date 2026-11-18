@@ -19,7 +19,9 @@ vec3 facade(vec3 wall, vec3 trim, vec3 N, float building, float floors) {
   float blind = step(vColumn, -0.5);
   float ground = 1.0 - step(0.5, row);
   float glazed = band(f.x, 0.22, 0.78, w.x) * band(f.y, mix(0.3, 0.1, ground), 0.74, w.y);
-  float panes = (1.0 - blind) * mix(0.23, glazed, detail);
+  // Lejos (o casi de canto) las ventanas no se resuelven: se usa una cobertura media algo menor que
+  // la real (0,23) para que esas fachadas no brillen como un filo de luz.
+  float panes = (1.0 - blind) * mix(0.14, glazed, detail);
   float down = vTop - vWorld.y;
   float wy = max(fwidth(vWorld.y), 1e-3);
   float cornice = 1.0 - smoothstep(uParapet - wy, uParapet + wy, down);
