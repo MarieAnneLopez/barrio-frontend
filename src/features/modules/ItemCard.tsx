@@ -21,7 +21,7 @@ export function ItemCard({ slug, item, selected, onShowOnMap, onOpen }: ItemCard
   return (
     <li
       className={`flex flex-col gap-3 rounded-md border p-4 ${
-        selected ? 'border-active bg-glass shadow-[var(--glow-active)]' : 'border-line bg-surface'
+        selected ? 'border-active bg-glass shadow-[var(--glow-active)]' : 'tone-papel border-line bg-pink'
       }`}
     >
       <div className="flex flex-wrap items-start justify-between gap-2">

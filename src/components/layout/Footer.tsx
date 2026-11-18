@@ -9,7 +9,7 @@ const FOOTER_FAQ_COUNT = 4;
 const HEADING = 'mt-0 mb-4 text-step-0 text-fg';
 
 /**
- * Pie institucional (§11.5, D2: al final de cada página, no fijo), en banda papel (D84): contacto,
+ * Pie institucional (§11.5, D2: al final de cada página, no fijo), en banda marrón (D96): contacto,
  * Perfil de la Creadora, preguntas frecuentes, 14 módulos y ubicación. En /preguntas y /creadora
  * omite el bloque que ya ocupa la página.
  */
@@ -19,7 +19,7 @@ export function Footer() {
   const lines = t('footer.locationLines', { returnObjects: true }) as string[];
 
   return (
-    <footer aria-label={t('footer.label')} className="tone-papel mt-16 bg-pink">
+    <footer aria-label={t('footer.label')} className="tone-papel mt-16 bg-band">
       <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-10 px-4 py-12 md:pr-20 md:pl-10 xl:px-10">
         <FooterContact />
         <div className="grid gap-10 lg:grid-cols-[1fr_1fr]">

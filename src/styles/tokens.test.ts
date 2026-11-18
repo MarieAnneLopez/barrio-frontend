@@ -55,6 +55,7 @@ const TEXT_PAIRS: [string, string][] = [
   ['--text-on-interactive', '--interactive-active'], ['--text-highlight', '--bg-surface'],
   ['--accent-soft', '--bg-primary'], ['--accent-soft', '--bg-surface'],
   ['--state-success', '--bg-surface'], ['--state-warning', '--bg-surface'], ['--state-error', '--bg-surface'],
+  ['--text-on-accent', '--bg-highlight'], ['--text-on-accent', '--bg-band'], ['--text-on-accent', '--bg-strong'], // D96
 ];
 
 describe.each([
@@ -94,7 +95,6 @@ describe('pares medidos de la paleta D96 (calculados por Martín y reverificados
   });
 
   it('blanco sobre marrón: 4,04, solo texto grande', () => {
-    const white = resolveColor('#ffffff', base);
-    expect(contrastRatio(white, resolveColor('var(--c-marron)', base))).toBeCloseTo(4.04, 1);
+    expect(contrastRatio(resolveColor('#ffffff', base), resolveColor('var(--c-marron)', base))).toBeCloseTo(4.04, 1);
   });
 });

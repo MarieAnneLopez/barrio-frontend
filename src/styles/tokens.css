@@ -18,6 +18,9 @@
   --bg-accent: var(--c-rosa-claro);
   --bg-soft: var(--c-rosa-claro);
   --bg-nav: var(--c-crema);
+  --bg-highlight: var(--c-amarillo); /* resalte: encabezado de página (sin Mini Marie encima) */
+  --bg-band: var(--c-marron); /* bandas puntuales: el pie; texto negro 5,20 */
+  --bg-strong: var(--c-rosa); /* el header sobre secciones crema; texto negro 11,22 */
 
   /* Texto (pares medidos en tokens.test.ts): negro sobre todos los fondos de la paleta. */
   --text-primary: var(--c-negro); /* 18,50 sobre crema · 14,96 sobre rosa claro */

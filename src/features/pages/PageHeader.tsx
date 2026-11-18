@@ -11,9 +11,9 @@ interface PageHeaderProps {
 }
 
 /**
- * Encabezado de página: un solo h1 por ruta y título del documento. Editorial (D84, D85): sin
- * placa, una regla ámbar de 1 px, la etiqueta en versalitas, el título en la display y la
- * descripción en serif cursiva, todo directo sobre el fondo.
+ * Encabezado de página: un solo h1 por ruta y título del documento. Editorial (D85) sobre una
+ * banda amarilla de resalte (D96): regla de 1 px, la etiqueta en versalitas, el título en la
+ * display y la descripción en serif cursiva, todo en negro.
  */
 export function PageHeader({ title, description, eyebrow, emoji }: PageHeaderProps) {
   const { t } = useTranslation();
@@ -22,7 +22,7 @@ export function PageHeader({ title, description, eyebrow, emoji }: PageHeaderPro
   }, [title, t]);
 
   return (
-    <header className="page-enter flex max-w-4xl flex-col gap-4">
+    <header className="page-enter tone-papel flex flex-col gap-4 rounded-sm bg-mark px-5 py-8 md:px-10">
       <span aria-hidden="true" className="ui-rule" />
       {eyebrow ? <p className="ui-eyebrow m-0 text-fg-muted">{eyebrow}</p> : null}
       <h1 className="m-0 flex items-center gap-3 text-step-5 text-fg">

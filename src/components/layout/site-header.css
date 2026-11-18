@@ -1,13 +1,23 @@
 /* Header y menú desplegable (etapa 2). El header toma el tono de la sección que tiene debajo
    (data-tone; ver toneRegistry.ts) y, si esa sección lo pide, flota transparente (data-float).
    El cambio de tono es instantáneo: solo se animan transform y opacity. */
+/* Paleta D96: sobre secciones crema el header va en rosa, y la selección de dentro (ES/EN) pasa a
+   crema para seguir viéndose; sobre secciones rosa claro va en crema. Sus controles usan la línea
+   negra: el marrón no llega a 3:1 sobre los rosas. [data-tone] sube la especificidad para no
+   depender del orden de las hojas (D93). */
 .site-header {
   border-bottom: 1px solid var(--border-subtle);
-  background-color: var(--bg-primary);
+  background-color: var(--bg-strong);
+}
+
+.site-header[data-tone] {
+  --border-strong: var(--text-on-accent);
+  --interactive-primary: var(--bg-primary);
 }
 
 .site-header[data-tone='papel'] {
-  background-color: var(--bg-accent);
+  --interactive-primary: var(--bg-strong);
+  background-color: var(--bg-primary);
 }
 
 /* Sobre una sección a pantalla completa: sin fondo ni línea. Con el menú abierto vuelve a ser sólido. */
@@ -29,12 +39,12 @@
   max-height: calc(100dvh - 4rem);
   overflow-y: auto;
   border-bottom: 1px solid var(--border-strong);
-  background-color: var(--bg-primary);
+  background-color: var(--bg-strong);
   animation: site-menu-in var(--dur-3) var(--ease-emphasis) both;
 }
 
 .site-header[data-tone='papel'] .site-menu {
-  background-color: var(--bg-accent);
+  background-color: var(--bg-primary);
 }
 
 .site-menu__veil {
