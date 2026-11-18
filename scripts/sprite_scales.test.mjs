@@ -23,6 +23,13 @@ function offShare(a, b, t) {
   return off / (a.length / 4);
 }
 
+/** Píxeles que se ven distintos (dos transparentes son iguales aunque difiera el color guardado). */
+function visibleDiff(a, b) {
+  let off = 0;
+  for (let p = 0; p < a.length; p += 4) if ((a[p + 3] || b[p + 3]) && a.readUInt32BE(p) !== b.readUInt32BE(p)) off += 1;
+  return off;
+}
+
 describe('atlas de Mini Marie (sprites32)', () => {
   it('cada secuencia tiene su tamaño base, el doble y el cuádruple que existan en el dibujo', () => {
     expect(Object.fromEntries(Object.entries(scales).map(([name, spec]) => [name, spec.sizes]))).toEqual({
@@ -62,9 +69,21 @@ describe('atlas de Mini Marie (sprites32)', () => {
     }
   }, 120_000);
 
+  // Revisión de sprites32: el reposo repite cuadros (sostenidos) y la compresión con pérdida los
+  // hacía distintos entre sí: «respiraba» con ruido. Va sin pérdida: lo idéntico queda idéntico en
+  // todo píxel visible (WebP sin pérdida reescribe el color bajo alfa 0, que no se pinta).
+  it.each(cases.filter(([name]) => name === 'idle'))('%s a %i px: los cuadros repetidos son idénticos', async (name, size, spec) => {
+    const { frames } = await readCycle(name);
+    const decoded = await sharp(file(name, size)).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    const cells = cellsOf(decoded, spec.grid[0], decoded.info.width / spec.grid[0], size, frames.length);
+    const pairs = frames.flatMap((f, n) => frames.slice(n + 1).flatMap((g, k) => (f.equals(g) ? [[n, n + 1 + k]] : [])));
+    expect(pairs.length).toBeGreaterThan(0);
+    for (const [n, m] of pairs) expect(visibleDiff(cells[n], cells[m]), `${name}_${size}: ${n} y ${m}`).toBe(0);
+  }, 120_000);
+
   // Medido (sprites32): 32 cuadros pesan de 3 a 4 veces lo que las tiras de 7 u 8 (el reposo, que era
   // un solo cuadro, unas 25 veces); el tope deja un 10 % de holgura sobre lo medido.
-  const BUDGET_KB = { 48: 40, 80: 90, 96: 90, 105: 120, 140: 140, 160: 200, 192: 180, 210: 260, 280: 340, 320: 470, 420: 460, 560: 740, 640: 840 };
+  const BUDGET_KB = { 48: 40, 80: 90, 96: 90, 105: 120, 140: 200, 160: 200, 192: 180, 210: 260, 280: 340, 320: 470, 420: 460, 560: 740, 640: 840 };
   it.each(cases)('%s a %i px: no pesa de más', (name, size) => {
     const budgetKb = BUDGET_KB[size];
     expect(statSync(file(name, size)).size / 1024).toBeLessThanOrEqual(budgetKb);

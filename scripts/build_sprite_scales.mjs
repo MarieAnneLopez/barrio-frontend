@@ -22,6 +22,10 @@ const cycles = join(root, 'scripts', 'sprite-cycles');
 const scales = JSON.parse(readFileSync(join(root, 'src', 'components', 'avatar', 'spriteScales.json'), 'utf8'));
 const CLEAR = { r: 0, g: 0, b: 0, alpha: 0 };
 const WEBP = { quality: 90, alphaQuality: 100, effort: 6 }; // sin smartSubsample: deja un filo violeta
+// El reposo repite cuadros (sostenidos): sin pérdida, lo idéntico queda idéntico (revisión de sprites32).
+const WEBP_BY = { idle: { lossless: true, effort: 6 } };
+// `node build_sprite_scales.mjs idle` rehace solo esa secuencia; sin argumentos, todas.
+const only = process.argv.slice(2);
 
 /** Las celdas del ciclo maestro, en orden (fila a fila), como PNG. */
 async function cells(name, cols, rows, cellW, cellH) {
@@ -39,6 +43,7 @@ async function cells(name, cols, rows, cellW, cellH) {
 }
 
 for (const [name, { frames, grid, cell, sizes }] of Object.entries(scales)) {
+  if (only.length && !only.includes(name)) continue;
   const [cols, rows] = grid;
   const [cellW, cellH] = cell;
   if (cols * rows !== frames) throw new Error(`${name}: ${cols}×${rows} celdas para ${frames} cuadros`);
@@ -52,7 +57,7 @@ for (const [name, { frames, grid, cell, sizes }] of Object.entries(scales)) {
     }
     const out = join(avatar, name, `${name}_${size}.webp`);
     await sharp({ create: { width: cols * w, height: rows * size, channels: 4, background: CLEAR } })
-      .composite(parts).webp(WEBP).toFile(out);
+      .composite(parts).webp(WEBP_BY[name] ?? WEBP).toFile(out);
     console.log(`${name}_${size}.webp: ${frames} cuadros de ${w}×${size} en ${cols}×${rows}`);
   }
 }
