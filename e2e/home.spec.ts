@@ -21,7 +21,7 @@ test('Inicio: 4 capítulos, HUD de la maqueta a la vista y reel cargado', async 
   const screens = await page.evaluate(() =>
     [...document.querySelectorAll<HTMLElement>('[data-chapter]')].map((el) => Math.round((el.offsetHeight / window.innerHeight) * 10) / 10),
   );
-  expect(screens).toEqual([1, 5, 2, 3]); // 1100svh de recorrido en total
+  expect(screens).toEqual([1, 10, 2, 3]); // 1600svh de recorrido: el vuelo tiene N + 1 = 10 pantallas (D104)
 
   // Al inicio del capítulo, con el recuadro ya fijado arriba, como lo ve quien se desplaza. No con
   // scrollIntoView: respeta el scroll-padding de la página y dejaría el recuadro sin fijar.

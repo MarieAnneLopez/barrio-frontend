@@ -44,7 +44,9 @@ let timer: number | undefined;
 const listeners = new Set<() => void>();
 
 function run(tries: number, gen: number): void {
-  (tries === 0 ? fetchAll() : quietly(fetchAll)).then(
+  // Sin la pantalla de carga completa, también al primer intento (D112): la maqueta tiene sus propios
+  // indicadores y en el Inicio se pide a mitad de página, al acercarse al capítulo 3.
+  quietly(fetchAll).then(
     (data) => {
       if (gen !== generation) return;
       state = { status: 'ready', data };
