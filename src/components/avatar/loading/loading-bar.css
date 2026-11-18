@@ -1,0 +1,89 @@
+/* Barra de carga viva: pista crema con línea marrón (3,56:1 sobre crema), relleno marrón que se
+   corre con translateX, un brillo crema que lo recorre y chispas amarillas de píxel en la punta.
+   Solo transform y opacity. Con movimiento reducido (data-reduced): ni brillo ni chispas. */
+.loading-bar {
+  position: relative;
+  width: min(32rem, 82vw);
+  height: 0.875rem;
+}
+
+.loading-bar__track {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border: 1px solid var(--border-ink);
+  border-radius: 999px;
+  background-color: var(--bg-primary);
+}
+
+.loading-bar__fill {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background-color: var(--bg-band);
+  transform: translate3d(-94%, 0, 0);
+  will-change: transform;
+}
+
+/* Brillo: una franja crema translúcida que cruza el relleno (lineal: movimiento constante). */
+.loading-bar__fill::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 35%;
+  background-image: linear-gradient(90deg, transparent, rgb(252 240 207 / 0.55), transparent);
+  animation: loading-shine 1.6s linear infinite;
+}
+
+/* Riel del ancho de la barra: translateX(avance · 100 %) lleva la punta a su sitio. */
+.loading-bar__rail {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.loading-bar__head {
+  position: absolute;
+  top: 50%;
+  left: 0;
+}
+
+.loading-bar__spark {
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  width: 6px;
+  height: 6px;
+  background-color: var(--bg-highlight);
+  opacity: 0;
+  animation: loading-spark 0.9s cubic-bezier(0.23, 1, 0.32, 1) infinite;
+}
+
+.loading-bar__spark:nth-child(2) { --dx: 14px; --dy: -18px; animation-delay: 0.18s; }
+.loading-bar__spark:nth-child(3) { --dx: 6px; --dy: 16px; animation-delay: 0.36s; }
+.loading-bar__spark:nth-child(4) { --dx: 18px; --dy: -6px; animation-delay: 0.54s; }
+.loading-bar__spark:nth-child(5) { --dx: 9px; --dy: -24px; animation-delay: 0.72s; }
+
+@keyframes loading-shine {
+  from { transform: translate3d(-100%, 0, 0); }
+  to { transform: translate3d(300%, 0, 0); }
+}
+
+@keyframes loading-spark {
+  0% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+  100% { opacity: 0; transform: translate3d(var(--dx, 12px), var(--dy, -12px), 0) scale(0.5); }
+}
+
+.loading-bar[data-reduced] .loading-bar__fill::after {
+  animation: none;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-bar__fill::after,
+  .loading-bar__spark {
+    animation: none;
+    opacity: 0;
+  }
+}

@@ -23,7 +23,7 @@ type Phase = 'shown' | 'leaving' | 'hidden';
  * petición de datos (el chat no cuenta: tiene su «pensando…»); nunca menos de 700 ms;
  * al terminar se desvanece.
  */
-export function useLoadingScreen(): { visible: boolean; leaving: boolean } {
+export function useLoadingScreen(): { visible: boolean; leaving: boolean; busy: boolean } {
   const apiActive = loadingSnapshot(useLoadingStore((s) => s.tasks)).active;
   const lazy = useLoadingScreenStore((s) => s.lazy) > 0;
   const [booting, setBooting] = useState(true);
@@ -59,5 +59,6 @@ export function useLoadingScreen(): { visible: boolean; leaving: boolean } {
     return () => window.clearTimeout(timer);
   }, [phase]);
 
-  return { visible: phase !== 'hidden', leaving: phase === 'leaving' };
+  // `busy`: aún hay algo que esperar (la barra de progreso se llena cuando deja de haberlo).
+  return { visible: phase !== 'hidden', leaving: phase === 'leaving', busy: wanted };
 }

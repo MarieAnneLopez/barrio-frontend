@@ -1,11 +1,10 @@
-/* Pantalla de carga (H33; paleta D96): fondo crema, Mini Marie cruzando la pantalla y una línea
-   marrón de 1 px por suelo. Solo transform y opacity. */
+/* Pantalla de carga (H33; gran actualización, paleta D100): arriba el escenario con el barrio en
+   capas (loading/loading-scene.css) sobre un cielo de crema a rosa, y Mini Marie cruzándolo; una
+   línea marrón quieta de 1 px por suelo; abajo, sobre crema, la barra viva y el texto. Solo
+   transform y opacity. */
 .loading-screen {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-6, 1.5rem);
   background-color: var(--bg-primary);
   transition: opacity var(--dur-3) ease-out; /* = SCREEN_LEAVE_MS (240 ms) */
 }
@@ -14,17 +13,19 @@
   opacity: 0;
 }
 
-/* Escenario a todo el ancho: ella entra por la izquierda y sale por la derecha. */
+/* Escenario a todo el ancho: ella entra por la izquierda y sale por la derecha, con los pies en el suelo.
+   Degradado sutil de cielo: permitido en el hero (D100). */
 .loading-screen__stage {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 100%;
+  position: relative;
+  flex: 1;
   overflow: hidden;
+  background-image: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-accent) 62%, var(--bg-strong) 100%);
 }
 
 /* Avanza en pasos enteros, uno por cuadro (duración y steps() los pone LoadingScreen). */
 .loading-screen__track {
+  position: absolute;
+  bottom: 0;
   animation-name: loading-run;
   animation-iteration-count: infinite;
   will-change: transform;
@@ -46,6 +47,14 @@
   background-color: var(--border-ink);
 }
 
+.loading-screen__floor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 2rem 1rem 2.75rem;
+}
+
 .loading-screen__text {
   margin: 0;
   font-family: var(--ff-body);
@@ -56,15 +65,17 @@
   color: var(--text-primary); /* negro sobre crema: 18,50:1 */
 }
 
-/* Movimiento reducido: pose fija al centro; el fundido de salida se mantiene. */
+/* Movimiento reducido: pose fija al centro, mirando a la derecha; el fundido de salida se mantiene. */
 @media (prefers-reduced-motion: reduce) {
   .loading-screen__track {
     animation: none;
-    margin-inline: auto;
+    left: 50%;
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
 :root.reduce-motion .loading-screen__track {
   animation: none;
-  margin-inline: auto;
+  left: 50%;
+  transform: translate3d(-50%, 0, 0);
 }

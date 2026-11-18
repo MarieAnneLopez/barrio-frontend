@@ -1,0 +1,99 @@
+/* Barrio de fondo de la pantalla de carga: capas en parallax lento, solo transform (diseños:
+   movimiento constante = lineal). Cada capa lleva tres tiras en fila y avanza exactamente una,
+   así el bucle no se nota. La fila lejana va más despacio que la cercana; el suelo no se mueve. */
+.loading-scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.loading-scene__sun {
+  position: absolute;
+  top: 7%;
+  right: 12%;
+  width: clamp(3.5rem, 9vmin, 6rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-color: var(--bg-highlight);
+}
+
+.loading-scene__layer {
+  --tile: 1200px;
+  --tile-h: 300px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  animation: loading-drift var(--drift) linear infinite;
+  will-change: transform;
+}
+
+.loading-scene__tile {
+  flex: none;
+  width: var(--tile);
+  height: var(--tile-h);
+}
+
+.loading-scene__layer--clouds {
+  --tile: 1600px;
+  --tile-h: 220px;
+  --drift: 70s;
+  top: 4%;
+  bottom: auto;
+}
+
+.loading-scene__layer--far {
+  --drift: 150s;
+}
+
+.loading-scene__layer--near {
+  --drift: 95s;
+  --tile-h: 240px;
+}
+
+.loading-scene__cloud,
+.loading-scene__window {
+  fill: var(--bg-primary);
+}
+
+.loading-scene__far {
+  fill: var(--bg-accent);
+}
+
+.loading-scene__near {
+  fill: var(--bg-strong);
+}
+
+@keyframes loading-drift {
+  to {
+    transform: translate3d(calc(-1 * var(--tile)), 0, 0);
+  }
+}
+
+/* En pantallas angostas el barrio se achica en la misma proporción que Mini Marie (210 px). */
+@media (max-width: 639px) {
+  .loading-scene__layer {
+    --tile: 800px;
+    --tile-h: 200px;
+  }
+
+  .loading-scene__layer--clouds {
+    --tile: 1066px;
+    --tile-h: 146px;
+  }
+
+  .loading-scene__layer--near {
+    --tile-h: 160px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-scene__layer {
+    animation: none;
+  }
+}
+
+:root.reduce-motion .loading-scene__layer {
+  animation: none;
+}
