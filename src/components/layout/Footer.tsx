@@ -10,9 +10,10 @@ const HEADING = 'mt-0 mb-4 text-step-0 text-fg';
 const COLUMN = 'mx-auto flex w-full max-w-[1200px] flex-col gap-10 px-4 py-12 md:pr-20 md:pl-10 xl:px-10';
 
 /**
- * Pie institucional (§11.5, D2: al final de cada página, no fijo), en dos bandas (D96): rosa con
- * contacto, Perfil de la Creadora y preguntas frecuentes; marrón con los 14 módulos, la ubicación
- * y los créditos. En /preguntas y /creadora omite el bloque que ya ocupa la página.
+ * Pie institucional (§11.5, D2: al final de cada página, no fijo), en dos bandas (D100): una franja
+ * rosa claro con texto negro (contacto, Perfil de la Creadora, preguntas frecuentes, los 14 módulos,
+ * la ubicación y los créditos) y una banda marrón con el nombre del sitio en crema, en texto grande
+ * (3,56:1 solo vale para texto grande). En /preguntas y /creadora omite el bloque que ya ocupa la página.
  */
 export function Footer() {
   const { t } = useTranslation();
@@ -20,8 +21,8 @@ export function Footer() {
   const lines = t('footer.locationLines', { returnObjects: true }) as string[];
 
   return (
-    <footer aria-label={t('footer.label')} className="tone-papel mt-16">
-      <div className="bg-strong">
+    <footer aria-label={t('footer.label')} className="mt-16">
+      <div className="tone-papel bg-pink">
         <div className={COLUMN}>
           <FooterContact />
           <div className="grid gap-10 lg:grid-cols-[1fr_1fr]">
@@ -38,10 +39,6 @@ export function Footer() {
               </section>
             )}
           </div>
-        </div>
-      </div>
-      <div className="bg-band">
-        <div className={COLUMN}>
           <div className="grid gap-10 md:grid-cols-[2fr_1fr]">
             <nav aria-labelledby="footer-modules">
               <h2 id="footer-modules" className={HEADING}>
@@ -80,6 +77,11 @@ export function Footer() {
             </Link>
           </p>
         </div>
+      </div>
+      <div className="bg-band">
+        <p className="m-0 mx-auto w-full max-w-[1200px] px-4 py-8 font-display text-step-4 text-on-band md:pr-20 md:pl-10 xl:px-10">
+          {t('app.title')}
+        </p>
       </div>
     </footer>
   );

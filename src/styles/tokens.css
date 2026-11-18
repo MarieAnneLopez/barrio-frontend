@@ -1,8 +1,11 @@
-/* Tokens del design system (docs/DISENO-V3.md; paleta D96, crema y rosas). Única fuente de la
-   paleta: crema #fcf0cf (~50 %, la principal), rosa claro #f3d1dc, rosa #f6a7c1, amarillo #fdcf76 y
-   marrón #b16e4b (~12,5 % cada uno). El texto es negro. El marrón solo es texto grande, ícono o
-   línea (3,56:1 sobre crema); Mini Marie nunca va sobre amarillo. Los mapas tienen su propio tema
-   (styles/map-palette.css). */
+/* Tokens del design system (docs/DISENO-V3.md; paleta D100 de Martín, 60/18/12/5/5). Única fuente
+   de la paleta: crema #fcf0cf (60 %: fondo, márgenes, espacio negativo), rosa claro #f3d1dc (18 %:
+   tarjetas, secciones alternas, barras laterales y paneles), rosa #f6a7c1 (12 %: banners, badges,
+   bordes activos e íconos; degradado sutil solo en hero y cabecera), amarillo #fdcf76 (5 %: botones
+   secundarios, novedad, estrellas, subrayados clave y hover) y marrón #b16e4b (5 %: títulos de alto
+   impacto, botón CTA y pie). El marrón es texto solo grande y solo sobre crema (3,56:1); nunca sobre
+   rosa claro (2,88), amarillo (2,76) ni rosa (2,16). Mini Marie nunca va sobre amarillo. Los mapas
+   tienen su propio tema (styles/map-palette.css). */
 :root {
   /* Primitivos */
   --c-crema: #fcf0cf;
@@ -12,37 +15,48 @@
   --c-marron: #b16e4b;
   --c-negro: #000000;
 
-  /* Superficies: crema de base; rosa claro para paneles secundarios y bloques alternos. */
-  --bg-primary: var(--c-crema);
-  --bg-surface: var(--c-crema);
-  --bg-accent: var(--c-rosa-claro);
+  /* [PROPUESTA] Cuerpo en negro: marrón sobre crema (3,56) no llega al 4,5:1 del texto normal.
+     Se cambia en esta línea. */
+  --texto-cuerpo: var(--c-negro);
+
+  /* Superficies */
+  --bg-primary: var(--c-crema); /* fondo general */
+  --bg-surface: var(--c-crema); /* campos y cajas sobre el fondo */
+  --bg-accent: var(--c-rosa-claro); /* tarjetas, paneles, secciones alternas */
   --bg-soft: var(--c-rosa-claro);
   --bg-nav: var(--c-crema);
-  --bg-highlight: var(--c-amarillo); /* resalte: encabezado de página (sin Mini Marie encima) */
-  --bg-band: var(--c-marron); /* bandas puntuales: el pie; texto negro 5,20 */
-  --bg-strong: var(--c-rosa); /* el header sobre secciones crema; texto negro 11,22 */
+  --bg-highlight: var(--c-amarillo); /* novedad, estrellas, subrayado clave */
+  --bg-band: var(--c-marron); /* pie: texto crema grande */
+  --bg-strong: var(--c-rosa); /* cabecera, banners y badges */
 
-  /* Texto (pares medidos en tokens.test.ts): negro sobre todos los fondos de la paleta. */
-  --text-primary: var(--c-negro); /* 18,50 sobre crema · 14,96 sobre rosa claro */
+  /* Texto (pares medidos en tokens.test.ts) */
+  --text-primary: var(--texto-cuerpo); /* 18,50 sobre crema · 14,96 sobre rosa claro */
   --text-secondary: rgb(0 0 0 / 0.82);
   --text-muted: rgb(0 0 0 / 0.7); /* ≥ 7 sobre crema y rosa claro */
   --text-on-accent: var(--c-negro);
   --text-on-soft: var(--c-negro);
-  --text-highlight: var(--c-negro); /* el resalte va en líneas y fondos, no en texto de color */
+  --text-highlight: var(--c-negro);
+  --text-on-highlight: var(--c-negro); /* 14,36 sobre amarillo */
+  --text-on-band: var(--c-crema); /* 3,56 sobre marrón: solo texto grande */
+  --text-title: var(--c-marron); /* títulos de alto impacto: grandes y solo sobre crema */
   --accent-soft: var(--c-negro);
 
-  /* Interacción: primario rosa; hover y activo rosa claro; texto negro (11,22 · 14,96). */
-  --interactive-primary: var(--c-rosa);
-  --interactive-hover: var(--c-rosa-claro);
-  --interactive-active: var(--c-rosa-claro);
-  --text-on-interactive: var(--c-negro);
+  /* Interacción: CTA marrón con texto crema grande y en negrita (ui.css lo fuerza);
+     secundario amarillo; hover amarillo; selección rosa. Texto negro sobre los claros. */
+  --interactive-primary: var(--c-marron);
+  --text-on-interactive: var(--c-crema);
+  --interactive-secondary: var(--c-amarillo);
+  --interactive-hover: var(--c-amarillo);
+  --text-on-hover: var(--c-negro);
+  --interactive-active: var(--c-rosa);
+  --text-on-active: var(--c-negro);
   --border-subtle: rgb(177 110 75 / 0.4);
   --border-strong: var(--c-marron); /* 3,56 sobre crema: líneas de 1 px */
   --border-ink: var(--c-marron);
   --glass-fill: var(--c-crema);
   --glass-blur: 0px;
   --hairline: rgb(177 110 75 / 0.3);
-  /* Foco doble: amarillo por fuera, negro por dentro; visible sobre crema, rosas y amarillo. */
+  /* Foco doble: amarillo por fuera, negro por dentro; visible sobre crema, rosas, amarillo y marrón. */
   --focus-ring: var(--c-amarillo);
   --focus-ring-inner: var(--c-negro);
   --overlay: rgb(177 110 75 / 0.6);

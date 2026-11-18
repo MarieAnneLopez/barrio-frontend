@@ -23,22 +23,31 @@
   cursor: progress;
 }
 
+/* CTA (D100): fondo marrón y texto crema, que solo pasa como texto grande (3,56:1): por eso la hoja
+   fuerza 1,1875rem (19 px ≥ 18,66) en Inter 700, sin importar las clases de quien lo use. */
+.ui-btn--primary {
+  font-family: var(--ff-heading);
+  font-size: 1.1875rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
 /* Un hover que cambia el fondo fija también el texto: la clase de color de quien usa el botón
-   no siempre acompaña (styles/consumers.test.ts). */
+   no siempre acompaña (styles/consumers.test.ts). El hover es amarillo (D100). */
 @media (hover: hover) and (pointer: fine) {
   .ui-btn--primary:hover {
     background-color: var(--interactive-hover);
-    color: var(--text-on-interactive);
+    color: var(--text-on-hover);
   }
 
   .ui-btn--secondary:hover {
-    background-color: var(--interactive-primary);
-    color: var(--text-on-interactive);
+    background-color: var(--interactive-active);
+    color: var(--text-on-active);
   }
 
-  /* Se tiñe con el color del propio texto: nunca lo iguala, tampoco en alto contraste. */
   .ui-btn--ghost:hover {
-    background-color: color-mix(in srgb, currentColor 14%, transparent);
+    background-color: var(--interactive-hover);
+    color: var(--text-on-hover);
   }
 
   .ui-field:hover {

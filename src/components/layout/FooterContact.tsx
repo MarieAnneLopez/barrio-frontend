@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 const EMAIL = 'marieanelopezpoveda@gmail.com';
 const INSTAGRAM = 'https://www.instagram.com/marieane_lop/';
 const LINK =
-  'ui-pressable ui-btn--secondary inline-flex min-h-11 items-center gap-2 rounded-sm border border-line-strong bg-surface px-4 font-medium text-fg no-underline';
+  'ui-pressable ui-btn--secondary inline-flex min-h-11 items-center gap-2 rounded-sm border border-fg bg-secondary px-4 font-medium text-on-mark no-underline';
 
 /** Contacto de la creadora (H32, D68): en el pie de todas las páginas. */
 export function FooterContact() {

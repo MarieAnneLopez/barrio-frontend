@@ -29,7 +29,7 @@ export function RailButton({
         onClick={onClick}
         className={`ui-pressable inline-flex size-11 items-center justify-center rounded-sm border ${
           pressed || expanded
-            ? 'border-interactive bg-interactive text-on-interactive'
+            ? 'border-fg bg-active text-on-active'
             : 'ui-btn--ghost border-transparent text-fg'
         }`}
       >

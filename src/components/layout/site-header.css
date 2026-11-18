@@ -1,29 +1,32 @@
 /* Header y menú desplegable (etapa 2). El header toma el tono de la sección que tiene debajo
    (data-tone; ver toneRegistry.ts) y, si esa sección lo pide, flota transparente (data-float).
    El cambio de tono es instantáneo: solo se animan transform y opacity. */
-/* Paleta D96: sobre secciones crema el header va en rosa, y la selección de dentro (ES/EN) pasa a
-   crema para seguir viéndose; sobre secciones rosa claro va en crema. Sus controles usan la línea
-   negra: el marrón no llega a 3:1 sobre los rosas. [data-tone] sube la especificidad para no
-   depender del orden de las hojas (D93). */
+/* Paleta D100: la cabecera es rosa (realce) con un degradado sutil hacia rosa claro, el único
+   permitido junto al del hero; la selección de dentro (ES/EN, menú) pasa a crema para seguir
+   viéndose. Sus controles usan la línea negra: el marrón no llega a 3:1 sobre los rosas.
+   [data-tone] sube la especificidad para no depender del orden de las hojas (D93). */
 .site-header {
   border-bottom: 1px solid var(--border-subtle);
   background-color: var(--bg-strong);
+  background-image: linear-gradient(180deg, var(--bg-strong) 55%, var(--bg-accent));
 }
 
 .site-header[data-tone] {
   --border-strong: var(--text-on-accent);
-  --interactive-primary: var(--bg-primary);
+  --interactive-active: var(--bg-primary);
 }
 
 .site-header[data-tone='papel'] {
-  --interactive-primary: var(--bg-strong);
+  --interactive-active: var(--bg-strong);
   background-color: var(--bg-primary);
+  background-image: none;
 }
 
 /* Sobre una sección a pantalla completa: sin fondo ni línea. Con el menú abierto vuelve a ser sólido. */
 .site-header[data-float]:not([data-open]) {
   border-bottom-color: transparent;
   background-color: transparent;
+  background-image: none;
 }
 
 /* Abierto, queda por encima del chat y de WhatsApp para que el velo los cubra. */

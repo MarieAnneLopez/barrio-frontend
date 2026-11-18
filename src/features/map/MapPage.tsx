@@ -20,7 +20,7 @@ export function MapPage() {
             <li key={category.slug}>
               <Link
                 to={categoryPath(category.slug)}
-                className="ui-pressable ui-btn--secondary flex min-h-11 items-center gap-3 rounded-md border border-line-strong bg-surface px-4 py-3 text-fg no-underline"
+                className="ui-pressable ui-btn--secondary flex min-h-11 items-center gap-3 rounded-md border border-fg bg-secondary px-4 py-3 text-on-mark no-underline"
               >
                 <span aria-hidden="true" className="text-step-1">{category.emoji}</span>
                 {t(`categories.${category.slug}.name`)}

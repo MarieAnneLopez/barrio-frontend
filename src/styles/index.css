@@ -30,6 +30,12 @@
   --color-fg-secondary: var(--text-secondary);
   --color-fg-muted: var(--text-muted);
   --color-on-interactive: var(--text-on-interactive);
+  --color-on-mark: var(--text-on-highlight);
+  --color-on-band: var(--text-on-band);
+  --color-title: var(--text-title);
+  --color-secondary: var(--interactive-secondary);
+  --color-on-hover: var(--text-on-hover);
+  --color-on-active: var(--text-on-active);
   --color-line: var(--border-subtle);
   --color-line-strong: var(--border-strong);
   --color-glass: var(--glass-fill);

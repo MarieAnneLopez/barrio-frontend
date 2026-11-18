@@ -31,7 +31,7 @@ export function ChatBubble({ message, animate, onNavigate }: ChatBubbleProps) {
   const { t } = useTranslation();
   if (message.from === 'user') {
     return (
-      <div className="chat-msg max-w-[85%] self-end rounded-lg bg-interactive px-3 py-2 text-step--1 text-on-interactive">
+      <div className="chat-msg max-w-[85%] self-end rounded-lg bg-strong px-3 py-2 text-step--1 text-on-pink">
         <span className="sr-only">{t('chat.you')}: </span>
         {message.text}
       </div>

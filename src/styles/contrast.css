@@ -20,6 +20,12 @@
   --interactive-hover: #ffffff;
   --interactive-active: #ffffff;
   --text-on-interactive: #000000;
+  --text-on-highlight: #ffffff;
+  --text-on-band: #ffffff;
+  --text-title: #ffffff;
+  --interactive-secondary: #000000;
+  --text-on-hover: #000000;
+  --text-on-active: #000000;
   --border-ink: #ffffff;
   --focus-ring-inner: #000000;
   --border-subtle: #ffffff;

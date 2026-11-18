@@ -1,13 +1,15 @@
 import { readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { classPairs, isOpaque, MODES, readSrc, srcDir, THEME, tintedRatio, tokenRatio } from '../test/classContrast';
+import { classPairs, isOpaque, MODES, readSrc, srcDir, THEME, tokenRatio } from '../test/classContrast';
 
 // tokens.test.ts mide pares de tokens; aquí se mide lo que los componentes juntan de verdad.
 // Límite conocido: solo ve un fondo y un texto escritos en la misma cadena de clases (o en la
 // misma regla CSS); un texto dentro de otro elemento se prueba en su componente (ver Input.test).
 const uiCss = readSrc('components', 'ui', 'ui.css').replace(/\/\*[\s\S]*?\*\//g, '');
-// Texto de los botones «ghost» y la superficie donde viven (encabezado, menú, barra de accesibilidad, fichas).
-const GHOST = [['--text-primary', '--bg-primary'], ['--text-secondary', '--bg-primary'], ['--text-on-soft', '--bg-soft'], ['--accent-soft', '--bg-surface']];
+// El CTA (ui-btn--primary) lleva texto crema sobre marrón, 3,56:1: ui.css lo fuerza a 19 px en
+// negrita, así que cuenta como texto grande y le basta 3:1 (WCAG 1.4.3).
+const CTA = /\bui-btn--primary\b/;
+const cta = (/\.ui-btn--primary\s*\{([^}]*)\}/.exec(uiCss)?.[1] ?? '');
 const components = readdirSync(srcDir, { recursive: true, encoding: 'utf8' })
   .filter((file) => file.endsWith('.tsx') && !file.includes('.test.'));
 
@@ -28,10 +30,11 @@ describe.each(MODES)('lo que los componentes combinan, en modo %s (D84)', (_mode
     let seen = 0;
     for (const file of components) {
       for (const chunk of readSrc(file).split(/['"`]|\$\{|\}/)) {
+        const minimum = CTA.test(chunk) ? 3 : 4.5;
         for (const { bg, text } of classPairs(chunk)) {
           seen += 1;
           const ratio = tokenRatio(THEME.get(text) ?? '', THEME.get(bg) ?? '', vars);
-          if (ratio < 4.5) failures.push(`${file}: bg-${bg} + text-${text} = ${ratio.toFixed(2)}:1`);
+          if (ratio < minimum) failures.push(`${file}: bg-${bg} + text-${text} = ${ratio.toFixed(2)}:1`);
         }
       }
     }
@@ -55,12 +58,18 @@ describe.each(MODES)('lo que los componentes combinan, en modo %s (D84)', (_mode
     expect(failures).toEqual([]);
   });
 
-  it('el hover «ghost» se tiñe con el color del propio texto, así que nunca lo iguala (≥ 4,5:1)', () => {
+  it('el hover «ghost» pone el amarillo con su texto negro, como los demás (≥ 4,5:1)', () => {
     const body = /\.ui-btn--ghost:hover\s*\{([^}]*)\}/.exec(uiCss)?.[1] ?? '';
-    const percent = Number(/background-color:\s*color-mix\(in srgb,\s*currentColor\s+(\d+)%,\s*transparent\)/.exec(body)?.[1]);
-    expect(percent).toBeGreaterThan(0);
-    for (const [text = '', bg = ''] of GHOST) {
-      expect(tintedRatio(`var(${text})`, `var(${bg})`, percent, vars), `${text} sobre ${bg}`).toBeGreaterThanOrEqual(4.5);
-    }
+    expect(body).toContain('background-color: var(--interactive-hover);');
+    expect(body).toContain('color: var(--text-on-hover);');
+    expect(tokenRatio('var(--text-on-hover)', 'var(--interactive-hover)', vars)).toBeGreaterThanOrEqual(4.5);
+  });
+});
+
+describe('el CTA es texto grande de verdad (D100)', () => {
+  it('ui.css fuerza 19 px (≥ 18,66) en Inter 700 a todo ui-btn--primary', () => {
+    expect(cta).toContain('font-size: 1.1875rem;');
+    expect(cta).toContain('font-weight: 700;');
+    expect(cta).toContain('font-family: var(--ff-heading);');
   });
 });

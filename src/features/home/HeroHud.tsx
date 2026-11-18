@@ -64,7 +64,7 @@ export function HeroHud({ legend, sober = false }: { legend: ReactNode; sober?: 
             <div className="flex flex-wrap gap-2">
               <Link
                 to={categoryPath(selected.slug)}
-                className="ui-pressable ui-btn--primary inline-flex min-h-9 items-center rounded-sm border border-interactive bg-interactive px-3 text-step--1 text-on-interactive no-underline"
+                className="ui-pressable ui-btn--secondary inline-flex min-h-9 items-center rounded-sm border border-fg bg-secondary px-3 text-step--1 text-on-mark no-underline"
               >
                 {t('hero.openModule', { module: t(`categories.${selected.slug}.name`) })}
               </Link>

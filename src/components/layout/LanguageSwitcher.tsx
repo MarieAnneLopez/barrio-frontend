@@ -22,7 +22,7 @@ export function LanguageSwitcher() {
             aria-pressed={active}
             onClick={() => void setLanguage(lng)}
             className={`ui-pressable min-h-9 min-w-11 rounded-sm px-2 font-mono text-step--1 font-medium uppercase tracking-wider ${
-              active ? 'bg-interactive text-on-interactive' : 'ui-btn--ghost text-fg-secondary'
+              active ? 'bg-active text-on-active' : 'ui-btn--ghost text-fg-secondary'
             }`}
           >
             {lng}

@@ -14,8 +14,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const VARIANT: Record<Variant, string> = {
   primary: 'ui-btn--primary bg-interactive text-on-interactive border-interactive',
-  // De contorno sobre noche; dentro de un tono papel queda como botón oscuro (tone.css).
-  secondary: 'ui-btn--secondary bg-surface text-fg border-line-strong',
+  // Secundario amarillo con línea negra (D100): amarillo y crema casi no se distinguen.
+  secondary: 'ui-btn--secondary bg-secondary text-on-mark border-fg',
   ghost: 'ui-btn--ghost bg-transparent text-fg border-transparent',
 };
 
