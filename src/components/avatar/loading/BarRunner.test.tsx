@@ -40,4 +40,10 @@ describe('la Mini Marie de la barra de carga', () => {
     expect(strip).toHaveAttribute('src', spriteUrl('run', 210)); // el mismo atlas que la Mini Marie grande (D111)
     expect(container.querySelectorAll('source')).toHaveLength(0);
   });
+
+  it('sin atlas compartido (pantallas grandes) usa sus fuentes por densidad, sin reducir el de 420', () => {
+    const { container } = render(<BarRunner shown={0.5} />);
+    expect(container.querySelector('img')).toHaveAttribute('src', spriteUrl('run', 105));
+    expect(container.querySelectorAll('source')).toHaveLength(2);
+  });
 });

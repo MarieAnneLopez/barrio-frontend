@@ -28,9 +28,10 @@ export function LoadingScreen() {
   const size = useMediaQuery(LOADER_WIDE, true) ? 420 : 210;
   const reduced = useReducedMotion();
   const track = useRef<HTMLDivElement>(null);
-  // Las dos Mini Marie comparten un solo atlas a 1× (D111): a 2× y 3× el navegador lo amplía entero y
-  // nítido (pixelated); bajar además el doble costaba ~400 KB en el celular antes de ver la página.
-  const rider = useCallback((shown: number) => <BarRunner shown={shown} atlas={size} />, [size]);
+  // En el celular las dos Mini Marie comparten el atlas de 210 (D111; la de la barra lo reduce a la
+  // mitad exacta): bajar además el doble costaba ~400 KB antes de ver la página. En pantallas grandes
+  // la de la barra usa el suyo (reducir el de 420 a la cuarta parte la dejaba dentada).
+  const rider = useCallback((shown: number) => <BarRunner shown={shown} atlas={size === 210 ? 210 : undefined} />, [size]);
 
   useEffect(() => setVisible(visible), [visible, setVisible]);
 

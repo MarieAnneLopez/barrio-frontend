@@ -9,10 +9,10 @@ import { BAR_RUNNER_SIZE, barWidth, runnerFrame } from './runnerFrame';
  * si la carga se detiene, ella se detiene. Va detrás de la punta, lejos de las chispas amarillas
  * (Mini Marie nunca sobre amarillo). Con movimiento reducido, su cuadro dibujado, quieto.
  */
-export function BarRunner({ shown, atlas }: { shown: number; atlas: SpriteSize<'run'> }) {
+export function BarRunner({ shown, atlas }: { shown: number; atlas?: SpriteSize<'run'> | undefined }) {
   return (
     <span className="bar-runner">
-      <SequenceSprite name="run" size={BAR_RUNNER_SIZE} atlas={atlas} playing={false} pose={3} frame={runnerFrame(shown, barWidth())} />
+      <SequenceSprite name="run" size={BAR_RUNNER_SIZE} {...(atlas ? { atlas } : {})} playing={false} pose={3} frame={runnerFrame(shown, barWidth())} />
     </span>
   );
 }
