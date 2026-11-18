@@ -9,6 +9,9 @@ import { FRAME_MS, sequenceSpec } from './sequences';
  */
 export const RUN = { direction: 1, facing: 'right', fps: 1000 / FRAME_MS.run } as const;
 
+/** Pantalla donde cabe a 420 px de alto (si no, 210). index.html precarga el atlas con esta misma condición. */
+export const LOADER_WIDE = '(min-width: 640px) and (min-height: 700px)';
+
 const STRIDE_AT_420 = 304;
 const FRAMES = sequenceSpec('run').frames;
 

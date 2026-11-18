@@ -13,6 +13,8 @@ interface Props<N extends SequenceName> {
   playing?: boolean;
   /** Desfase dentro del ciclo (0–1): varias a la vez no se mueven al unísono. */
   phase?: number;
+  /** Lejos de la pantalla (el pie de página): el atlas se baja al acercarse y se decodifica aparte. */
+  lazy?: boolean;
   className?: string;
 }
 
@@ -29,7 +31,8 @@ const DENSER = [[4, 2.01], [2, 1.01]] as const;
  * que la caja (el brazo del saludo sale por la derecha) sin mover la maqueta. Movimiento reducido:
  * el cuadro dibujado `pose`, quieto. Decorativa: el texto lo da quien la usa.
  */
-export function SequenceSprite<N extends SequenceName>({ name, size, pose = 0, playing = true, phase = 0, className = '' }: Props<N>) {
+export function SequenceSprite<N extends SequenceName>(props: Props<N>) {
+  const { name, size, pose = 0, playing = true, phase = 0, lazy = false, className = '' } = props;
   const reduced = useReducedMotion();
   const { sizes, grid: [cols, rows], keys } = sequenceSpec(name);
   const width = cellWidth(name, size);
@@ -57,6 +60,8 @@ export function SequenceSprite<N extends SequenceName>({ name, size, pose = 0, p
               src={spriteUrl(name, size)}
               alt=""
               draggable={false}
+              loading={lazy ? 'lazy' : undefined}
+              decoding={lazy ? 'async' : undefined}
               style={{ ...across, width: cols * cell, height: rows * size }}
             />
           </picture>

@@ -25,7 +25,7 @@ export function Footer() {
         <div className={COLUMN}>
           <FooterContact />
           <div className="grid gap-10 lg:grid-cols-[1fr_1fr]">
-            {pathname === '/creadora' ? null : <CreatorProfileSection headingLevel={2} />}
+            {pathname === '/creadora' ? null : <CreatorProfileSection headingLevel={2} lazy />}
             {pathname === '/preguntas' ? null : (
               <section aria-labelledby="footer-faq" className="flex flex-col gap-4">
                 <h2 id="footer-faq" className="m-0 text-step-1 text-fg">

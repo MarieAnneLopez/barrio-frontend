@@ -36,6 +36,8 @@ describe('Footer', () => {
       '/assets/avatar/idle/idle_560.webp', '/assets/avatar/idle/idle_280.webp',
     ]);
     expect(sprite).toHaveAttribute('data-playing'); // sprites32: respira en un ciclo de 32 cuadros
+    // Al pie de cada página: su atlas (122 KB a 1×) se baja solo cuando el pie se acerca.
+    expect(sprite?.querySelector('img')).toHaveAttribute('loading', 'lazy');
     expect(within(card).getByRole('link', { name: /WhatsApp/ })).toHaveAttribute('href', SPEC_WHATSAPP);
   });
 

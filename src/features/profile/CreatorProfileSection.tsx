@@ -8,6 +8,8 @@ import { whatsappUrl } from '../../lib/contact';
 interface CreatorProfileSectionProps {
   /** Nivel del título de la tarjeta según dónde se use. */
   headingLevel?: 2 | 3;
+  /** En el pie de página: Mini Marie se baja solo cuando el pie se acerca a la pantalla. */
+  lazy?: boolean;
 }
 
 /**
@@ -15,7 +17,7 @@ interface CreatorProfileSectionProps {
  * sprites32), y el contacto. Mini Marie va a escala entera como en el resto del sitio (D88):
  * 64 × 140 px, con su recurso doble o cuádruple.
  */
-export function CreatorProfileSection({ headingLevel = 2 }: CreatorProfileSectionProps) {
+export function CreatorProfileSection({ headingLevel = 2, lazy = false }: CreatorProfileSectionProps) {
   const { t } = useTranslation();
   const Heading = `h${headingLevel}` as const;
   const titleId = useId();
@@ -23,7 +25,7 @@ export function CreatorProfileSection({ headingLevel = 2 }: CreatorProfileSectio
   return (
     <Card as="section" aria-labelledby={titleId} className="flex flex-col gap-5 sm:flex-row">
       <span role="img" aria-label={t('creator.avatarAlt')} className="self-center leading-none sm:self-start">
-        <SequenceSprite name="idle" size={140} />
+        <SequenceSprite name="idle" size={140} lazy={lazy} />
       </span>
       <div className="flex flex-col gap-3">
         <p className="ui-eyebrow m-0 text-fg-muted">{t('creator.title')}</p>

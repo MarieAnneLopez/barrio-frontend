@@ -5,7 +5,7 @@ import { useLoadingScreen } from '../../hooks/useLoadingScreen';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { useLoadingScreenStore } from '../../store/loadingScreenStore';
-import { runKeyframes, runPath } from './loadingRun';
+import { LOADER_WIDE, runKeyframes, runPath } from './loadingRun';
 import { cellWidth } from './sequences';
 import { SequenceSprite } from './SequenceSprite';
 
@@ -20,7 +20,7 @@ export function LoadingScreen() {
   const { t } = useTranslation();
   const { visible, leaving } = useLoadingScreen();
   const setVisible = useLoadingScreenStore((s) => s.setVisible);
-  const size = useMediaQuery('(min-width: 640px) and (min-height: 700px)', true) ? 420 : 210;
+  const size = useMediaQuery(LOADER_WIDE, true) ? 420 : 210;
   const reduced = useReducedMotion();
   const track = useRef<HTMLDivElement>(null);
 
