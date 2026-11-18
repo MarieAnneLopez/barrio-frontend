@@ -47,9 +47,11 @@ describe('edificios reales de El Tintal', () => {
     expect(result.stats.tiles).toBeLessThan(100);
   });
 
-  it('presupuesto: menos de 600 000 triángulos y construcción en menos de 5 s (medida en el informe)', () => {
+  it('presupuesto: menos de 600 000 triángulos y construcción en menos de 1 s (mide ~0,1 s)', () => {
     expect(result.stats.triangles).toBeLessThan(600_000);
-    expect(result.stats.ms).toBeLessThan(5000);
+    // Tope holgado para una máquina cargada (dos procesos de prueba a la vez), pero que detecta
+    // una regresión de 10×: con los datos reales tarda 80-110 ms en caliente y 130-145 ms en frío.
+    expect(result.stats.ms).toBeLessThan(1000);
   });
 
   it('respaldo en tandas: ningún paso del constructor dura más que una tanda (reloj real)', () => {
