@@ -4,6 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { PhotoMeta } from './RibbonCaption';
 import type { RibbonPhoto } from './ribbonPhotos';
 
+/** La primera fila (hasta 3 columnas) entra sin diferir; la primera foto es el LCP de Galería (D116). */
+const FIRST_ROW = 3;
+// React 18 no conoce `fetchPriority`: va en minúsculas, como atributo HTML.
+const HIGH = { fetchpriority: 'high' } as Record<string, string>;
+
 interface RibbonGridProps {
   photos: readonly RibbonPhoto[];
   onOpen(index: number): void;
@@ -29,9 +34,10 @@ export function RibbonGrid({ photos, onOpen }: RibbonGridProps) {
             >
               <img
                 {...photo.thumb}
+                {...(index === 0 ? HIGH : {})}
                 sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw"
                 alt=""
-                loading="lazy"
+                loading={index < FIRST_ROW ? 'eager' : 'lazy'}
                 decoding="async"
                 className="ribbon-tile__img"
               />
