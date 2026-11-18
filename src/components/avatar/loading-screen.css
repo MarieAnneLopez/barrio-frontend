@@ -23,10 +23,13 @@
 }
 
 /* Avanza un cuadro cada vez, en px enteros: LoadingScreen le pone una posición redondeada por cuadro
-   con la API de animaciones (sprites32: zancada / 32 por cuadro, sin acumular error). */
+   con la API de animaciones (sprites32: zancada / 32 por cuadro, sin acumular error). Interlineado 0:
+   Mini Marie (inline-block) se apoya en la línea base, y sin esto quedaría sobre el hueco del
+   interlineado, ~9 px por encima del suelo (como en la bienvenida y la sentada). */
 .loading-screen__track {
   position: absolute;
   bottom: 0;
+  line-height: 0;
   will-change: transform;
 }
 
