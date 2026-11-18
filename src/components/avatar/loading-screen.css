@@ -1,5 +1,5 @@
-/* Pantalla de carga (H33; interfaz elegante D84): fondo noche, Mini Marie corriendo y una línea
-   ámbar de 1 px por suelo. Solo transform y opacity. */
+/* Pantalla de carga (H33; interfaz elegante D84): fondo noche, Mini Marie cruzando la pantalla y una
+   línea ámbar de 1 px por suelo. Solo transform y opacity. */
 .loading-screen {
   display: flex;
   flex-direction: column;
@@ -14,32 +14,37 @@
   opacity: 0;
 }
 
+/* Escenario a todo el ancho: ella entra por la izquierda y sale por la derecha. */
 .loading-screen__stage {
-  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: min(100% - 3rem, 480px);
+  align-items: flex-start;
+  width: 100%;
   overflow: hidden;
 }
 
-/* Suelo: una línea de 1 px con trazos ámbar que pasan hacia la izquierda; ella corre en su sitio. */
-.loading-screen__ground {
-  width: calc(100% + 64px);
-  height: 1px;
-  align-self: flex-start;
-  background-color: var(--border-subtle);
-  background-image: repeating-linear-gradient(90deg, var(--text-highlight) 0 40px, transparent 40px 64px);
-  animation: loading-ground 720ms linear infinite; /* = una zancada (8 × 90 ms) */
+/* Avanza en pasos enteros, uno por cuadro (duración y steps() los pone LoadingScreen). */
+.loading-screen__track {
+  animation-name: loading-run;
+  animation-iteration-count: infinite;
+  will-change: transform;
 }
 
-@keyframes loading-ground {
+@keyframes loading-run {
   from {
-    transform: translateX(0);
+    transform: translate3d(var(--run-start), 0, 0);
   }
   to {
-    transform: translateX(-64px);
+    transform: translate3d(var(--run-end), 0, 0);
   }
+}
+
+/* Suelo: una línea quieta de 1 px con trazos ámbar; el pie no puede patinar contra ella. */
+.loading-screen__ground {
+  width: 100%;
+  height: 1px;
+  background-color: var(--border-subtle);
+  background-image: repeating-linear-gradient(90deg, var(--text-highlight) 0 40px, transparent 40px 64px);
 }
 
 .loading-screen__text {
@@ -52,13 +57,15 @@
   color: var(--text-primary); /* papel sobre noche: 8,67:1 */
 }
 
-/* Movimiento reducido: pose fija y suelo quieto; el fundido de salida se mantiene. */
+/* Movimiento reducido: pose fija al centro; el fundido de salida se mantiene. */
 @media (prefers-reduced-motion: reduce) {
-  .loading-screen__ground {
+  .loading-screen__track {
     animation: none;
+    margin-inline: auto;
   }
 }
 
-:root.reduce-motion .loading-screen__ground {
+:root.reduce-motion .loading-screen__track {
   animation: none;
+  margin-inline: auto;
 }

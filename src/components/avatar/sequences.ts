@@ -2,8 +2,8 @@ import scales from './spriteScales.json';
 
 export type SequenceName = 'run' | 'wave' | 'sit' | 'idle';
 
-/** Milisegundos por cuadro: carrera ágil (8 × 90 = 720 ms por zancada), saludo pausado, sentada a 8 fps. */
-export const FRAME_MS: Record<SequenceName, number> = { run: 90, wave: 140, sit: 125, idle: 1000 };
+/** Milisegundos por cuadro: carrera a 10 fps (8 × 100 = 800 ms por zancada), saludo pausado, sentada a 8 fps. */
+export const FRAME_MS: Record<SequenceName, number> = { run: 100, wave: 140, sit: 125, idle: 1000 };
 
 /**
  * Tamaños fijos (alto en px) de cada secuencia: «escala entera» (D86). Los dibujos de Mini Marie
