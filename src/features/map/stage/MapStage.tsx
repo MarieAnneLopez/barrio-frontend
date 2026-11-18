@@ -57,7 +57,6 @@ export function MapStage({ label, title, emoji, children, onOpenPlace, mascot = 
   // cierra en el mismo render que abre la ficha (el foco pasa a la ficha, useCardFocus, y no se pierde).
   useEffect(() => {
     if (wide) return undefined;
-    if (useSelectionStore.getState().selected) setOpen(false);
     return useSelectionStore.subscribe((state, prev) => {
       if (state.selected && state.selected !== prev.selected) setOpen(false);
     });
