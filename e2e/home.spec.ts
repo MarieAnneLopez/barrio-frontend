@@ -38,10 +38,11 @@ test('Inicio: 4 capítulos, HUD de la maqueta a la vista y reel cargado', async 
       return style.position === 'fixed' && style.pointerEvents !== 'none' && shown(el);
     });
     // La ficha de lo elegido (SelectionCard) aparece al final de la fila de abajo: una sonda de su
-    // tamaño máximo (HeroHud: w-[min(22rem,100%)], max-h-[min(60svh,32rem)]) ocupa ese sitio.
+    // tamaño máximo (HeroHud: w-[min(22rem,100%)], max-h-[min(60svh,32rem)]) ocupa ese sitio y,
+    // como la ficha (min-h-0, desplaza por dentro), se encoge si no cabe.
     const probe = document.createElement('div');
     probe.textContent = 'ficha de lo elegido';
-    probe.style.cssText = 'margin-left:auto;width:min(22rem,100%);height:min(60svh,32rem)';
+    probe.style.cssText = 'margin-left:auto;width:min(22rem,100%);height:min(60svh,32rem);min-height:0;overflow-y:auto';
     document.querySelector('[data-chapter="3"] [aria-live="polite"]')?.parentElement?.append(probe);
     const hud = [...document.querySelectorAll('[data-chapter="3"] :is(.ui-panel, button, [data-mascot] .sequence)'), probe].filter(shown);
     const hits: string[] = [];

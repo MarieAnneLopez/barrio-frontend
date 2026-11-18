@@ -43,7 +43,9 @@ export function HeroHud({ legend, sober = false }: { legend: ReactNode; sober?: 
         </div>
       </div>
       {legend}
-      <div className={`mt-auto flex min-h-0 flex-wrap items-end gap-2 ${sober ? 'pr-14 md:pr-40' : ''}`}>
+      {/* En el celular la fila de abajo es una columna: la ficha se encoge al alto que queda (y
+          desplaza por dentro) en vez de bajar hasta el chat y WhatsApp (e2e/home.spec.ts a 390 px). */}
+      <div className={`mt-auto flex min-h-0 gap-2 ${sober ? 'flex-col items-start pr-14 md:flex-row md:flex-wrap md:items-end md:pr-40' : 'flex-wrap items-end'}`}>
         <div className={`${panel} max-w-[22rem]`} aria-live="polite">
           {hovered ? <p className="m-0 font-mono text-step--1 text-fg">{hovered}</p> : null}
           {hovered || sober ? null : (
@@ -54,7 +56,7 @@ export function HeroHud({ legend, sober = false }: { legend: ReactNode; sober?: 
             <MapSources bare />
           </div>
         </div>
-        <SelectionCard returnFocus={recenterButton} className="ml-auto max-h-[min(60svh,32rem)] w-[min(22rem,100%)]" />
+        <SelectionCard returnFocus={recenterButton} className="ml-auto max-h-[min(60svh,32rem)] min-h-0 w-[min(22rem,100%)]" />
       </div>
     </div>
   );
