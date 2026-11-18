@@ -1,7 +1,7 @@
 // Posiciones de la bienvenida (H33, D82): 8 Mini Marie que salen desde fuera de la pantalla
-// por sus esquinas y bordes, de cabeza hacia adentro, y saludan con los 7 cuadros de Marie.
+// por sus esquinas y el centro de sus bordes, de cabeza hacia adentro, y saludan.
 import type { WelcomeGeometry } from './welcomeTimeline';
-import { placePeeks, SLOTS, type PeekSlot, type Rect } from './welcomePeeks';
+import { placePeeks, SLOTS, type PeekSlot, type Size } from './welcomePeeks';
 
 /**
  * pose: cuadro fijo con movimiento reducido (índice desde 0; 1–4 = brazo arriba).
@@ -10,24 +10,25 @@ import { placePeeks, SLOTS, type PeekSlot, type Rect } from './welcomePeeks';
 const POSES = [1, 2, 3, 4, 2, 3, 1, 4];
 export const PEEK_SLOTS = SLOTS.map((id, i) => ({ id, pose: POSES[i] ?? 2, phase: ((i * 3) % 8) / 8 }));
 
-/** Obstáculos que ninguna puede tapar: letrero, botón, chat, WhatsApp y barra de accesibilidad. */
-const OBSTACLES = '#welcome-sign, .welcome-cta, .chat-launcher, .ui-whatsapp, aside.fixed';
+/** Pantalla visible de verdad: visualViewport, que ya descuenta la barra de scroll (jsdom no la tiene). */
+export function viewportSize(): Size {
+  const visual = typeof window.visualViewport === 'object' ? window.visualViewport : null;
+  const root = document.documentElement;
+  return {
+    w: visual?.width || root.clientWidth || window.innerWidth,
+    h: visual?.height || root.clientHeight || window.innerHeight,
+  };
+}
 
-/** Mide la pantalla y los obstáculos y ancla cada Mini Marie (left/top en px enteros, D86). */
+/** Ancla cada Mini Marie en su esquina o en el centro de su borde (left/top en px enteros, D86). */
 export function layoutPeeks(root: HTMLElement): void {
-  const body = root.querySelector<HTMLElement>('.welcome-peek__body');
-  const sprite = { w: body?.offsetWidth ?? 0, h: body?.offsetHeight ?? 0 };
-  const rects: Rect[] = [...document.querySelectorAll(OBSTACLES)]
-    .map((el) => el.getBoundingClientRect())
-    .filter((r) => r.width > 0 && r.height > 0);
-  const placed = placePeeks({ w: window.innerWidth, h: window.innerHeight }, sprite, rects);
+  const placed = placePeeks(viewportSize());
   root.querySelectorAll<HTMLElement>('.welcome-peek').forEach((el) => {
     const spot = placed[el.dataset.slot as PeekSlot];
     if (!spot) return;
     el.style.left = `${Math.round(spot.x)}px`;
     el.style.top = `${Math.round(spot.y)}px`;
     el.style.transform = `rotate(${spot.rotation}deg)`; // cabeza siempre hacia adentro
-    el.dataset.shifted = String(spot.shifted);
     el.dataset.diagonal = String(spot.rotation % 90 !== 0); // a 45° no hay píxel entero: se suaviza
   });
 }

@@ -7,13 +7,15 @@
   backdrop-filter: blur(6px);
 }
 
-/* Mini Marie que se asoman: 8 anclas sin tamaño en las esquinas y el centro de cada borde (JS las
-   corre por el borde si chocan, en píxeles enteros); la ancla gira para que la cabeza apunte
-   adentro y GSAP mueve solo el cuerpo, así no pisa esa colocación. Tamaño fijo (escala entera):
-   160 px de alto, u 80 px en pantallas de menos de 640 px; --peek-rise es el 46 % que asoma. */
+/* Mini Marie que se asoman: 8 anclas fijas sin tamaño en las esquinas exactas y el centro de cada
+   borde de la pantalla visible (JS las pone en píxeles enteros; nada las corre), en una capa por
+   encima del letrero y del botón; la ancla gira para que la cabeza apunte adentro y GSAP mueve solo
+   el cuerpo. Tamaño fijo (escala entera): 160 px de alto, u 80 px en pantallas de menos de 640 px;
+   --peek-rise es el 46 % que asoma. */
 .welcome-peek {
   --peek-rise: 74px;
   position: absolute;
+  z-index: 2;
   width: 0;
   height: 0;
   pointer-events: none;

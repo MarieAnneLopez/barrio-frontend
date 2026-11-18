@@ -12,7 +12,12 @@ export function useWelcomeRelayout(root: RefObject<HTMLElement>, open: boolean, 
     if (!open || !node) return undefined;
     layoutPeeks(node);
     const relayout = () => layoutPeeks(node);
+    const visual = typeof window.visualViewport === 'object' ? window.visualViewport : null;
     window.addEventListener('resize', relayout);
-    return () => window.removeEventListener('resize', relayout);
+    visual?.addEventListener('resize', relayout); // la barra del navegador del móvil al aparecer o irse
+    return () => {
+      window.removeEventListener('resize', relayout);
+      visual?.removeEventListener('resize', relayout);
+    };
   }, [root, open, size]);
 }
