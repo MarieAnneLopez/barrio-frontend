@@ -357,7 +357,8 @@
       "title": "Leyenda y filtro",
       "noData": "sin datos",
       "visible": "(visible en la maqueta)",
-      "hidden": "(oculta)"
+      "hidden": "(oculta)",
+      "notDrawn": "no se dibuja"
     },
     "recenter": "Recentrar",
     "touchHint": "Usa dos dedos para acercar o girar la maqueta; con un dedo sigues bajando por la página."
@@ -403,6 +404,7 @@
     "openModule": "Abrir la sección de {{module}}",
     "sample": "Dato de ejemplo: no se dibuja en la maqueta.",
     "noPlace": "Sin ubicación en el mapa.",
+    "wholeArea": "Abarca el barrio entero y más: la maqueta no la señala.",
     "showOnModel": "Ver en la maqueta"
   },
   "carousel": {

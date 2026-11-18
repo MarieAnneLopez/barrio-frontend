@@ -1,7 +1,7 @@
 // Qué módulos dibuja la maqueta según la sección (gran actualización): en el Inicio y en Mapa 3D, los
 // 14 (la leyenda oculta los que el visitante quiera); dentro de un módulo, solo los suyos, con la
 // búsqueda y los filtros de su lista (placeScope). Función pura.
-import { findCategory } from '../../lib/categoryConfig';
+import { findCategory, onTheModel } from '../../lib/categoryConfig';
 import type { Projection } from '../projection';
 import type { CategoryData } from '../useTintalData';
 import { buildPlaceLayer, type ModuleCollection, type PlaceLayer } from './placeLayers';
@@ -20,8 +20,13 @@ export interface PlaceScope {
  */
 const DENSE = new Set(['datos-catastrales', 'estado-calles']);
 
-/** La localidad es una ficha (FICHA), no un lugar que se pueda señalar: solo su contorno. */
-const markable = (slug: string) => findCategory(slug)?.geometry !== 'FICHA';
+const NOTHING: ModuleCollection = { type: 'FeatureCollection', features: [] };
+
+/**
+ * La localidad (FICHA) no se dibuja (onTheModel): su capa queda vacía, sin contorno ni marcador, y
+ * la leyenda lo dice. Su contorno de Kennedy salía de la isla y flotaba sobre el cielo.
+ */
+const drawable = (slug: string, collection: ModuleCollection) => (onTheModel(slug) ? collection : NOTHING);
 
 export function sceneLayers(
   places: readonly CategoryData[] | null,
@@ -32,12 +37,12 @@ export function sceneLayers(
     const own = scope.collection ?? places?.find((c) => c.slug === scope.slug)?.collection ?? null;
     const emoji = findCategory(scope.slug)?.emoji ?? '';
     const dense = DENSE.has(scope.slug);
-    const rule = { shapeMarkers: markable(scope.slug) && !dense, pickShapes: dense };
-    return own ? [buildPlaceLayer(scope.slug, emoji, own, project, rule)] : [];
+    const rule = { shapeMarkers: !dense, pickShapes: dense };
+    return own ? [buildPlaceLayer(scope.slug, emoji, drawable(scope.slug, own), project, rule)] : [];
   }
   return (places ?? []).flatMap(({ slug, emoji, collection }) =>
     collection
-      ? [buildPlaceLayer(slug, emoji, collection, project, { shapeMarkers: markable(slug) && !DENSE.has(slug) })]
+      ? [buildPlaceLayer(slug, emoji, drawable(slug, collection), project, { shapeMarkers: !DENSE.has(slug) })]
       : [],
   );
 }

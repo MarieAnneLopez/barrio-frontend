@@ -20,13 +20,21 @@ const PLACES = [
 const ALL = { slug: null, collection: null };
 
 describe('qué módulos dibuja la maqueta', () => {
-  it('en el Inicio y en Mapa 3D, todos los que tienen datos; lotes, calles y localidad, sin marcadores', () => {
+  it('en el Inicio y en Mapa 3D, todos los que tienen datos; lotes y calles, sin marcadores', () => {
     const layers = sceneLayers(PLACES, ALL, project);
     expect(layers.map((l) => [l.slug, l.ids])).toEqual([
       ['zonas-verdes', [1, 2]], ['datos-catastrales', []], ['estado-calles', []], ['localidad', []],
     ]);
-    expect(layers.map((l) => l.drawn)).toEqual([2, 1, 1, 1]);
+    expect(layers.map((l) => l.drawn)).toEqual([2, 1, 1, 0]);
     expect(layers.every((l) => l.shapes === null)).toBe(true); // fuera de su sección, lotes y calles no se eligen
+  });
+
+  it('la localidad es una ficha de toda la zona: no se dibuja (su contorno salía de la isla al cielo)', () => {
+    const outside = sceneLayers(PLACES, ALL, project).find((l) => l.slug === 'localidad');
+    const own = sceneLayers(PLACES, { slug: 'localidad', collection: polygons(4) }, project)[0];
+    for (const layer of [outside, own]) {
+      expect([layer?.outline.length, layer?.markers.length, layer?.drawn, layer?.shapes]).toEqual([0, 0, 0, null]);
+    }
   });
 
   it('dentro de un módulo, solo los suyos y con la búsqueda y los filtros de su lista', () => {

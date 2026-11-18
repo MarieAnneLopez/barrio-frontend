@@ -31,7 +31,7 @@ describe('Mapa 3D (/mapa)', () => {
     await userEvent.click(await screen.findByRole('button', { name: 'Panel de información' }));
     const panel = screen.getByRole('region', { name: 'Información del mapa' });
     const legend = within(panel).getByRole('list', { name: 'Leyenda y filtro' });
-    expect(within(legend).getAllByRole('button')).toHaveLength(14);
+    expect(within(legend).getAllByRole('button')).toHaveLength(13); // la localidad no se dibuja: no se oculta
     const links = within(legend).getAllByRole('link');
     expect(links).toHaveLength(14);
     expect(links[0]).toHaveAccessibleName('Abrir la sección de Centros Educativos');

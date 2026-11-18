@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import type { ModuleItem } from '../../lib/apiTypes';
+import { onTheModel } from '../../lib/categoryConfig';
 import { labelOf, moduleFields } from '../../lib/moduleFields';
 import { isSampleRecord } from '../../lib/verification';
 import { useStage } from '../map/stage/stageContext';
@@ -17,6 +18,7 @@ interface ItemCardProps {
 /**
  * Tarjeta de un lugar en el panel del módulo: nombre, datos clave, verificación, detalle y «Ver en el
  * mapa» (lo elige y lleva la cámara hasta él). Un dato de ejemplo no se dibuja en la maqueta: lo dice.
+ * La localidad (la ficha de toda la zona) no se señala en la maqueta: sin «Ver en el mapa».
  */
 export function ItemCard({ slug, item, selected, onShowOnMap, onOpen }: ItemCardProps) {
   const { t, i18n } = useTranslation();
@@ -57,7 +59,7 @@ export function ItemCard({ slug, item, selected, onShowOnMap, onOpen }: ItemCard
           {t('modules.detail')}{' '}
           <span className="sr-only">{t('modules.detailOf', { name })}</span>
         </button>
-        {item.geometry && !sample ? (
+        {item.geometry && !sample && onTheModel(slug) ? (
           <button
             type="button"
             aria-pressed={selected}

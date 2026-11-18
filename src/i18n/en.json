@@ -357,7 +357,8 @@
       "title": "Legend and filter",
       "noData": "no data",
       "visible": "(shown on the model)",
-      "hidden": "(hidden)"
+      "hidden": "(hidden)",
+      "notDrawn": "not drawn"
     },
     "recenter": "Recenter",
     "touchHint": "Use two fingers to zoom or rotate the model; one finger keeps scrolling the page."
@@ -403,6 +404,7 @@
     "openModule": "Open the {{module}} section",
     "sample": "Sample record: not drawn on the model.",
     "noPlace": "No location on the map.",
+    "wholeArea": "It covers the whole neighborhood and more: the model does not mark it.",
     "showOnModel": "Show on the model"
   },
   "carousel": {

@@ -1,16 +1,19 @@
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { CATEGORIES, categoryPath } from '../../lib/categoryConfig';
+import { CATEGORIES, categoryPath, onTheModel } from '../../lib/categoryConfig';
 import { useHeroStore } from '../../three/heroStore';
 import { DEFAULT_SHAPE, SHAPE_STYLE } from '../../three/shapeStyle';
 import { LegendMarker } from '../home/LegendMarker';
 import { ShapeSwatch } from '../home/ShapeSwatch';
 
+const ROW = 'flex min-h-11 min-w-0 flex-1 items-center gap-2 rounded-sm border px-2 text-left text-step--1';
+
 /**
  * Leyenda y filtro de Mapa 3D (H34), en el panel del escenario: las 14 categorías con su símbolo y
  * los lugares reales que la escena dibujó; cada una se oculta o se muestra, y la flecha abre su
- * sección (su lista y su mapa). Es HTML real: teclado y lector de pantalla.
+ * sección (su lista y su mapa). La localidad (la ficha de toda la zona) no se dibuja: su fila lo
+ * dice, sin interruptor. Es HTML real: teclado y lector de pantalla.
  */
 export function MapLegend() {
   const { t, i18n } = useTranslation();
@@ -27,25 +30,34 @@ export function MapLegend() {
           const shown = !hidden.includes(slug);
           const count = drawn[slug];
           const name = t(`categories.${slug}.name`);
+          const tally = count === undefined ? t('hero.legend.noData') : numbers.format(count);
           return (
             <li key={slug} data-slug={slug} data-drawn={count ?? ''} className="flex items-stretch gap-1">
-              <button
-                type="button"
-                aria-pressed={shown}
-                onClick={() => toggleCategory(slug)}
-                className={`ui-pressable flex min-h-11 min-w-0 flex-1 items-center gap-2 rounded-sm border px-2 text-left text-step--1 ${
-                  shown ? 'border-ink bg-stone text-on-stone' : 'ui-btn--ghost border-transparent text-fg line-through'
-                }`}
-              >
-                {geometry === 'POINT' ? (
-                  <LegendMarker slug={slug} emoji={emoji} />
-                ) : (
-                  <ShapeSwatch style={SHAPE_STYLE[slug] ?? DEFAULT_SHAPE} />
-                )}
-                <span className="min-w-0 flex-1">{name}</span>
-                <span className="font-mono">{count === undefined ? t('hero.legend.noData') : numbers.format(count)}</span>
-                <span className="sr-only">{shown ? t('hero.legend.visible') : t('hero.legend.hidden')}</span>
-              </button>
+              {onTheModel(slug) ? (
+                <button
+                  type="button"
+                  aria-pressed={shown}
+                  onClick={() => toggleCategory(slug)}
+                  className={`ui-pressable ${ROW} ${
+                    shown ? 'border-ink bg-stone text-on-stone' : 'ui-btn--ghost border-transparent text-fg line-through'
+                  }`}
+                >
+                  {geometry === 'POINT' ? (
+                    <LegendMarker slug={slug} emoji={emoji} />
+                  ) : (
+                    <ShapeSwatch style={SHAPE_STYLE[slug] ?? DEFAULT_SHAPE} />
+                  )}
+                  <span className="min-w-0 flex-1">{name}</span>
+                  <span className="font-mono">{tally}</span>
+                  <span className="sr-only">{shown ? t('hero.legend.visible') : t('hero.legend.hidden')}</span>
+                </button>
+              ) : (
+                <p className={`m-0 ${ROW} border-dashed border-line text-fg`}>
+                  <span aria-hidden="true">{emoji}</span>
+                  <span className="min-w-0 flex-1">{name}</span>
+                  <span className="font-mono">{t('hero.legend.notDrawn')}</span>
+                </p>
+              )}
               <Link
                 to={categoryPath(slug)}
                 aria-label={t('stage.openModule', { module: name })}

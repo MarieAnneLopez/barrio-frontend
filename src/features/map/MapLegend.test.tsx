@@ -31,7 +31,8 @@ describe('Maqueta 3D con los 14 módulos (H34)', () => {
     await screen.findByTestId('escena-3d');
     act(() => useHeroStore.getState().setDrawn({ 'centros-educativos': 5, 'datos-catastrales': 3706 }));
     const legend = screen.getByRole('list', { name: 'Leyenda y filtro' });
-    expect(within(legend).getAllByRole('button')).toHaveLength(14);
+    expect(within(legend).getAllByRole('button')).toHaveLength(13); // la localidad no se dibuja: no se oculta
+    expect(within(legend).getAllByRole('link')).toHaveLength(14);
     const lots = within(legend).getByRole('button', { name: /Datos Catastrales/ });
     expect(lots).toHaveTextContent(/3\.?706/);
     expect(within(legend).getByRole('button', { name: /Barberías/ })).toHaveTextContent('sin datos');
@@ -41,6 +42,18 @@ describe('Maqueta 3D con los 14 módulos (H34)', () => {
     expect(useHeroStore.getState().hidden).toEqual(['datos-catastrales']);
     await userEvent.click(lots);
     expect(useHeroStore.getState().hidden).toEqual([]);
+  });
+
+  it('la localidad (ficha de toda la zona) no se dibuja: su fila lo dice y no se oculta', async () => {
+    mockApi({ ...BASE_MAP, '/centros-educativos/geojson': FEATURES });
+    renderRoute('/mapa?panel=abierto');
+    await screen.findByTestId('escena-3d');
+    act(() => useHeroStore.getState().setDrawn({ localidad: 0 }));
+    const legend = screen.getByRole('list', { name: 'Leyenda y filtro' });
+    expect(within(legend).queryByRole('button', { name: /Información de la Localidad/ })).toBeNull();
+    const row = within(legend).getByText('Información de la Localidad').closest('li') as HTMLElement;
+    expect(row).toHaveTextContent('no se dibuja');
+    expect(within(row).getByRole('link', { name: /Información de la Localidad/ })).toHaveAttribute('href', '/categorias/localidad');
   });
 
   it('el botón Recentrar suelta lo elegido y vuelve al encuadre inicial', async () => {

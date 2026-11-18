@@ -62,7 +62,7 @@ export function ItemDetailModal({ slug, itemId, onClose, onShowOnMap, onEdit, on
               ))}
           </dl>
           <SourceLine item={data} />
-          <PlaceOnModel item={data} onShow={onShowOnMap} />
+          <PlaceOnModel slug={slug} item={data} onShow={onShowOnMap} />
           <Gallery slug={slug} itemId={data.id} place={title} />
           <RatingPanel slug={slug} itemId={data.id} />
           <AuthGuard role="admin">

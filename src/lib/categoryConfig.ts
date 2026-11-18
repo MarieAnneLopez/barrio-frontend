@@ -34,3 +34,9 @@ export const categoryPath = (slug: string) => `/categorias/${slug}`;
 export function findCategory(slug: string | undefined): CategoryConfig | undefined {
   return CATEGORIES.find((category) => category.slug === slug);
 }
+
+/**
+ * ¿La maqueta señala los lugares de este módulo? La localidad (FICHA) es la ficha de toda la zona,
+ * no un lugar: abarca el barrio entero y más, y su contorno salía de la isla al cielo.
+ */
+export const onTheModel = (slug: string) => findCategory(slug)?.geometry !== 'FICHA';
