@@ -18,7 +18,11 @@ const color = (token: MapToken) => new Color(mapColor(token));
  * bajo el puntero = sol (el amarillo de la interfaz) y elegido = atardecer (el rosa de la selección),
  * con su corona en una sombra del mismo tono (highlight.ts).
  * Los uniformes de luz son los compartidos (LIGHT, por referencia); la niebla, la de la escena.
- * Doble cara: la de atrás de los muros, sobre el techo hundido, es el pretil.
+ * Doble cara: la de atrás de los muros, sobre el techo hundido, es el pretil, y toma la rama barata
+ * del fragmento (sin ventanas, cuadrícula de pisos ni reflejos). Con FrontSide y una banda propia
+ * por tramo de muro, los datos reales suman 231 184 triángulos (+67 %) y hasta 324 650 vértices
+ * (+68 %; tres teselas pasan de índices de 16 bits), y tras descartar caras se rasterizan casi
+ * tantos triángulos como ahora.
  */
 export function createBuildingMaterial(): ShaderMaterial {
   const [hover, select] = [color('ciclo-sol'), color('ciclo-atardecer')];
