@@ -1,6 +1,7 @@
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Star } from './Stars';
+import { StateIcon } from './StateIcon';
 
 const STEPS = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5];
 
@@ -50,6 +51,7 @@ export function StarsInput({ value, onChange, legend, error }: StarsInputProps) 
       </div>
       {error ? (
         <p id={errorId} role="alert" className="mt-1 mb-0 text-step--1 text-error">
+          <StateIcon kind="error" />
           {error}
         </p>
       ) : null}

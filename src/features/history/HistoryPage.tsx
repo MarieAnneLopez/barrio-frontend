@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '../../components/ui/Button';
+import { LoadError } from '../../components/ui/LoadError';
 import { Skeleton } from '../../components/ui/Skeleton';
 import { PageHeader } from '../pages/PageHeader';
 import { Indicators } from './Indicators';
@@ -30,12 +30,7 @@ export function HistoryPage() {
       <PageHeader title={t('nav.history')} description={t('pages.history')} />
       <Section id="historia-linea" title={t('history.timeline')}>
         {historia.status === 'loading' ? <Skeleton className="h-40 w-full" lines={5} /> : null}
-        {historia.status === 'error' ? (
-          <div role="alert" className="flex flex-col items-start gap-3 rounded-sm border border-error bg-surface p-6">
-            <p className="m-0 text-fg">{t('modules.error')}</p>
-            <Button variant="secondary" size="sm" onClick={historia.retry}>{t('modules.retry')}</Button>
-          </div>
-        ) : null}
+        {historia.status === 'error' ? <LoadError onRetry={historia.retry} /> : null}
         {historia.status === 'success' ? <Timeline hitos={historia.data.hitos} fuentes={historia.data.fuentes} /> : null}
       </Section>
       <Section id="historia-bandera" title={t('history.flag.title')}>

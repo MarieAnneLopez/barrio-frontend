@@ -2,6 +2,7 @@ import { useId } from 'react';
 import type { UseFormRegisterReturn } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Input } from '../../components/ui/Input';
+import { StateIcon } from '../../components/ui/StateIcon';
 import type { FieldSpec } from '../../lib/moduleFields';
 import { displayValue } from './displayValue';
 
@@ -22,6 +23,7 @@ export function FormField({ slug, field, registration, error }: FormFieldProps) 
   const label = `${t(`fields.${field.name}`)}${field.required ? ' *' : ''}`;
   const errorNode = error ? (
     <p id={`${id}-error`} role="alert" className="m-0 text-step--1 text-error">
+      <StateIcon kind="error" />
       {error}
     </p>
   ) : null;

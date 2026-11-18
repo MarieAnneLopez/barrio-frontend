@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Button } from '../../components/ui/Button';
+import { LoadError } from '../../components/ui/LoadError';
 import { Skeleton } from '../../components/ui/Skeleton';
 import type { ApiState } from '../../hooks/useApi';
 import type { ModuleItem, Page } from '../../lib/apiTypes';
@@ -26,16 +26,7 @@ export function ModuleList(props: ModuleListProps) {
     return <p className="m-0 rounded-md border border-dashed border-line p-6 text-fg-secondary">{t('modules.notLoaded')}</p>;
   }
   if (list.status === 'loading') return <Skeleton className="h-24 w-full" lines={3} />;
-  if (list.status === 'error') {
-    return (
-      <div role="alert" className="flex flex-col items-start gap-3 rounded-sm border border-error bg-surface p-6">
-        <p className="m-0 text-fg">{t('modules.error')}</p>
-        <Button variant="secondary" size="sm" onClick={list.retry}>
-          {t('modules.retry')}
-        </Button>
-      </div>
-    );
-  }
+  if (list.status === 'error') return <LoadError onRetry={list.retry} />;
   const page = list.data;
   if (page.total === 0) {
     return (

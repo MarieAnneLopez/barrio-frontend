@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Modal } from '../../components/ui/Modal';
 import { Skeleton } from '../../components/ui/Skeleton';
+import { StateIcon } from '../../components/ui/StateIcon';
 import { useApi } from '../../hooks/useApi';
 import type { ModuleItem } from '../../lib/apiTypes';
 import { labelOf, moduleFields } from '../../lib/moduleFields';
@@ -38,6 +39,7 @@ export function ItemDetailModal({ slug, itemId, onClose, onShowOnMap, onEdit, on
       {item.status === 'loading' ? <Skeleton className="h-24 w-full" lines={4} /> : null}
       {item.status === 'error' ? (
         <p role="alert" className="m-0 text-fg">
+          <StateIcon kind="error" />
           {t('modules.error')}
         </p>
       ) : null}

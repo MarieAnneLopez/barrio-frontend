@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { StarsInput } from '../../components/ui/StarsInput';
+import { StateIcon } from '../../components/ui/StateIcon';
 import { ApiError, apiSend } from '../../lib/apiClient';
 import { useAuthStore } from '../../store/authStore';
 import { useAvatarStore } from '../../store/avatarStore';
@@ -60,8 +61,9 @@ export function RatingForm({ path, onRated }: RatingFormProps) {
         {t('ratings.submit')}
       </Button>
       <p aria-live="polite" className="m-0 text-step--1 text-fg-secondary">
-        {status.kind === 'done' ? t('ratings.thanks') : null}
-        {status.kind === 'error' ? status.message : null}
+        {/* Estado con ícono y texto (D100, PAL-06): el visto del éxito o el aspa del error. */}
+        {status.kind === 'done' ? <><StateIcon kind="success" />{t('ratings.thanks')}</> : null}
+        {status.kind === 'error' ? <><StateIcon kind="error" />{status.message}</> : null}
       </p>
     </form>
   );

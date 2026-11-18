@@ -1,5 +1,6 @@
 import { forwardRef, useId, type InputHTMLAttributes } from 'react';
 import { Spinner } from './Spinner';
+import { StateIcon } from './StateIcon';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   /** Etiqueta visible (nunca solo placeholder). */
@@ -48,6 +49,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       ) : null}
       {error ? (
         <p id={errorId} role="alert" className="text-step--1 text-error">
+          <StateIcon kind="error" />
           {error}
         </p>
       ) : null}

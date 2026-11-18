@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Button } from '../../components/ui/Button';
+import { LoadError } from '../../components/ui/LoadError';
 import { Skeleton } from '../../components/ui/Skeleton';
 import { useAllPhotos } from '../../hooks/useAllPhotos';
 import { photoAlt } from '../../lib/photoUrls';
@@ -26,12 +26,7 @@ export function PhotoCreditsPage() {
       <PageHeader title={t('credits.title')} description={t('credits.description')} />
       <p className="ui-prose m-0 text-step-0">{t('credits.changes')}</p>
       {photos.status === 'loading' ? <Skeleton className="h-48 w-full" lines={4} /> : null}
-      {photos.status === 'error' ? (
-        <div role="alert" className="flex flex-col items-start gap-3 rounded-sm border border-error bg-surface p-6">
-          <p className="m-0 text-fg">{t('modules.error')}</p>
-          <Button variant="secondary" size="sm" onClick={photos.retry}>{t('modules.retry')}</Button>
-        </div>
-      ) : null}
+      {photos.status === 'error' ? <LoadError onRetry={photos.retry} /> : null}
       {photos.status === 'success' ? (
         <div className="flex flex-col gap-3 border-t border-line pt-4">
           <p className="m-0 text-step--1 text-fg-muted">{t('credits.count', { count: photos.items.length })}</p>
