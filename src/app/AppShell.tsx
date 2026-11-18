@@ -1,7 +1,6 @@
 import { Suspense, useEffect } from 'react';
 import { Outlet, useMatches } from 'react-router-dom';
 import { LoadingScreen } from '../components/avatar/LoadingScreen';
-import { LoadingTask } from '../components/avatar/LoadingTask';
 import { WelcomeGate } from '../components/avatar/WelcomeGate';
 import { ChatWidget } from '../components/chat/ChatWidget';
 import { AccessibilityRail } from '../components/layout/AccessibilityRail';
@@ -13,6 +12,7 @@ import { restoreSession } from '../features/auth/authApi';
 import { LoginModal } from '../features/auth/LoginModal';
 import { ScenePortal } from '../features/home/ScenePortal';
 import { useApplyA11y } from '../hooks/useApplyA11y';
+import { RouteFallback } from './RouteFallback';
 
 const MAIN_ID = 'contenido';
 /** Columna de contenido: centrada, a 1200 px como máximo; deja libre la barra de accesibilidad. */
@@ -38,7 +38,7 @@ export function AppShell() {
       <LoadingScreen />
       <Header />
       <main id={MAIN_ID} tabIndex={-1} className={`flex-1 ${bleed ? '' : COLUMN}`}>
-        <Suspense fallback={<LoadingTask />}>
+        <Suspense fallback={<RouteFallback />}>
           <Outlet />
         </Suspense>
       </main>
