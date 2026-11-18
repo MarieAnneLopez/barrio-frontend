@@ -11,7 +11,7 @@ referencia está en `src/three/data/` (Web Worker incluido) y el codificador en 
 |---|---|---|
 | `manifest.json` | — | versión, proyección, tamaño y sha256 de cada archivo, conteos, fuentes y licencias |
 | `edificios.bin.gz` | 1 | huellas de edificios, pisos, dirección, nombre, lote y sector |
-| `vias.bin.gz` | 2 | red vial y peatonal (grafo), cruces peatonales y semáforos |
+| `vias.bin.gz` | 2 | red vial y peatonal (grafo), cruces (peatonales y de ciclorruta) y semáforos |
 | `suelo.bin.gz` | 3 | límite del barrio, parques, pasto, agua y líneas de agua |
 | `puntos.bin.gz` | 4 | árboles, hileras de árboles y faroles |
 
@@ -146,7 +146,7 @@ edificio.
 | `NOMB` | u32 | W | índice en `TNOM` (`nombre`) |
 | `OSMI` | f64 | W | id de la vía OSM (`osm`) |
 | `TNOM` | utf8 | | nombres de vías (`textos.nombres`) |
-| `CRXZ` | i16 | 2C | centro de cada cruce peatonal, una secuencia (`cruces.xz`) |
+| `CRXZ` | i16 | 2C | centro de cada cruce (peatonal o de ciclorruta), una secuencia (`cruces.xz`) |
 | `CRTI` | u8 | C | tipo de cruce (`cruces.tipo`), abajo |
 | `CRAN` | u16 | C | eje de la calle en diezmilésimas de radián: `atan2(dz, dx)` en [0, π) (`cruces.angulo`, en rad) |
 | `CRLA` | u16 | C | largo del cruce en decímetros; 0 sin dato (`cruces.largo`, en m) |
