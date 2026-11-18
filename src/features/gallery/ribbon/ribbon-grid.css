@@ -1,0 +1,81 @@
+/* Rejilla de respaldo de la cinta. Mientras llega el motor WebGL (data-mode «pending») va dentro del
+   escenario, que ya mide lo que la cinta, con su propio desplazamiento; sin WebGL (data-mode «grid»)
+   el escenario crece con ella. */
+.ribbon-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin: 0;
+  padding: var(--space-4);
+  list-style: none;
+}
+
+.ribbon[data-mode='pending'] .ribbon-grid {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.ribbon[data-mode='grid'] .ribbon-stage {
+  height: auto;
+  overflow: visible;
+}
+
+.ribbon-grid__figure {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.ribbon-grid__caption {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: var(--step--1);
+  color: var(--text-primary);
+}
+
+/* La foto con su etiqueta real debajo: el nombre del botón es esa etiqueta. */
+.ribbon-tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  color: var(--text-primary);
+  font-family: var(--ff-body);
+  font-size: var(--step-0);
+  text-align: left;
+  cursor: pointer;
+}
+
+.ribbon-tile__img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: var(--r-sm);
+  background-color: var(--bg-accent);
+}
+
+/* El color nunca va solo: al pasar el puntero o el foco, la etiqueta se subraya. */
+.ribbon-tile:hover .ribbon-tile__label,
+.ribbon-tile:focus-visible .ribbon-tile__label {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+@media (min-width: 640px) {
+  .ribbon-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .ribbon-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
