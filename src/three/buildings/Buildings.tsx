@@ -2,6 +2,7 @@ import { useThree } from '@react-three/fiber';
 import { useEffect, useMemo } from 'react';
 import type { Tintal3D } from '../data/format';
 import { useSelectionStore } from '../selection/selectionStore';
+import { bridgeHover } from './hud';
 import { createBuildingMaterial } from './material';
 import { applySelection, createPickHandlers, cursorOf } from './picking';
 import { tileRaycast } from './raycast';
@@ -40,6 +41,8 @@ export function Buildings({ world }: BuildingsProps) {
     applySelection(uniforms, useSelectionStore.getState());
     return useSelectionStore.subscribe((state) => applySelection(uniforms, state));
   }, [material]);
+  // El HUD de la maqueta (HeroHud) describe el edificio bajo el puntero.
+  useEffect(() => bridgeHover(world.edificios), [world]);
   // Diagnóstico (como PerfProbe): cuántos edificios y cuánto tardó la construcción.
   useEffect(() => {
     const host = gl.domElement.closest<HTMLElement>('[data-hero]');
