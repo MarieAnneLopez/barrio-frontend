@@ -65,7 +65,10 @@ para cada secuencia s (vértices inicio[s] .. inicio[s+1]-1):
 
 Una «secuencia» es un anillo (polígonos), una línea (líneas) o la lista completa (nodos y puntos).
 Los anillos van **abiertos** (el último vértice no repite el primero); el exterior gira antihorario
-visto desde arriba con el norte arriba (área positiva en el plano x, −z) y los huecos, horario.
+visto desde arriba con el norte arriba (área positiva en el plano x, −z) y los huecos, horario. No
+siempre son simples: tras redondear a decímetros, de los 22 375 anillos de edificios 37 repiten un
+vértice no consecutivo (se tocan en un punto) y 4 se cruzan a sí mismos. Triangule con un método
+que lo tolere (earcut, el de `THREE.ShapeUtils`), no con uno que exija polígonos simples.
 
 ## 3. `edificios.bin.gz` (tipo 1) — N edificios, R anillos, V vértices
 

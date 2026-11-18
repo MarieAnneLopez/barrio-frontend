@@ -53,7 +53,7 @@ describe('public/data/tintal', () => {
 
   it('edificios: conteos del manifiesto, exteriores antihorarios y huecos horarios', async () => {
     const e = decodeEdificios(await plain('edificios'));
-    const c = manifest.conteos.edificios ?? {};
+    const c = manifest.conteos.edificios;
     expect(e.count).toBe(c.total);
     expect(e.osm.filter((id) => id !== 0).length).toBe(c.osm);
     expect(e.tipoDireccion.filter((t) => t === 1 || t === 2).length).toBe(c.placaOficial);
@@ -72,8 +72,8 @@ describe('public/data/tintal', () => {
   it('vías, suelo y puntos: conteos del manifiesto; todo (también las huellas) dentro del bbox', async () => {
     const [v, s, p] = [decodeVias(await plain('vias')), decodeSuelo(await plain('suelo')), decodePuntos(await plain('puntos'))];
     const e = decodeEdificios(await plain('edificios'));
-    const cv = manifest.conteos.vias ?? {};
-    const cs = manifest.conteos.suelo ?? {};
+    const cv = manifest.conteos.vias;
+    const cs = manifest.conteos.suelo;
     expect([v.count, v.nodos.length / 2, v.cruces.tipo.length, v.semaforos.osm.length]).toEqual([cv.tramos, cv.nodos, cv.cruces, cv.semaforos]);
     expect([s.count, s.lineas.count, p.arboles.osm.length, p.hileras.osm.length, p.faroles.osm.length]).toEqual([
       cs.areas, cs.lineasDeAgua, cs.arboles, cs.hilerasDeArboles, cs.faroles,

@@ -1,6 +1,9 @@
 // Tipos de los datos 3D reales de El Tintal (formato TNT3, scripts/datos3d/FORMATO.md).
 // Coordenadas en metros con la proyección de src/three/projection.ts: x al este, z al sur.
+import type { TintalManifest } from './manifest';
 import spec from './tnt3.json';
+
+export type { ConteosEdificios, ConteosSuelo, ConteosVias, ManifestFile, TintalFile, TintalManifest } from './manifest';
 
 /** Códigos del formato; el codificador (scripts/datos3d) lee el mismo JSON. */
 export const TNT3 = spec;
@@ -10,7 +13,6 @@ export type I8 = Int8Array<ArrayBuffer>;
 export type U32 = Uint32Array<ArrayBuffer>;
 export type F32 = Float32Array<ArrayBuffer>;
 export type F64 = Float64Array<ArrayBuffer>;
-export type TintalFile = 'edificios' | 'vias' | 'suelo' | 'puntos';
 
 export interface Edificios {
   count: number;
@@ -78,20 +80,5 @@ export interface Suelo {
 }
 
 export interface Puntos { arboles: Puntos2D; hileras: { xz: F32; inicios: U32; osm: F64 }; faroles: Puntos2D }
-
-export interface ManifestFile { ruta: string; bytes: number; bytesTnt3: number; sha256: string }
-
-export interface TintalManifest {
-  version: number;
-  /** Fecha de la consulta más reciente a las fuentes. */
-  generado: string;
-  barrio: { nombre: string; definicion: string; areaKm2: number | null };
-  proyeccion: { bbox: [number, number, number, number]; origen: [number, number]; unidadesPorMetro: number };
-  licenciaDeLosArchivos: string;
-  archivos: Record<TintalFile, ManifestFile>;
-  /** edificios, vias y suelo: números y, en `porClase` y similares, conteos por clave. */
-  conteos: Record<string, Record<string, number | Record<string, number>>>;
-  fuentes: { id: string; nombre: string; licencia: string; atribucion: string; consultado: string }[];
-}
 
 export interface Tintal3D { manifest: TintalManifest; edificios: Edificios; vias: Vias; suelo: Suelo; puntos: Puntos }

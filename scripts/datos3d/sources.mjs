@@ -1,6 +1,6 @@
 // Descarga (o lee de la caché) todas las fuentes y arma su ficha para el manifiesto: servicio,
 // conjunto, licencia tal como la publica la fuente, atribución, versión y fecha de consulta.
-import { readFileSync } from 'node:fs';
+import { readFileSync, statSync } from 'node:fs';
 import { datasetInfo, downloadLayer, layerCopyright } from './arcgis.mjs';
 import { CATASTRO, CKAN, OSM_TEXTO, POLIGONO, PORTAL } from './config.mjs';
 import { downloadOsm } from './overpass.mjs';
@@ -10,12 +10,15 @@ function checkPolygon(text) {
   if (!json.geometry?.coordinates || !Array.isArray(json.bbox)) throw new Error('La API no devolvió el polígono con bbox');
 }
 
+/** Polígono desde un archivo local: la fecha es la de modificación del archivo (build repetible). */
+export function readLocalPolygon(path) {
+  const text = readFileSync(path, 'utf8');
+  checkPolygon(text);
+  return { feature: JSON.parse(text), fecha: statSync(path).mtime.toISOString() };
+}
+
 async function fetchPolygon(request) {
-  if (!/^https?:/.test(POLIGONO)) {
-    const text = readFileSync(POLIGONO, 'utf8');
-    checkPolygon(text);
-    return { feature: JSON.parse(text), fecha: new Date().toISOString() };
-  }
+  if (!/^https?:/.test(POLIGONO)) return readLocalPolygon(POLIGONO);
   const { text, fecha } = await request(POLIGONO, { validate: checkPolygon, label: 'polígono de El Tintal' });
   return { feature: JSON.parse(text), fecha };
 }
