@@ -393,6 +393,7 @@
     "touchHint": "Usa dos dedos para acercar o girar la maqueta; con un dedo sigues bajando por la página."
   },
   "carousel": {
+    "creditsHeading": "Vistas del barrio (vuelo del Inicio y Galería)",
     "label": "Fotografías del entorno de El Tintal",
     "slide": "Foto",
     "of": "{{current}} de {{total}}",

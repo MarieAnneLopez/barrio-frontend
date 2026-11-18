@@ -393,6 +393,7 @@
     "touchHint": "Use two fingers to zoom or rotate the model; one finger keeps scrolling the page."
   },
   "carousel": {
+    "creditsHeading": "Neighbourhood views (home photo flight and gallery)",
     "label": "Photos of the El Tintal area",
     "slide": "Photo",
     "of": "{{current}} of {{total}}",

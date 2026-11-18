@@ -5,6 +5,7 @@ import { Skeleton } from '../../components/ui/Skeleton';
 import { useAllPhotos } from '../../hooks/useAllPhotos';
 import { photoAlt } from '../../lib/photoUrls';
 import { PageHeader } from '../pages/PageHeader';
+import { CarouselCredits } from './CarouselCredits';
 import { PhotoCredit } from './PhotoCredit';
 
 // Paleta D100: cada foto es una fila de registro; el lugar va en una celda rosa claro.
@@ -49,6 +50,7 @@ export function PhotoCreditsPage() {
           </ol>
         </div>
       ) : null}
+      <CarouselCredits />
     </div>
   );
 }
