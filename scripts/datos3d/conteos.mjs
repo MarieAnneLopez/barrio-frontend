@@ -43,7 +43,7 @@ export function roadCounts({ nodes, ways, cruces, semaforos }) {
     sentidoUnico: ways.filter((w) => w.sentido !== 0).length, conCarriles: ways.filter((w) => w.carriles > 0).length,
     recortados: ways.filter((w) => has(w.banderas, SPEC.banderasVia.recortada)).length,
     cruces: cruces.length, crucesPorMarca: crossings, crucesConSemaforo: cruces.filter((c) => has(c.tipo, X.semaforo)).length,
-    semaforos: semaforos.length,
+    crucesDeCiclorruta: cruces.filter((c) => has(c.tipo, X.ciclorruta)).length, semaforos: semaforos.length,
   };
 }
 

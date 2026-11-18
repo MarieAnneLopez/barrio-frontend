@@ -20,7 +20,7 @@
     "enlace": 1, "puente": 2, "tunel": 4, "accesoRestringido": 8, "glorieta": 16, "area": 32,
     "soloBus": 64, "recortada": 128
   },
-  "cruces": { "cebra": 1, "marcado": 2, "sinMarcas": 3, "semaforo": 4, "deVia": 8, "sinEje": 16 },
+  "cruces": { "cebra": 1, "marcado": 2, "sinMarcas": 3, "semaforo": 4, "deVia": 8, "sinEje": 16, "ciclorruta": 32 },
   "clasesSuelo": {
     "barrio": 1, "park": 2, "garden": 3, "playground": 4, "pitch": 5, "track": 6, "sports_centre": 7,
     "grass": 8, "recreation_ground": 9, "village_green": 10, "meadow": 11, "forest": 12, "wood": 13,

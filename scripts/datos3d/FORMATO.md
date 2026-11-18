@@ -168,9 +168,17 @@ entran o salen de la escena. Personitas: clases 20-27 y, si hace falta, el borde
 residenciales y de servicio (OSM mapea pocos andenes aparte: ese borde es una regla de dibujo, no
 un dato).
 
+Cruces: los nodos `highway=crossing`, los semáforos que también son cruce
+(`highway=traffic_signals` + `crossing=*`; van además en `SEXZ`) y las vías de cruce
+(`footway`, `cycleway` o `path` = `crossing`) que no tienen un nodo de cruce. Las vías
+`cycleway=crossing` y `path=crossing` siguen en el grafo con su clase (26, 23); solo
+`footway=crossing` es la clase 22.
+
 Tipo de cruce (`CRTI`): bits 0-1 marcas (0 sin dato, 1 cebra, 2 marcado sin patrón dicho,
-3 sin marcas), 4 `semaforo`, 8 `deVia` (posición y eje deducidos de una vía `footway=crossing`
-sin nodo de cruce: su punto medio), 16 `sinEje` (no hay vía que dé el eje; `CRAN` = 0). Con
+3 sin marcas), 4 `semaforo`, 8 `deVia` (posición y eje deducidos de una vía de cruce sin nodo de
+cruce: su punto medio), 16 `sinEje` (no hay vía que dé el eje; `CRAN` = 0), 32 `ciclorruta` (el
+cruce es de una vía `cycleway=crossing`: de la ciclorruta; OSM no siempre dice si también es
+peatonal). Con
 `rotation.y = -angulo`, el +x local de un objeto queda a lo largo de la calle (en three,
 `rotation.y = φ` lleva +x a (cos φ, 0, −sen φ)): la franja del cruce mide `largo` en z local, de
 andén a andén (si es 0, el ancho de la calzada), y unos 3-4 m en x; las barras de la cebra van a

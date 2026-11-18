@@ -33,8 +33,14 @@ export function buildVias(osm, barrio, project) {
     }
   }
   const inside = (node) => barrio.inside(project([node.lon, node.lat]));
-  const tagged = (key, value) => osm.nodes.filter((n) => n.tags?.[key] === value && inside(n));
-  const semaforos = tagged('highway', 'traffic_signals').map((n) => ({ p: project([n.lon, n.lat]), osm: n.id }));
-  const cruces = buildCrossings(tagged('highway', 'crossing'), pieces, project);
+  const signals = osm.nodes.filter((n) => n.tags?.highway === 'traffic_signals' && inside(n));
+  const semaforos = signals.map((n) => ({ p: project([n.lon, n.lat]), osm: n.id }));
+  const cruces = buildCrossings(osm.nodes.filter((n) => isCrossingNode(n.tags) && inside(n)), pieces, project);
   return { nodes, ways, cruces, semaforos };
+}
+
+/** highway=crossing, o un semáforo que también es cruce (highway=traffic_signals + crossing=*). */
+function isCrossingNode(tags = {}) {
+  if (tags.highway === 'crossing') return true;
+  return tags.highway === 'traffic_signals' && tags.crossing !== undefined && tags.crossing !== 'no';
 }

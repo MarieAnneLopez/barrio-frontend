@@ -60,3 +60,26 @@ describe('buildVias', () => {
     expect(red.semaforos).toEqual([{ p: [10, -50], osm: 10 }]);
   });
 });
+
+describe('buildVias: cruces de semáforo y de ciclorruta', () => {
+  const otra = buildVias(splitElements([
+    way(1, { highway: 'residential' }, [[10, 10, -50], [11, 50, -50], [71, 70, -50], [12, 90, -50]]),
+    way(6, { highway: 'cycleway', cycleway: 'crossing', crossing: 'uncontrolled' }, [[60, 30, -45], [61, 30, -55]]),
+    way(7, { highway: 'cycleway', cycleway: 'crossing' }, [[70, 70, -45], [71, 70, -50], [72, 70, -55]]),
+    node(11, 50, -50, { highway: 'traffic_signals', crossing: 'traffic_signals' }),
+    node(71, 70, -50, { highway: 'crossing' }),
+  ]), loadBarrio(square, project), project);
+  const cruce = (osm) => otra.cruces.find((c) => c.osm === osm);
+
+  it('un semáforo con crossing=traffic_signals es semáforo y también cruce', () => {
+    expect(otra.semaforos.map((s) => s.osm)).toEqual([11]);
+    expect(cruce(11)).toMatchObject({ p: [50, -50], tipo: X.semaforo, angulo: 0 });
+  });
+
+  it('una vía cycleway=crossing da un cruce de ciclorruta; en el grafo sigue siendo cycleway', () => {
+    expect(otra.ways.filter((w) => w.osm >= 6).map((w) => w.clase)).toEqual([C.cycleway, C.cycleway]);
+    expect(cruce(6)).toMatchObject({ p: [30, -50], tipo: X.marcado | X.deVia | X.ciclorruta, largo: 10 });
+    expect(cruce(71)).toMatchObject({ p: [70, -50], tipo: X.ciclorruta, angulo: 0, largo: 10 });
+    expect(cruce(7)).toBeUndefined(); // su nodo de cruce ya la representa
+  });
+});

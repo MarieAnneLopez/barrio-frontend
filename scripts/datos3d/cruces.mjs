@@ -1,13 +1,15 @@
-// Cruces peatonales de OSM. Cada nodo highway=crossing va en su punto exacto con el eje de la vía
-// de carros que lo atraviesa; si además está sobre una vía footway=crossing, toma su largo (y sus
-// marcas si el nodo no las trae o son menos precisas). Las vías footway=crossing sin nodo de cruce
-// entran por su punto medio, con el eje de la calle perpendicular a su trazo.
+// Cruces de OSM. Cada nodo de cruce (highway=crossing, o un semáforo con crossing=*) va en su punto
+// exacto con el eje de la vía de carros que lo atraviesa; si además está sobre una vía de cruce
+// (footway, cycleway o path = crossing), toma su largo (y sus marcas si el nodo no las trae o son
+// menos precisas). Las vías de cruce sin nodo de cruce entran por su punto medio, con el eje de la
+// calle perpendicular a su trazo. Los de una ciclorruta (cycleway=crossing) llevan esa bandera.
 import { crossingType } from './osmtags.mjs';
 import { SPEC } from './spec.mjs';
 
-const CROSSING = SPEC.clasesVia.crossing;
 const X = SPEC.cruces;
 const MARKS = 3; // los dos bits de marcas
+const isCrossingWay = (tags) => ['footway', 'cycleway', 'path'].some((k) => tags.highway === k && tags[k] === 'crossing');
+const bike = (tags) => (tags.cycleway === 'crossing' ? X.ciclorruta : 0);
 
 /** Eje (sin sentido) del tramo a→b: atan2(dz, dx) llevado a [0, π). */
 const axis = (a, b) => (((Math.atan2(b[1] - a[1], b[0] - a[0]) % Math.PI) + Math.PI) % Math.PI);
@@ -28,7 +30,8 @@ const around = (pts, k) => [pts[Math.max(0, k - 1)], pts[Math.min(pts.length - 1
 
 function fromNode(node, refs, project, used) {
   const road = refs.find((r) => r.piece.clase < 20);
-  const walk = refs.find((r) => r.piece.clase === CROSSING);
+  const walks = refs.filter((r) => isCrossingWay(r.piece.tags));
+  const walk = walks.find((r) => !bike(r.piece.tags)) ?? walks[0]; // el peatonal antes que el de bicis
   let tipo = crossingType(node.tags ?? {});
   let angulo = 0;
   if (road) angulo = axis(...around(road.piece.points, road.k));
@@ -41,12 +44,12 @@ function fromNode(node, refs, project, used) {
     const fromWay = crossingType(walk.piece.tags);
     const [own, way] = [tipo & MARKS, fromWay & MARKS];
     if (!own || (own === X.marcado && way === X.cebra)) tipo = (tipo & ~MARKS) | way; // la marca más precisa
-    tipo |= fromWay & X.semaforo;
+    tipo |= (fromWay & X.semaforo) | bike(walk.piece.tags);
   }
   return { p: project([node.lon, node.lat]), tipo, angulo, largo, osm: node.id };
 }
 
-/** nodes: nodos highway=crossing del barrio; pieces: tramos recortados con sus ids de nodo OSM. */
+/** nodes: nodos de cruce del barrio; pieces: tramos recortados con sus ids de nodo OSM. */
 export function buildCrossings(nodes, pieces, project) {
   const at = new Map();
   for (const piece of pieces) {
@@ -57,9 +60,10 @@ export function buildCrossings(nodes, pieces, project) {
   const used = new Set();
   const out = nodes.map((node) => fromNode(node, at.get(node.id) ?? [], project, used));
   for (const piece of pieces) {
-    if (piece.clase !== CROSSING || used.has(piece)) continue;
+    if (!isCrossingWay(piece.tags) || used.has(piece)) continue;
     const { p, a, b } = midpoint(piece.points);
-    out.push({ p, tipo: crossingType(piece.tags, true), angulo: (axis(a, b) + Math.PI / 2) % Math.PI, largo: lengthOf(piece.points), osm: piece.way.id });
+    const tipo = crossingType(piece.tags, true) | bike(piece.tags);
+    out.push({ p, tipo, angulo: (axis(a, b) + Math.PI / 2) % Math.PI, largo: lengthOf(piece.points), osm: piece.way.id });
   }
   return out;
 }
