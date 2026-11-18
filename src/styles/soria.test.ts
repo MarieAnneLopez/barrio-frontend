@@ -21,6 +21,10 @@ describe('Soria para el texto que no es título (D98)', () => {
     expect(read('fonts.ts')).toContain("import './soria.css';");
   });
 
+  it('el «#» de las direcciones lo pone Georgia: el de Soria mide un tercio del alto y se lee como un punto', () => {
+    expect(soria).toMatch(/@font-face \{[^}]*unicode-range: U\+0000-0022, U\+0024-10FFFF;/);
+  });
+
   it('el cuerpo usa Soria con el respaldo local declarado', () => {
     expect(scale).toContain("--ff-body: 'Soria', Georgia, 'Times New Roman', serif;");
   });

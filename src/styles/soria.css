@@ -1,12 +1,16 @@
 /* Soria, de By Dani (Daniel Iglesias), SIL OFL 1.1, descargada de Font Squirrel (D98). Un solo
    estilo, Regular. Le faltan ¡ « » ‘ % ° - – — … ·: esos caracteres los pone Georgia, el respaldo
    de --ff-body. Licencia en public/assets/fonts/soria/OFL.txt. WOFF2 (26 KB) convertido del TTF
-   (77 KB) con fontTools, sin tocar glifos (cambio de formato; la licencia no reserva el nombre). */
+   (77 KB) con fontTools, sin tocar glifos (cambio de formato; la licencia no reserva el nombre).
+   El «#» de Soria mide 241 unidades de alto frente a 700 de las cifras y se apoya en la línea base:
+   en una placa («CL 34 S # 90C-39») se leía como un punto. unicode-range lo deja fuera y lo pone
+   Georgia, el respaldo, sin tocar la fuente. */
 @font-face {
   font-family: 'Soria';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
+  unicode-range: U+0000-0022, U+0024-10FFFF;
   src:
     url('/assets/fonts/soria/soria.woff2') format('woff2'),
     url('/assets/fonts/soria/soria.ttf') format('truetype');
