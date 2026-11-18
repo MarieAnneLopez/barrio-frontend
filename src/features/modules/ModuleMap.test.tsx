@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
 import type { ModuleItem } from '../../lib/apiTypes';
 import { useFocusStore } from '../../three/camera/focusStore';
+import { FOCUS_DISTANCE } from '../../three/camera/mapView';
 import { usePlaceScope } from '../../three/places/placeScope';
 import { useSelectionStore } from '../../three/selection/selectionStore';
 import { worldReady } from '../../test/emptyWorld';
@@ -48,7 +49,7 @@ describe('la maqueta de la sección de un módulo', () => {
     expect(useSelectionStore.getState().selected).toEqual({ kind: 'place', slug: 'centros-educativos', id: 2 });
     expect(within(card('Colegio Codema IED')).getByRole('button', { name: 'Seleccionado en el mapa' })).toHaveAttribute('aria-pressed', 'true');
     expect(await screen.findByRole('complementary', { name: 'Colegio Codema IED' })).toBeInTheDocument();
-    expect(useFocusStore.getState().target).not.toBeNull();
+    expect(useFocusStore.getState().target?.distance).toBe(FOCUS_DISTANCE); // un punto: la distancia de siempre
   });
 
   it('un dato de ejemplo no se dibuja: su tarjeta y su ficha completa lo dicen, sin «Ver en el mapa»', async () => {

@@ -29,13 +29,19 @@ export interface Goal {
   position: Vector3;
 }
 
-/** Encuadre de mapa: norte arriba, el barrio entero en la imagen, sin pasar de `maxDistance`. */
-export function mapView({ center, size }: MapFraming, aspect: number, maxDistance: number): HomeView {
+/** Distancia a la que un rectángulo de `size` (m, este-oeste y norte-sur) cabe entero en la imagen de mapa. */
+export function fitDistance(size: readonly [number, number], aspect: number): number {
   const tan = Math.tan((FOV_DEG * Math.PI) / 360);
   const pitch = (MAP_PITCH_DEG * Math.PI) / 180;
   const byWidth = size[0] / 2 / (tan * Math.max(aspect, 0.1));
   const byDepth = ((size[1] / 2) * Math.cos(pitch)) / tan; // el fondo se ve acortado por la inclinación
-  const distance = Math.min(maxDistance, Math.max(byWidth, byDepth) * MARGIN);
+  return Math.max(byWidth, byDepth) * MARGIN;
+}
+
+/** Encuadre de mapa: norte arriba, el barrio entero en la imagen, sin pasar de `maxDistance`. */
+export function mapView({ center, size }: MapFraming, aspect: number, maxDistance: number): HomeView {
+  const pitch = (MAP_PITCH_DEG * Math.PI) / 180;
+  const distance = Math.min(maxDistance, fitDistance(size, aspect));
   const target = new Vector3(center[0], 0, center[1]);
   const back = new Vector3(0, Math.cos(pitch), Math.sin(pitch)); // desde el sur, mirando al norte
   return { target, position: target.clone().addScaledVector(back, distance), distance };
