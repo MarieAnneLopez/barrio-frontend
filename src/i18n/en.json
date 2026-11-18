@@ -352,7 +352,6 @@
     "play": "Resume the orbit",
     "hint": "Drag to move, use the wheel to zoom and the right button to rotate. Hover over a building or pick a place to see its details.",
     "openModule": "View in {{module}}",
-    "source": "Data: Catastro Bogotá · © OpenStreetMap (ODbL)",
     "legend": {
       "title": "Legend and filter",
       "noData": "no data",
@@ -390,7 +389,8 @@
     "osmRef": "OpenStreetMap ({{ref}})",
     "nameSource": "Name",
     "mapData": "Map data",
-    "catastroCite": "Catastro Bogotá – Bogotá Open Data (open license)",
+    "catastroCite": "Catastro Bogotá (UAECD) – Bogotá Open Data",
+    "ccBy": "CC BY 4.0",
     "osmCite": "© OpenStreetMap contributors (ODbL)",
     "fullDetail": "Open full details",
     "missing": "This place is no longer in the module data.",
@@ -715,7 +715,7 @@
     "changes": "Photos come from Wikimedia Commons and Mapillary (CC BY-SA 4.0). The only change made is size and format (WebP), so they load fast; the content is the original.",
     "count_one": "{{count}} photo",
     "count_other": "{{count}} photos",
-    "link": "Photo credits",
+    "link": "Photo and map credits",
     "map": {
       "title": "Map data",
       "intro": "The 3D model in every section with a map uses official open data, processed once when the site is built. The places of the 14 modules cite their own source in their details.",

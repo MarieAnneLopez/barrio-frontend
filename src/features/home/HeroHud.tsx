@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/ui/Button';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { useHeroStore } from '../../three/heroStore';
+import { MapSources } from '../map/card/MapSources';
 import { SelectionCard } from '../map/card/SelectionCard';
 import { useHoverLabel } from '../map/card/useHoverLabel';
 
@@ -48,7 +49,10 @@ export function HeroHud({ legend, sober = false }: { legend: ReactNode; sober?: 
           {hovered || sober ? null : (
             <p className="m-0 text-step--1 text-fg-secondary">{t(touch ? 'hero.touchHint' : 'hero.hint')}</p>
           )}
-          <p className={`m-0 ${hovered || !sober ? 'mt-1' : ''} ${label}`}>{t('hero.source')}</p>
+          {/* La misma cita de las fichas (D105): licencia enlazada y «datos modificados» (FORMATO.md §8). */}
+          <div className={hovered || !sober ? 'mt-1' : ''}>
+            <MapSources bare />
+          </div>
         </div>
         <SelectionCard returnFocus={recenterButton} className="ml-auto max-h-[min(60svh,32rem)] w-[min(22rem,100%)]" />
       </div>

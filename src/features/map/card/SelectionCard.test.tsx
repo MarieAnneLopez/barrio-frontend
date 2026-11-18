@@ -48,7 +48,10 @@ describe('ficha de un edificio (DIRT, pisos y fuentes)', () => {
     const ficha = await card('Conjunto Torres del Parque');
     expect(within(ficha).getByRole('link', { name: 'Catastro (UAECD), lote 004627077011' })).toHaveAttribute(
       'href', 'https://datosabiertos.bogota.gov.co/dataset/construccion');
-    expect(within(ficha).getByRole('link', { name: 'Catastro Bogotá – Datos Abiertos Bogotá (licencia abierta)' })).toBeInTheDocument();
+    // D105 y FORMATO.md §8: la cita nombra a la UAECD, enlaza la licencia CC BY 4.0 y dice que los datos están modificados.
+    expect(within(ficha).getByRole('link', { name: 'Catastro Bogotá (UAECD) – Datos Abiertos Bogotá' })).toBeInTheDocument();
+    expect(within(ficha).getByRole('link', { name: 'CC BY 4.0' })).toHaveAttribute('href', 'https://creativecommons.org/licenses/by/4.0/deed.es');
+    expect(ficha).toHaveTextContent('Catastro Bogotá (UAECD) – Datos Abiertos Bogotá, CC BY 4.0, datos modificados');
     expect(within(ficha).getByRole('link', { name: '© colaboradores de OpenStreetMap (ODbL)' })).toHaveAttribute(
       'href', 'https://www.openstreetmap.org/copyright');
   });

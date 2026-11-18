@@ -12,9 +12,10 @@ export function SourceLink({ href, children }: { href: string; children: ReactNo
 }
 
 /**
- * Cita de los datos del mapa (D105) en toda ficha y en el pie del mapa: Catastro Bogotá por Datos
- * Abiertos Bogotá (CC BY 4.0: se dice que están modificados, FORMATO.md §8; el detalle va en
- * Créditos) y los colaboradores de OpenStreetMap (ODbL). `bare` quita el filete de la ficha.
+ * Cita de los datos del mapa (D105) en toda ficha, en el pie del mapa y en el HUD del Inicio:
+ * «Catastro Bogotá (UAECD) – Datos Abiertos Bogotá, CC BY 4.0» con la licencia enlazada (CC BY 4.0
+ * §3(a)(1)(C)) y «datos modificados» (FORMATO.md §8; el detalle va en Créditos), y «© colaboradores
+ * de OpenStreetMap (ODbL)». `bare` quita el filete de la ficha.
  */
 export function MapSources({ bare = false }: { bare?: boolean }) {
   const { t } = useTranslation();
@@ -22,6 +23,8 @@ export function MapSources({ bare = false }: { bare?: boolean }) {
     <p className={`m-0 text-step--1 ${bare ? '' : 'border-t border-line pt-3'}`}>
       <span>{t('card.mapData')}: </span>
       <SourceLink href={MAP_LINKS.catastro}>{t('card.catastroCite')}</SourceLink>
+      <span>, </span>
+      <SourceLink href={MAP_LINKS.ccBy}>{t('card.ccBy')}</SourceLink>
       <span>, {t('card.modified')}</span>
       <span aria-hidden="true"> · </span>
       <SourceLink href={MAP_LINKS.osmCopyright}>{t('card.osmCite')}</SourceLink>

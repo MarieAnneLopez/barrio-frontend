@@ -11,7 +11,7 @@ describe('Créditos: datos de los mapas (D105)', () => {
     const section = await screen.findByRole('region', { name: 'Datos de los mapas' });
     const link = (name: string | RegExp) => within(section).getByRole('link', { name });
 
-    expect(link('Catastro Bogotá – Datos Abiertos Bogotá (licencia abierta)')).toHaveAttribute(
+    expect(link('Catastro Bogotá (UAECD) – Datos Abiertos Bogotá')).toHaveAttribute(
       'href', 'https://datosabiertos.bogota.gov.co/dataset/construccion');
     expect(within(section).getByText(/Unidad Administrativa Especial de Catastro Distrital/)).toBeInTheDocument();
     expect(link('Creative Commons Atribución 4.0 (CC BY 4.0)')).toHaveAttribute(

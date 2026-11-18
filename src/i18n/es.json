@@ -352,7 +352,6 @@
     "play": "Reanudar la órbita",
     "hint": "Arrastra para mover, usa la rueda para acercar y el botón derecho para girar. Pasa el puntero sobre un edificio o elige un lugar para ver su ficha.",
     "openModule": "Ver en {{module}}",
-    "source": "Datos: Catastro Bogotá · © OpenStreetMap (ODbL)",
     "legend": {
       "title": "Leyenda y filtro",
       "noData": "sin datos",
@@ -390,7 +389,8 @@
     "osmRef": "OpenStreetMap ({{ref}})",
     "nameSource": "Nombre",
     "mapData": "Datos del mapa",
-    "catastroCite": "Catastro Bogotá – Datos Abiertos Bogotá (licencia abierta)",
+    "catastroCite": "Catastro Bogotá (UAECD) – Datos Abiertos Bogotá",
+    "ccBy": "CC BY 4.0",
     "osmCite": "© colaboradores de OpenStreetMap (ODbL)",
     "fullDetail": "Ver ficha completa",
     "missing": "Este lugar ya no está en los datos del módulo.",
@@ -715,7 +715,7 @@
     "changes": "Las fotos vienen de Wikimedia Commons y de Mapillary (CC BY-SA 4.0). El único cambio que se les hizo es el tamaño y el formato (WebP), para que carguen rápido; el contenido es el original.",
     "count_one": "{{count}} foto",
     "count_other": "{{count}} fotos",
-    "link": "Créditos de fotos",
+    "link": "Créditos de fotos y mapas",
     "map": {
       "title": "Datos de los mapas",
       "intro": "La maqueta 3D de todas las secciones con mapa usa datos oficiales y abiertos, procesados una sola vez al construir el sitio. Los lugares de los 14 módulos citan su propia fuente en su ficha.",

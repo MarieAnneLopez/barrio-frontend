@@ -37,6 +37,7 @@ describe('Mapa 3D (/mapa)', () => {
     expect(links[0]).toHaveAccessibleName('Abrir la sección de Centros Educativos');
     expect(links[0]).toHaveAttribute('href', '/categorias/centros-educativos');
     expect(within(panel).getByText(/no una unidad administrativa oficial/)).toBeInTheDocument();
-    expect(within(panel).getByRole('link', { name: 'Catastro Bogotá – Datos Abiertos Bogotá (licencia abierta)' })).toBeInTheDocument();
+    expect(within(panel).getByRole('link', { name: 'Catastro Bogotá (UAECD) – Datos Abiertos Bogotá' })).toBeInTheDocument();
+    expect(within(panel).getByRole('link', { name: 'CC BY 4.0' })).toBeInTheDocument();
   });
 });

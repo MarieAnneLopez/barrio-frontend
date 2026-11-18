@@ -67,7 +67,7 @@ describe('Galería General (/galeria, D66)', () => {
     renderRoute('/galeria');
     const heading = await screen.findByRole('heading', { level: 2, name: 'Lugares y vistas del barrio' });
     const section = heading.closest('section') as HTMLElement;
-    expect(await within(section).findByRole('link', { name: 'Créditos de fotos' })).toHaveAttribute('href', '/creditos-fotos');
+    expect(await within(section).findByRole('link', { name: 'Créditos de fotos y mapas' })).toHaveAttribute('href', '/creditos-fotos');
   });
 
   it('sin fotos de lugares lo dice, y si la API falla deja reintentar; las vistas del barrio siguen', async () => {

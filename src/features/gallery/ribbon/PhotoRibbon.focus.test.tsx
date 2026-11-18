@@ -21,7 +21,7 @@ describe('PhotoRibbon con WebGL: el foco nunca se pierde ni se esconde', () => {
 
   it('si el foco estaba en otro sitio (el enlace de créditos), al llegar el motor no se lo lleva', async () => {
     const mounted = await mountRibbon({ far: true });
-    const credits = screen.getByRole('link', { name: 'Créditos de fotos' });
+    const credits = screen.getByRole('link', { name: 'Créditos de fotos y mapas' });
     act(() => credits.focus());
     await mounted.arrive();
     expect(credits).toHaveFocus();

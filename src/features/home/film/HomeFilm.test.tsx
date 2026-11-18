@@ -50,7 +50,11 @@ describe('Inicio: película de 4 capítulos (etapa 3)', () => {
     await screen.findByTestId('escena-3d');
     expect(within(hero()).getByText('4,653° N · 74,157° O')).toBeInTheDocument();
     for (const name of ['Recentrar', 'Pausar la órbita']) expect(within(hero()).getByRole('button', { name })).toBeInTheDocument();
-    expect(within(hero()).getByText('Datos: Catastro Bogotá · © OpenStreetMap (ODbL)')).toBeInTheDocument();
+    // La atribución es la misma de las fichas (D105, FORMATO.md §8): licencia enlazada y «datos modificados».
+    const sources = within(hero()).getByText(/Datos del mapa/).closest('p') as HTMLElement;
+    expect(sources).toHaveTextContent('Catastro Bogotá (UAECD) – Datos Abiertos Bogotá, CC BY 4.0, datos modificados');
+    expect(within(sources).getByRole('link', { name: 'CC BY 4.0' })).toHaveAttribute('href', 'https://creativecommons.org/licenses/by/4.0/deed.es');
+    expect(within(sources).getByRole('link', { name: '© colaboradores de OpenStreetMap (ODbL)' })).toBeInTheDocument();
     expect(within(hero()).queryByRole('button', { name: 'Leyenda y filtro' })).toBeNull();
     expect(within(hero()).queryByText(/usa la rueda para acercar/)).toBeNull(); // aquí la rueda desplaza la página
   });
@@ -83,7 +87,7 @@ describe('Inicio: película de 4 capítulos (etapa 3)', () => {
   it('enlace discreto a los créditos de las fotos, fuera de los capítulos', async () => {
     renderRoute('/');
     await screen.findByTestId('escena-3d');
-    const credits = within(screen.getByRole('main')).getByRole('link', { name: 'Créditos de fotos' });
+    const credits = within(screen.getByRole('main')).getByRole('link', { name: 'Créditos de fotos y mapas' });
     expect(credits).toHaveAttribute('href', '/creditos-fotos');
     expect(credits.closest('[data-chapter]')).toBeNull();
   });
