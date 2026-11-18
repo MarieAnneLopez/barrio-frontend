@@ -19,13 +19,22 @@ describe('teclas, rueda, activación y foco de la cinta', () => {
     for (const key of ['Escape', 'Enter', ' ', 'ArrowUp', 'ArrowDown', 'End', 'Tab']) expect(keyAction(key)).toBeNull();
   });
 
-  it('la rueda se escucha en pasivo y llega en píxeles del eje dominante', () => {
+  it('la rueda llega en píxeles del eje dominante; la vertical nunca se cancela: la página sigue', () => {
     const spy = vi.spyOn(HTMLElement.prototype, 'addEventListener');
     const { frame, handlers } = mount();
-    expect(spy).toHaveBeenCalledWith('wheel', expect.any(Function), { passive: true });
-    fireEvent.wheel(frame, { deltaY: 2, deltaMode: 1 });
+    handlers.onWheel.mockReturnValue(true);
+    expect(spy).toHaveBeenCalledWith('wheel', expect.any(Function), { passive: false });
+    expect(fireEvent.wheel(frame, { deltaY: 2, deltaMode: 1 })).toBe(true);
     expect(handlers.onWheel).toHaveBeenCalledWith(32);
     spy.mockRestore();
+  });
+
+  it('el gesto horizontal que usa la cinta se cancela (no pasa de página en el historial); el que no usa, no', () => {
+    const { frame, handlers } = mount();
+    handlers.onWheel.mockReturnValueOnce(true).mockReturnValueOnce(false);
+    expect(fireEvent.wheel(frame, { deltaX: 30, deltaY: 4 })).toBe(false);
+    expect(fireEvent.wheel(frame, { deltaX: 30, deltaY: 4 })).toBe(true); // movimiento reducido: la cinta no la usa
+    expect(handlers.onWheel.mock.calls).toEqual([[30], [30]]);
   });
 
   it('la activación dice qué foto, y si vino del teclado (detail 0) o del puntero', () => {

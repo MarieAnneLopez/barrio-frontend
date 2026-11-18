@@ -56,13 +56,6 @@ describe('PhotoRibbon con WebGL: arrastre, rueda y clics', () => {
     expect(await screen.findByRole('dialog', { name: LABELS.at(-1) ?? '' })).toBeInTheDocument();
   });
 
-  it('la rueda mueve la cinta (delta × 0,8) sin cancelar el scroll de la página', async () => {
-    const { group, advance, live } = await mountRibbon();
-    expect(fireEvent.wheel(group(), { deltaY: PITCH_PX / 0.8 })).toBe(true);
-    advance();
-    expect(live()).toHaveTextContent(/^Foto 2 de/);
-  });
-
   it('con movimiento reducido la rueda no mueve la cinta y el arrastre no lanza', async () => {
     const mounted = await mountRibbon({ reducedMotion: true });
     fireEvent.wheel(mounted.group(), { deltaY: 4 * PITCH_PX });

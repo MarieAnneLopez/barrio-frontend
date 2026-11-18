@@ -1,5 +1,7 @@
-// Lo demás que la cinta escucha sobre su contenedor: la rueda (en pasivo: nunca se cancela, la página
-// sigue desplazándose), la activación de los botones y adónde va el foco. Las teclas llegan desde React.
+// Lo demás que la cinta escucha sobre su contenedor: la rueda, la activación de los botones y adónde va
+// el foco. Las teclas llegan desde React. La rueda vertical nunca se cancela (la página sigue
+// desplazándose); la horizontal que usa la cinta sí: en un panel táctil, ese gesto sobre una página sin
+// scroll horizontal sería «atrás» o «adelante» del historial y sacaría de la Galería.
 import { wheelPixels } from './ribbonMotion';
 
 export type KeyAction = 'next' | 'previous' | 'home';
@@ -12,7 +14,8 @@ export function keyAction(key: string): KeyAction | null {
 }
 
 export interface InputHandlers {
-  onWheel(pixels: number): void;
+  /** Píxeles de rueda en el eje dominante; devuelve si la cinta los usó. */
+  onWheel(pixels: number): boolean;
   /** Se activó el botón de una foto: con el teclado o un lector de pantalla (detail 0), o con el puntero. */
   onActivate(index: number, keyboard: boolean): void;
   /** El foco pasó al botón de una foto (−1 si salió de la cinta); `visible` = :focus-visible. */
@@ -34,7 +37,10 @@ function focusVisible(element: Element): boolean {
 }
 
 export function bindInput(frame: HTMLElement, handlers: InputHandlers): () => void {
-  const wheel = (event: WheelEvent) => handlers.onWheel(wheelPixels(event.deltaX, event.deltaY, event.deltaMode));
+  const wheel = (event: WheelEvent) => {
+    const used = handlers.onWheel(wheelPixels(event.deltaX, event.deltaY, event.deltaMode));
+    if (used && Math.abs(event.deltaX) > Math.abs(event.deltaY)) event.preventDefault();
+  };
   const click = (event: MouseEvent) => {
     const index = photoIndexOf(event.target);
     if (index >= 0) handlers.onActivate(index, event.detail === 0);
@@ -46,7 +52,7 @@ export function bindInput(frame: HTMLElement, handlers: InputHandlers): () => vo
   const focusOut = (event: FocusEvent) => {
     if (!(event.relatedTarget instanceof Node && frame.contains(event.relatedTarget))) handlers.onFocus(-1, false);
   };
-  frame.addEventListener('wheel', wheel, { passive: true });
+  frame.addEventListener('wheel', wheel, { passive: false });
   frame.addEventListener('click', click);
   frame.addEventListener('focusin', focusIn);
   frame.addEventListener('focusout', focusOut);

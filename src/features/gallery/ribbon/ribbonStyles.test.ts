@@ -53,16 +53,18 @@ describe('escenario de la cinta', () => {
 describe('reglas del código de la cinta', () => {
   const sources = readdirSync(here).filter((name) => /\.tsx?$/.test(name) && !/\.test\.|Kit\.ts$|Harness/.test(name));
 
-  it('sin colores sueltos, sin tocar el body y sin cancelar la rueda ni el toque', () => {
+  it('sin colores sueltos, sin tocar el body y sin cancelar la rueda vertical ni el toque', () => {
     expect(sources.length).toBeGreaterThan(20);
     for (const file of sources) {
       const text = read(file);
       expect(text, file).not.toMatch(/#[0-9a-f]{6}\b|\b0x[0-9a-f]{6}\b|rgba?\(/i);
       expect(text, file).not.toMatch(/document\.body|overflow\s*=/);
-      // Solo se cancelan las teclas que usa la cinta y el clic sintético de un arrastre.
-      if (!['useRibbon.ts', 'ribbonPointer.ts'].includes(file)) expect(text, file).not.toMatch(/preventDefault/);
+      // Solo se cancelan las teclas que usa la cinta, el clic sintético de un arrastre y la rueda horizontal que usa.
+      if (!['useRibbon.ts', 'ribbonPointer.ts', 'ribbonInput.ts'].includes(file)) expect(text, file).not.toMatch(/preventDefault/);
     }
-    expect(read('ribbonInput.ts')).toMatch(/'wheel', wheel, \{ passive: true \}/);
+    const input = read('ribbonInput.ts');
+    expect(input).toMatch(/'wheel', wheel, \{ passive: false \}/);
+    expect(input.match(/preventDefault/g)).toHaveLength(1); // solo la rueda horizontal (ribbonInput.test.ts)
   });
 
   it('three directo, sin react-three-fiber', () => {

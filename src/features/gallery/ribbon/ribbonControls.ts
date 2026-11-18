@@ -54,9 +54,10 @@ export function createControls(context: ControlContext): Controls {
   });
   const unbindInput = bindInput(context.frame, {
     onWheel(pixels) {
-      if (context.reduced()) return; // la rueda desplaza la página; la cinta solo la acompaña con movimiento
+      if (context.reduced()) return false; // la rueda desplaza la página; la cinta solo la acompaña con movimiento
       motion.target = wheelTarget(motion.target, pixels, context.unitsPerPixel());
       moved();
+      return true;
     },
     onActivate(index, keyboard) {
       const centered = index === context.active();
