@@ -4,6 +4,7 @@
 import { gunzipSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
 import { buildFixture, type FixtureFile } from '../../../scripts/datos3d/fixture.mjs';
+import { FormatError } from './container';
 import { gunzip } from './gunzip';
 import { loadTintal3D, transferables } from './loadTintal3D';
 
@@ -48,6 +49,15 @@ describe('loadTintal3D', () => {
   it('falla claro si un archivo no corresponde al manifiesto (caché vieja o archivo cortado)', async () => {
     const { fetcher } = fakeFetch((k) => files[k as FixtureFile], manifest({ suelo: 12 }));
     await expect(loadTintal3D('https://tintal.test/data/tintal/', fetcher)).rejects.toThrow(/suelo/);
+  });
+
+  it('falla con FormatError si el manifiesto no trae uno de los archivos', async () => {
+    const info = manifest();
+    delete (info.archivos as Partial<typeof info.archivos>).suelo;
+    const { fetcher } = fakeFetch((k) => files[k as FixtureFile], info);
+    const loading = loadTintal3D('https://tintal.test/data/tintal/', fetcher);
+    await expect(loading).rejects.toThrow(FormatError);
+    await expect(loading).rejects.toThrow(/suelo/);
   });
 
   it('lista los buffers transferibles sin repetir ninguno', async () => {

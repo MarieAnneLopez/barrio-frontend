@@ -241,6 +241,12 @@ for (let b = 0; b < e.count; b++) {
 }
 ```
 
+**Respaldo.** `loadTintal3DInWorker` rechaza si el navegador no tiene `Worker` o
+`DecompressionStream` (Safari < 16.4), si falla una descarga o el formato, si el mensaje del
+worker no se puede leer o si no contesta en `LOAD_TIMEOUT_MS` (30 s; entonces lo termina). Un
+rechazo no queda en caché: la siguiente llamada vuelve a intentar. La escena debe conservar la
+carga actual por la API (`useTintalData`) como respaldo y usarla cuando la promesa rechace.
+
 ## 8. Licencias y atribución
 
 Catastro Bogotá (UAECD): «Creative Commons Attribution 4.0». OpenStreetMap: ODbL 1.0 («©

@@ -4,6 +4,7 @@ import { clearTintal3DCache, loadTintal3DInWorker, tintalDataBase, type WorkerLi
 
 class FakeWorker implements WorkerLike {
   onmessage: ((event: MessageEvent) => void) | null = null;
+  onmessageerror: ((event: MessageEvent) => void) | null = null;
   onerror: ((event: ErrorEvent) => void) | null = null;
   terminated = false;
   sent: unknown[] = [];
@@ -59,5 +60,21 @@ describe('loadTintal3DInWorker', () => {
   it('rechaza si el worker no arranca (error de carga del módulo)', async () => {
     const broken = () => new FakeWorker((w) => w.onerror?.(new ErrorEvent('error', { message: 'sin módulo' })));
     await expect(loadTintal3DInWorker(broken)).rejects.toThrow(/sin módulo/);
+  });
+
+  it('si el worker no contesta a tiempo lo termina, rechaza y el siguiente intento vuelve a pedir', async () => {
+    const silent = new FakeWorker(() => {});
+    await expect(loadTintal3DInWorker(() => silent, 20)).rejects.toThrow(/no respondió/);
+    expect(silent.terminated).toBe(true);
+    const ok = () => new FakeWorker(answer({ ok: true, data: { edificios: { count: 3 } } }));
+    await expect(loadTintal3DInWorker(ok)).resolves.toMatchObject({ edificios: { count: 3 } });
+  });
+
+  it('rechaza si el mensaje no se puede leer o no tiene la forma esperada', async () => {
+    const unreadable = () => new FakeWorker((w) => w.onmessageerror?.(new MessageEvent('messageerror')));
+    await expect(loadTintal3DInWorker(unreadable, 1000)).rejects.toThrow(/leer/);
+    for (const data of [undefined, { foo: 1 }, { ok: false }, { ok: true }]) {
+      await expect(loadTintal3DInWorker(() => new FakeWorker(answer(data)), 1000)).rejects.toThrow(/forma/);
+    }
   });
 });

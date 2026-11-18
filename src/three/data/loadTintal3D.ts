@@ -2,7 +2,7 @@
 // descomprime, los decodifica y lista los buffers que se pueden transferir sin copiar.
 import { FormatError } from './container';
 import { decodeEdificios, decodePuntos, decodeSuelo, decodeVias } from './decode';
-import { TNT3, type Tintal3D, type TintalFile, type TintalManifest } from './format';
+import { TNT3, type ManifestFile, type Tintal3D, type TintalFile, type TintalManifest } from './format';
 import { gunzip } from './gunzip';
 
 const FILES: TintalFile[] = ['edificios', 'vias', 'suelo', 'puntos'];
@@ -14,7 +14,8 @@ async function get(fetcher: typeof fetch, url: URL, init?: RequestInit): Promise
 }
 
 async function fetchFile(fetcher: typeof fetch, base: string, manifest: TintalManifest, file: TintalFile) {
-  const entry = manifest.archivos[file];
+  const entry = (manifest.archivos as Partial<Record<TintalFile, ManifestFile>> | undefined)?.[file];
+  if (!entry) throw new FormatError(`El manifiesto no trae el archivo ${file}`);
   const url = new URL(entry.ruta, base);
   url.searchParams.set('v', entry.sha256.slice(0, 12)); // un manifiesto nuevo nunca usa archivos viejos de caché
   const plain = await gunzip(new Uint8Array(await (await get(fetcher, url)).arrayBuffer()));
