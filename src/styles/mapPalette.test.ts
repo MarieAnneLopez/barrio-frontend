@@ -37,7 +37,7 @@ describe('tema único de los mapas (D83)', () => {
   });
 
   it('cada rol apunta a un color medido: ningún rol trae un hex propio', () => {
-    const roles = [...theme.matchAll(/--map-([a-z-]+): ([^;]+);/g)].filter((m) => !m[1]?.startsWith('ref-'));
+    const roles = [...theme.matchAll(/--map-([a-z-]+): ([^;]+);/g)].filter((m) => !/^(ref|dia|ciclo)-/.test(m[1] ?? ''));
     expect(roles.length).toBeGreaterThanOrEqual(14);
     for (const [, name, value] of roles) expect(value, `--map-${name}`).toMatch(/^var\(--map-ref-[1-8]\)$/);
   });
@@ -47,6 +47,17 @@ describe('tema único de los mapas (D83)', () => {
       const { h, s } = hueSat(hex);
       expect(h >= 250 && h <= 330 && s > 0.15, `${hex}: ${h.toFixed(0)}°`).toBe(false);
     }
+  });
+
+  it('el ciclo de día y noche (D106) trae su propio hex, sin violeta y atado a la interfaz', () => {
+    const cycle = [...theme.matchAll(/--map-((?:dia|ciclo)-[a-z-]+): (#[0-9a-f]{6});/g)];
+    expect(cycle.length).toBe(27);
+    for (const [, name, hex = ''] of cycle) {
+      const { h, s } = hueSat(hex);
+      expect(h >= 250 && h <= 330 && s > 0.15, `--map-${name}: ${h.toFixed(0)}°`).toBe(false);
+    }
+    const pick = (name: string) => cycle.find((m) => m[1] === name)?.[2];
+    expect([pick('dia-horizonte'), pick('ciclo-atardecer'), pick('ciclo-sol')]).toEqual(['#fcf0cf', '#f6a7c1', '#fdcf76']);
   });
 
   it('los archivos de estilo de mapa no contienen ninguno de los 5 hex violetas de la interfaz', () => {

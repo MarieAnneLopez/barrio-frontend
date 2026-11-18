@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { deviceHints, initialQuality } from './qualityPolicy';
 
 // Calidad adaptable de la maqueta (gran actualización): la escena mide sus cuadros por segundo y
 // baja o sube de nivel. Cada nivel fija la densidad de píxeles, las sombras y cuántos carros,
@@ -29,7 +30,8 @@ interface QualityState {
 }
 
 export const useQualityStore = create<QualityState>()((set) => ({
-  level: 2,
+  // Arranca según el equipo (móvil o poca memoria: más abajo); luego la ajusta QualityProbe.
+  level: typeof window === 'undefined' ? 2 : initialQuality(deviceHints()),
   fps: null,
   setLevel: (level) => set({ level }),
   setFps: (fps) => set({ fps }),

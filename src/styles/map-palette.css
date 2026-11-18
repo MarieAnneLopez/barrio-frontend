@@ -31,4 +31,35 @@
   --map-contorno: var(--map-ref-7); /* contornos, placas de los marcadores y capa del módulo */
   --map-limite: var(--map-ref-7); /* límite del barrio */
   --map-control: var(--map-ref-8); /* controles propios del mapa (zoom, recentrar) */
+
+  /* Ciclo de día y noche de la maqueta (gran actualización, D106). La noche son los roles de arriba
+     (la referencia es nocturna); el día y el cielo no salen de ella, así que llevan su propio hex,
+     atado a la paleta de la interfaz donde se puede: horizonte crema, atardecer rosa y sol amarillo. */
+  --map-dia-cielo: #8ecae6; /* cenit de día */
+  --map-dia-horizonte: #fcf0cf; /* horizonte de día: el crema de la interfaz */
+  --map-dia-suelo: #8fb06a; /* pasto */
+  --map-dia-manzana: #d8d0bf; /* concreto de las manzanas */
+  --map-dia-via: #5f646b; /* asfalto */
+  --map-dia-via-borde: #e5ddcb; /* andenes */
+  --map-dia-parque: #6e9f55;
+  --map-dia-agua: #6aaed3;
+  --map-dia-edificio-bajo: #c98a64; /* ladrillo claro, hasta 3 pisos */
+  --map-dia-edificio-medio: #b16e4b; /* ladrillo: el marrón de la interfaz */
+  --map-dia-edificio-alto: #e6d8bf; /* concreto crema, 7 pisos o más */
+  --map-dia-techo: #8d8a84;
+  --map-dia-luz: #fff3dc; /* luz del sol */
+  --map-dia-ambiente: #b9c7d6; /* luz del cielo de día */
+  --map-ciclo-atardecer: #f6a7c1; /* horizonte al atardecer y al amanecer: el rosa de la interfaz */
+  --map-ciclo-cielo-atardecer: #6b6f9e; /* cenit al atardecer */
+  --map-ciclo-sol: #fdcf76; /* el sol: el amarillo de la interfaz */
+  --map-ciclo-luna: #e8ecf4;
+  --map-ciclo-luz-luna: #8fa8d0;
+  --map-ciclo-ambiente-noche: #2a3d5c;
+  --map-ciclo-ventana: #ffd27a; /* ventanas encendidas */
+  --map-ciclo-brillo-via: #3fe0d0; /* brillo de las vías de noche, como la referencia */
+  --map-ciclo-farol: #ffe2a8;
+  --map-ciclo-estrella: #f4f1e6;
+  --map-ciclo-tierra: #8a5a3c; /* borde de tierra de la isla */
+  --map-ciclo-roca: #77706a; /* roca bajo la isla */
+  --map-ciclo-nube: #fbf7ee;
 }
