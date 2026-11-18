@@ -1,5 +1,5 @@
 import './site-header.css';
-import { useState } from 'react';
+import { startTransition, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
@@ -48,7 +48,9 @@ export function Header() {
           {wide ? <HeaderTools /> : null}
           <button
             type="button"
-            onClick={() => setOpen((value) => !value)}
+            // INP (D115): el clic pinta enseguida (el botón hundido) y el panel se monta en una transición;
+            // montarlo dentro del clic costaba ~120 ms de código con la CPU de un celular de gama media.
+            onClick={() => startTransition(() => setOpen((value) => !value))}
             aria-expanded={open}
             aria-controls={MENU_ID}
             aria-label={open ? t('header.closeMenu') : t('header.openMenu')}
