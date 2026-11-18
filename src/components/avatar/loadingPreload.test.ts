@@ -2,7 +2,6 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { denserThan } from '../../lib/density';
 import { LOADER_WIDE } from './loadingRun';
 import { spriteUrl } from './sequences';
 
@@ -24,15 +23,15 @@ function matches(media: string, { w, h, dppx }: Screen): boolean {
   );
 }
 
-/** El atlas que pinta la pantalla de carga: 420 px de alto si cabe (si no, 210) o el doble exacto en pantallas densas. */
-const painted = ({ w, h, dppx }: Screen) => spriteUrl('run', (w >= 640 && h >= 860) || dppx >= 1.01 ? 420 : 210);
+/** El atlas que pinta la pantalla de carga: el de su tamaño a 1× (D111), 420 px de alto si cabe; si no, 210. */
+const painted = ({ w, h }: Screen) => spriteUrl('run', w >= 640 && h >= 860 ? 420 : 210);
 
 // Revisión de sprites32: el atlas de la carrera (412 KB a 420) se pedía solo cuando React pintaba la
 // pantalla de carga, compitiendo con el código justo cuando debe verse. index.html lo pide al leerse.
 describe('pantalla de carga: el atlas de la carrera se pide antes que el código', () => {
   it('un enlace de precarga por atlas, con la misma condición que la pantalla de carga', () => {
     expect(preloads.map((p) => p.href)).toEqual([spriteUrl('run', 420), spriteUrl('run', 210)]);
-    expect(preloads[0]?.media).toBe(`${LOADER_WIDE}, ${denserThan(1.01)}`);
+    expect(preloads[0]?.media).toBe(LOADER_WIDE);
   });
 
   it.each([

@@ -1,5 +1,6 @@
 import './sequence.css';
-import type { CSSProperties } from 'react';
+import { useRef, type CSSProperties } from 'react';
+import { useNearViewport } from '../../hooks/useNearViewport';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { denserThan } from '../../lib/density';
 import { atlasCellWidth, cellWidth, FRAME_MS, sequenceSpec, spriteUrl, type SequenceName, type SpriteSize } from './sequences';
@@ -15,8 +16,10 @@ interface Props<N extends SequenceName> {
   playing?: boolean;
   /** Desfase dentro del ciclo (0–1): varias a la vez no se mueven al unísono. */
   phase?: number;
-  /** Lejos de la pantalla (el pie de página): el atlas se baja al acercarse y se decodifica aparte. */
+  /** Lejos de la pantalla (el pie de página): el atlas se pide a 300 px de verse y se decodifica aparte. */
   lazy?: boolean;
+  /** Un solo atlas fijo, sin cambiar por densidad (la pantalla de carga comparte uno entre sus dos Mini Marie). */
+  atlas?: SpriteSize<N>;
   className?: string;
 }
 
@@ -34,7 +37,9 @@ const DENSER = [[4, 2.01], [2, 1.01]] as const;
  * el cuadro dibujado `pose`, quieto. Decorativa: el texto lo da quien la usa.
  */
 export function SequenceSprite<N extends SequenceName>(props: Props<N>) {
-  const { name, size, pose = 0, playing = true, phase = 0, lazy = false, className = '' } = props;
+  const { name, size, pose = 0, playing = true, phase = 0, lazy = false, atlas, className = '' } = props;
+  const box = useRef<HTMLSpanElement>(null);
+  const near = useNearViewport(box, lazy);
   const reduced = useReducedMotion();
   const { sizes, grid: [cols, rows], keys } = sequenceSpec(name);
   const width = cellWidth(name, size);
@@ -51,23 +56,23 @@ export function SequenceSprite<N extends SequenceName>(props: Props<N>) {
     ? { animationDuration: `${rows * rowMs}ms`, animationTimingFunction: `steps(${rows})`, animationDelay: delay }
     : { transform: `translateY(${-Math.floor(frame / cols) * size}px)` };
   return (
-    <span className={`sequence ${className}`} style={{ width, height: size }} data-sequence={name} data-playing={animate || undefined} aria-hidden="true">
+    <span ref={box} className={`sequence ${className}`} style={{ width, height: size }} data-sequence={name} data-playing={animate || undefined} aria-hidden="true">
       <span className="sequence__window" style={{ width: cell, height: size }}>
         <span className="sequence__rows" style={down}>
-          <picture>
-            {DENSER.filter(([times]) => sizes.includes(size * times)).map(([times, dppx]) => (
+          {near ? <picture>
+            {atlas ? null : DENSER.filter(([times]) => sizes.includes(size * times)).map(([times, dppx]) => (
               <source key={times} media={denserThan(dppx)} srcSet={spriteUrl(name, size * times)} />
             ))}
             <img
               className="sequence__strip"
-              src={spriteUrl(name, size)}
+              src={spriteUrl(name, atlas ?? size)}
               alt=""
               draggable={false}
               loading={lazy ? 'lazy' : undefined}
               decoding={lazy ? 'async' : undefined}
               style={{ ...across, width: cols * cell, height: rows * size }}
             />
-          </picture>
+          </picture> : null}
         </span>
       </span>
     </span>

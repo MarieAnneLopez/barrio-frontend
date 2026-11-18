@@ -1,5 +1,5 @@
 import './loading-screen.css';
-import { useEffect, useLayoutEffect, useRef } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLoadingScreen } from '../../hooks/useLoadingScreen';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
@@ -11,8 +11,6 @@ import { LoadingScene } from './loading/LoadingScene';
 import { LOADER_WIDE, runKeyframes, runPath } from './loadingRun';
 import { cellWidth } from './sequences';
 import { SequenceSprite } from './SequenceSprite';
-
-const rider = (shown: number) => <BarRunner shown={shown} />;
 
 /**
  * Pantalla de carga completa (H33; gran actualización): Mini Marie cruza la pantalla hacia la
@@ -30,6 +28,9 @@ export function LoadingScreen() {
   const size = useMediaQuery(LOADER_WIDE, true) ? 420 : 210;
   const reduced = useReducedMotion();
   const track = useRef<HTMLDivElement>(null);
+  // Las dos Mini Marie comparten un solo atlas a 1× (D111): a 2× y 3× el navegador lo amplía entero y
+  // nítido (pixelated); bajar además el doble costaba ~400 KB en el celular antes de ver la página.
+  const rider = useCallback((shown: number) => <BarRunner shown={shown} atlas={size} />, [size]);
 
   useEffect(() => setVisible(visible), [visible, setVisible]);
 
@@ -48,7 +49,7 @@ export function LoadingScreen() {
       <div className="loading-screen__stage">
         <LoadingScene />
         <div ref={track} className="loading-screen__track">
-          <SequenceSprite name="run" size={size} pose={3} className="loading-screen__runner" />
+          <SequenceSprite name="run" size={size} atlas={size} pose={3} className="loading-screen__runner" />
         </div>
       </div>
       <div className="loading-screen__ground" aria-hidden="true" />
