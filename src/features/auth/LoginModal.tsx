@@ -1,7 +1,11 @@
+import { lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Modal } from '../../components/ui/Modal';
+import { Spinner } from '../../components/ui/Spinner';
 import { useAuthStore } from '../../store/authStore';
-import { AuthForms } from './AuthForms';
+
+// Los formularios (con zod) bajan al abrir el diálogo: no pesan en la primera carga.
+const AuthForms = lazy(() => import('./AuthForms').then((m) => ({ default: m.AuthForms })));
 
 /** Diálogo de inicio de sesión que se abre desde el header o desde una acción que lo pide. */
 export function LoginModal() {
@@ -10,7 +14,11 @@ export function LoginModal() {
   const close = useAuthStore((s) => s.closeDialog);
   return (
     <Modal open={open} onClose={close} title={t('auth.title')} description={t('auth.description')}>
-      <AuthForms onDone={close} />
+      {open ? (
+        <Suspense fallback={<Spinner />}>
+          <AuthForms onDone={close} />
+        </Suspense>
+      ) : null}
     </Modal>
   );
 }

@@ -43,7 +43,7 @@ describe('favicon en la paleta nueva (D84)', () => {
     expect(papel).toBeGreaterThan(size); // el fondo papel asoma sobre el pelo
   });
 
-  it('el color de la barra del navegador es noche', () => {
-    expect(readFileSync(join(root, 'index.html'), 'utf8')).toContain('<meta name="theme-color" content="#283845" />');
+  it('el color de la barra del navegador es el rosa de la cabecera (D100)', () => {
+    expect(readFileSync(join(root, 'index.html'), 'utf8')).toContain('<meta name="theme-color" content="#F6A7C1" />');
   });
 });

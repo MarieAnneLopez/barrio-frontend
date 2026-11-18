@@ -7,6 +7,12 @@ export default defineConfig({
   // En desarrollo, /api va al backend FastAPI local (sin CORS).
   server: { proxy: { '/api': 'http://127.0.0.1:8000' } },
   preview: { proxy: { '/api': 'http://127.0.0.1:8000' } },
+  // zod solo lo usan los formularios (Acceso y módulos): en su propio chunk, fuera de la primera carga.
+  build: {
+    rolldownOptions: {
+      output: { codeSplitting: { groups: [{ name: 'zod', test: /[\\/]node_modules[\\/]zod[\\/]/ }] } },
+    },
+  },
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],

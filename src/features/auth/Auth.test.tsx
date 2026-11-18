@@ -15,7 +15,9 @@ const BAD = { status: 401, body: { error: { code: 'INVALID_CREDENTIALS', message
 
 async function openDialog() {
   await userEvent.click(await within(header()).findByRole('button', { name: 'Iniciar sesión' }));
-  return screen.findByRole('dialog', { name: 'Iniciar sesión' });
+  const dialog = await screen.findByRole('dialog', { name: 'Iniciar sesión' });
+  await within(dialog).findByLabelText('Correo electrónico'); // los formularios bajan en diferido
+  return dialog;
 }
 
 describe('LoginModal', () => {
