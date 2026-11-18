@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { PhotoFlight } from './flight/PhotoFlight';
@@ -14,14 +14,16 @@ import { ModelStage } from './stage/ModelStage';
  */
 export function HomeFilm() {
   const { t } = useTranslation();
+  const [warm, setWarm] = useState(false);
+  const onManifestoDone = useCallback(() => setWarm(true), []);
   useEffect(() => {
     document.title = `${t('app.title')} · ${t('app.shortTitle')}`;
   }, [t]);
 
   return (
     <>
-      <Manifesto />
-      <PhotoFlight />
+      <Manifesto onDone={onManifestoDone} />
+      <PhotoFlight warm={warm} />
       <ModelStage />
       <ModuleReel />
       <p className="mx-auto mb-0 w-full max-w-[1200px] px-4 py-6 text-step--1 md:px-10">

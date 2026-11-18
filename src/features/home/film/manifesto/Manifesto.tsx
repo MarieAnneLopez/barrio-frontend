@@ -17,7 +17,7 @@ type Phase = 'playing' | 'covered' | 'done';
  * reproduce una vez, al entrar en vista (playManifesto escribe los estilos por referencia). Bajo
  * el header queda noche hasta que el papel cubre la sección. Con movimiento reducido, estado final.
  */
-export function Manifesto() {
+export function Manifesto({ onDone }: { onDone?: () => void }) {
   const reduced = useReducedMotion();
   const section = useRef<HTMLElement>(null);
   const [phase, setPhase] = useState<Phase>(reduced ? 'done' : 'playing');
@@ -29,6 +29,10 @@ export function Manifesto() {
   useToneSection(section);
   // El header vuelve a leer el tono cuando cambia (toneRegistry).
   useEffect(() => refreshTone(), [tone]);
+  // Terminado (o en estado final desde el principio): el Inicio ya puede pedir lo que sigue (D113).
+  useEffect(() => {
+    if (done) onDone?.();
+  }, [done, onDone]);
 
   useEffect(() => {
     const node = section.current;
