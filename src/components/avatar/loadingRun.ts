@@ -3,9 +3,10 @@ import { FRAME_MS, sequenceSpec } from './sequences';
 /**
  * Carrera de la pantalla de carga. Los cuadros de «corriendo» miran a la derecha, así que avanza
  * hacia la derecha. Para que el pie apoyado no patine, ella se desplaza lo mismo que el pie
- * retrocede en el dibujo. Medido en el ciclo de 32 cuadros (sprites32): el talón apoyado pasa de
- * x = 129 a x = 91 px entre los cuadros 21 y 25 (de un dibujado al siguiente), 38 px en 4 cuadros:
- * 9,5 px por cuadro a 420 px de alto, 304 px por ciclo (la misma medida que en la tira de 8).
+ * retrocede en el dibujo. Medido en el ciclo de 32 cuadros (sprites32, revisión): en los apoyos
+ * (cuadros 0→4 y 20→24, desde 0) el pie retrocede 37,9 y 35,3 px en 4 cuadros; la media de todos
+ * los pares que apoyan da 292,8 px por ciclo a 420 px de alto. Se usa 292 (146 a 210, 73 a 105),
+ * entero; scripts/sprite_cycles.test.mjs lo vuelve a medir en el ciclo.
  */
 export const RUN = { direction: 1, facing: 'right', fps: 1000 / FRAME_MS.run } as const;
 
@@ -15,7 +16,7 @@ export const RUN = { direction: 1, facing: 'right', fps: 1000 / FRAME_MS.run } a
  */
 export const LOADER_WIDE = '(min-width: 640px) and (min-height: 860px)';
 
-const STRIDE_AT_420 = 304;
+const STRIDE_AT_420 = 292;
 const FRAMES = sequenceSpec('run').frames;
 
 /** Zancada: px que avanza en un ciclo entero a ese alto (304, 152 o 76; enteros). */

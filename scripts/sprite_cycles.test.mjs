@@ -5,7 +5,7 @@
 // no tengan sus dibujados vecinos. En la carrera, el pie apoyado no patina con el avance de la
 // pantalla de carga (revisión de sprites32).
 import { describe, expect, it } from 'vitest';
-import { offsetAt } from '../src/components/avatar/loadingRun';
+import { offsetAt, stridePx } from '../src/components/avatar/loadingRun';
 import { defects, drawnFrame, foot, readCycle, scales } from './sprite_cycles_lib.mjs';
 
 const names = Object.keys(scales);
@@ -66,5 +66,17 @@ describe('ciclos maestros de Mini Marie (sprites32)', () => {
     });
     expect(pairs.length).toBeGreaterThanOrEqual(8); // dos apoyos de 4 cuadros o más
     expect(pairs.filter(([, drift]) => Math.abs(drift) > 3)).toEqual([]);
+  }, 60_000);
+
+  // La zancada de la pantalla de carga (stridePx) sale de este mismo pie: lo que retrocede por cuadro
+  // en los apoyos, por 32 cuadros (revisión: el ciclo medía 292,8 px y loadingRun decía 304).
+  it('carrera: la zancada de la pantalla de carga es la que mide el pie apoyado (±4 px por ciclo)', async () => {
+    const feet = await runFeet();
+    const back = [];
+    feet.forEach((a, n) => {
+      const b = feet[(n + 1) % 32];
+      if (touches(a) && touches(b)) back.push(a.x - b.x);
+    });
+    expect(Math.abs((32 * sum(back)) / back.length - stridePx(420))).toBeLessThanOrEqual(4);
   }, 60_000);
 });

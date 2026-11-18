@@ -21,8 +21,8 @@ describe('carrera de la pantalla de carga', () => {
     expect(RUN.fps).toBeCloseTo(24);
   });
 
-  it('zancada medida en el ciclo: 304 px por ciclo a 420 de alto (9,5 por cuadro), 152 a 210 y 76 a 105', () => {
-    expect([stridePx(420), stridePx(210), stridePx(105)]).toEqual([304, 152, 76]);
+  it('zancada medida en el ciclo: 292 px por ciclo a 420 de alto (9,125 por cuadro), 146 a 210 y 73 a 105', () => {
+    expect([stridePx(420), stridePx(210), stridePx(105)]).toEqual([292, 146, 73]);
   });
 
   it('cada cuadro avanza zancada / 32 redondeada: px enteros que no acumulan error', () => {
@@ -36,17 +36,17 @@ describe('carrera de la pantalla de carga', () => {
       }
       expect(offsetAt(32, size)).toBe(stridePx(size)); // tras un ciclo, una zancada exacta
     }
-    expect([...Array(9).keys()].map((n) => offsetAt(n, 105))).toEqual([0, 2, 5, 7, 10, 12, 14, 17, 19]);
+    expect([...Array(9).keys()].map((n) => offsetAt(n, 105))).toEqual([0, 2, 5, 7, 9, 11, 14, 16, 18]);
   });
 
   it('cruza toda la pantalla, de fuera a fuera, en cuadros enteros', () => {
     const sprite = cellWidth('run', 210);
     const path = runPath(390, 210, sprite);
     expect(path.start).toBe(-98); // entra entera desde fuera, por la izquierda
-    expect(path.frames).toBe(103); // 488 px a 4,75 px por cuadro
-    expect(path.distance).toBe(offsetAt(103, 210));
+    expect(path.frames).toBe(107); // 488 px a 4,5625 px por cuadro
+    expect(path.distance).toBe(offsetAt(107, 210));
     expect(path.distance).toBeGreaterThanOrEqual(390 + 98); // y sale entera por la derecha
-    expect(path.durationMs).toBeCloseTo(103 * FRAME_MS.run);
+    expect(path.durationMs).toBeCloseTo(107 * FRAME_MS.run);
   });
 
   it('un fotograma clave por cuadro, en px enteros, sostenido hasta el cuadro siguiente', () => {
