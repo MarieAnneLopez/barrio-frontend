@@ -26,7 +26,7 @@ export function Streets({ world }: StreetsProps) {
       <GroundSurface world={world} palette={palette} />
       {stage >= 1 && <RoadSurfaces world={world} net={net} palette={palette} />}
       {stage >= 2 && <StreetFurniture world={world} net={net} palette={palette} />}
-      {stage >= 3 && <TreesLayer world={world} palette={palette} />}
+      {stage >= 3 && <TreesLayer world={world} net={net} palette={palette} />}
     </group>
   );
 }

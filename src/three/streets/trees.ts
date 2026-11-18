@@ -5,7 +5,8 @@ import type { Pose } from './instances';
 
 // Árboles: los 248 reales de OSM (natural=tree) en su punto; las 20 hileras reales (natural=tree_row)
 // repartidas cada ROW_STEP m (la hilera es dato, la posición de cada árbol no: FORMATO §6), y árboles
-// DECORATIVOS por regla dentro de parques y bosques (nunca se cuentan ni se muestran como dato).
+// DECORATIVOS por regla dentro de parques y bosques (nunca se cuentan ni se muestran como dato), salvo
+// donde `blocked` lo impide (treeGround: canchas, agua, vías, edificios).
 
 export const ROW_STEP = 7;
 
@@ -37,14 +38,16 @@ export function insideRings(rings: ArrayLike<number>[], x: number, z: number): b
   for (const r of rings) {
     const n = r.length >> 1;
     for (let i = 0, j = n - 1; i < n; j = i++) {
-      const [xi, zi, xj, zj] = [r[2 * i] ?? 0, r[2 * i + 1] ?? 0, r[2 * j] ?? 0, r[2 * j + 1] ?? 0];
+      const xi = r[2 * i] ?? 0, zi = r[2 * i + 1] ?? 0, xj = r[2 * j] ?? 0, zj = r[2 * j + 1] ?? 0;
       if (zi > z !== zj > z && x < ((xj - xi) * (z - zi)) / (zj - zi) + xi) inside = !inside;
     }
   }
   return inside;
 }
 
-function decorative(s: Suelo, out: TreePose[]): void {
+type Blocked = (x: number, z: number) => boolean;
+
+function decorative(s: Suelo, blocked: Blocked, out: TreePose[]): void {
   for (let a = 0; a < s.count; a++) {
     const rule = DECOR[s.clase[a] ?? 0];
     if (!rule) continue;
@@ -61,13 +64,13 @@ function decorative(s: Suelo, out: TreePose[]): void {
         if (hash01(gx, gz ^ 0x3c6e) > chance) continue;
         const x = (gx + 0.5 + 0.7 * (hash01(gz, gx) - 0.5)) * step;
         const z = (gz + 0.5 + 0.7 * (hash01(gx + 17, gz) - 0.5)) * step;
-        if (insideRings(rings, x, z)) out.push(tree(x, z, true));
+        if (insideRings(rings, x, z) && !blocked(x, z)) out.push(tree(x, z, true));
       }
     }
   }
 }
 
-export function treePoses(p: Puntos, s: Suelo): TreePose[] {
+export function treePoses(p: Puntos, s: Suelo, blocked: Blocked = () => false): TreePose[] {
   const out: TreePose[] = [];
   for (let i = 0; i + 1 < p.arboles.xz.length; i += 2) out.push(tree(p.arboles.xz[i] ?? 0, p.arboles.xz[i + 1] ?? 0, false));
   const h = p.hileras;
@@ -80,6 +83,6 @@ export function treePoses(p: Puntos, s: Suelo): TreePose[] {
       carry -= length;
     }
   }
-  decorative(s, out);
+  decorative(s, blocked, out);
   return out;
 }

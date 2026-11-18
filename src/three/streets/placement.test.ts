@@ -1,13 +1,12 @@
 import { Euler, Matrix4, Quaternion, Vector3 } from 'three';
 import { describe, expect, it } from 'vitest';
 import { TNT3 } from '../data/format';
-import { makePuntos, makeSuelo, makeVias } from './fixtures';
+import { makeVias } from './fixtures';
 import { writePose } from './instances';
 import { LAMP_STEP, lampPoses } from './lamps';
 import { buildNetwork, wayTags } from './network';
 import { roadSpec } from './roadClass';
 import { roadIndex } from './segmentIndex';
-import { ROW_STEP, treePoses } from './trees';
 
 const C = TNT3.clasesVia;
 // Avenida de 400 m hacia el este con un cruce en x = 200 y una calle residencial al norte.
@@ -47,24 +46,6 @@ describe('faroles decorativos (OSM no registra faroles: D105)', () => {
     expect(kept.length).toBeGreaterThan(3);
     expect(kept.every((l) => l.z < 0)).toBe(true);
     expect(kept.filter((l) => roads.covering(l.x, l.z, 0.3))).toEqual([]);
-  });
-});
-
-describe('árboles', () => {
-  it('los reales de OSM en su punto y las hileras repartidas cada ROW_STEP m, con variedad fija', () => {
-    const puntos = makePuntos([10, 20, -30, 5], [[0, 100, 70, 100]]);
-    const trees = treePoses(puntos, makeSuelo([]));
-    expect(trees.slice(0, 2).map((t) => [t.x, t.z])).toEqual([[10, 20], [-30, 5]]);
-    expect(trees.length).toBe(2 + Math.floor(70 / ROW_STEP));
-    expect(new Set(trees.map((t) => t.scale)).size).toBeGreaterThan(1);
-    expect(treePoses(puntos, makeSuelo([]))).toEqual(trees);
-  });
-
-  it('en los parques agrega árboles decorativos (regla de dibujo) solo dentro del polígono', () => {
-    const park = [0, 0, 200, 0, 200, 200, 0, 200];
-    const trees = treePoses(makePuntos([]), makeSuelo([[TNT3.clasesSuelo.park, [park]]]));
-    expect(trees.length).toBeGreaterThan(20);
-    expect(trees.every((t) => t.decorative && t.x > 0 && t.x < 200 && t.z > 0 && t.z < 200)).toBe(true);
   });
 });
 

@@ -2,9 +2,11 @@ import { useEffect, useMemo } from 'react';
 import type { Tintal3D } from '../data/format';
 import { posesToMatrices } from './instances';
 import { coneTree, roundTree } from './models';
+import type { Network } from './network';
 import type { StreetPalette } from './palette';
 import { partsMaterial } from './parts';
 import { StaticInstances } from './StaticInstances';
+import { decorBlocker } from './treeGround';
 import { treePoses, type TreePose } from './trees';
 
 /** Tono de la copa por árbol (gris que multiplica el verde del tema). */
@@ -14,13 +16,16 @@ function tones(trees: readonly TreePose[]): Float32Array {
   return out;
 }
 
-/** Árboles low-poly instanciados (trees.ts): reales de OSM, hileras y decorativos en parques. */
-export function TreesLayer({ world, palette }: { world: Tintal3D; palette: StreetPalette }) {
+/**
+ * Árboles low-poly instanciados (trees.ts): reales de OSM, hileras y decorativos en parques, estos
+ * fuera de canchas, agua, vías y edificios (treeGround).
+ */
+export function TreesLayer({ world, net, palette }: { world: Tintal3D; net: Network; palette: StreetPalette }) {
   const data = useMemo(() => {
-    const all = treePoses(world.puntos, world.suelo);
+    const all = treePoses(world.puntos, world.suelo, decorBlocker(world, net));
     const [round, cone] = [all.filter((t) => t.kind === 0), all.filter((t) => t.kind === 1)];
     return { round: posesToMatrices(round), cone: posesToMatrices(cone), roundTone: tones(round), coneTone: tones(cone) };
-  }, [world]);
+  }, [world, net]);
   const assets = useMemo(() => ({
     round: roundTree(),
     cone: coneTree(),

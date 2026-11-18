@@ -1,5 +1,22 @@
 // Datos TNT3 sintéticos para las pruebas de calles y vida: una red de vías pequeña a mano.
-import type { Puntos, Suelo, Vias } from '../data/format';
+import type { Edificios, Puntos, Suelo, Vias } from '../data/format';
+
+/** Edificios con sus anillos ([exterior, ...huecos] por edificio) y, si se dan, piso base y banderas. */
+export function makeEdificios(polys: number[][][], base: number[] = [], banderas: number[] = []): Edificios {
+  const rings = polys.flat();
+  const anillos = new Uint32Array(rings.length + 1);
+  rings.forEach((r, i) => (anillos[i + 1] = (anillos[i] ?? 0) + r.length / 2));
+  const edificios = new Uint32Array(polys.length + 1);
+  polys.forEach((p, i) => (edificios[i + 1] = (edificios[i] ?? 0) + p.length));
+  const n = polys.length;
+  const u8 = (values: number[] = []) => Uint8Array.from({ length: n }, (_, i) => values[i] ?? 0);
+  return {
+    count: n, xz: Float32Array.from(rings.flat()), anillos, edificios, pisos: u8([]).fill(3), base: u8(base), sotanos: u8(),
+    banderas: u8(banderas), tipoDireccion: u8(), direccion: new Uint32Array(n), tipoNombre: u8(), nombre: new Uint32Array(n),
+    lote: new Uint32Array(n), sector: new Uint32Array(n), osm: new Float64Array(n),
+    textos: { direcciones: [], nombres: [], origenNombres: [], lotes: [], sectores: [] },
+  };
+}
 
 export interface FixtureWay {
   nodes: number[];
