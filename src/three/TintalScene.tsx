@@ -83,7 +83,7 @@ export default function TintalScene({ world, places, active, reducedMotion }: Pr
       <Clouds center={framing.center} radius={radius} count={Math.max(8, Math.round(28 * density))} still={reducedMotion} />
       <Streets world={world} />
       <Buildings world={world} />
-      <Vida world={world} still={reducedMotion} />
+      <Vida world={world} still={reducedMotion} framing={framing} />
       <ScenePlaces places={places} project={project} />
       <PlaceLayers layers={layers} />
       <Billboards places={selected ? [selected] : []} />

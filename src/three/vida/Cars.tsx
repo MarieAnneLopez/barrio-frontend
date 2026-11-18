@@ -23,16 +23,18 @@ interface Props {
   count: number;
   still: boolean;
   palette: VidaPalette;
+  /** false en el cuadro en que se arma el grafo de carriles; los carros, en el siguiente. */
+  ready: boolean;
 }
 
 /**
  * Carros instanciados por el grafo vial real (traffic.ts), todos en un solo useFrame: avanzan,
  * giran en los cruces y de noche encienden los faros, con su abanico de luz en el suelo.
  */
-export function Cars({ vias, capacity, count: wanted, still, palette: p }: Props) {
+export function Cars({ vias, capacity, count: wanted, still, palette: p, ready }: Props) {
   const graph = useMemo(() => buildLaneGraph(vias), [vias]);
-  const count = graph.edges > 0 ? Math.min(wanted, capacity) : 0; // sin vías vehiculares no hay carros
-  const traffic = useMemo(() => createTraffic(graph, capacity), [graph, capacity]);
+  const traffic = useMemo(() => (ready ? createTraffic(graph, capacity) : null), [graph, capacity, ready]);
+  const count = traffic && graph.edges > 0 ? Math.min(wanted, capacity) : 0; // sin vías vehiculares no hay carros
   const assets = useMemo(() => ({
     car: carModel(),
     beam: headlightBeam(),
@@ -60,7 +62,7 @@ export function Cars({ vias, capacity, count: wanted, still, palette: p }: Props
 
   useFrame((_, delta) => {
     const [cars, beams] = [carsRef.current, beamsRef.current];
-    if (!cars || !beams) return;
+    if (!cars || !beams || !traffic) return;
     if (!still) stepTraffic(graph, traffic, count, Math.min(delta, 0.1));
     if (!still || written.current !== count) {
       const m = cars.instanceMatrix.array as Float32Array;

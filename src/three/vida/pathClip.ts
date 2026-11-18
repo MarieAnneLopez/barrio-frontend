@@ -45,9 +45,10 @@ export function clipOutside(d: PathDraft, walls: Walls): PathDraft[] {
   /** ¿El último trecho visto quedó adentro? null al empezar el camino. */
   let wasInside: boolean | null = null;
   const ts: number[] = [];
+  // Sin desestructurar arreglos en el bucle: corre miles de veces antes de que el motor lo optimice.
   for (let i = 0; 2 * i + 3 < d.xz.length; i++) {
-    const [ax, az, bx, bz] = [d.xz[2 * i] ?? 0, d.xz[2 * i + 1] ?? 0, d.xz[2 * i + 2] ?? 0, d.xz[2 * i + 3] ?? 0];
-    const [ya, yb] = [d.y[i] ?? 0, d.y[i + 1] ?? 0];
+    const ax = d.xz[2 * i] ?? 0, az = d.xz[2 * i + 1] ?? 0, bx = d.xz[2 * i + 2] ?? 0, bz = d.xz[2 * i + 3] ?? 0;
+    const ya = d.y[i] ?? 0, yb = d.y[i + 1] ?? 0;
     const put = (t: number) => add(ax + (bx - ax) * t, az + (bz - az) * t, ya + (yb - ya) * t);
     const gap = WALL_GAP / (Math.sqrt((bx - ax) ** 2 + (bz - az) ** 2) || 1);
     ts.length = 0;
@@ -56,7 +57,7 @@ export function clipOutside(d: PathDraft, walls: Walls): PathDraft[] {
     if (ts.length > 2) ts.sort(ascending);
     let from = 0; // donde el trozo actual entró a este tramo
     for (let k = 0; k + 1 < ts.length; k++) {
-      const [t0, t1] = [ts[k] ?? 0, ts[k + 1] ?? 1];
+      const t0 = ts[k] ?? 0, t1 = ts[k + 1] ?? 1;
       if (t1 - t0 < 1e-9) continue;
       const inside = walls.inside(ax + ((bx - ax) * (t0 + t1)) / 2, az + ((bz - az) * (t0 + t1)) / 2);
       if (inside && wasInside === false) {

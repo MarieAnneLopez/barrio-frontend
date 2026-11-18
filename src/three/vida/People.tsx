@@ -6,7 +6,8 @@ import { writePose } from '../streets/instances';
 import { partsMaterial } from '../streets/parts';
 import { personModel } from './models';
 import { instanceColors, type VidaPalette } from './vidaPalette';
-import { buildWalkPaths } from './walkPaths';
+import { packPaths } from './pathPack';
+import { clipDrafts, walkDrafts } from './walkPaths';
 import { createWalkers, frameWalkers } from './walkers';
 
 /** Más grandes que las reales para que se lean a la distancia de la maqueta (≈ 3 m). */
@@ -23,13 +24,18 @@ interface Props {
   count: number;
   still: boolean;
   palette: VidaPalette;
+  /** Cada paso en su cuadro: los caminos al montarse, su recorte con `clip` y la gente con `ready`. */
+  clip: boolean;
+  ready: boolean;
 }
 
 /** Personitas low-poly instanciadas que caminan por andenes, senderos y parques (walkers.ts). */
-export function People({ world, capacity, count: wanted, still, palette }: Props) {
-  const paths = useMemo(() => buildWalkPaths(world.vias, world.suelo, world.edificios), [world]);
-  const count = paths.count > 0 ? Math.min(wanted, capacity) : 0; // sin caminos no hay gente
-  const walkers = useMemo(() => createWalkers(paths, capacity), [paths, capacity]);
+export function People({ world, capacity, count: wanted, still, palette, clip, ready }: Props) {
+  const drafts = useMemo(() => walkDrafts(world.vias, world.suelo), [world]);
+  const clipped = useMemo(() => (clip ? clipDrafts(drafts, world.edificios) : null), [drafts, world, clip]);
+  const paths = useMemo(() => (clipped && ready ? packPaths(clipped) : null), [clipped, ready]);
+  const walkers = useMemo(() => (paths ? createWalkers(paths, capacity) : null), [paths, capacity]);
+  const count = paths && paths.count > 0 ? Math.min(wanted, capacity) : 0; // sin caminos no hay gente
   const assets = useMemo(() => ({
     model: personModel(),
     material: partsMaterial([
@@ -52,7 +58,8 @@ export function People({ world, capacity, count: wanted, still, palette }: Props
 
   useFrame((state, delta) => {
     const m = ref.current;
-    if (!m || !frameWalkers(paths, walkers, count, Math.min(delta, 0.1), state.clock.elapsedTime, still)) return;
+    if (!m || !paths || !walkers) return;
+    if (!frameWalkers(paths, walkers, count, Math.min(delta, 0.1), state.clock.elapsedTime, still)) return;
     const out = m.instanceMatrix.array as Float32Array;
     const s = PERSON_SCALE;
     for (let i = 0; i < count; i++) {

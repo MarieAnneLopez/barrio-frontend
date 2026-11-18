@@ -46,7 +46,7 @@ export class PolygonGrid {
   /** Polígono que contiene el punto y cumple `accept` (cualquiera, si no se da); −1 si ninguno. */
   find(x: number, z: number, accept?: (p: number) => boolean): number {
     const c = this.cells;
-    const [cx, cz] = [Math.floor((x - c.x0) / c.size), Math.floor((z - c.z0) / c.size)];
+    const cx = Math.floor((x - c.x0) / c.size), cz = Math.floor((z - c.z0) / c.size);
     if (cx < 0 || cz < 0 || cx >= c.nx || cz >= c.nz) return -1;
     for (let k = c.first[cx * c.nz + cz] ?? 0, end = c.first[cx * c.nz + cz + 1] ?? 0; k < end; k++) {
       const p = c.items[k] ?? 0;
@@ -61,17 +61,17 @@ export class PolygonGrid {
   /**
    * Agrega a `out` las fracciones t ∈ (0, 1) donde el segmento AB cruza un borde de los polígonos que
    * cumplen `accept`. Se buscan por trechos de una celda (la caja de un tramo largo en diagonal tocaría
-   * cientos de celdas) y cada polígono se corta una sola vez con el segmento entero.
+   * cientos de celdas) y cada polígono se corta una sola vez con el segmento entero. Sin desestructurar
+   * arreglos: corre miles de veces apenas se abre la maqueta, antes de que el motor la optimice.
    */
   crossings(ax: number, az: number, bx: number, bz: number, out: number[], accept?: (p: number) => boolean): void {
-    const [c, q] = [this.cells, ++this.query];
+    const c = this.cells, q = ++this.query, dx = bx - ax, dz = bz - az;
     if (c.nx === 0) return;
-    const parts = Math.max(1, Math.ceil(Math.sqrt((bx - ax) ** 2 + (bz - az) ** 2) / c.size));
+    const parts = Math.max(1, Math.ceil(Math.sqrt(dx * dx + dz * dz) / c.size));
     for (let s = 0; s < parts; s++) {
-      const [px, pz] = [ax + ((bx - ax) * s) / parts, az + ((bz - az) * s) / parts];
-      const [qx, qz] = [ax + ((bx - ax) * (s + 1)) / parts, az + ((bz - az) * (s + 1)) / parts];
-      const [x0, z0, x1, z1] = [Math.min(px, qx), Math.min(pz, qz), Math.max(px, qx), Math.max(pz, qz)];
-      const [cz0, cz1] = [cellOf(z0, c.z0, c.size, c.nz), cellOf(z1, c.z0, c.size, c.nz)];
+      const px = ax + (dx * s) / parts, pz = az + (dz * s) / parts, qx = ax + (dx * (s + 1)) / parts, qz = az + (dz * (s + 1)) / parts;
+      const x0 = Math.min(px, qx), z0 = Math.min(pz, qz), x1 = Math.max(px, qx), z1 = Math.max(pz, qz);
+      const cz0 = cellOf(z0, c.z0, c.size, c.nz), cz1 = cellOf(z1, c.z0, c.size, c.nz);
       for (let cx = cellOf(x0, c.x0, c.size, c.nx), cx1 = cellOf(x1, c.x0, c.size, c.nx); cx <= cx1; cx++) {
         // Las celdas cz0..cz1 de una columna son seguidas en la lista.
         for (let k = c.first[cx * c.nz + cz0] ?? 0, end = c.first[cx * c.nz + cz1 + 1] ?? 0; k < end; k++) {

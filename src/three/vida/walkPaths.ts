@@ -65,7 +65,8 @@ function sidewalks(v: Vias, d: PathDraft[]): void {
   }
 }
 
-export function buildWalkPaths(v: Vias, s: Suelo, e?: Edificios): WalkPaths {
+/** Los caminos sin recortar; clipDrafts los parte contra los edificios y packPaths los empaca (cada paso en su cuadro). */
+export function walkDrafts(v: Vias, s: Suelo): PathDraft[] {
   const d: PathDraft[] = [];
   footways(v, d);
   sidewalks(v, d);
@@ -74,7 +75,14 @@ export function buildWalkPaths(v: Vias, s: Suelo, e?: Edificios): WalkPaths {
     if (!((v.banderas[w] ?? 0) & TNT3.banderasVia.area) || !footSpec(v.clase[w] ?? 0)) continue;
     strolls([wayLine(v, w).xz], 9000 + w, d);
   }
-  if (!e) return packPaths(d);
-  const walls = footprintWalls(e);
-  return packPaths(d.flatMap((path) => clipOutside(path, walls)));
+  return d;
 }
+
+/** Los caminos partidos donde entran en un edificio a ras de suelo (pathClip). */
+export function clipDrafts(d: PathDraft[], e: Edificios): PathDraft[] {
+  const walls = footprintWalls(e);
+  return d.flatMap((path) => clipOutside(path, walls));
+}
+
+/** Todo en un paso (pruebas): los caminos, recortados si se dan los edificios, y empacados. */
+export const buildWalkPaths = (v: Vias, s: Suelo, e?: Edificios): WalkPaths => packPaths(e ? clipDrafts(walkDrafts(v, s), e) : walkDrafts(v, s));

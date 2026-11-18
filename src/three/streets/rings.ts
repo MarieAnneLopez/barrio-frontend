@@ -19,7 +19,7 @@ export function segmentCuts(
   xz: ArrayLike<number>, rings: ArrayLike<number>, r0: number, r1: number,
   ax: number, az: number, bx: number, bz: number, out: number[],
 ): void {
-  const [dx, dz] = [bx - ax, bz - az];
+  const dx = bx - ax, dz = bz - az;
   for (let r = r0; r < r1; r++) {
     for (let i = rings[r] ?? 0, end = rings[r + 1] ?? 0, j = end - 1; i < end; j = i++) {
       const cx = xz[2 * j] ?? 0, cz = xz[2 * j + 1] ?? 0;
