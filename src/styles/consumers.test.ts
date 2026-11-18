@@ -67,8 +67,8 @@ describe.each(MODES)('lo que los componentes combinan, en modo %s (D84)', (_mode
 });
 
 describe('el CTA es texto grande de verdad (D100)', () => {
-  it('ui.css fuerza 19 px (≥ 18,66) en Inter 700 a todo ui-btn--primary', () => {
-    expect(cta).toContain('font-size: 1.1875rem;');
+  it('ui.css fuerza 19 px (≥ 18,66) en Inter 700 a todo ui-btn--primary (en px reales: largeText.test)', () => {
+    expect(cta).toContain('font-size: max(1.1875rem, 19px);');
     expect(cta).toContain('font-weight: 700;');
     expect(cta).toContain('font-family: var(--ff-heading);');
   });
