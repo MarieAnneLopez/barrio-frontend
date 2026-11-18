@@ -2,7 +2,7 @@ import { type KeyboardEvent, type RefObject, useCallback, useEffect, useRef, use
 import { canCreateWebGL, type RibbonEngine, type RibbonItem, supportsWebGL } from './ribbonContract';
 import { useFocusCarry } from './ribbonFocus';
 
-type Node = RefObject<HTMLElement | null>;
+type ElementRef = RefObject<HTMLElement | null>;
 /** grid: sin WebGL, queda la rejilla · pending: el motor aún no llegó, se ve la rejilla · ribbon: la cinta. */
 export type RibbonMode = 'grid' | 'pending' | 'ribbon';
 /** Margen con el que se pide el motor: una pantalla antes de que la cinta asome. */
@@ -10,9 +10,9 @@ const NEAR = '100% 0px';
 
 interface Args {
   /** La sección (para saber si está cerca), el contenedor de la cinta y el del lienzo. */
-  root: Node;
-  frame: Node;
-  host: Node;
+  root: ElementRef;
+  frame: ElementRef;
+  host: ElementRef;
   items: readonly RibbonItem[];
   reduced: boolean;
   onOpen(index: number): void;

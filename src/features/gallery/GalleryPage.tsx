@@ -37,8 +37,8 @@ export function GalleryPage() {
         {photos.status === 'success' && !list.length ? (
           <p className="m-0 text-fg-secondary">{t('galleryPage.empty')}</p>
         ) : null}
-        {/* Con otro número de fotos (al reintentar tras un error) la cinta se monta de nuevo. */}
-        {photos.status === 'loading' ? null : <PhotoRibbon key={items.length} photos={items} />}
+        {/* Al reintentar se pasa por «loading»: la cinta se desmonta y vuelve con las fotos nuevas. */}
+        {photos.status === 'loading' ? null : <PhotoRibbon photos={items} />}
       </section>
     </div>
   );
