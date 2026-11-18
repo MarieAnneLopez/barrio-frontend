@@ -39,9 +39,16 @@ export interface RunPath {
   durationMs: number;
 }
 
-/** Recorrido que cruza un ancho de pantalla entero, de fuera a fuera, un cuadro de la carrera cada vez. */
+/**
+ * Recorrido que cruza un ancho de pantalla entero, de fuera a fuera, un cuadro de la carrera cada vez.
+ * En bucle el fotograma clave final (offset 1) no se pinta nunca: el último que se ve es el anterior,
+ * así que ese ya debe dejarla entera fuera por la derecha (auditoría MM-07). Es el primer cuadro en
+ * que ha recorrido la pantalla más su ancho; el recorrido tiene uno más, que nadie ve.
+ */
 export function runPath(viewport: number, size: number, sprite: number): RunPath {
-  const frames = Math.ceil(((viewport + sprite) * FRAMES) / stridePx(size));
+  let out = 0;
+  while (offsetAt(out, size) < viewport + sprite) out += 1;
+  const frames = out + 1;
   return { start: -Math.round(sprite), frames, distance: offsetAt(frames, size), durationMs: frames * FRAME_MS.run };
 }
 

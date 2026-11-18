@@ -43,11 +43,20 @@ describe('carrera de la pantalla de carga', () => {
     const sprite = cellWidth('run', 210);
     const path = runPath(390, 210, sprite);
     expect(path.start).toBe(-98); // entra entera desde fuera, por la izquierda
-    expect(path.frames).toBe(107); // 488 px a 4,5625 px por cuadro
-    expect(path.distance).toBe(offsetAt(107, 210));
-    expect(path.distance).toBeGreaterThanOrEqual(390 + 98); // y sale entera por la derecha
-    expect(path.durationMs).toBeCloseTo(107 * FRAME_MS.run);
+    expect(path.frames).toBe(108); // 488 px a 4,5625 px por cuadro: sale en el 107 y ese se ve entero
+    expect(path.distance).toBe(offsetAt(108, 210));
+    expect(path.durationMs).toBeCloseTo(108 * FRAME_MS.run);
   });
+
+  // Auditoría MM-07: en bucle (iterations: Infinity) el fotograma clave final, el de offset 1, no se
+  // pinta nunca: el último que se ve es el anterior. Ese ya debe dejarla entera fuera, por la derecha;
+  // si no, un trozo de bota desaparece de golpe en el borde.
+  it.each([[390, 210], [768, 210], [844, 210], [1440, 420], [1920, 420]])(
+    'a %i px de ancho y %i de alto, el último cuadro que se pinta ya la deja fuera, sin cuadros de más', (viewport, size) => {
+      const path = runPath(viewport, size, cellWidth('run', size));
+      expect(path.start + offsetAt(path.frames - 1, size)).toBeGreaterThanOrEqual(viewport);
+      expect(path.start + offsetAt(path.frames - 2, size)).toBeLessThan(viewport);
+    });
 
   it('un fotograma clave por cuadro, en px enteros, sostenido hasta el cuadro siguiente', () => {
     const path = runPath(390, 210, 98);
