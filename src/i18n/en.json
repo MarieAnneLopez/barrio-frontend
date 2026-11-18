@@ -436,6 +436,10 @@
       "avenida-el-tintal": {
         "alt": "El Tintal Avenue with cars driving under a cloudy sky.",
         "caption": "El Tintal Avenue, Patio Bonito area (neighboring)"
+      },
+      "campus-tagaste": {
+        "alt": "Tagaste Campus of Universidad Agustiniana: a covered plaza under a white arch, brick steps and a fountain, with the neighbourhood towers behind.",
+        "caption": "Tagaste Campus, Universidad Agustiniana"
       }
     },
     "roledescription": "carousel",

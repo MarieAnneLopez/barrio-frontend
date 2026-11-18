@@ -436,6 +436,10 @@
       "avenida-el-tintal": {
         "alt": "Avenida El Tintal con carros circulando bajo un cielo nublado.",
         "caption": "Avenida El Tintal, sector Patio Bonito (entorno vecino)"
+      },
+      "campus-tagaste": {
+        "alt": "Campus Tagaste de la Universidad Agustiniana: plaza cubierta bajo un arco blanco, gradas de ladrillo y una fuente, con torres del barrio al fondo.",
+        "caption": "Campus Tagaste, Universidad Agustiniana"
       }
     },
     "roledescription": "carrusel",

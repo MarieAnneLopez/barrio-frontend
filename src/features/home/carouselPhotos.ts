@@ -14,12 +14,14 @@ export interface CarouselPhoto {
 
 export const CAROUSEL_PHOTOS: readonly CarouselPhoto[] = credits;
 
-const BASE = '/assets/photos/carrusel';
+/** Carpetas de public/assets/photos con fotos locales en WebP de 640 y 1280 px. */
+export type PhotoFolder = 'carrusel' | 'lugares';
 
 /** srcset responsivo (WebP 640 y 1280 px) generado en H11 con sharp. */
-export function photoSources(id: string) {
+export function photoSources(id: string, folder: PhotoFolder = 'carrusel') {
+  const base = `/assets/photos/${folder}`;
   return {
-    src: `${BASE}/${id}-1280.webp`,
-    srcSet: `${BASE}/${id}-640.webp 640w, ${BASE}/${id}-1280.webp 1280w`,
+    src: `${base}/${id}-1280.webp`,
+    srcSet: `${base}/${id}-640.webp 640w, ${base}/${id}-1280.webp 1280w`,
   };
 }

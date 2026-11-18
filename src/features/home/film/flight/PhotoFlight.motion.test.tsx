@@ -21,18 +21,19 @@ describe('Vuelo entre fotos (capítulo 2): movimiento', () => {
     const view = fakeViewport();
     render(<PhotoFlight />);
     expect(space().style.transform).toBe('translate3d(0px, 0px, 30px)');
-    expect(cards().map((card) => card.style.visibility)).toEqual(['visible', 'visible', 'hidden', 'hidden']);
+    const [seen, gone] = ['visible', 'hidden'];
+    expect(cards().map((card) => card.style.visibility)).toEqual([seen, seen, gone, gone, gone, gone, gone, gone, gone]);
 
     const { scrollTo } = fakeLayout(section());
     view.show(true);
-    scrollTo(-2000); // mitad del recorrido (D = 4000)
+    scrollTo(-2000); // mitad del recorrido (D = 4000): cámara en 30 + 100 · 9 · 0,5 = 480
     frames.run();
-    expect(space().style.transform).toBe('translate3d(0px, 0px, 230px)');
-    expect(cards().map((card) => card.style.visibility)).toEqual(['hidden', 'hidden', 'visible', 'visible']);
+    expect(space().style.transform).toBe('translate3d(0px, 0px, 480px)');
+    expect(cards().map((card) => card.style.visibility)).toEqual([gone, gone, gone, gone, seen, seen, seen, gone, gone]);
     expect(section()).not.toHaveAttribute('data-reduced');
   });
 
-  it('con movimiento reducido: rejilla estática con las 4 fotos y el fondo, sin recorrido, oyentes ni cuadros', () => {
+  it('con movimiento reducido: rejilla estática con las 9 fotos y el fondo, sin recorrido, oyentes ni cuadros', () => {
     act(() => useA11yStore.setState({ reducedMotion: true }));
     const frames = fakeFrames();
     const view = fakeViewport();
@@ -43,8 +44,8 @@ describe('Vuelo entre fotos (capítulo 2): movimiento', () => {
 
     expect(section()).toHaveAttribute('data-reduced');
     expect(flown().join('')).toBe('');
-    expect(cards()).toHaveLength(4);
-    expect(section().querySelectorAll('img')).toHaveLength(5);
+    expect(cards()).toHaveLength(9);
+    expect(section().querySelectorAll('img')).toHaveLength(10);
     expect(add.mock.calls.map(([name]) => name)).not.toContain('scroll');
     expect(frames.request).not.toHaveBeenCalled();
   });

@@ -1,9 +1,9 @@
-/* Vuelo entre fotos con movimiento reducido: sin recorrido, sin sticky y sin perspectiva. Las 4
-   fotos quedan en una rejilla estática de 2 × 2 sobre el fondo, en una sola pantalla. Lo pide el
+/* Vuelo entre fotos con movimiento reducido: sin recorrido, sin sticky y sin perspectiva. Las 9
+   fotos quedan en una rejilla estática de 3 × 3 sobre el fondo, en una sola pantalla. Lo pide el
    componente (data-reduced, vía useReducedMotion) o la barra de accesibilidad; abajo, el mismo
    bloque como respaldo para la preferencia del sistema. Los !important ganan a los estilos en
    línea del vuelo si la hoja se adelanta al script. El ancho de la rejilla se limita por el alto:
-   dos filas de 4:3 caben siempre bajo el header. */
+   tres filas de 4:3 en tres columnas (la misma cuenta que 2 × 2) caben siempre bajo el header. */
 :is(.flight[data-reduced], :root.reduce-motion .flight) {
   height: auto;
 }
@@ -22,7 +22,7 @@
 :is(.flight[data-reduced], :root.reduce-motion .flight) .flight__space {
   position: static;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
   width: min(90%, calc((100svh - 7.5rem) * 4 / 3));
   height: auto;
@@ -59,7 +59,7 @@
   .flight .flight__space {
     position: static;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1rem;
     width: min(90%, calc((100svh - 7.5rem) * 4 / 3));
     height: auto;

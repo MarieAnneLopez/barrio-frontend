@@ -60,11 +60,11 @@ describe('hoja del vuelo entre fotos: movimiento reducido', () => {
   it.each([
     ['el componente o la barra de accesibilidad lo piden', (part: string) => rule(`${ASKED}${part}`)],
     ['lo pide el sistema (respaldo sin script)', (part: string) => rule(`.flight${part}`, system)],
-  ])('si %s: sin recorrido, sin sticky, sin perspectiva y en rejilla de 2 × 2', (_who, find) => {
+  ])('si %s: sin recorrido, sin sticky, sin perspectiva y en rejilla de 3 × 3', (_who, find) => {
     has(find(''), 'height: auto;');
     has(find(' .flight__sticky'), 'position: relative;');
     has(find(' .flight__camera'), 'perspective: none;');
-    has(find(' .flight__space'), 'display: grid;', 'grid-template-columns: repeat(2, minmax(0, 1fr));', 'transform: none !important;');
+    has(find(' .flight__space'), 'display: grid;', 'grid-template-columns: repeat(3, minmax(0, 1fr));', 'transform: none !important;');
     // Los estilos en línea del vuelo no pueden ganarle a la rejilla.
     has(find(' .flight__card'), 'transform: none !important;', 'opacity: 1 !important;', 'visibility: visible !important;');
   });

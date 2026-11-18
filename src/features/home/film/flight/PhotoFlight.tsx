@@ -4,21 +4,21 @@ import { useLayoutEffect, useRef, type CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useToneSection } from '../../../../components/layout/useHeaderLook';
 import { useReducedMotion } from '../../../../hooks/useReducedMotion';
-import { CAROUSEL_PHOTOS } from '../../carouselPhotos';
 import { FlightPhoto } from './FlightPhoto';
 import { cardRatio, cardSide } from './flightMath';
+import { FLIGHT_PHOTOS } from './flightPhotos';
 import { runFlight } from './flightScene';
 
-/** Las N = 4 primeras fotos del carrusel, en su orden. */
-const PHOTOS = CAROUSEL_PHOTOS.slice(0, 4);
-/** Fondo estático: la vista desde la terraza hacia el barrio, la más abierta de las cuatro. */
+/** Las N = 9 fotos del vuelo (flightPhotos.ts), en su orden. */
+const PHOTOS = FLIGHT_PHOTOS;
+/** Fondo estático: la vista desde la terraza hacia el barrio, la más abierta de todas. */
 const BACKDROP = PHOTOS[1];
 
 /**
  * Capítulo 2 del Inicio (etapa 3): vuelo entre fotos. La sección mide N + 1 pantallas; mientras se
  * recorre, la cámara avanza con el scroll nativo entre las fotos reales del barrio, que pasan a
  * izquierda y derecha sobre un fondo fijo (flightScene.ts escribe los estilos por referencia).
- * Solo fotografía: sin leyendas. Con movimiento reducido, una rejilla estática de 2 × 2. El header
+ * Solo fotografía: sin leyendas. Con movimiento reducido, una rejilla estática de 3 × 3. El header
  * va sólido (no se declara flotante): tras su texto pasarían fotos claras, por debajo de 4,5:1.
  */
 export function PhotoFlight() {
