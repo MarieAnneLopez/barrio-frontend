@@ -5,6 +5,7 @@ import { MathUtils, TOUCH, Vector3, type Fog, type PerspectiveCamera } from 'thr
 import type { MapControls as MapControlsImpl } from 'three-stdlib';
 import { useHeroStore } from './heroStore';
 import { homeView } from './referenceView';
+import { useSelectionStore } from './selection/selectionStore';
 
 const AUTO_ROTATE_SPEED = 0.33; // unidades de three: ~una vuelta cada 3 minutos
 const EASE = 3; // ease-out exponencial: ~95 % del recorrido en ~1 s
@@ -32,19 +33,13 @@ export function CameraRig({ radius, view, reducedMotion }: Props) {
   const placed = useRef(false);
   const paused = useHeroStore((s) => s.paused);
   const interacting = useHeroStore((s) => s.interacting);
-  const selected = useHeroStore((s) => s.selected);
+  const selected = useSelectionStore((s) => s.selected);
   const recenterTick = useHeroStore((s) => s.recenterTick);
 
-  // Vuelo hacia el lugar elegido o de vuelta al encuadre inicial (recentrar).
+  // De vuelta al encuadre inicial (recentrar).
   useEffect(() => {
-    if (selected) {
-      const target = new Vector3(...selected.position).setY(0);
-      const away = camera.position.clone().sub(controls.current?.target ?? home.target).setLength(home.distance * 0.45);
-      goal.current = { target, position: target.clone().add(away) };
-    } else {
-      goal.current = { target: home.target.clone(), position: home.position.clone() };
-    }
-  }, [selected, recenterTick, camera, home]);
+    goal.current = { target: home.target.clone(), position: home.position.clone() };
+  }, [recenterTick, home]);
 
   useFrame((state, delta) => {
     // MapControls pone touch-action: none en el elemento de eventos de r3f y en el canvas

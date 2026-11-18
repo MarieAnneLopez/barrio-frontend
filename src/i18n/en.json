@@ -392,6 +392,38 @@
     "recenter": "Recenter",
     "touchHint": "Use two fingers to zoom or rotate the model; one finger keeps scrolling the page."
   },
+  "card": {
+    "close": "Close details",
+    "building": "Building",
+    "noAddress": "Building without an address",
+    "addressKind": {
+      "0": "Address",
+      "1": "Official address",
+      "2": "Address of its lot (nearest plate)",
+      "3": "Approximate address (from the block)"
+    },
+    "none": "No address",
+    "floors": "Floors",
+    "floorCount_one": "{{count}} floor",
+    "floorCount_other": "{{count}} floors",
+    "floorsUnknown": "Floors: no data",
+    "overhang": "from floor {{base}} (overhang)",
+    "basements_one": "{{count}} basement",
+    "basements_other": "{{count}} basements",
+    "underConstruction": "under construction",
+    "lot": "Cadastral lot",
+    "sector": "Cadastral sector",
+    "source": "Source",
+    "catastroLot": "Catastro (UAECD), lot {{lot}}",
+    "catastro": "Catastro (UAECD)",
+    "osmRef": "OpenStreetMap ({{ref}})",
+    "nameSource": "Name",
+    "mapData": "Map data",
+    "catastroCite": "Catastro Bogotá – Bogotá Open Data (open license)",
+    "osmCite": "© OpenStreetMap contributors (ODbL)",
+    "fullDetail": "Open full details",
+    "missing": "This place is no longer in the module data."
+  },
   "carousel": {
     "label": "Photos of the El Tintal area",
     "slide": "Photo",

@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { clearBaseMapCache } from '../../components/map/baseMapData';
 import { CATEGORIES } from '../../lib/categoryConfig';
 import { useHeroStore } from '../../three/heroStore';
+import { useSelectionStore } from '../../three/selection/selectionStore';
 import { callsTo, mockApi } from '../../test/mockApi';
 import { BASE_MAP, FEATURES } from '../../test/moduleFixtures';
 import { renderRoute, setViewport } from '../../test/renderRoute';
@@ -15,7 +16,8 @@ beforeEach(() => {
   worldReady();
   clearBaseMapCache();
   setViewport(true);
-  act(() => useHeroStore.setState({ hidden: [], drawn: {}, selected: null }));
+  act(() => useHeroStore.setState({ hidden: [], drawn: {} }));
+  act(() => useSelectionStore.setState({ selected: null, hovered: null }));
 });
 
 describe('Maqueta 3D con los 14 módulos (H34)', () => {
@@ -48,10 +50,10 @@ describe('Maqueta 3D con los 14 módulos (H34)', () => {
     mockApi({ ...BASE_MAP, '/centros-educativos/geojson': FEATURES });
     renderRoute('/');
     await screen.findByTestId('escena-3d');
-    act(() => useHeroStore.setState({ selected: { id: 1, name: 'X', slug: 'barberias', emoji: '💈', position: [0, 0, 0] } }));
+    act(() => useSelectionStore.getState().select({ kind: 'place', slug: 'barberias', id: 1 }));
     const before = useHeroStore.getState().recenterTick;
     await userEvent.click(screen.getByRole('button', { name: 'Recentrar' }));
-    expect(useHeroStore.getState().selected).toBeNull();
+    expect(useSelectionStore.getState().selected).toBeNull();
     expect(useHeroStore.getState().recenterTick).toBe(before + 1);
   });
 });

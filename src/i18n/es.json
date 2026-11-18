@@ -392,6 +392,38 @@
     "recenter": "Recentrar",
     "touchHint": "Usa dos dedos para acercar o girar la maqueta; con un dedo sigues bajando por la página."
   },
+  "card": {
+    "close": "Cerrar ficha",
+    "building": "Edificio",
+    "noAddress": "Edificio sin dirección",
+    "addressKind": {
+      "0": "Dirección",
+      "1": "Dirección oficial",
+      "2": "Dirección de su lote (placa más cercana)",
+      "3": "Dirección aproximada (de la manzana)"
+    },
+    "none": "Sin dirección",
+    "floors": "Pisos",
+    "floorCount_one": "{{count}} piso",
+    "floorCount_other": "{{count}} pisos",
+    "floorsUnknown": "Pisos sin dato",
+    "overhang": "desde el piso {{base}} (voladizo)",
+    "basements_one": "{{count}} sótano",
+    "basements_other": "{{count}} sótanos",
+    "underConstruction": "en construcción",
+    "lot": "Lote catastral",
+    "sector": "Sector catastral",
+    "source": "Fuente",
+    "catastroLot": "Catastro (UAECD), lote {{lot}}",
+    "catastro": "Catastro (UAECD)",
+    "osmRef": "OpenStreetMap ({{ref}})",
+    "nameSource": "Nombre",
+    "mapData": "Datos del mapa",
+    "catastroCite": "Catastro Bogotá – Datos Abiertos Bogotá (licencia abierta)",
+    "osmCite": "© colaboradores de OpenStreetMap (ODbL)",
+    "fullDetail": "Ver ficha completa",
+    "missing": "Este lugar ya no está en los datos del módulo."
+  },
   "carousel": {
     "label": "Fotografías del entorno de El Tintal",
     "slide": "Foto",
