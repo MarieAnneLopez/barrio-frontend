@@ -1,17 +1,14 @@
-import { lazy, Suspense } from 'react';
 import { createPortal } from 'react-dom';
-import { LoadingTask } from '../../components/avatar/LoadingTask';
 import { Skeleton } from '../../components/ui/Skeleton';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { useA11yStore } from '../../store/a11yStore';
 import { useTintal3D } from '../../three/data/useTintal3D';
 import { sceneHostElement, useSceneHost } from '../../three/sceneHost';
+import { useSceneModule } from '../../three/sceneModule';
 import { useTintalData } from '../../three/useTintalData';
 
-// three + r3f se cargan aparte: el resto del sitio no paga su peso.
-const TintalScene = lazy(() => import('../../three/TintalScene'));
-
 function SceneMount() {
+  const scene = useSceneModule(); // se pide a la vez que los datos, no después
   const world = useTintal3D();
   const api = useTintalData();
   const active = useSceneHost((s) => s.attached && s.visible);
@@ -19,10 +16,13 @@ function SceneMount() {
   const reducedMotion = useA11yStore((s) => s.reducedMotion) || systemReduced;
   if (world.status !== 'ready') return null;
   const places = api.status === 'ready' ? api.data.categories : null;
+  const Scene = scene?.default;
   return createPortal(
-    <Suspense fallback={<><LoadingTask /><Skeleton className="h-full w-full" /></>}>
-      <TintalScene world={world.data} places={places} active={active} reducedMotion={reducedMotion} />
-    </Suspense>,
+    Scene ? (
+      <Scene world={world.data} places={places} active={active} reducedMotion={reducedMotion} />
+    ) : (
+      <Skeleton className="h-full w-full" />
+    ),
     sceneHostElement(),
   );
 }
