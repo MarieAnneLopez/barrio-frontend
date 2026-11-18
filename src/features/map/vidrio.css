@@ -61,3 +61,14 @@
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
 }
+
+/* Hover de los botones de vidrio (tres barras y Recentrar), como los del resto de la app: amarillo
+   opaco (D100) con texto negro; la línea negra de 2 px sigue. Va al final para mandar también en
+   alto contraste (allí el hover es blanco con texto negro). vidrio.test.ts mide los contrastes. */
+@media (hover: hover) and (pointer: fine) {
+  .vidrio.vidrio--boton:hover {
+    background-color: var(--interactive-hover);
+    background-image: none;
+    color: var(--text-on-hover);
+  }
+}

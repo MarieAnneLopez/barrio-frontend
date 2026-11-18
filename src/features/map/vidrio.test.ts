@@ -67,4 +67,17 @@ describe('vidrio de los mapas: contraste sobre el peor fondo de la maqueta', () 
     for (const block of blocks) expect(block).toMatch(/background-color: var\(--bg-accent\);/);
     for (const block of blocks.slice(1)) expect(block).toMatch(/backdrop-filter: none;/);
   });
+
+  it('hover de los botones de vidrio (tres barras, Recentrar): amarillo D100 opaco, texto ≥ 4,5:1 y borde ≥ 3:1 en el mapa', () => {
+    const rule = /\.vidrio\.vidrio--boton:hover\s*\{([^}]*)\}/.exec(css)?.[1] ?? '';
+    expect(rule).toMatch(/background-color: var\(--interactive-hover\);/);
+    expect(rule).toMatch(/background-image: none;/);
+    expect(rule).toMatch(/color: var\(--text-on-hover\);/);
+    expect(css.indexOf('.vidrio.vidrio--boton:hover')).toBeGreaterThan(css.indexOf(':root.high-contrast .vidrio')); // también en alto contraste
+    const fill = resolveColor('var(--interactive-hover)', tokens);
+    expect(contrastRatio(resolveColor('var(--text-on-hover)', tokens), fill)).toBeGreaterThanOrEqual(4.5);
+    for (const bg of [...GRAYS, ...NIGHT, ...DAY, WHITE]) {
+      expect(Math.max(contrastRatio(fill, bg), contrastRatio(INK, bg)), `sobre ${bg.join()}`).toBeGreaterThanOrEqual(3);
+    }
+  });
 });
