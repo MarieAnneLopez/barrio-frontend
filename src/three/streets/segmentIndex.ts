@@ -2,19 +2,21 @@ import type { Vias } from '../data/format';
 import type { Network } from './network';
 import { isBridge } from './wayLine';
 
-// Índice en rejilla de los tramos de calzada a ras de suelo: «¿qué calzada pasa más cerca de este
-// punto?» (largo de los cruces sin dato, lado de la calle de cada semáforo).
+// Índice en rejilla de los tramos de las vías: «¿qué vía pasa más cerca de este punto?» y «¿qué vía
+// cubre este punto?» (cruces y semáforos sobre su calzada, faroles y árboles fuera de las demás).
 
 const CELL = 40;
 const key = (cx: number, cz: number) => (cx + 2048) * 4096 + (cz + 2048);
 
 export interface RoadHit {
   way: number;
+  /** Alcance del tramo a cada lado de su eje (en roadIndex, la media calzada). */
   half: number;
   dist: number;
-  /** Punto más cercano sobre el eje y dirección unitaria del tramo (en el sentido del dibujo). */
+  /** Punto más cercano sobre el eje, su fracción t del segmento y la dirección unitaria del tramo (dibujo). */
   x: number;
   z: number;
+  t: number;
   dx: number;
   dz: number;
 }
@@ -22,12 +24,15 @@ export interface RoadHit {
 export class SegmentIndex {
   private readonly cells = new Map<number, number[]>();
   private readonly seg: number[] = [];
-  private readonly net: Network;
+  private readonly reach: Float32Array;
+  private readonly widest: number;
 
-  constructor(v: Vias, net: Network) {
-    this.net = net;
+  /** `reach(w)`: hasta dónde llega el tramo w a cada lado de su eje (m); 0 lo deja fuera. */
+  constructor(v: Vias, reach: (w: number) => number) {
+    this.reach = Float32Array.from({ length: v.count }, (_, w) => Math.max(0, reach(w)));
+    this.widest = this.reach.reduce((a, b) => Math.max(a, b), 0);
     for (let w = 0; w < v.count; w++) {
-      if (!net.specs[w] || isBridge(v, w)) continue;
+      if (!((this.reach[w] ?? 0) > 0)) continue;
       for (let i = v.tramos[w] ?? 0; i < (v.tramos[w + 1] ?? 0) - 1; i++) {
         const [a, b] = [v.indices[i] ?? 0, v.indices[i + 1] ?? 0];
         const id = this.seg.length / 5;
@@ -48,8 +53,8 @@ export class SegmentIndex {
     }
   }
 
-  nearest(x: number, z: number, radius: number): RoadHit | null {
-    let best: RoadHit | null = null;
+  /** Recorre cada segmento a menos de `radius` del punto, con su punto más cercano. */
+  private scan(x: number, z: number, radius: number, visit: (hit: RoadHit) => void): void {
     const seen = new Set<number>();
     this.each(x - radius, z - radius, x + radius, z + radius, (k) => {
       for (const id of this.cells.get(k) ?? []) {
@@ -61,11 +66,25 @@ export class SegmentIndex {
         const t = Math.max(0, Math.min(1, ((x - ax) * dx + (z - az) * dz) / (length * length)));
         const [px, pz] = [ax + dx * t, az + dz * t];
         const dist = Math.hypot(x - px, z - pz);
-        if (dist <= radius && (!best || dist < best.dist)) {
-          best = { way: w, half: this.net.specs[w]?.half ?? 3, dist, x: px, z: pz, dx: dx / length, dz: dz / length };
-        }
+        if (dist <= radius) visit({ way: w, half: this.reach[w] ?? 0, dist, x: px, z: pz, t, dx: dx / length, dz: dz / length });
       }
+    });
+  }
+
+  /** El tramo más cercano a menos de `radius` m que cumple `accept` (cualquiera, si no se da). */
+  nearest(x: number, z: number, radius: number, accept?: (hit: RoadHit) => boolean): RoadHit | null {
+    let best: RoadHit | null = null;
+    this.scan(x, z, radius, (hit) => {
+      if ((!best || hit.dist < best.dist) && (!accept || accept(hit))) best = hit;
     });
     return best;
   }
+
+  /** El tramo que cubre el punto (su eje a menos de su alcance + `margin`), el de eje más cercano; o null. */
+  covering(x: number, z: number, margin = 0): RoadHit | null {
+    return this.nearest(x, z, this.widest + margin, (hit) => hit.dist < hit.half + margin);
+  }
 }
+
+/** Calzadas de la red a ras de suelo (sin puentes), con su media calzada de alcance. */
+export const roadIndex = (v: Vias, net: Network) => new SegmentIndex(v, (w) => (isBridge(v, w) ? 0 : (net.specs[w]?.half ?? 0)));

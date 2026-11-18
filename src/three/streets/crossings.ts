@@ -1,9 +1,14 @@
 import { TNT3, type Vias } from '../data/format';
-import type { SegmentIndex } from './segmentIndex';
+import type { RoadHit, SegmentIndex } from './segmentIndex';
 
 // Cebras y cruces de ciclorruta en los cruces reales de OSM (TNT3.vias.cruces, FORMATO §4): con
-// rotation.y = −ángulo el +x local va a lo largo de la calle; la franja mide `largo` en z (de andén a
-// andén; si es 0, el ancho de la calzada más cercana) y las barras van a lo largo de x, repetidas en z.
+// rotation.y = −ángulo el +x local va a lo largo de la calle; la franja va de andén a andén de la
+// calzada que cruza (su ancho dibujado) y las barras van a lo largo de x, repetidas en z.
+// Reglas de dibujo (D105): el `largo` de TNT3 es el de TODA la vía de cruce (scripts/datos3d/cruces.mjs),
+// que puede pasar por varias calzadas, así que solo dice hasta dónde buscar la calzada; el cruce se
+// pinta sobre el eje de la calzada dibujada a su alcance (con su eje si el dato no lo trae: `sinEje`)
+// y no se pinta si no hay ninguna. Las marcas «cebra» (1), «marcado sin patrón» (2) y «sin dato» (0)
+// se pintan como cebra; «sin marcas» (3) no se pinta.
 
 export const ZEBRA = {
   /** Largo de cada barra a lo largo de la calle, ancho de barra y paso entre barras (m). */
@@ -20,6 +25,8 @@ export interface Mark { x: number; z: number; angle: number; sx: number; sz: num
 
 const T = TNT3.cruces;
 const MARKS_MASK = 3;
+/** Dos cruces a menos de esto sobre el eje de la misma calzada son el mismo (m). */
+const SAME_SPOT = 1.5;
 
 export function crossingMarks(x: number, z: number, angle: number, length: number, tipo: number): { white: Mark[]; cycle: Mark[] } {
   const white: Mark[] = [];
@@ -44,15 +51,25 @@ export function crossingMarks(x: number, z: number, angle: number, length: numbe
   return { white, cycle };
 }
 
+/** ¿El tramo va con el eje dado (a menos de 30°)? */
+const along = (angle: number) => (hit: RoadHit) => Math.abs(Math.cos(angle) * hit.dz - Math.sin(angle) * hit.dx) < 0.5;
+const axisOf = (hit: RoadHit) => (((Math.atan2(hit.dz, hit.dx) % Math.PI) + Math.PI) % Math.PI);
+
 /** Todas las marcas de cruce del barrio. */
 export function allCrossingMarks(v: Vias, roads: SegmentIndex): { white: Mark[]; cycle: Mark[] } {
   const out = { white: [] as Mark[], cycle: [] as Mark[] };
+  const painted: Array<[number, number]> = [];
   const c = v.cruces;
   for (let i = 0; i < c.tipo.length; i++) {
-    const [x, z] = [c.xz[2 * i] ?? 0, c.xz[2 * i + 1] ?? 0];
-    const largo = c.largo[i] ?? 0;
-    const length = largo > 0 ? largo : 2 * (roads.nearest(x, z, 15)?.half ?? 3.5);
-    const marks = crossingMarks(x, z, c.angulo[i] ?? 0, length, c.tipo[i] ?? 0);
+    const tipo = c.tipo[i] ?? 0;
+    if ((tipo & MARKS_MASK) === T.sinMarcas) continue;
+    const [x, z, given] = [c.xz[2 * i] ?? 0, c.xz[2 * i + 1] ?? 0, c.angulo[i] ?? 0];
+    const reach = Math.max(2, (c.largo[i] ?? 0) / 2 + 1);
+    const hit = (tipo & T.sinEje ? null : roads.nearest(x, z, reach, along(given))) ?? roads.nearest(x, z, reach);
+    if (!hit || painted.some(([px, pz]) => Math.hypot(px - hit.x, pz - hit.z) < SAME_SPOT)) continue;
+    painted.push([hit.x, hit.z]);
+    const angle = tipo & T.sinEje || !along(given)(hit) ? axisOf(hit) : given;
+    const marks = crossingMarks(hit.x, hit.z, angle, 2 * hit.half, tipo);
     out.white.push(...marks.white);
     out.cycle.push(...marks.cycle);
   }

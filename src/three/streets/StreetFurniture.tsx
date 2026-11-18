@@ -9,7 +9,7 @@ import { LEVEL } from './levels';
 import type { Network } from './network';
 import type { StreetPalette } from './palette';
 import { partsMaterial } from './parts';
-import { SegmentIndex } from './segmentIndex';
+import { roadIndex } from './segmentIndex';
 import { signalPoses } from './signals';
 import { StaticInstances } from './StaticInstances';
 
@@ -28,9 +28,9 @@ const LAMP_REACH = 1.6;
  */
 export function StreetFurniture({ world, net, palette: p }: Props) {
   const data = useMemo(() => {
-    const roads = new SegmentIndex(world.vias, net);
+    const roads = roadIndex(world.vias, net);
     const marks = allCrossingMarks(world.vias, roads);
-    const lamps = lampPoses(world.vias, net);
+    const lamps = lampPoses(world.vias, net, roads);
     const pools = lamps.map((l) => ({ ...l, x: l.x + Math.cos(l.yaw) * LAMP_REACH, z: l.z - Math.sin(l.yaw) * LAMP_REACH, y: LEVEL.marks + 0.02, scale: 24 }));
     return {
       white: marksToMatrices(marks.white, LEVEL.marks),

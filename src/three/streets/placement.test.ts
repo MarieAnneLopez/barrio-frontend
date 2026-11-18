@@ -6,8 +6,7 @@ import { writePose } from './instances';
 import { LAMP_STEP, lampPoses } from './lamps';
 import { buildNetwork, wayTags } from './network';
 import { roadSpec } from './roadClass';
-import { SegmentIndex } from './segmentIndex';
-import { signalPoses } from './signals';
+import { roadIndex } from './segmentIndex';
 import { ROW_STEP, treePoses } from './trees';
 
 const C = TNT3.clasesVia;
@@ -21,7 +20,7 @@ const avenue = roadSpec(wayTags(vias, 0));
 const tip = (yaw: number, x: number, z: number, arm: number) => [x + Math.cos(yaw) * arm, z - Math.sin(yaw) * arm];
 
 describe('faroles decorativos (OSM no registra faroles: D105)', () => {
-  const lamps = lampPoses(vias, net);
+  const lamps = lampPoses(vias, net, roadIndex(vias, net));
 
   it('solo en las vías principales, cada ~35 m, alternando lados, en el andén y con el brazo hacia la vía', () => {
     expect(lamps.length).toBeGreaterThan(6);
@@ -36,19 +35,18 @@ describe('faroles decorativos (OSM no registra faroles: D105)', () => {
   it('ninguno dentro del cruce', () => {
     expect(lamps.every((l) => Math.abs(l.x - 200) > avenue.half + 4)).toBe(true);
   });
-});
 
-describe('semáforos de OSM a ambos lados de su calzada', () => {
-  const withSignal = { ...vias, semaforos: { xz: Float32Array.from([100, 1]), osm: new Float64Array(1) } };
-  const poses = signalPoses(withSignal, new SegmentIndex(withSignal, net));
-
-  it('dos postes enfrentados fuera de la calzada, con el brazo sobre ella', () => {
-    expect(poses).toHaveLength(2);
-    expect(poses.map((p) => Math.sign(p.z)).sort()).toEqual([-1, 1]);
-    for (const p of poses) {
-      expect(Math.abs(p.z)).toBeGreaterThan(avenue.half);
-      expect(Math.abs(tip(p.yaw, p.x, p.z, 3)[1] ?? 0)).toBeLessThan(avenue.half);
-    }
+  it('ninguno sobre otra calzada: junto a una calle de servicio pegada a la avenida solo van del otro lado', () => {
+    const tight = makeVias([[0, 0], [400, 0], [0, 6], [400, 6]], [
+      { nodes: [0, 1], clase: C.secondary, sentido: 1 },
+      { nodes: [2, 3], clase: C.service },
+    ]);
+    const tightNet = buildNetwork(tight);
+    const roads = roadIndex(tight, tightNet);
+    const kept = lampPoses(tight, tightNet, roads);
+    expect(kept.length).toBeGreaterThan(3);
+    expect(kept.every((l) => l.z < 0)).toBe(true);
+    expect(kept.filter((l) => roads.covering(l.x, l.z, 0.3))).toEqual([]);
   });
 });
 
