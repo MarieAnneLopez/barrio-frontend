@@ -1,12 +1,16 @@
 import { useApi } from '../../hooks/useApi';
 import type { ModuleFeatures, ModuleItem, Page } from '../../lib/apiTypes';
 import { moduleFields } from '../../lib/moduleFields';
+import { refreshTintalData } from '../../three/useTintalData';
 
 export const PAGE_SIZE = 10;
 
 export type Filters = Record<string, string>;
 
-/** Lista paginada (para la tabla) y colección GeoJSON (para el mapa) de un módulo. */
+/**
+ * Lista paginada (para la tabla) y colección GeoJSON (para el mapa) de un módulo. `refresh`, tras
+ * crear, editar o borrar, vuelve a pedir las dos y también los lugares que dibuja la maqueta.
+ */
 export function useModuleData(slug: string, page: number, q: string, filters: Filters = {}) {
   const { label, sort: preferred } = moduleFields(slug);
   const sort = preferred ?? label;
@@ -17,6 +21,7 @@ export function useModuleData(slug: string, page: number, q: string, filters: Fi
   const refresh = () => {
     list.retry();
     features.retry();
+    refreshTintalData();
   };
   return { list, features, notLoaded, refresh };
 }

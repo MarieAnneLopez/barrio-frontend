@@ -82,7 +82,11 @@ export function ModuleDetailView({ category, initialOpenId = null, focusId = nul
           setOpenId(null);
           setEditing(item);
         }}
-        onDeleted={() => { setOpenId(null); refresh(); }}
+        onDeleted={() => {
+          if (selectedId === openId) useSelectionStore.getState().select(null); // su ficha no queda con lo borrado
+          setOpenId(null);
+          refresh();
+        }}
       />
       <CrudFormModal
         category={category}

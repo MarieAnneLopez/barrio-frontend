@@ -65,6 +65,17 @@ export function resetTintalData(): void {
   state = { status: 'loading' };
 }
 
+/**
+ * Tras crear, editar o borrar un lugar: vuelve a pedir los 14 módulos en silencio. Mientras tanto la
+ * maqueta sigue con lo que tiene (sin pantalla de carga); así no se queda con un lugar borrado o viejo.
+ */
+export function refreshTintalData(): void {
+  if (!started) return;
+  generation += 1;
+  window.clearTimeout(timer);
+  run(1, generation);
+}
+
 function subscribe(listener: () => void): () => void {
   listeners.add(listener);
   return () => listeners.delete(listener);
