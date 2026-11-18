@@ -1,4 +1,4 @@
-import { act, fireEvent, screen } from '@testing-library/react';
+import { act, fireEvent, screen, within } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mountRibbon, PHOTOS } from './ribbonHarness';
 
@@ -23,5 +23,13 @@ describe('PhotoRibbon con WebGL: el crédito de la foto centrada, siempre a la v
     await mountRibbon({ photos: PHOTOS.map((photo, at) => ({ ...photo, module: at === 0 ? 'estaciones-transporte' : null })) });
     expect(screen.getByRole('link', { name: /Ver en Estaciones/ })).toHaveAttribute('href', '/categorias/estaciones-transporte');
     expect(screen.getByText(/al ampliarla; las de los lugares, también en/)).toBeInTheDocument();
+  });
+
+  it('cada botón se llama con su etiqueta real y se distingue por su posición, aunque la etiqueta se repita', async () => {
+    const { group } = await mountRibbon({ photos: PHOTOS.map((photo) => ({ ...photo, label: 'Biblioteca El Tintal' })) });
+    const buttons = within(group()).getAllByRole('button', { name: 'Biblioteca El Tintal' });
+    expect(buttons).toHaveLength(PHOTOS.length);
+    expect(buttons[0]).toHaveAccessibleDescription(`1 de ${PHOTOS.length}`);
+    expect(buttons[2]).toHaveAccessibleDescription(`3 de ${PHOTOS.length}`);
   });
 });

@@ -33,6 +33,7 @@ describe('Galería General (/galeria, D66)', () => {
       'Universidad Agustiniana', 'Biblioteca El Tintal', 'Vista desde la biblioteca hacia el barrio',
     ]);
     const first = buttons[0]?.closest('li') as HTMLElement;
+    expect(buttons[0]).toHaveAccessibleDescription('Foto 1 de Universidad Agustiniana'); // el nombre es la etiqueta; el texto, su descripción
     expect(first.querySelector('img')).toHaveAttribute('src', '/assets/photos/lugares/campus-tagaste-640.webp');
     expect(within(first).getByText('Foto 1 de Universidad Agustiniana')).toBeInTheDocument();
     expect(within(first).getByText('Foto: Futbolero')).toBeInTheDocument();

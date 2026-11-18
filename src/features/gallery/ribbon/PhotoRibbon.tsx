@@ -1,5 +1,5 @@
 import './ribbon.css';
-import { memo, useEffect, useId, useMemo, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
@@ -7,23 +7,9 @@ import { GalleryLightbox } from '../../modules/GalleryLightbox';
 import { RibbonCaption } from './RibbonCaption';
 import { focusPhoto } from './ribbonFocus';
 import { RibbonGrid } from './RibbonGrid';
+import { RibbonHit } from './RibbonHit';
 import type { RibbonPhoto } from './ribbonPhotos';
 import { useRibbon } from './useRibbon';
-
-interface HitProps {
-  index: number;
-  label: string;
-  active: boolean;
-}
-
-/** Botón nativo de una foto: su nombre es la etiqueta real. Roving tabindex: solo la activa entra con Tab. */
-const RibbonHit = memo(function RibbonHit({ index, label, active }: HitProps) {
-  return (
-    <button type="button" data-ribbon-index={index} tabIndex={active ? 0 : -1} className="ribbon-hit">
-      <span className="sr-only">{label}</span>
-    </button>
-  );
-});
 
 /**
  * Fotos de la Galería General en una cinta curva en WebGL (three directo). Se recorre arrastrando (con
@@ -70,7 +56,10 @@ export function PhotoRibbon({ photos }: { photos: readonly RibbonPhoto[] }) {
           >
             <div ref={host} className="ribbon-canvas" />
             {live ? photos.map((photo, index) => (
-              <RibbonHit key={photo.key} index={index} label={photo.label} active={index === ribbon.active} />
+              <RibbonHit
+                key={photo.key} index={index} label={photo.label} active={index === ribbon.active}
+                position={t('gallery.position', { current: index + 1, total: photos.length })}
+              />
             )) : null}
           </div>
         )}

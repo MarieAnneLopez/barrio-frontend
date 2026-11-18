@@ -13,8 +13,8 @@ describe('PhotoRibbon con WebGL: botones, teclado y anuncios', () => {
   it('un botón nativo por foto, con la etiqueta real como nombre; solo la activa entra con Tab', async () => {
     const { group, root } = await mountRibbon();
     const buttons = within(group()).getAllByRole('button');
-    expect(buttons.map((button) => button.textContent)).toEqual(LABELS);
-    expect(buttons[2]).toHaveAccessibleName('Biblioteca El Tintal');
+    expect(buttons).toHaveLength(LABELS.length);
+    LABELS.forEach((label, at) => expect(buttons[at]).toHaveAccessibleName(label));
     expect(tabbable(root())).toEqual([buttons[0]]);
     expect(group()).toHaveAccessibleDescription(/Arrastra, usa la rueda o las flechas/);
     expect(root().querySelector('canvas')).toHaveAttribute('aria-hidden', 'true');
