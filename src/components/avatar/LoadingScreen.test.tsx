@@ -48,6 +48,8 @@ describe('Pantalla de carga completa (H33)', () => {
       setViewport(roomy);
       render(<LoadingScreen />);
       expect([runner()?.style.width, runner()?.style.height]).toEqual([width, height]);
+      // El escenario sabe su alto: el sol se queda por encima de su cabeza (loadingSun.test.ts).
+      expect(status()?.querySelector<HTMLElement>('.loading-screen__stage')?.style.getPropertyValue('--runner')).toBe(height);
     });
 
   it('va en crema con suelo marrón: sin ladrillo, esquinas de píxel ni fuente de píxel (D96)', () => {

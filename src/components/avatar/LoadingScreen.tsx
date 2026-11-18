@@ -1,5 +1,5 @@
 import './loading-screen.css';
-import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, type CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLoadingScreen } from '../../hooks/useLoadingScreen';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
@@ -47,7 +47,8 @@ export function LoadingScreen() {
   if (!visible) return null;
   return (
     <div role="status" aria-live="polite" data-leaving={leaving || undefined} className="loading-screen fixed inset-0 z-[140]">
-      <div className="loading-screen__stage">
+      {/* Su alto, para que el sol quede siempre por encima de su cabeza (loading-scene.css). */}
+      <div className="loading-screen__stage" style={{ '--runner': `${size}px` } as CSSProperties}>
         <LoadingScene />
         <div ref={track} className="loading-screen__track">
           <SequenceSprite name="run" size={size} atlas={size} pose={3} className="loading-screen__runner" />

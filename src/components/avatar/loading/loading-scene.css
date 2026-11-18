@@ -8,11 +8,17 @@
   pointer-events: none;
 }
 
+/* Sol arriba a la derecha, siempre por encima de la cabeza de Mini Marie (nunca sobre amarillo):
+   --runner es su alto (LoadingScreen) y --room lo libre sobre ella. Con poco alto (celular en
+   horizontal) sube y se recorta en el borde; si no quedaría ni medio sol, se va del todo (el último
+   término solo pesa cuando es negativo). Medido en loadingSun.test.ts (auditoría MM-08, PAL-07). */
 .loading-scene__sun {
+  --sun: clamp(3.5rem, 9vmin, 6rem);
+  --room: calc(100% - var(--runner, 0px) - 0.5rem);
   position: absolute;
-  top: 7%;
+  top: min(7%, calc(var(--room) - var(--sun)), calc((var(--room) - var(--sun) / 2) * 999));
   right: 12%;
-  width: clamp(3.5rem, 9vmin, 6rem);
+  width: var(--sun);
   aspect-ratio: 1;
   border-radius: 50%;
   background-color: var(--bg-highlight);
@@ -53,17 +59,9 @@
 }
 
 .loading-scene__cloud,
-.loading-scene__window {
-  fill: var(--bg-primary);
-}
-
-.loading-scene__far {
-  fill: var(--bg-accent);
-}
-
-.loading-scene__near {
-  fill: var(--bg-strong);
-}
+.loading-scene__window { fill: var(--bg-primary); }
+.loading-scene__far { fill: var(--bg-accent); }
+.loading-scene__near { fill: var(--bg-strong); }
 
 @keyframes loading-drift {
   to {
