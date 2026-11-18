@@ -9,6 +9,8 @@ export const renderers: FakeRenderer[] = [];
 export class FakeRenderer {
   domElement: HTMLCanvasElement;
   capabilities = { getMaxAnisotropy: () => 8 };
+  /** Como el de three: `onShaderError` se llama si un programa no enlaza. */
+  debug: { checkShaderErrors: boolean; onShaderError: ((...args: unknown[]) => void) | null } = { checkShaderErrors: true, onShaderError: null };
   setPixelRatio = vi.fn();
   setSize = vi.fn();
   render = vi.fn();

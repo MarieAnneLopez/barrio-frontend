@@ -31,6 +31,12 @@ export function createRibbonView(host: HTMLElement, onLost: () => void, onPhoto:
   // Se pide aquí el contexto (three recibe luego ese mismo): si el navegador lo niega, se sabe sin que three lo grite.
   if (!canvas.getContext('webgl2', CONTEXT)) throw new Error('WebGL 2 no disponible');
   const renderer = new WebGLRenderer({ canvas, ...CONTEXT });
+  // Un programa que no enlaza en esta GPU dejaría la cinta en blanco (three solo lo registra): queda la rejilla.
+  renderer.debug.onShaderError = (gl, program, vertex, fragment) => {
+    const logs = [gl.getProgramInfoLog(program), gl.getShaderInfoLog(vertex), gl.getShaderInfoLog(fragment)];
+    console.error('Cinta de la Galería: un shader no compiló; se muestra la rejilla.', ...logs);
+    onLost();
+  };
   canvas.setAttribute('aria-hidden', 'true');
   canvas.addEventListener('webglcontextlost', onLost);
   host.appendChild(canvas);
