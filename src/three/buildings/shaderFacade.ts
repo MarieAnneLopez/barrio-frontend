@@ -1,8 +1,8 @@
 import { MEDIUM_FROM } from './volume';
 
 // Fachada (GLSL): muro con ventanas en filas por piso y columnas cada ~3 m, cornisa en el remate,
-// sombra bajo la cornisa, losas de entrepiso en los edificios de 4 pisos o más y oscurecimiento al
-// pie. De día el vidrio es oscuro y refleja el cielo (uZenith) con un brillo del sol; de noche las
+// sombra bajo la cornisa, losas de entrepiso en los volúmenes que rematan en el piso 4 o más (los de
+// clase media y alta: `floors` es el piso del remate, topLevel) y oscurecimiento al pie. De día el vidrio es oscuro y refleja el cielo (uZenith) con un brillo del sol; de noche las
 // ventanas se encienden al azar (windowLit). Lejos, el patrón se funde en su promedio (sin moiré).
 // Las medianeras (columna −1) son ciegas: sin ventanas, un poco más oscuras.
 export const FACADE_GLSL = /* glsl */ `

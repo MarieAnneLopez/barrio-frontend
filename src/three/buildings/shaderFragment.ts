@@ -1,6 +1,6 @@
 import { LIGHT_GLSL } from '../sky/lightUniforms';
 import { FACADE_GLSL } from './shaderFacade';
-import { MEDIUM_FROM, TALL_FROM } from './volume';
+import { HEIGHT_CLASS_GLSL } from './volume';
 import { WINDOW_GLSL } from './windows';
 
 // Fragmento de los edificios. La normal plana sale de las derivadas de la posición (sin atributo de
@@ -24,6 +24,7 @@ uniform float uLevel;
 uniform float uParapet;
 ${LIGHT_GLSL}
 ${WINDOW_GLSL}
+${HEIGHT_CLASS_GLSL}
 #include <fog_pars_fragment>
 varying vec3 vWorld;
 varying float vBuilding;
@@ -34,8 +35,8 @@ ${FACADE_GLSL}
 void main() {
   vec3 N = normalize(cross(dFdx(vWorld), dFdy(vWorld)));
   float building = floor(vBuilding + 0.5);
-  float floors = floor(vTop / uLevel + 0.5);
-  int cls = floors >= ${TALL_FROM.toFixed(1)} ? 2 : (floors >= ${MEDIUM_FROM.toFixed(1)} ? 1 : 0);
+  float floors = topLevel(vTop);
+  int cls = heightClass(floors);
   float tone = hash01(building, 7.0, 3.0);
   vec3 wall = mix(uWall[cls], uWallNight[cls], uNight) * (0.9 + 0.2 * tone);
   // Remates en concreto claro; en los altos (ya claros) un tono más oscuro que el muro.

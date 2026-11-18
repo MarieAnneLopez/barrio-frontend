@@ -43,7 +43,23 @@ export function volumeOf(e: Columns, b: number, h: number = LEVEL_HEIGHT): Volum
   return { bottom: base * h, top: (base + levels) * h, levels, known };
 }
 
-/** 0 = hasta 3 pisos, 1 = de 4 a 6, 2 = 7 o más (el shader usa los mismos umbrales). */
-export function heightClass(levels: number): 0 | 1 | 2 {
-  return levels >= TALL_FROM ? 2 : levels >= MEDIUM_FROM ? 1 : 0;
+/**
+ * Clase de altura del tema: 0 = remata hasta el piso 3, 1 = del 4 al 6, 2 = del 7 en adelante. Va
+ * por el piso del remate (base + pisos), no por los pisos del volumen: así un voladizo toma la clase
+ * de la casa que remata a su misma altura. El shader usa la misma expresión (HEIGHT_CLASS_GLSL),
+ * desde el remate que lleva cada vértice.
+ */
+export function heightClass(volume: Pick<Volume, 'top'>, h: number = LEVEL_HEIGHT): 0 | 1 | 2 {
+  const level = Math.floor(volume.top / h + 0.5);
+  return level >= TALL_FROM ? 2 : level >= MEDIUM_FROM ? 1 : 0;
 }
+
+/** heightClass en GLSL (necesita `uniform float uLevel`, la altura dibujada de un piso). */
+export const HEIGHT_CLASS_GLSL = /* glsl */ `
+float topLevel(float top) {
+  return floor(top / uLevel + 0.5);
+}
+int heightClass(float level) {
+  return level >= ${TALL_FROM.toFixed(1)} ? 2 : (level >= ${MEDIUM_FROM.toFixed(1)} ? 1 : 0);
+}
+`;

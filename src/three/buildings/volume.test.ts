@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { TNT3 } from '../data/format';
 import { EXAGGERATION } from '../referenceView';
-import { DEFAULT_LEVELS, heightClass, LEVEL_HEIGHT, METERS_PER_LEVEL, volumeOf } from './volume';
+import { BUILDINGS_FRAGMENT } from './shaderFragment';
+import { DEFAULT_LEVELS, HEIGHT_CLASS_GLSL, heightClass, LEVEL_HEIGHT, METERS_PER_LEVEL, volumeOf } from './volume';
 
 const F = TNT3.banderasEdificio;
 const one = (pisos: number, base: number, banderas: number) => ({
@@ -34,7 +35,21 @@ describe('volumen de un edificio (FORMATO §3)', () => {
     expect(volumeOf(one(0, 0, F.pisosConocidos), 0)).toBeNull();
   });
 
-  it('clase de altura del tema: hasta 3 pisos, de 4 a 6 y 7 o más', () => {
-    expect([1, 3, 4, 6, 7, 23].map(heightClass)).toEqual([0, 0, 1, 1, 2, 2]);
+  it('clase de altura del tema por el piso del remate (base + pisos): hasta 3, de 4 a 6 y 7 o más', () => {
+    const cls = (pisos: number, base = 0) => {
+      const volume = volumeOf(one(pisos, base, F.pisosConocidos), 0);
+      return volume ? heightClass(volume) : null;
+    };
+    expect([1, 3, 4, 6, 7, 23].map((pisos) => cls(pisos))).toEqual([0, 0, 1, 1, 2, 2]);
+    // Casa de 4 pisos con voladizo de 3 pisos desde el piso 1: los dos rematan en el piso 4 (medio).
+    expect([cls(4), cls(3, 1)]).toEqual([1, 1]);
+    expect(cls(2, 5)).toBe(2); // remata en el piso 7
+  });
+
+  it('el shader calcula la clase con la misma expresión, desde el remate de cada vértice (vTop)', () => {
+    expect(HEIGHT_CLASS_GLSL).toContain('floor(top / uLevel + 0.5)');
+    expect(HEIGHT_CLASS_GLSL).toContain('level >= 7.0 ? 2 : (level >= 4.0 ? 1 : 0)');
+    expect(BUILDINGS_FRAGMENT).toContain(HEIGHT_CLASS_GLSL);
+    expect(BUILDINGS_FRAGMENT).toContain('float floors = topLevel(vTop);\n  int cls = heightClass(floors);');
   });
 });
