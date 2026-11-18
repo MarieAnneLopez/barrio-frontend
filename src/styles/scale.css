@@ -5,8 +5,9 @@
   --font-scale: 1;
   --ff-display: 'Anton', 'Arial Narrow', sans-serif; /* condensada pesada: solo peso 400 */
   --ff-serif: 'Cormorant Garamond', Georgia, serif; /* cursiva: títulos de sección y de foto */
-  --ff-body: 'Inter', system-ui, sans-serif;
-  --ff-mono: var(--ff-body); /* cifras: Inter con números tabulares */
+  --ff-body: 'Soria', Georgia, 'Times New Roman', serif; /* texto que no es título (D98) */
+  --ff-heading: 'Inter', system-ui, sans-serif; /* h4–h6 conservan su fuente */
+  --ff-mono: var(--ff-body); /* cifras: números tabulares si la fuente los tiene */
   --step--1: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
   --step-0: clamp(1rem, 0.97rem + 0.15vw, 1.0625rem);
   --step-1: clamp(1.1875rem, 1.12rem + 0.35vw, 1.375rem);

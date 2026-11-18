@@ -9,12 +9,12 @@ const fonts = readFileSync(join(here, 'fonts.ts'), 'utf8');
 const scale = readFileSync(join(here, 'scale.css'), 'utf8');
 
 describe('tipografía base (D85)', () => {
-  it('carga Anton, Cormorant Garamond cursiva e Inter fina desde @fontsource (sin enlaces externos)', () => {
+  it('carga Anton, Cormorant Garamond cursiva e Inter (para h4–h6) desde @fontsource, sin enlaces externos', () => {
     for (const file of [
       '@fontsource/anton/latin-400.css',
       '@fontsource/cormorant-garamond/latin-500-italic.css',
       '@fontsource/cormorant-garamond/latin-600-italic.css',
-      '@fontsource/inter/latin-300.css',
+      '@fontsource/inter/latin-400.css',
     ]) {
       expect(fonts).toContain(`'${file}'`);
     }
@@ -29,6 +29,7 @@ describe('tipografía base (D85)', () => {
   it('los tokens de fuente apuntan a las familias nuevas', () => {
     expect(scale).toMatch(/--ff-display: 'Anton'/);
     expect(scale).toMatch(/--ff-serif: 'Cormorant Garamond'/);
-    expect(scale).toMatch(/--ff-body: 'Inter'/);
+    expect(scale).toMatch(/--ff-body: 'Soria'/); // D98
+    expect(scale).toMatch(/--ff-heading: 'Inter'/);
   });
 });

@@ -21,7 +21,7 @@
   background-color: var(--bg-surface);
 }
 
-/* Etiqueta superior: versalitas espaciadas en Inter (antes iba en fuente de píxel). */
+/* Etiqueta superior: versalitas espaciadas en la fuente de texto (Soria, D98). */
 .ui-eyebrow {
   font-family: var(--ff-body);
   font-size: 0.75rem;

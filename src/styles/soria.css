@@ -1,0 +1,10 @@
+/* Soria, de By Dani (Daniel Iglesias), SIL OFL 1.1, descargada de Font Squirrel (D98). Un solo
+   estilo, Regular. Le faltan ¡ « » ‘ % ° - – — … ·: esos caracteres los pone Georgia, el respaldo
+   de --ff-body. Licencia en public/assets/fonts/soria/OFL.txt. */
+@font-face {
+  font-family: 'Soria';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/assets/fonts/soria/soria.ttf') format('truetype');
+}
