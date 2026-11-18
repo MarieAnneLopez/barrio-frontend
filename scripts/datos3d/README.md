@@ -6,9 +6,13 @@ visitante solo pide esos archivos a su mismo origen: no consulta Catastro, OSM n
 externo. Nada es inventado ni «dato de ejemplo»; lo que la fuente no trae queda como «sin dato».
 
 ```bash
-npm run datos:3d                 # usa la caché si existe (idéntico byte a byte)
+npm run datos:3d                 # usa la caché si existe (idéntico byte a byte con el mismo Node)
 npm run datos:3d -- --refrescar  # vuelve a descargar todo (versión vigente de cada fuente)
 ```
+
+Desde la caché, la salida es idéntica byte a byte con la misma versión de Node (24.20.0 para los
+datos comitidos): la cabecera gzip no lleva fecha ni sistema, pero los bytes comprimidos dependen
+del zlib de cada versión de Node.
 
 Requisitos: Node 24 (`.nvmrc`; usa `fetch`, `zlib` y `crypto` de Node) y red. Sin dependencias
 nuevas. Tarda ~75 s descargando y ~3 s desde la caché.
@@ -52,7 +56,9 @@ los muestre debe citar las dos atribuciones (`manifest.licenciaDeLosArchivos`).
 ## Método
 
 1. **Polígono y proyección.** El polígono de la API (el mismo que recibe la escena) define el
-   recorte; su bbox fija el origen de `src/three/projection.ts` (una prueba compara ambas).
+   recorte; su bbox fija el origen de `src/three/projection.ts`. `geo.test.mjs` comprueba que la
+   proyección del script da lo mismo que la de la escena, y `realData.test.ts` que el borde del
+   barrio decodificado llena justo el bbox del manifiesto con la proyección de la escena.
 2. **Catastro por ArcGIS REST, solo el recorte.** Consulta espacial `esriSpatialRelIntersects`
    con el polígono → OBJECTID; luego las entidades en lotes de 1000 (`f=geojson`, WGS84, 7
    decimales). La paginación por `resultOffset` con geometría devuelve vacío en ese servidor; por
@@ -115,6 +121,8 @@ coinciden una a una (código, textos, lote y tipo, sin contar espacios al final)
 
 ## Pruebas
 
-`npx vitest run scripts/datos3d src/three/data`: geometría y recorte, codificador, placas,
-etiquetas OSM, red vial y cruces, suelo, decodificador (con un fixture del mismo codificador),
-Web Worker y cliente, y los datos comitidos contra su manifiesto (`realData.test.ts`).
+`npx vitest run scripts/datos3d src/three/data`: geometría y recorte, codificador, placas y
+direcciones, etiquetas OSM, red vial y cruces, suelo, decodificador (con un fixture del mismo
+codificador) y sus comprobaciones de error, Web Worker y cliente (tiempo límite y respuestas
+malas), y los datos comitidos contra su manifiesto y la proyección de la escena
+(`realData.test.ts`).

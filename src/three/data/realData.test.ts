@@ -31,10 +31,23 @@ describe('public/data/tintal', () => {
     expect(total).toBeLessThan(6 * 1024 * 1024);
   });
 
-  it('usa la proyección de la escena: el origen es el centro del bbox del polígono', () => {
-    const [w, s, e, n] = manifest.proyeccion.bbox;
-    expect(manifest.proyeccion.origen).toEqual([(w + e) / 2, (s + n) / 2]);
-    expect(createProjection(manifest.proyeccion.bbox)(manifest.proyeccion.origen).map((v) => v + 0)).toEqual([0, 0]);
+  it('usa la proyección de la escena: el borde del barrio decodificado llena el bbox del manifiesto', async () => {
+    const s = decodeSuelo(await plain('suelo'));
+    const [west, south, east, north] = manifest.proyeccion.bbox;
+    const project = createProjection(manifest.proyeccion.bbox);
+    const corners = [...project([west, north]), ...project([east, south])]; // [minX, minZ, maxX, maxZ]
+    const box = [Infinity, Infinity, -Infinity, -Infinity];
+    for (let a = 0; a < s.count; a++) {
+      if (s.clase[a] !== TNT3.clasesSuelo.barrio) continue;
+      const outer = s.areas[a] ?? 0;
+      for (let v = s.anillos[outer] ?? 0; v < (s.anillos[outer + 1] ?? 0); v++) {
+        const [x, z] = [s.xz[2 * v] ?? 0, s.xz[2 * v + 1] ?? 0];
+        [box[0], box[1], box[2], box[3]] = [Math.min(box[0] ?? x, x), Math.min(box[1] ?? z, z), Math.max(box[2] ?? x, x), Math.max(box[3] ?? z, z)];
+      }
+    }
+    // Tolerancia: decímetros del formato (±0,05 m) y bbox publicado con 6 decimales (±0,06 m).
+    box.forEach((value, i) => expect(Math.abs(value - (corners[i] ?? 0))).toBeLessThan(0.15));
+    expect(manifest.proyeccion.origen).toEqual([(west + east) / 2, (south + north) / 2]);
     expect(manifest.proyeccion.unidadesPorMetro).toBe(TNT3.unidadesPorMetro);
   });
 
@@ -56,8 +69,9 @@ describe('public/data/tintal', () => {
     expect(bad).toEqual([]);
   });
 
-  it('vías, suelo y puntos: conteos del manifiesto y coordenadas dentro del bbox del barrio', async () => {
+  it('vías, suelo y puntos: conteos del manifiesto; todo (también las huellas) dentro del bbox', async () => {
     const [v, s, p] = [decodeVias(await plain('vias')), decodeSuelo(await plain('suelo')), decodePuntos(await plain('puntos'))];
+    const e = decodeEdificios(await plain('edificios'));
     const cv = manifest.conteos.vias ?? {};
     const cs = manifest.conteos.suelo ?? {};
     expect([v.count, v.nodos.length / 2, v.cruces.tipo.length, v.semaforos.osm.length]).toEqual([cv.tramos, cv.nodos, cv.cruces, cv.semaforos]);
@@ -70,7 +84,7 @@ describe('public/data/tintal', () => {
     const [x0, z1] = project([west, south]);
     const [x1, z0] = project([east, north]);
     let outside = 0;
-    for (const xz of [v.nodos, s.xz, s.lineas.xz, p.arboles.xz, p.hileras.xz, v.cruces.xz]) {
+    for (const xz of [e.xz, v.nodos, v.cruces.xz, v.semaforos.xz, s.xz, s.lineas.xz, p.arboles.xz, p.hileras.xz]) {
       for (let i = 0; i < xz.length; i += 2) {
         const [x, z] = [xz[i] ?? 0, xz[i + 1] ?? 0];
         if (x < x0 - 1 || x > x1 + 1 || z < z0 - 1 || z > z1 + 1) outside += 1;

@@ -1,6 +1,6 @@
 // @vitest-environment node
 // Contenedor binario TNT3 (FORMATO.md): cabecera, tabla de secciones alineada a 8 bytes,
-// coordenadas en decímetros con deltas que dan la vuelta en int16, tablas de texto y gzip estable.
+// coordenadas en decímetros con deltas que dan la vuelta en int16, tablas de texto y cabecera gzip.
 import { gunzipSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
 import { createTable, deltaEncode, gzipStable, quantize, writeContainer } from './encode.mjs';
@@ -57,7 +57,8 @@ describe('tablas y gzip', () => {
     expect(table.list).toEqual(['', 'KR 86 # 6-50']);
   });
 
-  it('gzip estable: mismo resultado en cualquier sistema (sin fecha, SO desconocido)', () => {
+  // Los bytes comprimidos dependen del zlib de Node: se repiten con la misma versión de Node.
+  it('gzip estable: cabecera sin fecha y con SO desconocido, y vuelve a los mismos bytes', () => {
     const data = new TextEncoder().encode('El Tintal '.repeat(50));
     const packed = gzipStable(data);
     expect([...packed.subarray(0, 2)]).toEqual([0x1f, 0x8b]);
