@@ -1,4 +1,5 @@
 import { LIGHT_GLSL } from '../sky/lightUniforms';
+import { HIGHLIGHT_GLSL } from './highlight';
 import { FACADE_GLSL } from './shaderFacade';
 import { HEIGHT_CLASS_GLSL } from './volume';
 import { WINDOW_GLSL } from './windows';
@@ -18,8 +19,6 @@ uniform vec3 uTrimNight;
 uniform vec3 uGlass;
 uniform vec3 uLamp;
 uniform vec3 uLampSoft;
-uniform vec3 uHoverColor;
-uniform vec3 uSelectColor;
 uniform float uLevel;
 uniform float uParapet;
 ${LIGHT_GLSL}
@@ -32,8 +31,10 @@ varying float vColumn;
 varying float vTop;
 varying float vMark;
 ${FACADE_GLSL}
+${HIGHLIGHT_GLSL}
 void main() {
   vec3 N = normalize(cross(dFdx(vWorld), dFdy(vWorld)));
+  float wy = max(fwidth(vWorld.y), 1e-3);
   float building = floor(vBuilding + 0.5);
   float floors = topLevel(vTop);
   int cls = heightClass(floors);
@@ -51,10 +52,7 @@ void main() {
   } else {
     color = facade(wall, trim, N, building, floors);
   }
-  float selected = step(1.5, vMark);
-  color = mix(color, uSelectColor, 0.55 * selected);
-  color = mix(color, uHoverColor, 0.4 * step(0.5, vMark) * (1.0 - selected));
-  gl_FragColor = vec4(color, 1.0);
+  gl_FragColor = vec4(highlight(color, vMark, N, wy), 1.0);
   #include <colorspace_fragment>
   #include <fog_fragment>
 }
