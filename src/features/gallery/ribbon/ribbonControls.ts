@@ -24,15 +24,16 @@ export interface ControlContext {
 
 export interface Controls {
   key(key: string): boolean;
-  center(index: number): void;
+  center(index: number, instant?: boolean): void;
   dispose(): void;
 }
 
 export function createControls(context: ControlContext): Controls {
   const { motion, moved } = context;
   let start = 0;
-  const center = (index: number) => {
+  const center = (index: number, instant = false) => {
     motion.target = centerOn(index, motion.target, context.pitch(), context.count());
+    if (instant) motion.current = motion.target;
     moved();
   };
 

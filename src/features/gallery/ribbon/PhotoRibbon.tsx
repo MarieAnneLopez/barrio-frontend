@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { GalleryLightbox } from '../../modules/GalleryLightbox';
 import { RibbonCaption } from './RibbonCaption';
+import { focusPhoto } from './ribbonFocus';
 import { RibbonGrid } from './RibbonGrid';
 import type { RibbonPhoto } from './ribbonPhotos';
 import { useRibbon } from './useRibbon';
@@ -53,7 +54,7 @@ export function PhotoRibbon({ photos }: { photos: readonly RibbonPhoto[] }) {
     const index = viewed.current;
     if (open !== null || index === null) return;
     viewed.current = null;
-    root.current?.querySelector<HTMLElement>(`[data-ribbon-index="${index}"], [data-grid-index="${index}"]`)?.focus({ preventScroll: true });
+    focusPhoto(root.current, index);
   }, [open, root]);
 
   return (

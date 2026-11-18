@@ -18,7 +18,8 @@ export interface Hits {
   place(placed: readonly Placed[], layout: RibbonLayout): void;
 }
 
-export function createHits(): Hits {
+/** `onHidden` avisa si se aparcó el botón que tenía el foco: así no se queda enfocado sin anillo visible. */
+export function createHits(onHidden: (index: number) => void = () => undefined): Hits {
   let buttons: readonly HTMLElement[] = [];
   let shown = new Set<number>();
   return {
@@ -44,7 +45,9 @@ export function createHits(): Hits {
       });
       for (const index of shown) {
         const button = buttons[index];
-        if (button && !now.has(index)) parkHit(button);
+        if (!button || now.has(index)) continue;
+        parkHit(button);
+        if (button === document.activeElement) onHidden(index);
       }
       shown = now;
     },

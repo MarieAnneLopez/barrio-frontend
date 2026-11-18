@@ -30,8 +30,8 @@ export interface RibbonEngine {
   setReduced(reduced: boolean): void;
   /** Tecla con el foco en la cinta; devuelve si la usó (entonces no debe hacer nada más). */
   key(key: string): boolean;
-  /** Centra una foto por el camino más corto. */
-  center(index: number): void;
+  /** Centra una foto por el camino más corto; `instant`: sin recorrido, ya está ahí. */
+  center(index: number, instant?: boolean): void;
   dispose(): void;
 }
 

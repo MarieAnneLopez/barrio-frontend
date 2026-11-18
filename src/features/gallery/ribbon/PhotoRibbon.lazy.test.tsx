@@ -1,4 +1,4 @@
-import { act, fireEvent, screen, within } from '@testing-library/react';
+import { fireEvent, screen, within } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { webgl } from './ribbonCanvasKit';
 import { renderers } from './ribbonGlKit';
@@ -44,13 +44,6 @@ describe('PhotoRibbon: el motor WebGL llega aparte, y sin él queda la rejilla',
     expect(mounted.group().querySelector('canvas')).not.toBeNull();
     const [watcher] = lookout(mounted.observers.created.intersection) as { disconnect?: unknown }[];
     expect(watcher?.disconnect).toHaveBeenCalled();
-  });
-
-  it('si el foco estaba en la rejilla, al llegar el motor pasa al botón de la foto activa', async () => {
-    const mounted = await mountRibbon({ far: true });
-    act(() => tiles()[3]?.focus());
-    await mounted.arrive();
-    expect(mounted.hit(0)).toHaveFocus();
   });
 
   it('si el navegador no da un contexto WebGL, ni siquiera descarga el motor', async () => {

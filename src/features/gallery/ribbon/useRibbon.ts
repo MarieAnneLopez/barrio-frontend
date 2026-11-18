@@ -1,5 +1,6 @@
 import { type KeyboardEvent, type RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { canCreateWebGL, type RibbonEngine, type RibbonItem, supportsWebGL } from './ribbonContract';
+import { useFocusCarry } from './ribbonFocus';
 
 type Node = RefObject<HTMLElement | null>;
 /** grid: sin WebGL, queda la rejilla · pending: el motor aún no llegó, se ve la rejilla · ribbon: la cinta. */
@@ -24,7 +25,6 @@ interface Args {
  */
 export function useRibbon({ root, frame, host, items, reduced, onOpen }: Args) {
   const engine = useRef<RibbonEngine | null>(null);
-  const refocus = useRef(false);
   const latest = useRef({ items, reduced, onOpen });
   const [supported, setSupported] = useState(supportsWebGL);
   const [wanted, setWanted] = useState(false);
@@ -33,6 +33,8 @@ export function useRibbon({ root, frame, host, items, reduced, onOpen }: Args) {
   const [settled, setSettled] = useState(0);
   const mode: RibbonMode = !supported ? 'grid' : ready ? 'ribbon' : 'pending';
   const request = useCallback(() => (canCreateWebGL() ? setWanted(true) : setSupported(false)), []);
+  const center = useCallback((index: number, instant = false) => engine.current?.center(index, instant), []);
+  const carry = useFocusCarry(root, mode, center);
 
   // Va antes que el efecto que crea el motor: deja a mano lo último y, si ya existe, se lo pasa.
   useEffect(() => {
@@ -59,12 +61,16 @@ export function useRibbon({ root, frame, host, items, reduced, onOpen }: Args) {
         if (cancelled || !frame.current || !host.current) return;
         started = createRibbonEngine({
           frame: frame.current, host: host.current, onActive: setActive, onSettle: setSettled,
-          onOpen: (index) => latest.current.onOpen(index), onLost: () => setSupported(false),
+          onOpen: (index) => latest.current.onOpen(index),
+          onLost: () => {
+            carry(root.current, 'data-ribbon-index'); // el foco pasará a la tesela de la misma foto, no al body
+            setSupported(false);
+          },
         });
         started.setItems(latest.current.items);
         started.setReduced(latest.current.reduced);
         engine.current = started;
-        refocus.current = root.current?.contains(document.activeElement) ?? false;
+        carry(root.current, 'data-grid-index'); // si estaba en una tesela, la cinta empieza en esa foto, con el foco
         setReady(true);
       })
       .catch(() => !cancelled && setSupported(false)); // sin contexto WebGL o sin red: queda la rejilla
@@ -73,15 +79,11 @@ export function useRibbon({ root, frame, host, items, reduced, onOpen }: Args) {
       started?.dispose();
       engine.current = null;
     };
-  }, [supported, wanted, root, frame, host]);
+  }, [supported, wanted, root, frame, host, carry]);
 
   // Los botones existen cuando la cinta ya se ve: se le pasan al motor, que los coloca sobre las fotos.
   useEffect(() => {
-    if (mode !== 'ribbon' || !frame.current) return;
-    const buttons = [...frame.current.querySelectorAll<HTMLElement>('[data-ribbon-index]')];
-    engine.current?.setButtons(buttons);
-    if (refocus.current) buttons[0]?.focus({ preventScroll: true }); // el foco estaba en la rejilla: no se pierde
-    refocus.current = false;
+    if (mode === 'ribbon' && frame.current) engine.current?.setButtons([...frame.current.querySelectorAll<HTMLElement>('[data-ribbon-index]')]);
   }, [mode, items, frame]);
 
   /** Flechas y Home son de la cinta; lo demás (y los atajos con Alt, Ctrl o ⌘) sigue siendo del navegador. */
@@ -89,6 +91,5 @@ export function useRibbon({ root, frame, host, items, reduced, onOpen }: Args) {
     if (event.altKey || event.ctrlKey || event.metaKey || !(event.target instanceof Node)) return;
     if (frame.current?.contains(event.target) && engine.current?.key(event.key)) event.preventDefault();
   };
-  const center = useCallback((index: number) => engine.current?.center(index), []);
   return { mode, active, settled, onKeyDown, center };
 }

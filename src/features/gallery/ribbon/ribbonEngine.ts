@@ -16,9 +16,11 @@ const ARRIVED = 0.05;
 /** Lanza un error si el navegador no da un contexto WebGL: quien lo llama se queda con la rejilla. */
 export function createRibbonEngine({ frame, host, onActive, onSettle, onOpen, onLost }: RibbonOptions): RibbonEngine {
   const motion = createMotion();
-  const hits = createHits();
   let [items, buttons] = [[] as readonly RibbonItem[], [] as readonly HTMLElement[]];
   let [reduced, active, settled, focused, ring] = [false, 0, 0, -1, false];
+  /** El foco (si está en la cinta) pasa al botón de la foto activa. */
+  const focusActive = () => frame.contains(document.activeElement) && buttons[active]?.focus({ preventScroll: true });
+  const hits = createHits(focusActive); // la foto enfocada salió de la pantalla: su botón no tendría anillo
   const count = () => Math.max(items.length, 1);
   const view = createRibbonView(host, onLost, () => loop.wake());
   const pitch = () => view.layout.pitch;
@@ -52,9 +54,7 @@ export function createRibbonEngine({ frame, host, onActive, onSettle, onOpen, on
     unitsPerPixel: () => view.layout.unitsPerPixel,
     reduced: () => reduced,
     active: () => active,
-    focusActive() {
-      if (frame.contains(document.activeElement)) buttons[active]?.focus({ preventScroll: true });
-    },
+    focusActive,
     onFocus: then((index: number, visible: boolean) => {
       [focused, ring] = [index, visible];
     }),
