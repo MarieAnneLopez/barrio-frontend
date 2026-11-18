@@ -17,6 +17,9 @@ import { useRibbon } from './useRibbon';
  * el visor, con autor y licencia, y al cerrarlo el foco vuelve a su botón. El motor se descarga aparte:
  * hasta que llega, y si no hay WebGL, se ve una rejilla accesible con las mismas fotos.
  */
+/** Fotos de la rejilla mientras llega el motor (D117): bastan para la pantalla; la definitiva, todas. */
+const PENDING_TILES = 12;
+
 export function PhotoRibbon({ photos }: { photos: readonly RibbonPhoto[] }) {
   const { t } = useTranslation();
   const reduced = useReducedMotion();
@@ -63,7 +66,7 @@ export function PhotoRibbon({ photos }: { photos: readonly RibbonPhoto[] }) {
             )) : null}
           </div>
         )}
-        {live ? null : <RibbonGrid photos={photos} onOpen={setOpen} />}
+        {live ? null : <RibbonGrid photos={ribbon.mode === 'pending' ? photos.slice(0, PENDING_TILES) : photos} onOpen={setOpen} />}
       </div>
       {live ? (
         <>
