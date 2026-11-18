@@ -24,7 +24,7 @@ export function indexPlacas(placas) {
   return { byLot, byBlock };
 }
 
-/** Empate a igual distancia: el PDOTIPO menor (supuesto: 1 es la principal) y luego el código. */
+/** Empate a igual distancia: el PDOTIPO menor (subtipos de la capa: 1 Principal, 2 Secundaria…) y luego el código. */
 const before = (a, b) => a.pdoTipo < b.pdoTipo || (a.pdoTipo === b.pdoTipo && a.codigo < b.codigo);
 
 /**

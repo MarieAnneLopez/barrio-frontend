@@ -36,10 +36,10 @@ nuevas. Tarda ~75 s descargando y ~3 s desde la caché.
 
 **Licencias, con el texto tal como lo publica cada fuente:**
 
-- **Construcción, Lote, Placa Domiciliaria y Sector Catastral** (las cuatro páginas del portal):
-  «Licencia Creative Commons Attribution 4.0» (https://creativecommons.org/licenses/by/4.0/).
-  Atribución que publica cada servicio (`copyrightText`): «Unidad Administrativa Especial de
-  Catastro Distrital - UAECD».
+- **Construcción, Lote, Placa Domiciliaria y Sector Catastral** (las cuatro páginas del portal,
+  bajo el encabezado «Licencia», y el `license_title` de su API CKAN): «Creative Commons
+  Attribution 4.0» (https://creativecommons.org/licenses/by/4.0/). Atribución que publica cada
+  servicio (`copyrightText`): «Unidad Administrativa Especial de Catastro Distrital - UAECD».
 - **OpenStreetMap** (https://www.openstreetmap.org/copyright): «OpenStreetMap is open data,
   licensed under the Open Data Commons Open Database License (ODbL) by the OpenStreetMap Foundation
   (OSMF).» y «Where you use OpenStreetMap data, you are required to do the following two things:
@@ -50,8 +50,12 @@ nuevas. Tarda ~75 s descargando y ~3 s desde la caché.
 - **Polígono**: «© OpenStreetMap contributors, ODbL 1.0» (propiedad `license` de la API).
 
 Los archivos generados son, en lo que viene de OSM, una base de datos derivada bajo ODbL 1.0
-(https://opendatacommons.org/licenses/odbl/1-0/); lo de Catastro sigue en CC BY 4.0. La vista que
-los muestre debe citar las dos atribuciones (`manifest.licenciaDeLosArchivos`).
+(https://opendatacommons.org/licenses/odbl/1-0/); lo de Catastro sigue en CC BY 4.0 y está
+**modificado** (CC BY 4.0 §3(a)(1)(B) pide indicarlo): recortado al barrio, huellas limpiadas y
+redondeadas a 10 cm en una proyección local, direcciones armadas desde las placas y unidas a cada
+edificio por código de lote, recodificado en TNT3 y unido con nombres y edificios de OSM. La vista
+que los muestre debe citar las dos atribuciones e indicar que los datos de Catastro fueron
+modificados (`manifest.licenciaDeLosArchivos`).
 
 ## Método
 
@@ -64,14 +68,23 @@ los muestre debe citar las dos atribuciones (`manifest.licenciaDeLosArchivos`).
    decimales). La paginación por `resultOffset` con geometría devuelve vacío en ese servidor; por
    ids funciona. El portal (API CKAN) da título, licencia y última versión publicada.
 3. **Edificios.** Cada polígono de Construcción cuyo punto interior cae en el barrio (20 381, todos):
-   huella limpia a decímetros, pisos (`CONNPISOS`), arranque del voladizo (`CONALTURA`; 1 = sobre el
-   primer piso), sótanos, mejora y lote (`LOTECODIGO`). Catastro publica pisos, no alturas.
+   huella limpia a decímetros, pisos (`CONNPISOS`), arranque del voladizo (`CONALTURA`), sótanos,
+   mejora y lote (`LOTECODIGO`). Catastro publica pisos, no alturas.
+   **`CONALTURA` como piso de arranque es una interpretación deducida de los datos**: el servicio
+   solo lo publica como «Altura» (Double), sin dominio ni descripción. Cuadra en el barrio: en los
+   2 908 voladizos vale 1 (2 903) o 2 (5) y en lo demás 0 (17 282), −1 (181), −1,5 (7) o 1 (3);
+   arranque + pisos del voladizo nunca pasa del edificio más alto de su lote (2 365 iguales, 543
+   menores, 0 mayores); `CONELEVACI` = `CONNPISOS` en 2 907 de los 2 908 voladizos, y en 181 de
+   las 188 construcciones con sótano que no son voladizo vale `CONNPISOS` + 1.
 4. **Complemento OSM.** Un edificio de OSM entra solo si menos de un tercio de su huella cae sobre
    construcciones de Catastro (rejilla de 8×8 puntos): 13 de 230. Su lote sale de la capa Lote.
 5. **Dirección oficial.** Por el código de lote (Construcción `LOTECODIGO` = Lote `LOTCODIGO` =
    Placa `PDOCLOTE`): la placa del lote que cae dentro de la huella; si no, la más cercana del
    lote; si el lote no tiene, la más cercana de su manzana (9 primeros dígitos). Empate a igual
-   distancia: el `PDOTIPO` menor y luego `PDOCODIGO`. El número de casa, torre o interior solo
+   distancia: el `PDOTIPO` menor y luego `PDOCODIGO`; la capa publica `PDOTIPO` como su campo de
+   subtipos (`typeIdField`, en `…/placadomiciliaria/MapServer/0?f=json`): 1 Principal,
+   2 Secundaria, 3 Incluye, 4 Adicional PH, 5 Provisional DSU (en el barrio: 15 906 / 640 / 207 de
+   los tres primeros), así que la principal gana. El número de casa, torre o interior solo
    va con el edificio al que identifica: el único interior dentro de la huella, o el edificio del
    lote más cercano a la placa y a menos de 5 m. Si no, y siempre con la placa de la manzana,
    queda la dirección del conjunto (vía y número): así salen 1 312 edificios (297 huellas con
@@ -81,8 +94,9 @@ los muestre debe citar las dos atribuciones (`manifest.licenciaDeLosArchivos`).
    `PDOCINTERI` solo cuenta como número si tiene la forma «cruce distancia» (en 22 placas trae
    `8` o `MJ 34`): si no, queda vía e interior (`CL 34A S IN 8`), y un interior sin vía ni número
    no es dirección.
-   La unión es por código y no por posición: medido en el barrio, solo el 86,7 % de las placas cae
-   dentro del polígono de su propio lote (7,7 % en el lote vecino y 5,6 % en el andén o la vía).
+   La unión es por código y no por posición: medido en el barrio, de las 16 740 placas cuyo lote
+   está en la capa Lote, solo 14 520 (86,7 %) caen dentro del polígono de su propio lote; 1 277
+   (7,6 %) caen en otro lote y 943 (5,6 %) en el andén o la vía.
 6. **Nombre de conjunto o lugar** (Catastro no publica nombres): el edificio OSM con nombre que lo
    contiene o, si no, el área OSM con nombre más pequeña que lo contiene (conjuntos residenciales,
    colegios, parques, comercio). El sector catastral (`SCANOMBRE`) va aparte, por el código de lote.

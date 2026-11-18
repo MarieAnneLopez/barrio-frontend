@@ -21,7 +21,7 @@ describe('assignPlacas: qué placa toma cada edificio', () => {
     placa('otra-manzana', [0, 1], '004601019001'),
   ];
 
-  it('la placa del lote que cae dentro de la huella gana aunque tenga un PDOTIPO mayor', () => {
+  it('la placa del lote que cae dentro de la huella gana aunque sea secundaria (PDOTIPO 2)', () => {
     expect(one({ rings: box(0, 0), lote: LOTE }, placas)).toEqual({ tipo: 1, texto: 'placa dentro' });
   });
 
@@ -29,7 +29,7 @@ describe('assignPlacas: qué placa toma cada edificio', () => {
     expect(one({ rings: box(20, 0), lote: LOTE }, placas)).toEqual({ tipo: 2, texto: 'placa cerca' });
   });
 
-  it('a igual distancia gana el PDOTIPO menor (supuesto: 1 es la principal)', () => {
+  it('a igual distancia gana la principal: el PDOTIPO menor (1 Principal, 2 Secundaria)', () => {
     const twin = [placa('b', [12, -5], 'L', { pdoTipo: 2 }), placa('a', [-2, -5], 'L', { pdoTipo: 1 })];
     expect(one({ rings: box(0, 0), lote: 'L' }, twin).texto).toBe('placa a');
   });

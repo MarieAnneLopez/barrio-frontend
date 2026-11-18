@@ -78,7 +78,7 @@ que lo tolere (earcut, el de `THREE.ShapeUtils`), no con uno que exija polígono
 | `ANIL` | u32 | R+1 | inicio de cada anillo en vértices; el último = V (`anillos`) |
 | `EDIF` | u32 | N+1 | inicio de cada edificio en anillos; su primer anillo es el exterior, los demás huecos (`edificios`) |
 | `PISO` | u8 | N | pisos del volumen (`pisos`) |
-| `BASE` | u8 | N | piso donde empieza el volumen: 0 en el suelo, ≥ 1 en voladizos (`base`) |
+| `BASE` | u8 | N | piso donde empieza el volumen: 0 en el suelo, ≥ 1 en voladizos; sale de `CONALTURA`, leído como piso de arranque (interpretación deducida de los datos: README, paso 3) (`base`) |
 | `SOTA` | u8 | N | sótanos (`sotanos`) |
 | `BAND` | u8 | N | banderas, abajo (`banderas`) |
 | `DIRT` | u8 | N | de dónde salió la placa: 0 ninguna, 1 dentro de la huella, 2 la más cercana de su lote, 3 la más cercana de su manzana; la ficha debe decirlo (abajo) (`tipoDireccion`) |
@@ -121,8 +121,10 @@ una placa que es de otro edificio o que queda lejos) y siempre con 3, el texto e
 conjunto: vía y número, sin interior (`KR 88D # 6D-27`). Por eso muchos edificios de un mismo
 conjunto comparten la dirección (el lote 004627077011 tiene 744 construcciones y una sola placa).
 
-Además lote (`TLOT`), sector (`TSEC`) y fuente: Catastro (UAECD) o OSM. Origen trazable: Catastro →
-`https://datosabiertos.bogota.gov.co/dataset/construccion#LOTECODIGO=<lote>`; OSM →
+Además lote (`TLOT`), sector (`TSEC`) y fuente. Origen trazable: Catastro → el texto «Catastro
+(UAECD), lote <código>» con enlace al conjunto, sin fragmento
+(`https://datosabiertos.bogota.gov.co/dataset/construccion`: el portal no abre un registro por
+lote, y `CONCODIGO` no identifica una construcción: 6 569 valores para 20 381); OSM →
 `https://www.openstreetmap.org/way/<id>` (o `relation/<-id>`). Los textos son datos reales
 (`verified`) de Catastro y OSM, pero la relación entre la placa y el edificio solo es directa con
 `DIRT` = 1: con 2 y 3 es una aproximación, y la ficha no la muestra como la placa verificada del
@@ -254,7 +256,9 @@ carga actual por la API (`useTintalData`) como respaldo y usarla cuando la prome
 
 Catastro Bogotá (UAECD): «Creative Commons Attribution 4.0». OpenStreetMap: ODbL 1.0 («©
 OpenStreetMap contributors»). Lo derivado de OSM es una base de datos derivada bajo ODbL 1.0
-(`manifest.licenciaDeLosArchivos`). Toda vista que muestre estos datos debe citar a las dos fuentes.
+(`manifest.licenciaDeLosArchivos`). Toda vista que muestre estos datos debe citar a las dos fuentes
+e indicar que los datos de Catastro están modificados (CC BY 4.0 §3(a)(1)(B)), p. ej. «Catastro
+Bogotá (UAECD), CC BY 4.0, datos modificados · © OpenStreetMap contributors, ODbL».
 
 ## 9. Versiones
 

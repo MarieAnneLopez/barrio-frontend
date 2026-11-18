@@ -13,7 +13,9 @@ const F = SPEC.banderasEdificio;
 function attributes(p) {
   const known = Number.isInteger(p.CONNPISOS);
   const pisos = known ? p.CONNPISOS : 0;
-  const start = Number.isFinite(p.CONALTURA) ? p.CONALTURA : 0; // nivel donde arranca: 1 = sobre el primer piso
+  // CONALTURA («Altura», sin dominio publicado) se lee como el piso donde arranca: 1 = sobre el
+  // primer piso. Es una interpretación deducida de los datos (README, paso 3).
+  const start = Number.isFinite(p.CONALTURA) ? p.CONALTURA : 0;
   const banderas = (known ? F.pisosConocidos : 0) | (p.CONVOLADIZ === 1 ? F.voladizo : 0)
     | (p.CONMEJORA === 1 ? F.mejora : 0) | (p.CONTSEMIS === 1 ? F.semisotano : 0)
     | (known && pisos === 0 && start < 0 ? F.subterranea : 0);
