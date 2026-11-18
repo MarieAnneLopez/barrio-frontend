@@ -1,6 +1,6 @@
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ModuleItem } from '../../lib/apiTypes';
 import { useSelectionStore } from '../../three/selection/selectionStore';
 import { ADMIN } from '../../test/authFixtures';
@@ -9,6 +9,9 @@ import { BARBERIA, barberiaRoutes } from '../../test/engagementFixtures';
 import { callsTo, mockApi } from '../../test/mockApi';
 import { page } from '../../test/moduleFixtures';
 import { renderRoute, setViewport } from '../../test/renderRoute';
+
+// jsdom no tiene WebGL: la escena se sustituye (si el chunk diferido llegara a cargar, r3f fallaría).
+vi.mock('../../three/TintalScene', () => ({ default: () => <div data-testid="escena-3d" /> }));
 
 // La ficha de la derecha busca el lugar en la lista del módulo y, si no está, en los datos de los 14
 // módulos que la maqueta pide una vez por sesión: tras borrarlo seguía mostrando el registro borrado

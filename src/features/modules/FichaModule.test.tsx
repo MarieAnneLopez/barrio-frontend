@@ -1,12 +1,15 @@
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ModuleItem } from '../../lib/apiTypes';
 import { useFocusStore } from '../../three/camera/focusStore';
 import { worldReady } from '../../test/emptyWorld';
 import { mockApi } from '../../test/mockApi';
 import { BASE_MAP, page } from '../../test/moduleFixtures';
 import { renderRoute, setViewport } from '../../test/renderRoute';
+
+// jsdom no tiene WebGL: la escena se sustituye (si el chunk diferido llegara a cargar, r3f fallaría).
+vi.mock('../../three/TintalScene', () => ({ default: () => <div data-testid="escena-3d" /> }));
 
 // La localidad (FICHA) abarca el barrio entero y mucho más: su contorno no se dibuja en la maqueta
 // (salía de la isla y flotaba sobre el cielo), así que no se ofrece «Ver en el mapa».

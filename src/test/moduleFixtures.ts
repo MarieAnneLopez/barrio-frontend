@@ -29,6 +29,18 @@ export const FEATURES: MockResponse = {
   },
 };
 
+/** GeoJSON de un módulo que, como la API, aplica la búsqueda (q, en el nombre) y los filtros de la lista. */
+export function geojsonRoute(items: ModuleItem[]) {
+  return (url: URL): MockResponse => {
+    const q = (url.searchParams.get('q') ?? '').toLowerCase();
+    const filters = [...url.searchParams].filter(([key]) => key !== 'q' && key !== 'sort');
+    const found = items.filter((item) =>
+      String(item.nombre ?? '').toLowerCase().includes(q) && filters.every(([key, value]) => item[key] === value));
+    const features = found.map((item) => ({ type: 'Feature', id: item.id, geometry: item.geometry, properties: item }));
+    return { body: { type: 'FeatureCollection', features } };
+  };
+}
+
 const empty = { body: { type: 'FeatureCollection', features: [] } };
 
 /** Mapa base mínimo: polígono con bbox y capas vacías. */

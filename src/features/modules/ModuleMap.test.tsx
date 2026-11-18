@@ -1,15 +1,19 @@
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ModuleItem } from '../../lib/apiTypes';
 import { useFocusStore } from '../../three/camera/focusStore';
 import { FOCUS_DISTANCE } from '../../three/camera/mapView';
 import { usePlaceScope } from '../../three/places/placeScope';
+import { sceneLayers } from '../../three/places/sceneLayers';
 import { useSelectionStore } from '../../three/selection/selectionStore';
 import { worldReady } from '../../test/emptyWorld';
-import { mockApi } from '../../test/mockApi';
-import { BASE_MAP, ITEMS, page } from '../../test/moduleFixtures';
+import { callsTo, mockApi } from '../../test/mockApi';
+import { BASE_MAP, geojsonRoute, ITEMS, page } from '../../test/moduleFixtures';
 import { renderRoute, setViewport } from '../../test/renderRoute';
+
+// jsdom no tiene WebGL: la escena se sustituye (si el chunk diferido llegara a cargar, r3f fallaría).
+vi.mock('../../three/TintalScene', () => ({ default: () => <div data-testid="escena-3d" /> }));
 
 // Un registro inventado (semilla): se lista con su etiqueta, pero no se dibuja en la maqueta.
 const SAMPLE: ModuleItem = {
@@ -17,19 +21,20 @@ const SAMPLE: ModuleItem = {
   geometry: { type: 'Point', coordinates: [-74.156, 4.65] },
 };
 const ALL = [...ITEMS, SAMPLE];
-const features = { body: { type: 'FeatureCollection', features: ALL.map((p) => ({ type: 'Feature', id: p.id, geometry: p.geometry, properties: p })) } };
 const routes = {
   ...BASE_MAP,
   '/centros-educativos': page(ALL),
-  '/centros-educativos/geojson': features,
+  '/centros-educativos/geojson': geojsonRoute(ALL),
   ...Object.fromEntries(ALL.map((item) => [`/centros-educativos/${item.id}`, { body: item }])),
 };
 const card = (name: string) => screen.getByRole('heading', { level: 3, name }).closest('li') as HTMLElement;
+const lonLat = ([lon = 0, lat = 0]: readonly number[]): [number, number] => [lon, lat];
+let fetchMock: ReturnType<typeof mockApi>;
 
 beforeEach(() => {
   worldReady();
   setViewport(true);
-  mockApi(routes);
+  fetchMock = mockApi(routes);
 });
 
 describe('la maqueta de la sección de un módulo', () => {
@@ -37,7 +42,15 @@ describe('la maqueta de la sección de un módulo', () => {
     const { unmount } = renderRoute('/categorias/centros-educativos?panel=abierto');
     await screen.findByRole('list', { name: 'Lista de lugares' });
     await waitFor(() => expect(usePlaceScope.getState().collection?.features).toHaveLength(3));
-    expect(usePlaceScope.getState().slug).toBe('centros-educativos');
+    await userEvent.type(screen.getByLabelText('Buscar en este módulo'), 'codema');
+    await userEvent.click(screen.getByRole('button', { name: 'Buscar' }));
+    await userEvent.selectOptions(screen.getByLabelText('Carácter'), 'publico');
+    await waitFor(() => expect(callsTo(fetchMock, '/centros-educativos/geojson').at(-1)?.get('caracter')).toBe('publico'));
+    expect(callsTo(fetchMock, '/centros-educativos/geojson').at(-1)?.get('q')).toBe('codema');
+    await waitFor(() => expect(usePlaceScope.getState().collection?.features.map((f) => f.properties?.id)).toEqual([2]));
+    const { slug, collection } = usePlaceScope.getState();
+    expect(slug).toBe('centros-educativos');
+    expect(sceneLayers(null, { slug, collection }, lonLat).map((layer) => layer.ids)).toEqual([[2]]);
     unmount();
     expect(usePlaceScope.getState().slug).toBeNull(); // fuera de la sección vuelven los 14 módulos
   });
