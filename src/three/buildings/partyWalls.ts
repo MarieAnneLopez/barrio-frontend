@@ -32,17 +32,18 @@ export function* wallKinds(s: BuildingSource, volumes: ReadonlyArray<Volume | nu
   const end = new Int32Array(total);
   const keys = new Float64Array(total);
   for (let b = 0; b < s.count; b++) {
+    if (b % 2048 === 0) yield;
     if (!volumes[b]) continue;
     for (let r = s.edificios[b] ?? 0; r < (s.edificios[b + 1] ?? 0); r++) {
       const [from, to] = [s.anillos[r] ?? 0, s.anillos[r + 1] ?? 0];
       for (let v = from; v < to; v++) [owner[v], end[v], keys[v]] = [b, v + 1 < to ? v + 1 : from, pointKey(s.xz, v)];
     }
   }
-  yield;
   // Lista enlazada de tramos por punto de arranque (sin un arreglo por punto).
   const head = new Map<number, number>();
   const chain = new Int32Array(total).fill(-1);
   for (let v = 0; v < total; v++) {
+    if (v % STEP === 0) yield;
     if ((owner[v] ?? -1) < 0) continue;
     const key = keys[v] ?? 0;
     chain[v] = head.get(key) ?? -1;
