@@ -34,6 +34,12 @@ export const WORLD_VERTEX = /* glsl */ `
   #include <fog_vertex>
 `;
 
+/** Los uniformes del ciclo que lee el vertex shader (luces de noche, parpadeos, movimiento). */
+const VERTEX_LIGHT = /* glsl */ `
+uniform float uNight;
+uniform float uTime;
+`;
+
 export interface LitOptions {
   vertex: string;
   fragment: string;
@@ -46,7 +52,7 @@ export interface LitOptions {
 export function litMaterial({ vertex, fragment, uniforms = {}, additive = false, side }: LitOptions): ShaderMaterial {
   const material = new ShaderMaterial({
     uniforms: { ...UniformsUtils.clone(UniformsLib.fog), ...LIGHT, ...uniforms },
-    vertexShader: `#include <common>\n#include <fog_pars_vertex>\n${vertex}`,
+    vertexShader: `#include <common>\n#include <fog_pars_vertex>\n${VERTEX_LIGHT}\n${vertex}`,
     fragmentShader: `#include <common>\n#include <fog_pars_fragment>\n${LIGHT_GLSL}\n${SHADE_GLSL}\n${fragment}`,
     fog: true,
     transparent: additive,

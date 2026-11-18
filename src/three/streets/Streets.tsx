@@ -2,7 +2,9 @@ import { useMemo } from 'react';
 import type { Tintal3D } from '../data/format';
 import { buildNetwork } from './network';
 import { readStreetPalette } from './palette';
+import { StreetFurniture } from './StreetFurniture';
 import { GroundSurface, RoadSurfaces } from './StreetSurfaces';
+import { TreesLayer } from './TreesLayer';
 import { useStage } from './useStage';
 
 export interface StreetsProps {
@@ -18,11 +20,13 @@ export interface StreetsProps {
 export function Streets({ world }: StreetsProps) {
   const palette = useMemo(() => readStreetPalette(), []);
   const net = useMemo(() => buildNetwork(world.vias), [world]);
-  const stage = useStage(1);
+  const stage = useStage(3);
   return (
     <group>
       <GroundSurface world={world} palette={palette} />
       {stage >= 1 && <RoadSurfaces world={world} net={net} palette={palette} />}
+      {stage >= 2 && <StreetFurniture world={world} net={net} palette={palette} />}
+      {stage >= 3 && <TreesLayer world={world} palette={palette} />}
     </group>
   );
 }
