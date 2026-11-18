@@ -2,7 +2,7 @@ import { useEffect, useSyncExternalStore } from 'react';
 import { apiGet } from '../lib/apiClient';
 import { quietly } from '../lib/loadingTracker';
 import { CATEGORIES } from '../lib/categoryConfig';
-import type { ModuleCollection } from './categoryLayers';
+import type { ModuleCollection } from './places/placeLayers';
 
 export interface CategoryData {
   slug: string;

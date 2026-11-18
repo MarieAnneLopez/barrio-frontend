@@ -1,11 +1,8 @@
-import '../components/map/map.css'; // estilo .map-marker de los billboards
 import { Canvas } from '@react-three/fiber';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { mapColor } from '../lib/cssToken';
-import { Billboards } from './Billboards';
 import { Buildings } from './buildings/Buildings';
 import { CameraRig } from './CameraRig';
-import { buildCategoryLayer } from './categoryLayers';
 import { Clouds } from './clouds/Clouds';
 import { useContextRecovery } from './contextRecovery';
 import type { Tintal3D } from './data/format';
@@ -14,7 +11,6 @@ import { useHeroStore } from './heroStore';
 import { Island } from './island/Island';
 import { PerfProbe } from './PerfProbe';
 import { ScenePlaces } from './places/ScenePlaces';
-import { PlaceLayers } from './PlaceLayers';
 import { createProjection } from './projection';
 import { QualityProbe } from './quality/QualityProbe';
 import { useQualityStore, QUALITY } from './quality/qualityStore';
@@ -49,14 +45,6 @@ export default function TintalScene({ world, places, active, reducedMotion }: Pr
   const density = useQualityStore((s) => QUALITY[s.level].density);
   const recovery = useContextRecovery();
   const setInteracting = useHeroStore((s) => s.setInteracting);
-  // Los 14 módulos (H34, D69) mientras el carril «mapas» los pasa a ScenePlaces.
-  const layers = useMemo(
-    () => (places ?? []).flatMap((c) => (c.collection ? [buildCategoryLayer(c.slug, c.emoji, c.collection, project)] : [])),
-    [places, project],
-  );
-  const setDrawn = useHeroStore((s) => s.setDrawn);
-  useEffect(() => setDrawn(Object.fromEntries(layers.map((l) => [l.slug, l.drawn]))), [layers, setDrawn]);
-  const selected = useHeroStore((s) => s.selected);
 
   return (
     <Canvas
@@ -85,8 +73,6 @@ export default function TintalScene({ world, places, active, reducedMotion }: Pr
       <Buildings world={world} />
       <Vida world={world} still={reducedMotion} />
       <ScenePlaces places={places} project={project} />
-      <PlaceLayers layers={layers} />
-      <Billboards places={selected ? [selected] : []} />
       <CameraRig radius={radius} view={framing} reducedMotion={reducedMotion} />
       <QualityProbe />
       <PerfProbe />

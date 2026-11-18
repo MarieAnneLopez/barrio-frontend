@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import type { ModuleItem } from '../../lib/apiTypes';
-import { verificationKind, type VerificationKind } from './verification';
+import { verificationKind, type VerificationKind } from '../../lib/verification';
 
 // Insignias de contorno (D85): el símbolo y la palabra dicen el estado, no el color; la línea
 // punteada marca lo que no está verificado.
