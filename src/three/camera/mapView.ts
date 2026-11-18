@@ -3,6 +3,7 @@
 // norte arriba y muestra el barrio entero; los vuelos llevan la cámara hacia un lugar sin bajar nunca
 // de 50 m. Funciones puras (x al este, z al sur, y arriba; suelo en y = 0).
 import { Vector3 } from 'three';
+import { MARKER_Y } from '../places/placeLayers';
 import { FOV_DEG, type HomeView } from '../referenceView';
 
 /** Inclinación desde la vertical: un mapa que todavía deja ver el volumen de los edificios. */
@@ -11,6 +12,8 @@ export const MAP_PITCH_DEG = 42;
 export const MIN_CAMERA_Y = 50;
 /** Distancia a la que vuela la cámara al elegir un lugar en la lista (m): unas dos manzanas a lo alto. */
 export const FOCUS_DISTANCE = 1300;
+/** Altura a la que miran los vuelos: la de los marcadores, para que el lugar quede en el centro de la imagen. */
+export const FOCUS_Y = MARKER_Y;
 /** Holgura del encuadre para que el borde del barrio no toque el de la imagen (la perspectiva lo agranda). */
 const MARGIN = 1.12;
 /** En los vuelos la vista queda al menos a esta altura sobre el horizonte. */
@@ -40,7 +43,7 @@ export function mapView({ center, size }: MapFraming, aspect: number, maxDistanc
 
 /** Vuelo hacia un punto: misma dirección de vista que ahora, a `distance` de él y bien por encima del suelo. */
 export function focusGoal(point: { x: number; z: number }, distance: number, camera: Vector3, lookAt: Vector3): Goal {
-  const target = new Vector3(point.x, 0, point.z);
+  const target = new Vector3(point.x, FOCUS_Y, point.z);
   const away = camera.clone().sub(lookAt);
   if (away.lengthSq() < 1e-6) away.set(0, 1, 1);
   away.setLength(distance);

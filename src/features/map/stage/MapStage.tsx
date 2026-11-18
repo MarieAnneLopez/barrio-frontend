@@ -71,7 +71,8 @@ export function MapStage({ label, title, emoji, children, onOpenPlace, mascot = 
             {children}
           </StagePanel>
         </StageContext.Provider>
-        <div className="pointer-events-none absolute top-[4.25rem] right-3 bottom-[12rem] left-3 z-30 flex flex-col items-end md:right-16 md:bottom-[5.5rem] md:left-auto md:w-[22rem]">
+        {/* En el celular la ficha no baja de la mitad: la cámara deja el lugar en el centro, a la vista. */}
+        <div className="pointer-events-none absolute top-[4.25rem] right-3 bottom-[55%] left-3 z-30 flex flex-col items-end md:right-16 md:bottom-[5.5rem] md:left-auto md:w-[22rem]">
           <SelectionCard returnFocus={menu} onOpenPlace={onOpenPlace} className="max-h-full min-h-0 w-full" />
         </div>
         <StageFooter beside={open} />

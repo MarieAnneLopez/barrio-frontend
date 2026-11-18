@@ -1,7 +1,8 @@
 import { PerspectiveCamera, Vector3 } from 'three';
 import { describe, expect, it } from 'vitest';
 import { FOV_DEG } from '../referenceView';
-import { focusGoal, keepAbove, mapView, MIN_CAMERA_Y } from './mapView';
+import { MARKER_Y } from '../places/placeLayers';
+import { FOCUS_Y, focusGoal, keepAbove, mapView, MIN_CAMERA_Y } from './mapView';
 
 const BARRIO = { center: [120, -40] as [number, number], size: [3400, 2300] as [number, number] };
 
@@ -41,9 +42,10 @@ describe('encuadre de mapa de las secciones con mapa', () => {
 });
 
 describe('vuelo al foco', () => {
-  it('conserva la dirección de la vista y queda a la distancia pedida del punto', () => {
+  it('conserva la dirección de la vista y queda a la distancia pedida del punto, mirando a la altura de los marcadores', () => {
     const goal = focusGoal({ x: 500, z: 300 }, 1300, new Vector3(0, 800, 600), new Vector3(0, 0, 0));
-    expect(goal.target.toArray()).toEqual([500, 0, 300]);
+    expect(goal.target.toArray()).toEqual([500, FOCUS_Y, 300]);
+    expect(Math.abs(MARKER_Y - FOCUS_Y)).toBeLessThan(10); // el marcador queda casi en el centro de la imagen
     expect(goal.position.distanceTo(goal.target)).toBeCloseTo(1300);
     const before = new Vector3(0, 800, 600).normalize();
     expect(goal.position.clone().sub(goal.target).normalize().dot(before)).toBeCloseTo(1);

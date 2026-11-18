@@ -684,7 +684,7 @@
     }
   },
   "mapPage": {
-    "explore": "Arrastra para mover el mapa, usa la rueda o dos dedos para acercar y elige un lugar o un edificio para ver su ficha a la derecha.",
+    "explore": "Arrastra para mover el mapa, usa la rueda o dos dedos para acercar y elige un lugar o un edificio para ver su ficha.",
     "note": "Edificios, lotes, placas y sectores de Catastro Bogotá (UAECD) por Datos Abiertos Bogotá (CC BY 4.0, datos modificados); vías, parques y agua de OpenStreetMap (ODbL). El Tintal es aquí la suma de las UPZ 78 y 79 (662 ha): una definición operativa, no una unidad administrativa oficial."
   },
   "galleryPage": {
