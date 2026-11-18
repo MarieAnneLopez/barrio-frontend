@@ -40,7 +40,7 @@ export function createRibbonScene(cache: PhotoCache, anisotropy: number): Ribbon
   const shared = createSharedUniforms();
   const floor = createFloor();
   scene.add(floor.mesh);
-  let [layout, pixelRatio, version] = [layoutFor(1, 1), 1, 0];
+  let [layout, pixelRatio, version, band] = [layoutFor(1, 1), 1, 0, ''];
   let [slots, photos, theme] = [[] as Slot[], [] as readonly ScenePhoto[], null as RibbonTheme | null];
   const range = () => REACH * layout.halfW + layout.cardW / 2;
 
@@ -51,13 +51,17 @@ export function createRibbonScene(cache: PhotoCache, anisotropy: number): Ribbon
       return layout;
     },
     resize(width, height, ratio) {
-      [layout, pixelRatio, version] = [layoutFor(width, height), ratio, version + 1];
+      [layout, pixelRatio] = [layoutFor(width, height), ratio];
       camera.aspect = layout.width / layout.height;
       camera.updateProjectionMatrix();
       applyLayout(shared, layout);
-      // Las franjas cambian de tamaño: se rehacen las ranuras (y así cuántas hacen falta).
+      // Se rehacen las ranuras solo si hacen falta otras tantas o si cambia el tamaño de la franja de su
+      // etiqueta en píxeles reales: three no cambia el tamaño de una textura ya subida a la GPU.
+      const [count, next] = [slotCount(layout.pitch, range()), `${Math.round((layout.cardW / layout.unitsPerPixel) * ratio)}@${ratio}`];
+      if (count === slots.length && next === band) return;
+      band = next;
       disposeSlots(slots, scene);
-      slots = createSlots(slotCount(layout.pitch, range()), geometry, shared, scene, anisotropy);
+      slots = createSlots(count, geometry, shared, scene, anisotropy); // nacen sin pintar: se pintan al verse
     },
     setPhotos(next) {
       [photos, version] = [next, version + 1];

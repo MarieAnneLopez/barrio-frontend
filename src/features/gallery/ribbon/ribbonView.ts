@@ -43,6 +43,7 @@ export function createRibbonView(host: HTMLElement, onLost: () => void, onPhoto:
   const anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
   const cache = createPhotoCache(CACHED_PHOTOS, anisotropy, onPhoto);
   const ribbon = createRibbonScene(cache, anisotropy);
+  let size = '';
 
   return {
     get layout() {
@@ -52,6 +53,9 @@ export function createRibbonView(host: HTMLElement, onLost: () => void, onPhoto:
       const [width, height] = [host.clientWidth, host.clientHeight];
       if (width === 0 || height === 0) return false;
       const ratio = Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO); // sigue al zoom y al monitor
+      const next = `${width}×${height}@${ratio}`;
+      if (next === size) return true; // lo mismo (el primer aviso del ResizeObserver): reajustar el lienzo lo borraría
+      size = next;
       renderer.setPixelRatio(ratio);
       renderer.setSize(width, height, false);
       ribbon.resize(width, height, ratio);
