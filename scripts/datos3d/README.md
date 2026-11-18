@@ -104,8 +104,8 @@ modificados (`manifest.licenciaDeLosArchivos`).
    polígono con nodos compartidos (grafo), sentido, carriles, velocidad, nivel, puentes y accesos;
    cruces con eje de la calle, largo y marcas; semáforos; parques, pasto y agua recortados al
    barrio; canales; árboles, hileras y faroles reales. Solo pide lo que usa el script: los nombres
-   van con sus claves de lugar, no `name` a secas, que traía límites (Cundinamarca, Bogotá, UPZ) y
-   152 rutas de bus. La respuesta baja de 17,2 MB (5 042 elementos) a 3,0 MB (4 812); con la
+   van con sus claves de lugar, no `name` a secas, que traía límites (Cundinamarca, Bogotá, UPZ),
+   151 rutas de bus y 1 de metro. La respuesta baja de 17,2 MB (5 042 elementos) a 3,0 MB (4 812); con la
    respuesta vieja filtrada así, los cuatro `.bin.gz` salen idénticos.
 
 **Verificación de versión (2026-11-17):** las 16 753 placas del servicio REST dentro del polígono
