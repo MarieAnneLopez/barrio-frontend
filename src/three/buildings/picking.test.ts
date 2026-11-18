@@ -11,6 +11,9 @@ const [tile] = buildAll(fakeSource([{ rings: [square(0, 0, 10)], pisos: 2 }, { r
 if (!tile) throw new Error('sin tesela');
 const mesh = new Mesh(tileGeometry(tile));
 const group = new Group().add(mesh); // r3f entrega los eventos al grupo (eventObject)
+const canvas = document.createElement('canvas');
+const handlers = createPickHandlers(canvas);
+const cursor = () => canvas.style.cursor;
 /** Evento de r3f sobre la primera cara del edificio k de la tesela (`front`: lo más cercano al rayo). */
 const on = (k: number, delta = 0, front: object = mesh) => ({
   object: mesh,
@@ -19,16 +22,12 @@ const on = (k: number, delta = 0, front: object = mesh) => ({
   intersections: [{ object: front, eventObject: front === mesh ? group : front }, { object: mesh, eventObject: group }],
   delta,
   stopPropagation: vi.fn(),
+  nativeEvent: { target: canvas },
 }) as unknown as ThreeEvent<PointerEvent> & ThreeEvent<MouseEvent>;
-
-let cursor = '';
-const handlers = createPickHandlers((value) => {
-  cursor = value;
-});
 
 beforeEach(() => {
   useSelectionStore.setState({ selected: null, hovered: null });
-  cursor = '';
+  canvas.style.cursor = '';
 });
 
 describe('selección de edificios con el puntero', () => {
@@ -36,14 +35,14 @@ describe('selección de edificios con el puntero', () => {
     const event = on(1);
     handlers.onPointerMove(event);
     expect(useSelectionStore.getState().hovered).toEqual({ kind: 'building', index: 1 });
-    expect(cursor).toBe('pointer');
+    expect(cursor()).toBe('pointer');
     expect(event.stopPropagation).not.toHaveBeenCalled(); // la cámara (MapControls) sigue igual
   });
 
   it('al salir quita el hover del edificio, pero no el de un lugar', () => {
     handlers.onPointerMove(on(0));
     handlers.onPointerOut();
-    expect([useSelectionStore.getState().hovered, cursor]).toEqual([null, '']);
+    expect([useSelectionStore.getState().hovered, cursor()]).toEqual([null, '']);
     useSelectionStore.getState().hover({ kind: 'place', slug: 'parques', id: 4 });
     handlers.onPointerOut();
     expect(useSelectionStore.getState().hovered).toEqual({ kind: 'place', slug: 'parques', id: 4 });
@@ -60,7 +59,7 @@ describe('selección de edificios con el puntero', () => {
     const marker = new Mesh();
     handlers.onPointerMove(on(1, 0, marker));
     handlers.onClick(on(1, 0, marker));
-    expect([useSelectionStore.getState().hovered, useSelectionStore.getState().selected, cursor]).toEqual([null, null, '']);
+    expect([useSelectionStore.getState().hovered, useSelectionStore.getState().selected, cursor()]).toEqual([null, null, '']);
     // Si venía sobre el edificio, lo suelta; si el de delante ya marcó su lugar, no lo toca.
     handlers.onPointerMove(on(1));
     handlers.onPointerMove(on(1, 0, marker));

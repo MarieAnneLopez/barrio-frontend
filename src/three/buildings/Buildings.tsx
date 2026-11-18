@@ -30,7 +30,7 @@ export function Buildings({ world }: BuildingsProps) {
     () => (result?.tiles ?? []).map((tile) => ({ key: tile.key, geometry: tileGeometry(tile), raycast: tileRaycast(tile) })),
     [result],
   );
-  const handlers = useMemo(() => createPickHandlers(cursorOf(gl.domElement)), [gl]);
+  const handlers = useMemo(() => createPickHandlers(gl.domElement), [gl]);
 
   useEffect(() => () => meshes.forEach((m) => m.geometry.dispose()), [meshes]);
   useEffect(() => () => material.dispose(), [material]);

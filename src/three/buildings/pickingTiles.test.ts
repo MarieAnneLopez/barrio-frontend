@@ -19,19 +19,18 @@ type Hit = { object: Object3D; eventObject: Object3D };
 const tileHit = (k: number): Hit => ({ object: meshes[k] as Mesh, eventObject: group });
 const placeHit: Hit = { object: marker, eventObject: marker };
 
-let cursor = '';
-const handlers = createPickHandlers((value) => {
-  cursor = value;
-});
+const canvas = document.createElement('canvas');
+const handlers = createPickHandlers(canvas);
+const cursor = () => canvas.style.cursor;
 
 /** Llama al handler del grupo como r3f: una vez por malla del grupo, en el orden de `hits`. */
-function dispatch(handler: PickHandlers['onPointerMove'] | PickHandlers['onClick'], hits: Hit[]): void {
+function dispatch(handler: PickHandlers['onPointerMove'] | PickHandlers['onClick'], hits: Hit[], target: EventTarget = canvas): void {
   for (const hit of hits) {
     const k = meshes.indexOf(hit.object as Mesh);
     if (k < 0) continue; // el lugar tiene sus propios handlers
     const stopPropagation = vi.fn();
     const face = { a: tiles[k]?.index[0] ?? 0, b: 0, c: 0 };
-    const event = { ...hit, face, intersections: hits, delta: 0, stopPropagation };
+    const event = { ...hit, face, intersections: hits, delta: 0, stopPropagation, nativeEvent: { target } };
     handler(event as unknown as ThreeEvent<PointerEvent> & ThreeEvent<MouseEvent>);
     if (stopPropagation.mock.calls.length > 0) break;
   }
@@ -39,15 +38,15 @@ function dispatch(handler: PickHandlers['onPointerMove'] | PickHandlers['onClick
 
 beforeEach(() => {
   useSelectionStore.setState({ selected: null, hovered: null });
-  cursor = '';
+  canvas.style.cursor = '';
 });
 
 describe('elección cuando el rayo cruza varias teselas', () => {
   it('marca el edificio de la tesela más cercana; la de atrás no lo suelta', () => {
     dispatch(handlers.onPointerMove, [tileHit(0), tileHit(1)]);
-    expect([useSelectionStore.getState().hovered, cursor]).toEqual([{ kind: 'building', index: 0 }, 'pointer']);
+    expect([useSelectionStore.getState().hovered, cursor()]).toEqual([{ kind: 'building', index: 0 }, 'pointer']);
     dispatch(handlers.onPointerMove, [tileHit(1), tileHit(0)]);
-    expect([useSelectionStore.getState().hovered, cursor]).toEqual([{ kind: 'building', index: 1 }, 'pointer']);
+    expect([useSelectionStore.getState().hovered, cursor()]).toEqual([{ kind: 'building', index: 1 }, 'pointer']);
   });
 
   it('un lugar delante de las dos teselas sí suelta el edificio', () => {
@@ -59,5 +58,19 @@ describe('elección cuando el rayo cruza varias teselas', () => {
   it('el clic elige el edificio de la tesela más cercana', () => {
     dispatch(handlers.onClick, [tileHit(1), tileHit(0)]);
     expect(useSelectionStore.getState().selected).toEqual({ kind: 'building', index: 1 });
+  });
+});
+
+// drei Html monta los billboards dentro del div donde escucha r3f (events.connected): sus eventos
+// burbujean hasta r3f, que arma el rayo con offsetX/Y relativos al botón, no al lienzo.
+describe('eventos de un elemento HTML sobre la maqueta (billboards)', () => {
+  it('no marcan ni eligen el edificio que cae en ese offset, y sueltan el que estaba marcado', () => {
+    const billboard = document.createElement('button');
+    dispatch(handlers.onPointerMove, [tileHit(0)], billboard);
+    dispatch(handlers.onClick, [tileHit(0)], billboard);
+    expect([useSelectionStore.getState().hovered, useSelectionStore.getState().selected]).toEqual([null, null]);
+    dispatch(handlers.onPointerMove, [tileHit(0)]);
+    dispatch(handlers.onPointerMove, [tileHit(0)], billboard);
+    expect(useSelectionStore.getState().hovered).toBeNull();
   });
 });
