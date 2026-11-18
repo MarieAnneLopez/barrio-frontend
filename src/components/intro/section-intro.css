@@ -1,0 +1,99 @@
+/* Entrada de cada sección (D101): el manifiesto del Inicio con el título de la página. Dos capas
+   idénticas: la de base y, encima, la revelada, que una elipse destapa desde una esquina
+   (introVariant). Máscaras, rebote y tracking del manifiesto (manifesto-title.css). Texto negro en
+   las dos capas; el titular revelado sobre crema va en marrón, solo porque es texto grande. */
+.intro {
+  --gutter: clamp(1.25rem, 4vw, 2.5rem);
+  position: relative;
+  overflow: hidden;
+  container-type: inline-size;
+  border-radius: var(--r-sm);
+  background-color: var(--intro-reveal);
+}
+
+.intro[data-reveal='crema'] {
+  --intro-reveal: var(--bg-primary);
+  --intro-base: var(--bg-accent);
+  --intro-title: var(--text-title);
+  --intro-badge: var(--bg-strong);
+}
+
+.intro[data-reveal='rosa-claro'] {
+  --intro-reveal: var(--bg-accent);
+  --intro-base: var(--bg-primary);
+  --intro-title: var(--text-on-accent);
+  --intro-badge: var(--bg-strong);
+}
+
+.intro[data-reveal='rosa'] {
+  --intro-reveal: var(--bg-strong);
+  --intro-base: var(--bg-accent);
+  --intro-title: var(--text-on-accent);
+  --intro-badge: var(--bg-primary);
+}
+
+.intro__layer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 2rem var(--gutter) 2.25rem;
+  color: var(--text-on-accent);
+}
+
+.intro__layer--base {
+  position: absolute;
+  inset: 0;
+  background-color: var(--intro-base);
+}
+
+.intro__layer--papel {
+  position: relative;
+  background-color: var(--intro-reveal);
+}
+
+/* Subrayado clave en amarillo (D100): el único adorno, como la regla del encabezado anterior. */
+.intro__rule {
+  display: block;
+  width: 4rem;
+  height: 4px;
+  background-color: var(--bg-highlight);
+}
+
+.intro__badge {
+  margin: 0;
+  padding: 0.125rem 0.625rem;
+  border-radius: var(--r-sm);
+  background-color: var(--intro-badge);
+}
+
+.intro__lede {
+  max-width: 60ch;
+  margin: 0;
+  font-family: var(--ff-serif);
+  font-size: var(--step-2);
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+/* --fit es el cuerpo en % del ancho (introMath.fitSize); el alto lo limita para no empujar el
+   contenido más de media pantalla, y 9rem es el techo en pantallas muy anchas. */
+.intro__title {
+  --leading: 0.96;
+  --track: 0.035em;
+  --bounce-back: 0.2em;
+  --bounce-up: 0.02em;
+  margin: 0.25rem 0 0;
+  font-family: var(--ff-display);
+  font-size: calc(var(--fit) * 1vw);
+  font-size: min(calc(var(--fit) * 1cqw), calc((52svh - 10rem) / (var(--lines) * var(--leading))), 9rem);
+  font-weight: 400;
+  font-synthesis: none;
+  line-height: var(--leading);
+  letter-spacing: calc(-1 * var(--track));
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--intro-title);
+}

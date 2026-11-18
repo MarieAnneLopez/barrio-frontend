@@ -13,6 +13,8 @@ export interface PlayHandlers {
   onCover: () => void;
   /** Terminó: las palabras están en su sitio y el papel, abierto del todo. */
   onEnd: () => void;
+  /** Recorte del papel para un avance b; por defecto, la elipse desde abajo a la derecha. */
+  clip?: (b: number) => string;
 }
 
 /** La pantalla de carga y la bienvenida tapan toda la página: nadie vería la animación. */
@@ -22,7 +24,7 @@ const overlayUp = (): boolean => useLoadingScreenStore.getState().visible || use
  * Anima las palabras (`[data-word="i"]`, en las dos capas) y el recorte de la capa papel
  * (`[data-layer="papel"]`) de `section` cuando entra en vista. Devuelve la limpieza.
  */
-export function playManifesto(section: HTMLElement, { onCover, onEnd }: PlayHandlers): () => void {
+export function playManifesto(section: HTMLElement, { onCover, onEnd, clip = revealClip }: PlayHandlers): () => void {
   const words = [...section.querySelectorAll<HTMLElement>('[data-word]')].map((node) => ({ node, index: Number(node.dataset.word) }));
   const paper = section.querySelector<HTMLElement>('[data-layer="papel"]');
   const end = playDuration(Math.max(0, ...words.map((word) => word.index)) + 1);
@@ -40,7 +42,7 @@ export function playManifesto(section: HTMLElement, { onCover, onEnd }: PlayHand
       node.style.opacity = opacity;
     }
     const b = revealProgress(elapsed);
-    if (paper) paper.style.clipPath = revealClip(b);
+    if (paper) paper.style.clipPath = clip(b);
     if (papered || !revealCovers(b)) return;
     papered = true;
     onCover();

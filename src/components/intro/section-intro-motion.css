@@ -1,0 +1,60 @@
+/* Líneas, máscaras y estados de la entrada de sección (D101), con los valores del manifiesto del
+   Inicio. Sin data-done (antes y durante la animación) las palabras esperan invisibles y la capa
+   revelada, cerrada en su esquina; el rAF de playManifesto escribe encima transform, opacity y el
+   recorte. Con data-done no queda nada en línea y manda la hoja, que es el estado final. */
+.intro__layer--base .intro__title {
+  color: var(--text-on-accent); /* el marrón nunca va sobre rosa claro */
+}
+
+/* La sangría va en em (sangría / cuerpo) para seguir al cuerpo cuando el alto lo limita. */
+.intro__line {
+  display: block;
+  padding-left: calc(1em * var(--indent) / var(--fit));
+}
+
+.intro__mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding: var(--bounce-up) 0.02em 0.08em calc(0.02em + var(--bounce-back));
+  margin: calc(-1 * var(--bounce-up)) calc(-0.02em - var(--track)) -0.08em calc(-0.02em - var(--bounce-back));
+}
+
+.intro__word {
+  display: inline-block;
+  padding-right: var(--track);
+  transform-origin: 0 0;
+}
+
+.intro__mark {
+  margin-left: 0.065em;
+}
+
+.intro:not([data-done]) .intro__word {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.intro:not([data-done]) .intro__layer--papel {
+  clip-path: ellipse(20% 0% at var(--intro-at));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro .intro__word {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .intro .intro__layer--papel {
+    clip-path: none !important;
+  }
+}
+
+:root.reduce-motion .intro .intro__word {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+:root.reduce-motion .intro .intro__layer--papel {
+  clip-path: none !important;
+}

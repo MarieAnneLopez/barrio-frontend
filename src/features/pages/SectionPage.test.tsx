@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react';
+import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { useA11yStore } from '../../store/a11yStore';
 import { useChatStore } from '../../store/chatStore';
@@ -18,7 +19,7 @@ beforeEach(() => {
 
 describe('Secciones en construcción y límite del chat (D62)', () => {
   it('una sección sin página propia dice que está en construcción', () => {
-    render(<SectionPage section="gallery" />);
+    render(<SectionPage section="gallery" />, { wrapper: MemoryRouter });
     expect(screen.getByText('En construcción')).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 1, name: 'Galería General' })).toBeInTheDocument();
   });
