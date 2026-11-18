@@ -27,11 +27,15 @@ interface StarsProps {
   size?: number;
 }
 
-/** Calificación de solo lectura (D100: llenas en amarillo con contorno negro; colores en stars.css). */
+/**
+ * Calificación de solo lectura (D100: llenas en amarillo con contorno negro; colores en stars.css).
+ * Lleva su superficie crema: sobre rosa claro (.tone-papel) el contorno de llenas y vacías sería el
+ * mismo negro y el amarillo no se separa del rosa claro (1,04:1); en crema, la superficie no se ve.
+ */
 export function Stars({ value, label, size }: StarsProps) {
   const rounded = value === null ? 0 : Math.round(value * 2) / 2;
   return (
-    <span role="img" aria-label={label} className="inline-flex items-center gap-0.5">
+    <span role="img" aria-label={label} className="inline-flex items-center gap-0.5 rounded-sm bg-surface">
       {[0, 1, 2, 3, 4].map((i) => (
         <Star key={i} size={size} fill={Math.min(1, Math.max(0, rounded - i))} />
       ))}

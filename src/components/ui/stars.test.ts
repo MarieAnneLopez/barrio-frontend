@@ -1,30 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { MODES, readSrc } from '../../test/classContrast';
+import { MODES } from '../../test/classContrast';
 import { contrastRatio, resolveColor } from '../../test/colorMath';
+import { declaration, starColors, starRule } from '../../test/starColors';
 
 // PAL-09 (D100: el amarillo es el de las estrellas): las llenas en amarillo con un contorno que se
 // recorta sobre el fondo (≥ 3:1, WCAG 1.4.11) y las vacías, solo con el contorno. Llenas y vacías se
-// distinguen también sin el tono: cambia el contorno (normal) o el relleno (alto contraste).
-const css = readSrc('components', 'ui', 'stars.css').replace(/\/\*[\s\S]*?\*\//g, '');
-const block = (selector: string) =>
-  new RegExp(`(?:^|\\n)${selector.replace(/\./g, '\\.')}\\s*\\{([^}]*)\\}`).exec(css)?.[1] ?? '';
-const prop = (body: string, name: string) => new RegExp(`(?:^|[\\s;])${name}:\\s*([^;]+);`).exec(body)?.[1]?.trim();
-
-/** Colores de una estrella llena y del contorno de una vacía, con la regla de alto contraste si toca. */
-function starColors(high: boolean) {
-  const [full, override] = [block('.stars-full'), high ? block(':root.high-contrast .stars-full') : ''];
-  return {
-    fill: prop(override, 'fill') ?? prop(full, 'fill') ?? '',
-    stroke: prop(override, 'stroke') ?? prop(full, 'stroke') ?? '',
-    empty: prop(block('.stars-empty'), 'stroke') ?? '',
-  };
-}
-
+// distinguen también sin el tono: cambia el contorno (normal) o el relleno (alto contraste). Sobre rosa
+// claro (.tone-papel) las estrellas llevan su propia superficie crema: Stars.test.tsx.
 describe('estrellas de calificación', () => {
   it('llenas en el token del amarillo; vacías sin relleno', () => {
-    expect(prop(block('.stars-full'), 'fill')).toBe('var(--bg-highlight)');
+    expect(declaration(starRule('.stars-full'), 'fill')).toBe('var(--bg-highlight)');
     expect(resolveColor('var(--bg-highlight)', MODES[0]?.[1] ?? new Map())).toEqual([253, 207, 118, 1]); // #fdcf76
-    expect(prop(block('.stars-empty'), 'fill')).toBe('transparent');
+    expect(declaration(starRule('.stars-empty'), 'fill')).toBe('transparent');
   });
 
   describe.each(MODES)('en modo %s', (mode, vars) => {

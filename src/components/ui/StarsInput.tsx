@@ -26,7 +26,8 @@ export function StarsInput({ value, onChange, legend, error }: StarsInputProps) 
   return (
     <fieldset className="m-0 border-0 p-0" aria-describedby={error ? errorId : undefined}>
       <legend className="mb-2 p-0 text-step--1 text-fg-secondary">{legend}</legend>
-      <div className="stars-input flex items-center gap-0.5">
+      {/* Superficie crema propia, como Stars: sobre rosa claro las estrellas no se distinguirían. */}
+      <div className="stars-input flex w-fit items-center gap-0.5 rounded-sm bg-surface">
         {[0, 1, 2, 3, 4].map((star) => (
           <span key={star} className="relative inline-flex" data-on={value !== undefined && value > star}>
             <Star size={32} fill={value === undefined ? 0 : Math.min(1, Math.max(0, value - star))} />
