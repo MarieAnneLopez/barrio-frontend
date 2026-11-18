@@ -2,15 +2,12 @@ import { wallKinds } from './partyWalls';
 import type { BuildOptions, BuildResult, BuildingSource, TileData } from './protocol';
 import { partition, TILE_SIZE } from './tiles';
 import { createTileWriter } from './tileWriter';
-import { LEVEL_HEIGHT, volumeOf } from './volume';
+import { LEVEL_HEIGHT, PARAPET, volumeOf } from './volume';
 import { WINDOW_SPACING } from './windows';
 
 // Constructor de las mallas de edificios, por teselas. Es un generador que cede el control tras
 // cada edificio: el Web Worker lo corre de un tirón (buildAll) y el respaldo en el hilo principal
 // lo avanza en tandas de pocos milisegundos por cuadro (useBuildingTiles).
-
-/** Pretil (m dibujados): decorativo, no es un dato de la fuente. */
-export const PARAPET = 1;
 
 export const DEFAULT_OPTIONS: BuildOptions = {
   tileSize: TILE_SIZE,

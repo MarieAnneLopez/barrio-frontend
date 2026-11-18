@@ -41,13 +41,15 @@ const smoothstep = (e0: number, e1: number, x: number) => {
   return t * t * (3 - 2 * t);
 };
 
+/** Fracción de ventanas encendidas según la noche (0 de día; sube en el atardecer). */
+export const litFraction = (night: number): number => LIT_FRACTION * smoothstep(0.15, 0.85, night);
+
 /** ¿La ventana (edificio, piso, columna) está encendida en el segundo `timeS` con la noche `night`? */
 export function windowLit(building: number, level: number, column: number, timeS: number, night: number): boolean {
   const r0 = hash01(building, level, column);
   const period = PERIOD_MIN + PERIOD_SPAN * r0;
   const slot = Math.floor((timeS + r0 * period) / period);
-  const fraction = LIT_FRACTION * smoothstep(0.15, 0.85, night);
-  return hash01(building, level * ROW_STRIDE + column, slot) < fraction;
+  return hash01(building, level * ROW_STRIDE + column, slot) < litFraction(night);
 }
 
 const hex = (n: number) => `0x${n.toString(16).toUpperCase()}u`;
@@ -66,11 +68,13 @@ uint hashU32(uint a, uint b, uint c) {
 float hash01(float a, float b, float c) {
   return float(hashU32(uint(a), uint(b), uint(c)) >> 8u) / 16777216.0;
 }
+float litFraction(float night) {
+  return ${LIT_FRACTION} * smoothstep(0.15, 0.85, night);
+}
 float windowLit(float building, float level, float column, float night) {
   float r0 = hash01(building, level, column);
   float period = ${PERIOD_MIN.toFixed(1)} + ${PERIOD_SPAN.toFixed(1)} * r0;
   float slot = floor((uTime + r0 * period) / period);
-  float fraction = ${LIT_FRACTION} * smoothstep(0.15, 0.85, night);
-  return hash01(building, level * ${ROW_STRIDE.toFixed(1)} + column, slot) < fraction ? 1.0 : 0.0;
+  return hash01(building, level * ${ROW_STRIDE.toFixed(1)} + column, slot) < litFraction(night) ? 1.0 : 0.0;
 }
 `;

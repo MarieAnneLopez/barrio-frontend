@@ -14,6 +14,8 @@ export const METERS_PER_LEVEL = 3.2;
 export const LEVEL_HEIGHT = METERS_PER_LEVEL * EXAGGERATION;
 /** Pisos por regla cuando la fuente no los da (el mismo valor que usaba la capa OSM anterior). */
 export const DEFAULT_LEVELS = 3;
+/** Pretil (m dibujados): el techo va así de hundido bajo el remate del muro. Decorativo, no es dato. */
+export const PARAPET = 1;
 /** Clases de altura del tema de los mapas (map-palette.css): bajo < 4 ≤ medio < 7 ≤ alto. */
 export const MEDIUM_FROM = 4;
 export const TALL_FROM = 7;
