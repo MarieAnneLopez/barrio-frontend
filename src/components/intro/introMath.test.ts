@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { revealClip } from '../../features/home/film/manifesto/manifestoMath';
+import { playDuration, revealClip } from '../../features/home/film/manifesto/manifestoMath';
 import { cornerClip, fitSize, splitLines, staggerOrder } from './introMath';
 
 describe('recorte del revelado desde cada esquina', () => {
@@ -27,6 +27,12 @@ describe('orden de las palabras (índice de arranque de cada una)', () => {
     for (const order of ['forward', 'backward', 'center'] as const) {
       expect([...staggerOrder(order, 7)].sort((a, b) => a - b)).toEqual([0, 1, 2, 3, 4, 5, 6]);
     }
+  });
+
+  it('con dos palabras el centro queda entre ellas y salen a la vez: no es adelante ni atrás, y dura lo mismo', () => {
+    expect(staggerOrder('center', 2)).toEqual([0, 0]);
+    // playManifesto dura playDuration(último turno + 1): con 1 a 3 palabras manda el revelado (1,1 s).
+    expect(playDuration(1)).toBe(playDuration(2));
   });
 });
 

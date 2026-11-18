@@ -21,11 +21,15 @@ export const cornerClip = (corner: Corner) => (b: number): string =>
 /** Centro de la elipse en CSS («100% 100%»), para el estado cerrado de la hoja. */
 export const cornerAt = (corner: Corner): string => AT[corner];
 
-/** Índice de arranque de cada palabra (0 = la primera en salir). */
+/**
+ * Índice de arranque de cada palabra (0 = la primera en salir). Con dos palabras el centro queda entre
+ * ellas y salen a la vez: si no, «del centro» sería igual que «adelante» (con una no hay orden que variar).
+ */
 export function staggerOrder(order: WordOrder, count: number): number[] {
   const words = Array.from({ length: count }, (_, i) => i);
   if (order === 'forward') return words;
   if (order === 'backward') return words.map((i) => count - 1 - i);
+  if (count === 2) return [0, 0];
   const middle = (count - 1) / 2;
   const sequence = [...words].sort((a, b) => Math.abs(a - middle) - Math.abs(b - middle) || a - b);
   return words.map((i) => sequence.indexOf(i));
