@@ -8,7 +8,7 @@ import { noRaycast, usePositionGeometry } from './resources';
 /**
  * Contorno de las figuras de un módulo (zonas, canchas, calles, lotes): segmentos fundidos en una sola
  * geometría, con el trazo de la leyenda (D79: guion además del color). No se elige con el puntero: lo
- * hace el marcador del centro de cada figura.
+ * hace el marcador del centro de cada figura o, en la sección de lotes y calles, ShapePicker.
  */
 export function PlaceOutline({ layer }: { layer: PlaceLayer }) {
   const geometry = usePositionGeometry(layer.outline);

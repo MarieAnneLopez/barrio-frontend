@@ -26,12 +26,23 @@ describe('qué módulos dibuja la maqueta', () => {
       ['zonas-verdes', [1, 2]], ['datos-catastrales', []], ['estado-calles', []], ['localidad', []],
     ]);
     expect(layers.map((l) => l.drawn)).toEqual([2, 1, 1, 1]);
-    expect(sceneLayers(PLACES, { slug: 'estado-calles', collection: null }, project)[0]?.ids).toEqual([7]); // en su sección sí
+    expect(layers.every((l) => l.shapes === null)).toBe(true); // fuera de su sección, lotes y calles no se eligen
   });
 
   it('dentro de un módulo, solo los suyos y con la búsqueda y los filtros de su lista', () => {
-    const layers = sceneLayers(PLACES, { slug: 'datos-catastrales', collection: polygons(5, 6) }, project);
-    expect(layers.map((l) => [l.slug, l.emoji, l.ids])).toEqual([['datos-catastrales', '🏠', [5, 6]]]);
+    const layers = sceneLayers(PLACES, { slug: 'zonas-verdes', collection: polygons(5, 6) }, project);
+    expect(layers.map((l) => [l.slug, l.emoji, l.ids])).toEqual([['zonas-verdes', '🌳', [5, 6]]]);
+    expect(layers[0]?.shapes).toBeNull();
+  });
+
+  it('en la sección de lotes o de calles no hay un marcador por figura (una alfombra): se eligen en el suelo', () => {
+    for (const slug of ['datos-catastrales', 'estado-calles']) {
+      const [layer] = sceneLayers(PLACES, { slug, collection: polygons(5, 6) }, project);
+      expect(layer?.ids).toEqual([]);
+      expect(layer?.markers).toHaveLength(0);
+      expect(layer?.shapes?.ids).toEqual([5, 6]);
+      expect(layer?.drawn).toBe(2);
+    }
   });
 
   it('mientras la lista del módulo carga, usa los lugares que ya tiene la maqueta', () => {

@@ -1,5 +1,7 @@
 import type { RootState } from '@react-three/fiber';
-import { Vector3, type Intersection, type Object3D, type Raycaster } from 'three';
+import { Plane, Vector3, type Intersection, type Object3D, type Raycaster } from 'three';
+import { FOV_DEG, SHAPE_Y } from '../referenceView';
+import { shapeAt, type PlaceShapes } from './placeShapes';
 
 /** Proyecta un punto del mundo a píxeles de la pantalla; null si queda detrás de la cámara. */
 export type ToScreen = (x: number, y: number, z: number) => [number, number] | null;
@@ -44,5 +46,29 @@ export function screenPick(get: () => RootState, markers: Float32Array, radius =
     const at: [number, number] = [((pointer.x + 1) / 2) * size.width, ((1 - pointer.y) / 2) * size.height];
     const index = nearestMarker(markers, toScreen, at, radius);
     if (index >= 0) hits.push({ distance: 0, point: new Vector3().fromArray(markers, index * 3), index, object: this });
+  };
+}
+
+/** Metros que cubre un píxel a `distance` de la cámara, con una vista de `fovDeg` grados y `heightPx` de alto. */
+export function metersPerPixel(distance: number, heightPx: number, fovDeg: number): number {
+  return (2 * distance * Math.tan((fovDeg * Math.PI) / 360)) / Math.max(1, heightPx);
+}
+
+const GROUND = new Plane(new Vector3(0, 1, 0), -SHAPE_Y); // el plano de los contornos
+
+/**
+ * `raycast` de r3f para las figuras que se eligen en el suelo (placeShapes): corta el rayo con el
+ * plano de los contornos y busca la figura bajo ese punto, con PICK_PX de margen para los trazos.
+ * La distancia del acierto es la del rayo: lo que esté delante (un edificio) gana.
+ */
+export function groundPick(get: () => RootState, shapes: PlaceShapes, outline: Float32Array, radius = PICK_PX) {
+  const at = new Vector3();
+  return function raycast(this: Object3D, raycaster: Raycaster, hits: Intersection[]): void {
+    if (!raycaster.ray.intersectPlane(GROUND, at)) return;
+    const { camera, size } = get();
+    const distance = raycaster.ray.origin.distanceTo(at);
+    const fov = 'fov' in camera ? camera.fov : FOV_DEG;
+    const index = shapeAt(shapes, outline, at.x, at.z, radius * metersPerPixel(distance, size.height, fov));
+    if (index >= 0) hits.push({ distance, point: at.clone(), index, object: this });
   };
 }

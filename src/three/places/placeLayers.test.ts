@@ -44,6 +44,21 @@ describe('lugares de los módulos en la maqueta: solo registros reales', () => {
     expect(layer.markers).toHaveLength(0);
     expect(layer.drawn).toBe(1);
     expect(layer.outline.length).toBe(18);
+    expect(layer.shapes).toBeNull();
+  });
+
+  it('figuras que se eligen en el suelo: su id, si es área, su centro y el dueño de cada segmento', () => {
+    const layer = buildPlaceLayer('estado-calles', '🛣️', collection([
+      [item(4), { type: 'Point', coordinates: [1, 1] }],
+      [item(7), { type: 'Polygon', coordinates: [ring] }],
+      [item(8), { type: 'LineString', coordinates: [[0, 0], [2, 2]] }],
+    ]), project, { shapeMarkers: false, pickShapes: true });
+    expect(layer.ids).toEqual([4]); // los puntos siguen con su marcador
+    expect(layer.shapes?.ids).toEqual([7, 8]);
+    expect(Array.from(layer.shapes?.closed ?? [])).toEqual([1, 0]);
+    expect(Array.from(layer.shapes?.centers ?? [])).toEqual([1000, Y, 2000, 1000, Y, 1000]);
+    expect(Array.from(layer.shapes?.owner ?? [])).toEqual([0, 0, 0, 1]);
+    expect(layer.outline.length / 6).toBe(4);
   });
 
   it('un lugar sin geometría, o una figura de ejemplo, no se cuenta como dibujado', () => {

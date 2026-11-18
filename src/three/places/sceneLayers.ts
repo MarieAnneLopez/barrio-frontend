@@ -14,8 +14,9 @@ export interface PlaceScope {
 }
 
 /**
- * Módulos tan densos (un marcador por lote o por tramo de calle: cientos en el barrio) que fuera de su
- * sección solo muestran su contorno o su trazo; dentro de ella sí llevan marcador para elegirlos.
+ * Módulos tan densos (3 706 lotes, 341 tramos de calle) que un marcador por figura es una alfombra
+ * que tapa el mapa: fuera de su sección solo muestran su contorno o su trazo; dentro de ella, cada
+ * figura se elige en el suelo (placeShapes) y solo la elegida lleva marcador.
  */
 const DENSE = new Set(['datos-catastrales', 'estado-calles']);
 
@@ -30,7 +31,9 @@ export function sceneLayers(
   if (scope.slug) {
     const own = scope.collection ?? places?.find((c) => c.slug === scope.slug)?.collection ?? null;
     const emoji = findCategory(scope.slug)?.emoji ?? '';
-    return own ? [buildPlaceLayer(scope.slug, emoji, own, project, { shapeMarkers: markable(scope.slug) })] : [];
+    const dense = DENSE.has(scope.slug);
+    const rule = { shapeMarkers: markable(scope.slug) && !dense, pickShapes: dense };
+    return own ? [buildPlaceLayer(scope.slug, emoji, own, project, rule)] : [];
   }
   return (places ?? []).flatMap(({ slug, emoji, collection }) =>
     collection
