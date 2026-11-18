@@ -3,8 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
 import type { Photo } from '../../lib/apiTypes';
-import { photoAlt } from '../../lib/photoUrls';
+import { photoAlt, photoSet } from '../../lib/photoUrls';
 import { PhotoCredit } from '../gallery/PhotoCredit';
+
+/** Ancho de la foto: el panel ancho del modal (48rem) menos su margen interior y el de la pantalla. */
+const SIZES = '(min-width: 800px) 720px, calc(100vw - 80px)';
 
 interface GalleryLightboxProps {
   photos: Photo[];
@@ -17,6 +20,8 @@ interface GalleryLightboxProps {
 /**
  * Visor (§11.3 punto 4): entra con el modal (escala + opacidad), flechas
  * izquierda/derecha o botones para navegar, Escape cierra, pie con autor y licencia.
+ * Las fotos de Commons tienen versión de 640 y 1280 px y el navegador pide la de su ancho; las de
+ * Mapillary existen solo a 1024 px y van tal cual (photoSet). Se decodifican fuera del hilo principal.
  */
 export function GalleryLightbox({ photos, index, onIndex, place }: GalleryLightboxProps) {
   const { t, i18n } = useTranslation();
@@ -38,7 +43,10 @@ export function GalleryLightbox({ photos, index, onIndex, place }: GalleryLightb
     <Modal open={photo !== undefined} onClose={() => onIndex(null)} title={place} wide>
       {photo ? (
         <figure className="m-0 flex flex-col gap-3">
-          <img key={photo.id} src={photo.url} alt={photoAlt(photo, i18n.language)} className="ui-lightbox-img max-h-[60dvh] w-full rounded-md object-contain" />
+          <img
+            key={photo.id} {...photoSet(photo.url)} sizes={SIZES} decoding="async" alt={photoAlt(photo, i18n.language)}
+            className="ui-lightbox-img max-h-[60dvh] w-full rounded-md object-contain"
+          />
           <figcaption className="text-step--1 text-fg-secondary">
             {photoAlt(photo, i18n.language)}
             <PhotoCredit author={photo.autor} license={photo.licencia} source={photo.source_ref} />
