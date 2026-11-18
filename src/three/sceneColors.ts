@@ -37,8 +37,3 @@ export function readSceneColors(): SceneColors {
     contorno: read('contorno'),
   };
 }
-
-/** Clase de altura de un edificio: 0 = hasta 3 pisos, 1 = de 4 a 6, 2 = 7 o más. */
-export function heightClass(levels: number): 0 | 1 | 2 {
-  return levels >= 7 ? 2 : levels >= 4 ? 1 : 0;
-}
