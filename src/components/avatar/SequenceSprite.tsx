@@ -3,7 +3,7 @@ import { useRef, type CSSProperties } from 'react';
 import { useNearViewport } from '../../hooks/useNearViewport';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { DENSER, denserThan } from '../../lib/density';
-import { atlasCellWidth, cellWidth, FRAME_MS, sequenceSpec, spriteUrl, type SequenceName, type SpriteSize } from './sequences';
+import { atlasCellWidth, cellWidth, FRAME_MS, frameTransforms, sequenceSpec, spriteUrl, type SequenceName, type SpriteSize } from './sequences';
 
 interface Props<N extends SequenceName> {
   name: N;
@@ -47,13 +47,13 @@ export function SequenceSprite<N extends SequenceName>(props: Props<N>) {
   const rowMs = cols * FRAME_MS[name];
   const delay = `${-phase * rows * rowMs}ms`;
   const drawn = keys[Math.min(Math.max(pose, 0), keys.length - 1)] ?? 0;
-  const frame = !reduced && props.frame !== undefined ? props.frame % (cols * rows) : drawn;
+  const still = frameTransforms(name, size, !reduced && props.frame !== undefined ? props.frame % (cols * rows) : drawn);
   const across: CSSProperties = animate
     ? { animationDuration: `${rowMs}ms`, animationTimingFunction: `steps(${cols})`, animationDelay: delay }
-    : { transform: `translateX(${-(frame % cols) * cell}px)` };
+    : { transform: still.across };
   const down: CSSProperties = animate
     ? { animationDuration: `${rows * rowMs}ms`, animationTimingFunction: `steps(${rows})`, animationDelay: delay }
-    : { transform: `translateY(${-Math.floor(frame / cols) * size}px)` };
+    : { transform: still.down };
   return (
     <span ref={box} className={`sequence ${className}`} style={{ width, height: size }} data-sequence={name} data-playing={animate || undefined} aria-hidden="true">
       <span className="sequence__window" style={{ width: cell, height: size }}>

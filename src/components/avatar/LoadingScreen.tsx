@@ -6,7 +6,7 @@ import { useLoadingScreen } from '../../hooks/useLoadingScreen';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { useLoadingScreenStore } from '../../store/loadingScreenStore';
-import { BarRunner } from './loading/BarRunner';
+import { BarRunner, type BarRunnerHandle } from './loading/BarRunner';
 import { LoadingProgress } from './loading/LoadingProgress';
 import { LoadingScene } from './loading/LoadingScene';
 import { LOADER_WIDE, loaderAtlas, runKeyframes, runPath } from './loadingRun';
@@ -33,7 +33,9 @@ export function LoadingScreen() {
   const atlas = loaderAtlas(size, useDensity());
   const reduced = useReducedMotion();
   const track = useRef<HTMLDivElement>(null);
-  const rider = useCallback((shown: number) => <BarRunner shown={shown} atlas={atlas} />, [atlas]);
+  const runner = useRef<BarRunnerHandle>(null);
+  // La barra le da a la de la punta su posición real en cada rAF (auditoría MM-09).
+  const travel = useCallback((px: number) => runner.current?.travel(px), []);
 
   useEffect(() => setVisible(visible), [visible, setVisible]);
 
@@ -58,7 +60,7 @@ export function LoadingScreen() {
       </div>
       <div className="loading-screen__ground" aria-hidden="true" />
       <div className="loading-screen__floor">
-        <LoadingProgress busy={busy && !leaving} reduced={reduced} rider={rider} />
+        <LoadingProgress busy={busy && !leaving} reduced={reduced} rider={<BarRunner ref={runner} atlas={atlas} />} onTravel={travel} />
         <p className="loading-screen__text">
           <span className="sr-only">{t('loading.runner')}. </span>
           {t('loading.screen')}
