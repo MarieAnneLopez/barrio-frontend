@@ -12,7 +12,7 @@ export const MAP_PITCH_DEG = 42;
 export const MIN_CAMERA_Y = 50;
 /** Distancia a la que vuela la cámara al elegir un lugar en la lista (m): unas dos manzanas a lo alto. */
 export const FOCUS_DISTANCE = 1300;
-/** Altura a la que miran los vuelos: la de los marcadores, para que el lugar quede en el centro de la imagen. */
+/** Altura a la que miran los vuelos: la del mapa (contornos y marcadores), con el lugar en el centro de la imagen. */
 export const FOCUS_Y = MARKER_Y;
 /** Holgura del encuadre para que el borde del barrio no toque el de la imagen (la perspectiva lo agranda). */
 const MARGIN = 1.12;

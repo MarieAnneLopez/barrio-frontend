@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import type { ModuleItem } from '../../lib/apiTypes';
 import { buildPlaceLayer, MARKER_Y, type ModuleCollection } from './placeLayers';
 
+const Y = Math.fround(MARKER_Y); // los marcadores van en un Float32Array
+
 const project = ([lon = 0, lat = 0]: readonly number[]): [number, number] => [lon * 1000, lat * 1000];
 const item = (id: number, extra: Partial<ModuleItem> = {}): ModuleItem => ({
   id, nombre: `Lugar ${id}`, source_type: 'osm', source_ref: null, verified: true, geometry: null, ...extra,
@@ -19,7 +21,7 @@ describe('lugares de los módulos en la maqueta: solo registros reales', () => {
       [item(2, { source_type: 'seed', verified: false }), { type: 'Point', coordinates: [5, 5] }],
       [item(3, { verified: false }), { type: 'Point', coordinates: [3, 4] }], // «por verificar» sí es real
     ]), project, { shapeMarkers: true });
-    expect(Array.from(layer.markers)).toEqual([1000, MARKER_Y, 2000, 3000, MARKER_Y, 4000]);
+    expect(Array.from(layer.markers)).toEqual([1000, Y, 2000, 3000, Y, 4000]);
     expect(layer.ids).toEqual([1, 3]);
     expect(layer.drawn).toBe(2);
     expect(layer.outline).toHaveLength(0);
@@ -32,7 +34,7 @@ describe('lugares de los módulos en la maqueta: solo registros reales', () => {
     ]), project, { shapeMarkers: true });
     expect(layer.drawn).toBe(2);
     expect(layer.outline.length).toBe((3 + 1) * 6); // 3 segmentos del anillo y 1 de la línea
-    expect(Array.from(layer.markers)).toEqual([1000, MARKER_Y, 2000, 1000, MARKER_Y, 1000]);
+    expect(Array.from(layer.markers)).toEqual([1000, Y, 2000, 1000, Y, 1000]);
     expect(layer.ids).toEqual([7, 8]);
   });
 

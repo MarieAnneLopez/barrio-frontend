@@ -24,8 +24,12 @@ export interface PlaceLayer {
   drawn: number;
 }
 
-/** Altura de los marcadores sobre el suelo (m); se dibujan encima de todo (depthTest apagado). */
-export const MARKER_Y = 46;
+/**
+ * Altura de los marcadores (m): la de los contornos. Se dibujan encima de todo (depthTest apagado),
+ * así que subirlos no los hace más visibles: solo los corre en pantalla (a 46 m caían ~41 m al
+ * norte de su lugar con la inclinación de los mapas; markerAnchor.test.ts).
+ */
+export const MARKER_Y = SHAPE_Y;
 
 /** Anillos o trazos de una figura (cada uno es una polilínea). */
 function strokes(geometry: Geometry): Position[][] {
