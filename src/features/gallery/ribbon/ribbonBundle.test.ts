@@ -45,6 +45,10 @@ describe('three queda fuera del trozo de la Galería', () => {
     expect(page.files.filter((file) => /ribbon(Engine|View|Scene|Slots|Shader|Floor|Textures)\.ts$/.test(file))).toEqual([]);
   });
 
+  it('ScrollTrigger tampoco: al registrarse deja un rAF, un intervalo y oyentes globales toda la sesión', () => {
+    expect(page.packages).not.toContain('gsap/ScrollTrigger');
+  });
+
   it('el motor (y three con él) solo se pide con import() dinámico', () => {
     expect(readFileSync(join(here, 'useRibbon.ts'), 'utf8')).toMatch(/[^.\w]import\('\.\/ribbonEngine'\)/);
     expect(staticGraph(join(here, 'ribbonEngine.ts')).packages.filter(usesThree)).toEqual(['three']); // por ahí sí llega

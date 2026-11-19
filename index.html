@@ -8,8 +8,12 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
     <meta name="description" content="Reconoce tu Barrio: El Tintal, Kennedy, Bogotá D.C." />
-    <!-- Soria es la letra de todo el texto (D98): se pide ya, sin esperar al CSS. -->
+    <!-- Soria es la letra de todo el texto (D98): se pide ya, sin esperar al CSS. Y las dos que pintan
+         el LCP medido: Anton (el titular, a 1440 px) y Cormorant 500 cursiva (la bajada, en el celular).
+         Vite les pone el mismo nombre con hash que en la hoja de @fontsource: una sola descarga. -->
     <link rel="preload" href="/assets/fonts/soria/soria.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/node_modules/@fontsource/anton/files/anton-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-500-italic.woff2" as="font" type="font/woff2" crossorigin />
     <title>Reconoce tu Barrio · El Tintal</title>
     <!-- Pantalla de carga (H33): el atlas de la carrera se pide al leer la página, no cuando React
          la pinta. El de 420 px si la pantalla da para ese alto o es densa (el doble exacto de 210);

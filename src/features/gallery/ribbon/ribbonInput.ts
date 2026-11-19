@@ -52,6 +52,10 @@ export function bindInput(frame: HTMLElement, handlers: InputHandlers): () => vo
   const focusOut = (event: FocusEvent) => {
     if (!(event.relatedTarget instanceof Node && frame.contains(event.relatedTarget))) handlers.onFocus(-1, false);
   };
+  // No pasivo a propósito: Safari no deja apagar el gesto de historial con overscroll-behavior-x (WebKit
+  // 240183, sin resolver; Chrome y Firefox sí). Solo cancelar el evento en este oyente, sobre el elemento
+  // bajo el cursor, evita que el deslizamiento horizontal saque de la Galería. La vertical nunca se
+  // cancela, y Chromium solo espera al hilo principal en el primer evento de cada gesto que no se cancela.
   frame.addEventListener('wheel', wheel, { passive: false });
   frame.addEventListener('click', click);
   frame.addEventListener('focusin', focusIn);

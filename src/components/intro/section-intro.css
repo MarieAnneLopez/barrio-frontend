@@ -79,8 +79,8 @@
   text-wrap: balance;
 }
 
-/* --fit es el cuerpo en % del ancho (introMath.fitSize); el alto lo limita para no empujar el contenido más de media pantalla,
-   9rem es el techo en pantallas muy anchas y 24 px el suelo: el marrón solo es texto grande (PAL-04, celular apaisado). */
+/* --fit: cuerpo en % del ancho (introMath.fitSize; la cuenta en px es titleSize). El alto lo limita a media pantalla;
+   techo 9rem; suelo de 24 px reales: el marrón solo es texto grande (PAL-04, D110) y en una pantalla baja crece la entrada. */
 .intro__title {
   --leading: 0.96;
   --track: 0.035em;

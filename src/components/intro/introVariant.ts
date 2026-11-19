@@ -1,7 +1,8 @@
 // Variante determinista de la entrada de cada sección (D101). Cada dimensión recorre su lista en
 // el orden del menú, así dos secciones seguidas nunca repiten esquina, orden de palabras, desfase
-// de líneas ni color revelado; el Inicio (índice 0) es el manifiesto tal cual. Las rutas que no
-// están en el menú toman un índice estable a partir de su texto.
+// de líneas ni color revelado; el orden visible tampoco (staggerOrder), salvo con una sola palabra a
+// cada lado, donde no hay orden que variar y el efecto cambia por la esquina y el color. El Inicio
+// (índice 0) es el manifiesto tal cual. Las rutas fuera del menú toman un índice estable de su texto.
 import { CATEGORIES, categoryPath } from '../../lib/categoryConfig';
 import { NAV_AFTER_CATEGORIES, NAV_BEFORE_CATEGORIES } from '../../lib/navigation';
 import { palettePlan } from '../layout/palettePlan';
