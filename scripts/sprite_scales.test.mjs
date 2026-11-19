@@ -7,6 +7,7 @@ import { existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import sharp from 'sharp';
 import { describe, expect, it } from 'vitest';
+import { loadPalette, snapRgba } from './sprite/snap.mjs';
 import { cellsOf, readCycle, root, scales } from './sprite_cycles_lib.mjs';
 
 const cases = Object.entries(scales).flatMap(([name, spec]) => spec.sizes.map((size) => [name, size, spec]));
@@ -56,15 +57,17 @@ describe('atlas de Mini Marie (sprites32)', () => {
   // Revisión de sprites32: nada comprobaba que el atlas saliera del ciclo maestro de hoy. Cada celda
   // es su cuadro reducido como en build_sprite_scales.mjs (lanczos3); la compresión con pérdida
   // aparta a lo sumo un 0,1 % de los píxeles más de 64 niveles (medido); un maestro cambiado sin
-  // rehacer el atlas, en torno al 16 % (la carrera con las piernas nuevas).
+  // rehacer el atlas, en torno al 16 % (la carrera con las piernas nuevas). Las hojas de Martín (D124)
+  // van además a la paleta de su hoja con alfa binaria, igual que en el build.
   it.each(cases)('%s a %i px: cada celda es su cuadro del ciclo maestro de hoy', async (name, size, spec) => {
     const { frames, w, h } = await readCycle(name);
     const cw = (w * size) / h;
     const decoded = await sharp(file(name, size)).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
     const cells = cellsOf(decoded, spec.grid[0], cw, size, frames.length);
     for (const [n, frame] of frames.entries()) {
-      const want = size === h ? frame : await sharp(frame, { raw: { width: w, height: h, channels: 4 } })
+      let want = size === h ? frame : await sharp(frame, { raw: { width: w, height: h, channels: 4 } })
         .resize(cw, size, { kernel: 'lanczos3' }).raw().toBuffer();
+      if (spec.sheet && size !== h) want = snapRgba(want, loadPalette(root, name)); // D124: vuelta a la paleta
       expect(offShare(cells[n], want, 64), `${name}_${size}: celda ${n}`).toBeLessThanOrEqual(0.005);
     }
   }, 120_000);

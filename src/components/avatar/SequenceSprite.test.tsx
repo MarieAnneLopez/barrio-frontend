@@ -44,9 +44,9 @@ describe('SequenceSprite a escala entera (D86)', () => {
 describe('SequenceSprite: ciclo de 32 cuadros en un atlas de 8 × 4 (sprites32)', () => {
   it('la caja, la ventana y el atlas miden píxeles enteros: el paso de la animación no tiembla', () => {
     render(<SequenceSprite name="wave" size={160} />);
-    expect([box()?.style.width, box()?.style.height]).toEqual(['82px', '160px']); // la caja de siempre
-    expect([view()?.style.width, view()?.style.height]).toEqual(['98px', '160px']); // el brazo sale por la derecha
-    expect([atlas()?.style.width, atlas()?.style.height]).toEqual(['784px', '640px']); // 8 × 98, 4 × 160
+    expect([box()?.style.width, box()?.style.height]).toEqual(['100px', '160px']); // la caja del cuerpo
+    expect([view()?.style.width, view()?.style.height]).toEqual(['116px', '160px']); // chispas y corazones salen por la derecha
+    expect([atlas()?.style.width, atlas()?.style.height]).toEqual(['928px', '640px']); // 8 × 116, 4 × 160
     expect(box()).toHaveAttribute('data-playing');
   });
 
@@ -71,8 +71,8 @@ describe('SequenceSprite: ciclo de 32 cuadros en un atlas de 8 × 4 (sprites32)'
     act(() => useA11yStore.setState({ reducedMotion: true }));
     render(<SequenceSprite name="wave" size={160} pose={2} />);
     expect(box()).not.toHaveAttribute('data-playing');
-    // el tercer cuadro dibujado es el 11 del ciclo: columna 2, fila 1
-    expect([atlas()?.style.transform, rows()?.style.transform]).toEqual(['translateX(-196px)', 'translateY(-160px)']);
+    // la tercera pose fija es el cuadro 11 del ciclo: columna 2, fila 1
+    expect([atlas()?.style.transform, rows()?.style.transform]).toEqual(['translateX(-232px)', 'translateY(-160px)']);
   });
 
   it('rechaza un tamaño que no es de la secuencia (nada de escalas intermedias)', () => {

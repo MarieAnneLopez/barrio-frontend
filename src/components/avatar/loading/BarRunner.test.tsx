@@ -7,7 +7,7 @@ import { BarRunner, type BarRunnerHandle } from './BarRunner';
 import { runnerFrame } from './runnerFrame';
 
 const FRAMES = sequenceSpec('run').frames;
-const STEP = stridePx(105) / FRAMES; // px de barra por cuadro a 105 px de alto (2,28)
+const STEP = stridePx(105) / FRAMES; // px de barra por cuadro a 105 px de alto (0,875)
 
 describe('la Mini Marie de la barra de carga', () => {
   it('sin avance está en el primer cuadro y avanza uno por cada zancada / 32 recorrida', () => {

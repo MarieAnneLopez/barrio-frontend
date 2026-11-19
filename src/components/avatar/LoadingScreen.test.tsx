@@ -43,7 +43,7 @@ describe('Pantalla de carga completa (H33)', () => {
     expect(useLoadingScreenStore.getState().visible).toBe(false);
   });
 
-  it.each([['amplia', true, '196px', '420px'], ['pequeña', false, '98px', '210px']])(
+  it.each([['amplia', true, '308px', '420px'], ['pequeña', false, '154px', '210px']])(
     'en pantalla %s corre a escala entera (D86)', (_view, roomy, width, height) => {
       setViewport(roomy);
       render(<LoadingScreen />);

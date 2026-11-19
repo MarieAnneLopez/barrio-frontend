@@ -8,8 +8,12 @@ interface Props {
 
 /** Alto fijo del sprite (escala entera, D86): en un círculo de 48 px se ve el 60 % de arriba. */
 const SPRITE = 80;
-/** La mano que saluda está a la derecha de la cabeza: se corre un poco el encuadre hacia ella. */
-const SHIFT = 0.1;
+/**
+ * La mano que saluda está a la derecha de la cabeza: se corre un poco el encuadre hacia ella. En la
+ * hoja de Martín (D124), a 80 px la cabeza va de x = 3 a 43 y la mano llega a 50 (caja de 50): con un
+ * 3 % el centro de cabeza y mano cae en el centro del círculo.
+ */
+const SHIFT = 0.03;
 
 /**
  * Avatar del chat (pedido de Marie): Mini Marie saludando como foto de perfil, recortada

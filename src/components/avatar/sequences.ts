@@ -12,9 +12,10 @@ export const FRAME_MS: Record<SequenceName, number> = { run: 1000 / 24, wave: 50
  * Tamaños fijos (alto en px) de cada secuencia: «escala entera» (D86). Los dibujos de Mini Marie
  * no siguen una rejilla de píxel regular, así que no se escalan con CSS: cada tamaño es un atlas
  * generado por scripts/build_sprite_scales.mjs con celdas de ancho entero, y se muestra 1:1.
- * Cada secuencia es un ciclo de 32 cuadros (8 columnas × 4 filas): los que dibujó Marie (8 de la
- * carrera, 7 del saludo, 7 de la sentada sin el corrido de D88, 1 del reposo) y sus intermedios.
- * La carrera tiene además 105 px (la cuarta parte de 420) para un corredor pequeño.
+ * Cada secuencia es un ciclo de 32 cuadros (8 columnas × 4 filas). Carrera, saludo y sentada salen
+ * enteros de las hojas de 32 cuadros que entregó Martín (D124; scripts/sprite32); el reposo, del
+ * cuadro de Marie y sus intermedios (sprites32). La carrera tiene además 105 px (la cuarta parte de
+ * 420) para un corredor pequeño.
  */
 export const SPRITE_SIZES: Record<SequenceName, readonly number[]> = {
   wave: scales.wave.sizes,
@@ -35,7 +36,7 @@ export interface SequenceSpec {
   sizes: readonly number[];
   /** Columnas y filas del atlas. */
   grid: readonly [number, number];
-  /** Índice en el ciclo de cada cuadro dibujado por Marie (la `pose` de SequenceSprite). */
+  /** Índice en el ciclo de cada pose fija (la `pose` de SequenceSprite; en el saludo, 1–4 con el brazo arriba). */
   keys: readonly number[];
 }
 

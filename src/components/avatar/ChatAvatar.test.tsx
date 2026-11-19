@@ -10,14 +10,14 @@ describe('Avatar del chat (D86)', () => {
     render(<ChatAvatar size={size} />);
     expect([avatar()?.style.width, avatar()?.style.height]).toEqual([`${size}px`, `${size}px`]);
     expect(sprite()).toHaveAttribute('data-sequence', 'wave');
-    expect([sprite()?.style.width, sprite()?.style.height]).toEqual(['41px', '80px']);
+    expect([sprite()?.style.width, sprite()?.style.height]).toEqual(['50px', '80px']);
   });
 
   it('el encuadre va en píxeles enteros: cabeza, hombros y la mano que saluda', () => {
     render(<ChatAvatar size={48} />);
     const frame = sprite()?.parentElement;
     expect(frame?.style.top).toBe('1px');
-    expect(frame?.style.left).toBe('-1px'); // (48 − 41) / 2 − 10 % de 41, redondeado
+    expect(frame?.style.left).toBe('-2px'); // (48 − 50) / 2 − 3 % de 50, redondeado
   });
 
   it('va en un círculo con línea de 1 px, sin borde grueso ni sombra', () => {

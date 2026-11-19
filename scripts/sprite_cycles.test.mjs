@@ -8,9 +8,11 @@ import { describe, expect, it } from 'vitest';
 import { offsetAt, stridePx } from '../src/components/avatar/loadingRun';
 import { defects, drawnFrame, foot, readCycle, scales } from './sprite_cycles_lib.mjs';
 
-const names = Object.keys(scales);
+// Ciclos con cuadros dibujados e intermedios (el reposo). Carrera, saludo y sentada salen enteros de
+// las hojas de Martín (D124) y se prueban en sprite_sheets32.test.mjs (paleta, restos, magenta y halo).
+const names = Object.keys(scales).filter((name) => !scales[name].sheet);
 const sum = (xs) => xs.reduce((s, x) => s + x, 0);
-const GROUND = 418; // fila del suelo en la celda de la carrera (196 × 420)
+const GROUND = 418; // fila del suelo en la celda de la carrera (308 × 420; las botas llegan a 417–419)
 const touches = (f) => f.y >= GROUND - 2;
 const runFeet = async () => {
   const { frames, w, h } = await readCycle('run');

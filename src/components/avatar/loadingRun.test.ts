@@ -21,8 +21,8 @@ describe('carrera de la pantalla de carga', () => {
     expect(RUN.fps).toBeCloseTo(24);
   });
 
-  it('zancada medida en el ciclo: 292 px por ciclo a 420 de alto (9,125 por cuadro), 146 a 210 y 73 a 105', () => {
-    expect([stridePx(420), stridePx(210), stridePx(105)]).toEqual([292, 146, 73]);
+  it('zancada medida en la hoja de Martín: 112 px por ciclo a 420 de alto (3,5 por cuadro), 56 a 210 y 28 a 105', () => {
+    expect([stridePx(420), stridePx(210), stridePx(105)]).toEqual([112, 56, 28]);
   });
 
   it('cada cuadro avanza zancada / 32 redondeada: px enteros que no acumulan error', () => {
@@ -36,16 +36,16 @@ describe('carrera de la pantalla de carga', () => {
       }
       expect(offsetAt(32, size)).toBe(stridePx(size)); // tras un ciclo, una zancada exacta
     }
-    expect([...Array(9).keys()].map((n) => offsetAt(n, 105))).toEqual([0, 2, 5, 7, 9, 11, 14, 16, 18]);
+    expect([...Array(9).keys()].map((n) => offsetAt(n, 105))).toEqual([0, 1, 2, 3, 4, 4, 5, 6, 7]);
   });
 
   it('cruza toda la pantalla, de fuera a fuera, en cuadros enteros', () => {
     const sprite = cellWidth('run', 210);
     const path = runPath(390, 210, sprite);
-    expect(path.start).toBe(-98); // entra entera desde fuera, por la izquierda
-    expect(path.frames).toBe(108); // 488 px a 4,5625 px por cuadro: sale en el 107 y ese se ve entero
-    expect(path.distance).toBe(offsetAt(108, 210));
-    expect(path.durationMs).toBeCloseTo(108 * FRAME_MS.run);
+    expect(path.start).toBe(-154); // entra entera desde fuera, por la izquierda
+    expect(path.frames).toBe(312); // 544 px a 1,75 px por cuadro: sale en el 311 y ese se ve entero
+    expect(path.distance).toBe(offsetAt(312, 210));
+    expect(path.durationMs).toBeCloseTo(312 * FRAME_MS.run);
   });
 
   // Auditoría MM-07: en bucle (iterations: Infinity) el fotograma clave final, el de offset 1, no se
@@ -65,7 +65,7 @@ describe('carrera de la pantalla de carga', () => {
     const at = positionAt(narrow, 210, 50.5 * FRAME_MS.run);
     expect(at).toBe(-98 + offsetAt(50, 210));
     expect(frameAt(wide, 210, at)).toBe(50);
-    expect(frameAt(narrow, 210, positionAt(wide, 210, 150.5 * FRAME_MS.run))).toBe(0);
+    expect(frameAt(narrow, 210, positionAt(wide, 210, 400.5 * FRAME_MS.run))).toBe(0);
     expect(positionAt(narrow, 210, narrow.durationMs + 2.5 * FRAME_MS.run)).toBe(-98 + offsetAt(2, 210));
   });
 
@@ -74,7 +74,7 @@ describe('carrera de la pantalla de carga', () => {
     const keys = runKeyframes(path, 210);
     expect(keys).toHaveLength(path.frames + 1);
     expect(keys[0]).toEqual({ offset: 0, easing: 'step-end', transform: 'translate3d(-98px, 0, 0)' });
-    expect(keys[1]?.transform).toBe('translate3d(-93px, 0, 0)'); // 4,75 → 5 px
+    expect(keys[1]?.transform).toBe('translate3d(-96px, 0, 0)'); // 1,75 → 2 px
     expect(keys.at(-1)).toMatchObject({ offset: 1, transform: `translate3d(${path.distance - 98}px, 0, 0)` });
     expect(keys.every((k) => /^translate3d\(-?\d+px, 0, 0\)$/.test(String(k.transform)))).toBe(true);
   });

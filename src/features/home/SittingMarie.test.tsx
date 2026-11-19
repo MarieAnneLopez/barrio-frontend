@@ -27,7 +27,7 @@ describe('Mini Marie sentada (D82)', () => {
     sitting.forEach((node) => {
       expect(node).toHaveAttribute('aria-hidden', 'true');
       const sprite = node.querySelector<HTMLElement>('.sequence[data-sequence="sit"]');
-      expect([sprite?.style.width, sprite?.style.height]).toEqual(['29px', '48px']);
+      expect([sprite?.style.width, sprite?.style.height]).toEqual(['26px', '48px']);
       // Inicio y Mapa 3D van a pantalla completa y sin marco: se sienta en una repisa de 1 px bajo el header.
       expect(node.querySelectorAll('.sitting-marie__ledge')).toHaveLength(1);
       expect(node.classList.contains('sitting-marie--stage')).toBe(true);

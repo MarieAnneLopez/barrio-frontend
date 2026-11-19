@@ -47,21 +47,21 @@ afterEach(() => {
 describe('Pantalla de carga: el recorrido sigue al ancho de la pantalla', () => {
   it('al girar el celular rehace el recorrido para el ancho nuevo y sigue donde iba', () => {
     render(<LoadingScreen />);
-    expect(frames(0)).toBe(runPath(390, 210, 98).frames);
+    expect(frames(0)).toBe(runPath(390, 210, 154).frames);
     run(0).currentTime = 50.5 * FRAME_MS.run; // va por el cuadro 50
     resize(844);
     expect(run(0).cancel).toHaveBeenCalledTimes(1);
     expect(animate).toHaveBeenCalledTimes(2);
-    expect(frames(1)).toBe(runPath(844, 210, 98).frames);
+    expect(frames(1)).toBe(runPath(844, 210, 154).frames);
     expect(frameOf(1)).toBe(50); // el mismo cuadro del recorrido: la misma posición, sin salto
   });
 
   it('si en la pantalla nueva ya habría salido, vuelve a entrar por la izquierda', () => {
     widen(844);
     render(<LoadingScreen />);
-    run(0).currentTime = 150.5 * FRAME_MS.run; // a 586 px: fuera de una pantalla de 390
+    run(0).currentTime = 400.5 * FRAME_MS.run; // a 546 px: fuera de una pantalla de 390
     resize(390);
-    expect(frames(1)).toBe(runPath(390, 210, 98).frames);
+    expect(frames(1)).toBe(runPath(390, 210, 154).frames);
     expect(frameOf(1)).toBe(0);
   });
 

@@ -3,10 +3,11 @@ import { FRAME_MS, SIZES, sequenceSpec, type SpriteSize } from './sequences';
 /**
  * Carrera de la pantalla de carga. Los cuadros de «corriendo» miran a la derecha, así que avanza
  * hacia la derecha. Para que el pie apoyado no patine, ella se desplaza lo mismo que el pie
- * retrocede en el dibujo. Medido en el ciclo de 32 cuadros (sprites32, revisión): en los apoyos
- * (cuadros 0→4 y 20→24, desde 0) el pie retrocede 37,9 y 35,3 px en 4 cuadros; la media de todos
- * los pares que apoyan da 292,8 px por ciclo a 420 px de alto. Se usa 292 (146 a 210, 73 a 105),
- * entero; scripts/sprite_cycles.test.mjs lo vuelve a medir en el ciclo.
+ * retrocede en el dibujo. Medido en la hoja de 32 cuadros de Martín (D124) con el pie de
+ * scripts/sprite_cycles_lib.mjs (x media de las 6 filas opacas más bajas): en los 13 pares de
+ * cuadros seguidos que apoyan, el pie retrocede en media 3,506 px por cuadro, 112,2 px por ciclo a
+ * 420 px de alto (es el avance de menor error). Se usa 112 (56 a 210, 28 a 105), entero;
+ * scripts/sprite_cycles.test.mjs lo vuelve a medir en el ciclo.
  */
 export const RUN = { direction: 1, facing: 'right', fps: 1000 / FRAME_MS.run } as const;
 
@@ -25,10 +26,10 @@ export function loaderAtlas(size: number, times: number): SpriteSize<'run'> {
   return SIZES.run.find((atlas) => atlas >= size * times) ?? 420;
 }
 
-const STRIDE_AT_420 = 292;
+const STRIDE_AT_420 = 112;
 const FRAMES = sequenceSpec('run').frames;
 
-/** Zancada: px que avanza en un ciclo entero a ese alto (304, 152 o 76; enteros). */
+/** Zancada: px que avanza en un ciclo entero a ese alto (112, 56 o 28; enteros). */
 export function stridePx(size: number): number {
   return (STRIDE_AT_420 * size) / 420;
 }
