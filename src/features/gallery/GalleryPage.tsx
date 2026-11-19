@@ -1,6 +1,6 @@
 import { useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '../../components/ui/Button';
+import { LoadError } from '../../components/ui/LoadError';
 import { Skeleton } from '../../components/ui/Skeleton';
 import { useAllPhotos } from '../../hooks/useAllPhotos';
 import { useBatchReveal } from '../../hooks/useBatchReveal';
@@ -28,12 +28,7 @@ export function GalleryPage() {
       <section aria-labelledby="gallery-photos" className="flex flex-col gap-6">
         <h2 id="gallery-photos" className="m-0 text-step-2 text-fg">{t('galleryPage.photos')}</h2>
         {photos.status === 'loading' ? <Skeleton className="h-48 w-full" lines={3} /> : null}
-        {photos.status === 'error' ? (
-          <div role="alert" className="flex flex-col items-start gap-3 rounded-sm border border-error bg-surface p-6">
-            <p className="m-0 text-fg">{t('modules.error')}</p>
-            <Button variant="secondary" size="sm" onClick={photos.retry}>{t('modules.retry')}</Button>
-          </div>
-        ) : null}
+        {photos.status === 'error' ? <LoadError onRetry={photos.retry} /> : null}
         {photos.status === 'success' && !list.length ? (
           <p className="m-0 text-fg-secondary">{t('galleryPage.empty')}</p>
         ) : null}

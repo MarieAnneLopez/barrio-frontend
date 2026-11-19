@@ -26,6 +26,7 @@
   --color-interactive: var(--interactive-primary);
   --color-interactive-hover: var(--interactive-hover);
   --color-active: var(--interactive-active);
+  --color-figure: var(--figure-highlight);
   --color-fg: var(--text-primary);
   --color-fg-secondary: var(--text-secondary);
   --color-fg-muted: var(--text-muted);

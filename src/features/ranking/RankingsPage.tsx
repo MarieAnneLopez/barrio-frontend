@@ -1,6 +1,6 @@
 import { useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '../../components/ui/Button';
+import { LoadError } from '../../components/ui/LoadError';
 import { Skeleton } from '../../components/ui/Skeleton';
 import { useApi } from '../../hooks/useApi';
 import type { RankingEntry } from '../../lib/apiTypes';
@@ -39,12 +39,7 @@ export function RankingsPage() {
         </select>
       </div>
       {ranking.status === 'loading' ? <Skeleton className="h-24 w-full" lines={4} /> : null}
-      {ranking.status === 'error' ? (
-        <div role="alert" className="flex flex-col items-start gap-3 rounded-sm border border-error bg-surface p-6">
-          <p className="m-0 text-fg">{t('modules.error')}</p>
-          <Button variant="secondary" size="sm" onClick={ranking.retry}>{t('modules.retry')}</Button>
-        </div>
-      ) : null}
+      {ranking.status === 'error' ? <LoadError onRetry={ranking.retry} /> : null}
       {ranking.status === 'success' ? <RankingList entries={ranking.data} /> : null}
     </div>
   );

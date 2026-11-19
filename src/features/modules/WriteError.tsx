@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { StateIcon } from '../../components/ui/StateIcon';
 import type { ApiError } from '../../lib/apiClient';
 import { useAuthStore } from '../../store/authStore';
 import { useAvatarStore } from '../../store/avatarStore';
@@ -20,6 +21,7 @@ export function WriteError({ error }: { error: ApiError | null }) {
   if (!error) return null;
   return (
     <p role="alert" className="m-0 rounded-sm border border-error bg-surface p-3 text-step--1 text-fg">
+      <StateIcon kind="error" />
       {expired ? (
         <LoginPrompt message={t('forms.needAdmin')} />
       ) : (

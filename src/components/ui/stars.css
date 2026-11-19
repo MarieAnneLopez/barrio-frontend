@@ -1,15 +1,23 @@
-/* Estrellas (D13, D84): vacías con una línea (3,78:1 sobre noche) y llenas en el color de realce
-   (ámbar sobre noche; noche sobre papel; blanco en alto contraste). */
+/* Estrellas (D100, PAL-09; stars.test.ts y Stars.test.tsx): las llenas en amarillo con el contorno
+   negro del realce (18,50:1 sobre crema); las vacías, solo con la línea fuerte (marrón sobre crema,
+   3,56:1). El amarillo solo no se recorta sobre la crema (1,29:1): el contorno dibuja la estrella y,
+   negro frente a marrón (5,20:1), separa llenas de vacías; la cifra al lado lo dice sin él. Siempre
+   sobre su propia superficie crema (Stars, StarsInput): en .tone-papel los dos contornos serían negros.
+   En alto contraste el amarillo vale negro: las llenas pasan al blanco y las vacías, línea blanca. */
 .stars-empty {
   fill: transparent;
   stroke: var(--border-strong);
-  stroke-width: 1.2;
+  stroke-width: 1.5;
 }
 
 .stars-full {
-  fill: var(--text-highlight);
+  fill: var(--bg-highlight);
   stroke: var(--text-highlight);
-  stroke-width: 1.2;
+  stroke-width: 1.5;
+}
+
+:root.high-contrast .stars-full {
+  fill: var(--text-highlight);
 }
 
 /* El radio cubre su mitad de estrella pero no se ve; el foco se ve en la estrella. */

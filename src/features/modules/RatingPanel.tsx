@@ -26,7 +26,9 @@ export function RatingPanel({ slug, itemId }: { slug: string; itemId: number }) 
             value={average}
             label={average === null ? t('ratings.none') : t('ratings.average', { value: format(average) })}
           />
+          {/* La cifra, como en Ranking: no depende del contorno fino que separa llenas de vacías. */}
           <span className="text-step--1 text-fg-secondary">
+            {average === null ? null : <span aria-hidden="true" className="font-mono">{format(average)} · </span>}
             {average === null ? t('ratings.none') : t('ratings.count', { count: data.total })}
           </span>
         </div>
@@ -35,7 +37,10 @@ export function RatingPanel({ slug, itemId }: { slug: string; itemId: number }) 
         <ul className="m-0 flex list-none flex-col gap-2 p-0">
           {data.items.map((r) => (
             <li key={r.id} className="rounded-md border border-line p-3 text-step--1">
-              <Stars value={r.estrellas} size={14} label={t('ratings.average', { value: format(r.estrellas) })} />
+              <span className="flex items-center gap-2">
+                <Stars value={r.estrellas} size={14} label={t('ratings.average', { value: format(r.estrellas) })} />
+                <span aria-hidden="true" className="font-mono text-fg-secondary">{format(r.estrellas)}</span>
+              </span>
               {r.comentario ? <p className="m-0 mt-1 text-fg">{r.comentario}</p> : null}
               <p className="m-0 mt-1 text-fg-muted">{r.autor_nombre ?? t('ratings.anonymous')}</p>
             </li>

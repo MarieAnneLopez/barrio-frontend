@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { StateIcon } from '../../components/ui/StateIcon';
 import type { CategoryConfig } from '../../lib/categoryConfig';
 
 /**
@@ -14,6 +15,7 @@ export function ModuleIntro({ category }: { category: CategoryConfig }) {
       <p className="m-0">{t(`categories.${category.slug}.description`)}</p>
       {i18n.exists(notice) ? (
         <p role="note" className="m-0 rounded-sm border border-warning border-dashed bg-surface p-3 text-step--1 text-fg">
+          <StateIcon kind="warning" />
           {t(notice)}
         </p>
       ) : null}

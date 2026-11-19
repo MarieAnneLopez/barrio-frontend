@@ -1,6 +1,7 @@
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Star } from './Stars';
+import { StateIcon } from './StateIcon';
 
 const STEPS = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5];
 
@@ -25,7 +26,8 @@ export function StarsInput({ value, onChange, legend, error }: StarsInputProps) 
   return (
     <fieldset className="m-0 border-0 p-0" aria-describedby={error ? errorId : undefined}>
       <legend className="mb-2 p-0 text-step--1 text-fg-secondary">{legend}</legend>
-      <div className="stars-input flex items-center gap-0.5">
+      {/* Superficie crema propia, como Stars: sobre rosa claro las estrellas no se distinguirían. */}
+      <div className="stars-input flex w-fit items-center gap-0.5 rounded-sm bg-surface">
         {[0, 1, 2, 3, 4].map((star) => (
           <span key={star} className="relative inline-flex" data-on={value !== undefined && value > star}>
             <Star size={32} fill={value === undefined ? 0 : Math.min(1, Math.max(0, value - star))} />
@@ -50,6 +52,7 @@ export function StarsInput({ value, onChange, legend, error }: StarsInputProps) 
       </div>
       {error ? (
         <p id={errorId} role="alert" className="mt-1 mb-0 text-step--1 text-error">
+          <StateIcon kind="error" />
           {error}
         </p>
       ) : null}

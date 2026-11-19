@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRouteError } from 'react-router-dom';
+import { StateIcon } from '../components/ui/StateIcon';
 
 const BUTTON =
   'ui-pressable ui-btn--primary inline-flex min-h-11 items-center rounded-md border border-interactive bg-interactive px-4 font-medium text-on-interactive no-underline';
@@ -20,7 +21,10 @@ export function RouteError({ inShell = false }: { inShell?: boolean }) {
 
   return (
     <div role="alert" className={inShell ? 'flex max-w-2xl flex-col items-start gap-4' : 'flex min-h-dvh flex-col items-center justify-center gap-4 bg-surface p-6 text-center'}>
-      <h1 className="m-0 text-step-2 text-fg">{t('routeError.title')}</h1>
+      <h1 className="m-0 text-step-2 text-fg">
+        <StateIcon kind="error" />
+        {t('routeError.title')}
+      </h1>
       <p className="m-0 max-w-prose text-step-0 text-fg-secondary">{t('routeError.description')}</p>
       <div className="flex flex-wrap gap-3">
         <button type="button" className={BUTTON} onClick={() => window.location.reload()}>

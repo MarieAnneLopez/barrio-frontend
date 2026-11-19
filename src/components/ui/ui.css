@@ -24,10 +24,11 @@
 }
 
 /* CTA (D100): fondo marrón y texto crema, que solo pasa como texto grande (3,56:1): por eso la hoja
-   fuerza 1,1875rem (19 px ≥ 18,66) en Inter 700, sin importar las clases de quien lo use. */
+   fuerza 1,1875rem (19 px ≥ 18,66) en Inter 700, sin importar las clases de quien lo use, y nunca
+   menos de 19 px reales: con la letra al 90 % el rem solo daría 17,1 px (PAL-04, largeText.test). */
 .ui-btn--primary {
   font-family: var(--ff-heading);
-  font-size: 1.1875rem;
+  font-size: max(1.1875rem, 19px);
   font-weight: 700;
   line-height: 1.2;
 }

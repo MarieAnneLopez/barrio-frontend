@@ -56,6 +56,20 @@ describe('Footer', () => {
     renderRoute('/creadora');
     expect(await screen.findAllByRole('heading', { name: 'Marie Anne Lopez Poveda' })).toHaveLength(1);
   });
+
+  // PAL-08 (D100, DISENO-V3 §2): el pie es una franja rosa claro con texto negro y una banda marrón con
+  // el nombre en crema grande (la medida, en styles/largeText.test). Sin otra banda, en todo ancho.
+  it('franja rosa claro en todo ancho con módulos, ubicación, derechos, nota académica y créditos; sin barra amarilla', () => {
+    renderRoute('/');
+    const modules = within(footer()).getByRole('navigation', { name: 'Módulos del barrio' });
+    const strip = modules.closest<HTMLElement>('.tone-papel') as HTMLElement;
+    expect(strip).toHaveClass('bg-pink');
+    expect(strip.className).not.toMatch(/\b\w+:bg-/); // el rosa claro no espera a 768 px
+    for (const text of [es.footer.rights, es.footer.academic]) expect(within(strip).getByText(text)).toBeInTheDocument();
+    expect(within(strip).getByRole('link', { name: es.credits.link })).toHaveClass('text-fg');
+    expect(footer().querySelector('[class*="bg-mark"]')).toBeNull();
+    expect(within(footer()).getByText(es.app.title).closest('.bg-band')).not.toBeNull();
+  });
 });
 
 describe('WhatsAppFloat', () => {

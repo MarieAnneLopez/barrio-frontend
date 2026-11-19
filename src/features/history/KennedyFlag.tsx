@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { StateIcon } from '../../components/ui/StateIcon';
 import { SourceLinks } from './SourceLinks';
 
 export const FLAG_URL = '/assets/flags/bandera_kennedy.svg';
@@ -37,6 +38,7 @@ export function KennedyFlag() {
           ))}
         </ul>
         <p role="note" className="m-0 rounded-sm border border-warning bg-surface p-3 text-step--1 text-fg">
+          <StateIcon kind="warning" />
           <span className="font-medium text-warning">{t('history.unverified')}: </span>
           {t('history.flag.note')}
         </p>
