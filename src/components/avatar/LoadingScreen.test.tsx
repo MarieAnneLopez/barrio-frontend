@@ -48,6 +48,8 @@ describe('Pantalla de carga completa (H33)', () => {
       setViewport(roomy);
       render(<LoadingScreen />);
       expect([runner()?.style.width, runner()?.style.height]).toEqual([width, height]);
+      // El escenario sabe su alto: el sol se queda por encima de su cabeza (loadingSun.test.ts).
+      expect(status()?.querySelector<HTMLElement>('.loading-screen__stage')?.style.getPropertyValue('--runner')).toBe(height);
     });
 
   it('va en crema con suelo marrón: sin ladrillo, esquinas de píxel ni fuente de píxel (D96)', () => {
@@ -56,6 +58,12 @@ describe('Pantalla de carga completa (H33)', () => {
     expect(css).not.toMatch(/--palette-|--ff-pixel|#fff|shadow/);
     expect(css).toMatch(/\.loading-screen \{[^}]*background-color: var\(--bg-primary\)/);
     expect(css).toMatch(/\.loading-screen__ground \{[^}]*height: 1px;[^}]*var\(--border-ink\)/);
+  });
+
+  // Auditoría MM-06: .sequence es inline-block y su hijo va en absoluto, así que su línea base es su
+  // borde inferior; sin line-height 0 se apoyaba sobre el hueco del interlineado (~9 px a 16 px × 1,6).
+  it('corre con los pies en el suelo: la pista no deja hueco de interlineado bajo ella', () => {
+    expect(css).toMatch(/\.loading-screen__track \{[^}]*line-height: 0;/);
   });
 
   it('vuelve mientras baja el código de una página', () => {

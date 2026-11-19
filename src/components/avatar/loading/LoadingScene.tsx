@@ -26,8 +26,9 @@ function Strip({ kind }: { kind: 'far' | 'near' | 'clouds' }) {
 /**
  * Barrio de fondo de la pantalla de carga (gran actualización): cielo de crema a rosa, sol
  * amarillo, nubes y dos filas de edificios (rosa claro lejos, rosa cerca) en parallax lento, solo
- * con transform. El sol queda arriba a la derecha, por encima de la carrera: Mini Marie nunca pasa
- * sobre el amarillo. Decorativo; con movimiento reducido, quieto.
+ * con transform. El sol queda arriba a la derecha, siempre por encima de la cabeza de Mini Marie: en
+ * un escenario bajo sube y se recorta, o se va (loading-scene.css, con --runner). Nunca pasa sobre el
+ * amarillo. Decorativo; con movimiento reducido, quieto.
  */
 export function LoadingScene() {
   return (

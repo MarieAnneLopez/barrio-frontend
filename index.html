@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#F6A7C1" />
-    <!-- Favicon (D82): el mismo rostro sonriente de Mini Marie que el logo del encabezado. -->
+    <!-- Favicon (D82): el rostro sonriente de Mini Marie (cuadro 6 del saludo). El logo del
+         encabezado es su rostro en reposo, que respira con el ciclo de 32 cuadros. -->
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
     <meta name="description" content="Reconoce tu Barrio: El Tintal, Kennedy, Bogotá D.C." />
@@ -15,11 +16,12 @@
     <link rel="preload" href="/node_modules/@fontsource/anton/files/anton-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-500-italic.woff2" as="font" type="font/woff2" crossorigin />
     <title>Reconoce tu Barrio · El Tintal</title>
-    <!-- Pantalla de carga (H33): el atlas de la carrera se pide al leer la página, no cuando React
-         la pinta. El de 420 px si la pantalla da para ese alto o es densa (el doble exacto de 210);
-         si no, el de 210. Misma condición que LoadingScreen (LOADER_WIDE) y SequenceSprite. -->
-    <link rel="preload" as="image" type="image/webp" href="/assets/avatar/run/run_420.webp" media="(min-width: 640px) and (min-height: 860px)" />
-    <link rel="preload" as="image" type="image/webp" href="/assets/avatar/run/run_210.webp" media="(max-width: 639.98px), (max-height: 859.98px)" />
+    <!-- Pantalla de carga (H33, D111): el atlas que comparten sus dos Mini Marie se pide al leer la
+         página, no cuando React la pinta. El de 420 px si la pantalla da para ese alto (LOADER_WIDE)
+         o es más densa que 1,01 dppx; si no, el de 210. Misma elección que LoadingScreen (loaderAtlas,
+         con los umbrales de SequenceSprite); las formas -webkit- son para Safari antes del 16. -->
+    <link rel="preload" as="image" type="image/webp" href="/assets/avatar/run/run_420.webp" media="(min-width: 640px) and (min-height: 860px), (min-resolution: 1.01dppx), (-webkit-min-device-pixel-ratio: 1.01)" />
+    <link rel="preload" as="image" type="image/webp" href="/assets/avatar/run/run_210.webp" media="(max-width: 639.98px) and (max-resolution: 1.009dppx), (max-height: 859.98px) and (max-resolution: 1.009dppx), (max-width: 639.98px) and (-webkit-max-device-pixel-ratio: 1.009), (max-height: 859.98px) and (-webkit-max-device-pixel-ratio: 1.009)" />
   </head>
   <body>
     <div id="root"></div>

@@ -1,6 +1,6 @@
 /* Barra de carga viva: pista crema con línea marrón (3,56:1 sobre crema), relleno marrón que se
-   corre con translateX, un brillo crema que lo recorre y chispas amarillas de píxel en la punta.
-   Solo transform y opacity. Con movimiento reducido (data-reduced): ni brillo ni chispas. */
+   corre con translateX, un brillo del color de la pista que lo recorre y chispas amarillas de píxel
+   en la punta. Solo transform y opacity. Con movimiento reducido (data-reduced): ni brillo ni chispas. */
 .loading-bar {
   position: relative;
   width: min(32rem, 82vw);
@@ -25,14 +25,20 @@
   will-change: transform;
 }
 
-/* Brillo: una franja crema translúcida que cruza el relleno (lineal: movimiento constante). */
+/* Brillo: una franja del color de la pista al 55 % que cruza el relleno (lineal: movimiento constante).
+   Sale del tema: crema sobre el marrón; en Alto Contraste, gris sobre el blanco (4,4:1 sobre la pista). */
 .loading-bar__fill::after {
   content: '';
   position: absolute;
   inset: 0 auto 0 0;
   width: 35%;
-  background-image: linear-gradient(90deg, transparent, rgb(252 240 207 / 0.55), transparent);
+  background-image: linear-gradient(90deg, transparent, color-mix(in srgb, var(--bg-primary) 55%, transparent), transparent);
   animation: loading-shine 1.6s linear infinite;
+}
+
+/* Alto Contraste: pista y relleno eran los dos negro (1:1). El relleno va en la tinta (blanco, 21:1). */
+:root.high-contrast .loading-bar__fill {
+  background-color: var(--border-ink);
 }
 
 /* Riel del ancho de la barra: translateX(avance · 100 %) lleva la punta a su sitio. */
@@ -64,6 +70,7 @@
 .loading-bar__spark:nth-child(3) { --dx: 6px; --dy: 16px; animation-delay: 0.36s; }
 .loading-bar__spark:nth-child(4) { --dx: 18px; --dy: -6px; animation-delay: 0.54s; }
 .loading-bar__spark:nth-child(5) { --dx: 9px; --dy: -24px; animation-delay: 0.72s; }
+:root.high-contrast .loading-bar__spark { background-color: var(--text-primary); } /* amarillo es negro allí */
 
 @keyframes loading-shine {
   from { transform: translate3d(-100%, 0, 0); }

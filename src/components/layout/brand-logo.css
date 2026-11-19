@@ -1,4 +1,8 @@
 /* Logo (D82, D86). <picture> solo elige el recurso: no ocupa caja propia. */
+.brand-logo {
+  position: relative;
+}
+
 .brand-logo picture {
   display: contents;
 }
@@ -8,4 +12,73 @@
   .brand-logo img {
     image-rendering: pixelated;
   }
+}
+
+/* Ciclo de reposo (auditoría MM-04): encima del póster, en la misma caja y con el fondo del círculo,
+   así lo tapa entero; invisible hasta que su imagen está decodificada (LogoCycle). */
+.brand-logo__cycle {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background-color: inherit;
+  opacity: 0;
+}
+
+.brand-logo__cycle[data-shown] {
+  opacity: 1;
+}
+
+.brand-logo__rows {
+  display: block;
+}
+
+/* El atlas: 8 × 4 cuadros de 32 px en móvil y de 48 px desde 640 px (como el póster). */
+.brand-logo__atlas {
+  display: block;
+  max-width: none;
+  width: 256px;
+  height: 128px;
+}
+
+@media (min-width: 640px) {
+  .brand-logo__atlas {
+    width: 384px;
+    height: 192px;
+  }
+}
+
+/* Al verse, columnas (la imagen) y filas (su contenedor) arrancan a la vez, solo con transform. */
+.brand-logo__cycle[data-shown] .brand-logo__atlas {
+  animation-name: brand-logo-columns;
+  animation-timing-function: steps(8);
+  animation-iteration-count: infinite;
+}
+
+.brand-logo__cycle[data-shown] .brand-logo__rows {
+  animation-name: brand-logo-rows;
+  animation-timing-function: steps(4);
+  animation-iteration-count: infinite;
+}
+
+@keyframes brand-logo-columns {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes brand-logo-rows {
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+/* Respaldo si el sistema pide menos movimiento antes de que React lo lea: el póster. */
+@media (prefers-reduced-motion: reduce) {
+  .brand-logo__cycle {
+    display: none;
+  }
+}
+
+:root.reduce-motion .brand-logo__cycle {
+  display: none;
 }

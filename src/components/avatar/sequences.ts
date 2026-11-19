@@ -59,3 +59,10 @@ export const cellWidth = (name: SequenceName, size: number): number => scaled(na
 export const atlasCellWidth = (name: SequenceName, size: number): number => scaled(name, size, scales[name].cell);
 
 export const spriteUrl = (name: SequenceName, size: number) => `/assets/avatar/${name}/${name}_${size}.webp`;
+
+/** Desplazamientos (px enteros) que muestran el cuadro `frame` del ciclo: la columna en X, la fila en Y. */
+export function frameTransforms(name: SequenceName, size: number, frame: number): { across: string; down: string } {
+  const [cols] = sequenceSpec(name).grid;
+  const across = `translateX(${-(frame % cols) * atlasCellWidth(name, size)}px)`;
+  return { across, down: `translateY(${-Math.floor(frame / cols) * size}px)` };
+}

@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { offsetAt, RUN, runKeyframes, runPath, stridePx } from './loadingRun';
+import { frameAt, offsetAt, positionAt, RUN, runKeyframes, runPath, stridePx } from './loadingRun';
 import { cellWidth, FRAME_MS } from './sequences';
 
 const css = readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'loading-screen.css'), 'utf8');
@@ -43,10 +43,30 @@ describe('carrera de la pantalla de carga', () => {
     const sprite = cellWidth('run', 210);
     const path = runPath(390, 210, sprite);
     expect(path.start).toBe(-98); // entra entera desde fuera, por la izquierda
-    expect(path.frames).toBe(107); // 488 px a 4,5625 px por cuadro
-    expect(path.distance).toBe(offsetAt(107, 210));
-    expect(path.distance).toBeGreaterThanOrEqual(390 + 98); // y sale entera por la derecha
-    expect(path.durationMs).toBeCloseTo(107 * FRAME_MS.run);
+    expect(path.frames).toBe(108); // 488 px a 4,5625 px por cuadro: sale en el 107 y ese se ve entero
+    expect(path.distance).toBe(offsetAt(108, 210));
+    expect(path.durationMs).toBeCloseTo(108 * FRAME_MS.run);
+  });
+
+  // Auditoría MM-07: en bucle (iterations: Infinity) el fotograma clave final, el de offset 1, no se
+  // pinta nunca: el último que se ve es el anterior. Ese ya debe dejarla entera fuera, por la derecha;
+  // si no, un trozo de bota desaparece de golpe en el borde.
+  it.each([[390, 210], [768, 210], [844, 210], [1440, 420], [1920, 420]])(
+    'a %i px de ancho y %i de alto, el último cuadro que se pinta ya la deja fuera, sin cuadros de más', (viewport, size) => {
+      const path = runPath(viewport, size, cellWidth('run', size));
+      expect(path.start + offsetAt(path.frames - 1, size)).toBeGreaterThanOrEqual(viewport);
+      expect(path.start + offsetAt(path.frames - 2, size)).toBeLessThan(viewport);
+    });
+
+  // Auditoría MM-10: al girar el celular el recorrido seguía con el ancho de antes. Se rehace con el
+  // nuevo, desde la misma posición; si en la pantalla nueva ya habría salido, vuelve a entrar.
+  it('rehacer el recorrido conserva su posición, y en bucle cuenta desde la entrada', () => {
+    const [narrow, wide] = [runPath(390, 210, 98), runPath(844, 210, 98)];
+    const at = positionAt(narrow, 210, 50.5 * FRAME_MS.run);
+    expect(at).toBe(-98 + offsetAt(50, 210));
+    expect(frameAt(wide, 210, at)).toBe(50);
+    expect(frameAt(narrow, 210, positionAt(wide, 210, 150.5 * FRAME_MS.run))).toBe(0);
+    expect(positionAt(narrow, 210, narrow.durationMs + 2.5 * FRAME_MS.run)).toBe(-98 + offsetAt(2, 210));
   });
 
   it('un fotograma clave por cuadro, en px enteros, sostenido hasta el cuadro siguiente', () => {

@@ -7,7 +7,9 @@ interface LoadingProgressProps {
   /** Hay algo que justifica la pantalla (arranque, chunks o datos): useLoadingScreen. */
   busy: boolean;
   reduced: boolean;
-  rider?: (shown: number) => ReactNode;
+  /** Lo que viaja con la punta (la Mini Marie pequeña) y su posición en cada rAF (LoadingBar). */
+  rider?: ReactNode;
+  onTravel?: (px: number) => void;
 }
 
 /**
@@ -15,11 +17,12 @@ interface LoadingProgressProps {
  * datos y chunks, loadingStore), que nunca retrocede mientras la pantalla sigue a la vista; cuando
  * ya no queda nada, se llena. Cada aparición de la pantalla monta uno nuevo, desde la astilla.
  */
-export function LoadingProgress({ busy, reduced, rider }: LoadingProgressProps) {
+export function LoadingProgress({ busy, reduced, rider, onTravel }: LoadingProgressProps) {
   const { active, progress } = loadingSnapshot(useLoadingStore((s) => s.tasks));
   const [target, setTarget] = useState(START);
   const next = nextTarget(target, { busy, active, progress });
   // Ajuste durante el render: el objetivo solo sube.
   if (next > target) setTarget(next);
-  return <LoadingBar target={Math.max(target, next)} reduced={reduced} {...(rider ? { rider } : {})} />;
+  const riding = { ...(rider ? { rider } : {}), ...(onTravel ? { onTravel } : {}) };
+  return <LoadingBar target={Math.max(target, next)} reduced={reduced} {...riding} />;
 }

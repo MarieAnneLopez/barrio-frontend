@@ -1,8 +1,16 @@
 /* La Mini Marie de la barra: de pie sobre ella, con su frente 2 px antes de la punta (las chispas
-   amarillas saltan hacia adelante y nunca la tocan). La punta (loading-bar__head) mide 0 × 0. */
+   amarillas saltan hacia adelante y nunca la tocan). La punta (loading-bar__head) mide 0 × 0.
+   Interlineado 0: sin él se apoyaba sobre el hueco del interlineado, ~9 px más arriba. */
 .bar-runner {
   position: absolute;
   right: 2px;
   bottom: 10px;
+  line-height: 0;
   pointer-events: none;
+}
+
+/* Comparte el atlas de la grande (210 o 420, D111) y siempre lo reduce (a 105 px CSS): con suavizado.
+   El vecino más cercano, que sequence.css pone a 1× y 2×, le dentaba el contorno al reducir. */
+.bar-runner .sequence__strip {
+  image-rendering: auto;
 }
