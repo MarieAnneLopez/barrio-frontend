@@ -6,6 +6,7 @@ import type { MapControls as MapControlsImpl } from 'three-stdlib';
 import { mapView } from './camera/mapView';
 import { MAP_REACH, MAX_POLAR_DEG, rigLimits } from './camera/rigMode';
 import { useCameraGoal } from './camera/useCameraGoal';
+import { useControlsGuard } from './camera/useControlsGuard';
 import { useHeroStore } from './heroStore';
 import { homeView } from './referenceView';
 import { useSceneHost } from './sceneHost';
@@ -44,6 +45,7 @@ export function CameraRig({ radius, view, reducedMotion }: Props) {
   );
   const limits = rigLimits(mode, home.distance, radius);
   const cancel = useCameraGoal(controls, home, mode, reducedMotion);
+  const epoch = useControlsGuard(controls);
   const paused = useHeroStore((s) => s.paused);
   const interacting = useHeroStore((s) => s.interacting);
   const selected = useSelectionStore((s) => s.selected);
@@ -55,6 +57,7 @@ export function CameraRig({ radius, view, reducedMotion }: Props) {
     for (const el of surfaces) if (el && el.style.touchAction !== limits.touchAction) el.style.touchAction = limits.touchAction;
     const c = controls.current;
     if (!c) return;
+    c.enabled = true; // nada debe dejar la cámara apagada
     // Recorte y niebla relativos a la distancia: con el plano cercano a media distancia las capas
     // a ras de suelo no parpadean, y la niebla da ≈ 15 % al fondo del encuadre (como la referencia).
     const distance = state.camera.position.distanceTo(c.target);
@@ -69,6 +72,7 @@ export function CameraRig({ radius, view, reducedMotion }: Props) {
 
   return (
     <MapControls
+      key={epoch}
       ref={controls}
       makeDefault
       enableDamping={!reducedMotion}
