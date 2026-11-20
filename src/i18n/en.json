@@ -493,6 +493,11 @@
       "greet": "Hi! I can take you to any of the neighborhood's 14 modules, the 3D map or El Tintal's history.",
       "help": "Ask me about schools, parks, food, transport, vets and the other modules; I'll take you to the section with its map and list. I can also tell you how to contact Marie.",
       "contact": "Marie Anne Lopez Poveda created this platform. You can message her on WhatsApp at +57 313 259 6937 with the WhatsApp button in the corner, or see her profile.",
+      "library": "The Biblioteca Pública El Tintal Manuel Zapata Olivella is a local landmark. Check BibloRed for current services and opening hours.",
+      "libraryPhone": "BibloRed lists (601) 580 3060, extension 1000, for this library.",
+      "urgent": "If this is happening now or someone is in danger, call 123 in Bogotá.",
+      "libraryHours": "Saved BibloRed hours: Tuesday through Saturday, 8 a.m. to 7 p.m., and Sunday, 10 a.m. to 5 p.m. Closed on Mondays and public holidays. Check the listing before visiting.",
+      "transit": "You can explore stations in the transport section. TransMiApp provides official route and journey information; check it for current schedules and routes.",
       "category": "Let's go to {{name}}: you'll see the places on the map and in the list, and every record says where it comes from.",
       "theft": "Let's go to {{name}}. These reports are for prevention, not alarm. In an emergency call 123.",
       "map": "The 3D map shows El Tintal's blocks, roads and parks with the places of each module.",
@@ -500,8 +505,10 @@
       "fallback": "I don't have that one at hand, but I can take you to the 14 modules, the 3D map, the history or Marie's contact.",
       "limit": "You've reached the message limit for now. Wait a few minutes and ask me again."
     },
+    "sources": "Sources",
+    "consulted": "Accessed: {{date}}",
     "thinking": "Mini Marie is looking through the neighborhood data…",
-    "privacy": "Mini Marie writes with Gemini, Google's AI: don't share personal data."
+    "privacy": "Your questions may be sent to an external AI provider. Please do not enter personal information."
   },
   "ratings": {
     "title": "Ratings",

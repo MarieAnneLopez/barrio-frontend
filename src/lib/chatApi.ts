@@ -1,4 +1,4 @@
-import { ApiError, apiGet, apiSend } from './apiClient';
+import { apiGet, apiSend } from './apiClient';
 
 /** Respuesta de POST /api/v1/chat (ModelProvider del backend, H22). Llega ya en el idioma pedido. */
 export interface RemoteReply {
@@ -10,43 +10,42 @@ export interface RemoteReply {
   experto: string | null;
   acciones: { ruta: string; etiqueta: string }[];
   sugerencias: string[];
+  lugar?: string | null;
+  fuentes?: { titulo: string; url: string; consultado_en: string }[];
 }
 
 /** Lo que el agente percibe del usuario además del mensaje. */
 export interface ChatContext {
   idioma: 'es' | 'en';
   ruta: string;
+  contexto_lugar?: string;
 }
 
-/** El proxy espera hasta ~75 s a que la API despierte (D82): el chat la espera. */
-const CHAT_TIMEOUT_MS = 80_000;
-/** Pedido de Marie (D82): si una consulta falla, se reintenta en silencio 2 veces. */
-export const chatRetry = { delaysMs: [1000, 2000] };
-const pause = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-/** Solo se reintenta lo que puede pasar solo: red caída o error 5xx. */
-const transient = (error: unknown) => !(error instanceof ApiError) || error.status === 0 || error.status >= 500;
-
-async function askOnce(mensaje: string, context: ChatContext): Promise<RemoteReply> {
-  const reply = await apiSend<RemoteReply>('POST', '/chat', { mensaje, ...context }, CHAT_TIMEOUT_MS);
-  if (!reply) throw new Error('Respuesta vacía del chat');
-  return reply;
-}
-
+/** Un único POST; el límite también cubre la lectura del cuerpo de respuesta. */
 export async function askMarie(mensaje: string, context: ChatContext): Promise<RemoteReply> {
-  for (let attempt = 0; ; attempt += 1) {
-    try {
-      return await askOnce(mensaje, context);
-    } catch (error) {
-      const delay = chatRetry.delaysMs[attempt];
-      if (delay === undefined || !transient(error)) throw error;
-      await pause(delay);
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    const timeout = new Promise<never>((_, reject) => {
+      timer = setTimeout(() => reject(new Error('Tiempo agotado')), 15_000);
+    });
+    const reply = await Promise.race([apiSend<RemoteReply>('POST', '/chat', { mensaje, ...context }, 15_000), timeout]);
+    if (!reply || typeof reply.texto !== 'string' || !reply.texto.trim()
+      || !Array.isArray(reply.acciones) || !reply.acciones.every((a) => a && typeof a.etiqueta === 'string'
+        && typeof a.ruta === 'string' && /^\/(?![/\\])/.test(a.ruta))
+      || !Array.isArray(reply.sugerencias) || !reply.sugerencias.every((s) => typeof s === 'string')
+      || (reply.fuentes != null && (!Array.isArray(reply.fuentes) || !reply.fuentes.every((s) =>
+        s && typeof s.titulo === 'string' && typeof s.url === 'string' && typeof s.consultado_en === 'string')))) {
+      throw new Error('Respuesta inválida del chat');
     }
+    return reply;
+  } finally {
+    clearTimeout(timer);
   }
 }
 
 /** GET /api/v1/chat/estado (H36): proveedor externo que recibe los mensajes, o null. */
 export interface ChatStatus {
-  proveedor: 'gemini' | 'claude' | null;
+  proveedor: 'gemini' | 'claude' | 'desconocido' | null;
 }
 
 let status: Promise<ChatStatus> | null = null;
@@ -55,7 +54,7 @@ let status: Promise<ChatStatus> | null = null;
 export function chatStatus(): Promise<ChatStatus> {
   status ??= apiGet<ChatStatus>('/chat/estado').catch(() => {
     status = null;
-    return { proveedor: null };
+    return { proveedor: 'desconocido' as const };
   });
   return status;
 }

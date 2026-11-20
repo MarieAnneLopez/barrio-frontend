@@ -1,9 +1,10 @@
-import { useId, useState, type RefObject } from 'react';
+import { useId, type RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useChatStore } from '../../store/chatStore';
 import { NavIcon } from '../layout/NavIcon';
 
 interface ChatInputProps {
-  onSend: (text: string) => void;
+  onSend: (text: string) => boolean;
   inputRef: RefObject<HTMLInputElement>;
 }
 
@@ -11,7 +12,9 @@ interface ChatInputProps {
 export function ChatInput({ onSend, inputRef }: ChatInputProps) {
   const { t } = useTranslation();
   const id = useId();
-  const [value, setValue] = useState('');
+  const value = useChatStore((s) => s.draft);
+  const setValue = useChatStore((s) => s.setDraft);
+  const pending = useChatStore((s) => s.pending);
   const empty = value.trim() === '';
 
   return (
@@ -19,9 +22,8 @@ export function ChatInput({ onSend, inputRef }: ChatInputProps) {
       className="flex items-center gap-2 border-t border-line p-3"
       onSubmit={(event) => {
         event.preventDefault();
-        if (empty) return;
-        onSend(value);
-        setValue('');
+        if (empty || pending) return;
+        if (onSend(value)) setValue('');
       }}
     >
       <label htmlFor={id} className="sr-only">
@@ -39,7 +41,7 @@ export function ChatInput({ onSend, inputRef }: ChatInputProps) {
       />
       <button
         type="submit"
-        disabled={empty}
+        disabled={empty || pending}
         aria-label={t('chat.send')}
         className="ui-pressable ui-btn--primary inline-flex size-11 shrink-0 items-center justify-center rounded-md border border-interactive bg-interactive text-on-interactive disabled:opacity-50"
       >

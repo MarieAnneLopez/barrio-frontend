@@ -34,22 +34,21 @@ beforeEach(() => {
 });
 
 describe('Chat sin API (D82)', () => {
-  it('si la API falla, reintenta 2 veces en silencio y responde sin hablar de servidor (D82)', async () => {
+  it('si la API falla responde con la guía local sin duplicar el envío', async () => {
     mockApi(chatRoute({ status: 502, body: { error: { code: 'BACKEND_UNAVAILABLE', message: 'x' } } }));
     renderRoute('/');
     await ask('¿Qué colegios hay?');
     expect(await screen.findByRole('link', { name: 'Ir a Centros Educativos' })).toBeInTheDocument();
-    expect(sent).toHaveLength(3);
+    expect(sent).toHaveLength(1);
     expect(screen.getByRole('log').textContent).not.toMatch(/servidor|conexión|repertorio/i);
   });
 
-  it('un reintento que sale bien muestra la respuesta del modelo, sin rastro del fallo', async () => {
-    let calls = 0;
-    mockApi({ '/chat': () => (++calls === 1 ? { status: 503, body: {} } : { body: { ...REPLY, texto: 'Hay colegios.' } }) });
+  it.each([{}, REPLY])('un 200 sin respuesta utilizable también orienta sobre el lugar', async (body) => {
+    mockApi(chatRoute({ status: 200, body }));
     renderRoute('/');
     await ask('¿Qué colegios hay?');
-    expect(await screen.findByText('Hay colegios.')).toBeInTheDocument();
-    expect(calls).toBe(2);
+    expect(await screen.findByRole('link', { name: 'Ir a Centros Educativos' })).toBeInTheDocument();
+    expect(sent).toHaveLength(1);
   });
 
 });

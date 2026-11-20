@@ -493,6 +493,11 @@
       "greet": "¡Hola! Puedo llevarte a cualquiera de los 14 módulos del barrio, al mapa 3D o a la historia de El Tintal.",
       "help": "Pregúntame por colegios, parques, comida, transporte, veterinarias y los demás módulos; te llevo a la sección con su mapa y su lista. También te cuento cómo contactar a Marie.",
       "contact": "Marie Anne Lopez Poveda creó esta plataforma. Puedes escribirle por WhatsApp al 313 259 6937 con el botón de WhatsApp de la esquina, o ver su perfil.",
+      "library": "La Biblioteca Pública El Tintal Manuel Zapata Olivella es un lugar del barrio. Consulta BibloRed para sus servicios y horarios actuales.",
+      "libraryPhone": "La ficha de BibloRed indica el (601) 580 3060, extensión 1000.",
+      "urgent": "Si está ocurriendo ahora o hay alguien en peligro, llama al 123 en Bogotá.",
+      "libraryHours": "Horario guardado de BibloRed: martes a sábado de 8 a. m. a 7 p. m. y domingos de 10 a. m. a 5 p. m. Los lunes y festivos está cerrada. Confirma en la ficha antes de ir.",
+      "transit": "Puedes consultar las estaciones en el módulo de transporte. TransMiApp ofrece información oficial de rutas y viajes; verifica allí horarios y recorridos.",
       "category": "Te llevo a {{name}}: ahí ves los lugares en el mapa y en la lista, y cada dato dice de dónde viene.",
       "theft": "Te llevo a {{name}}. Son reportes para prevenir, no para alarmarte. En una emergencia llama al 123.",
       "map": "El mapa 3D muestra las manzanas, vías y parques de El Tintal con los lugares de cada módulo.",
@@ -500,8 +505,10 @@
       "fallback": "Esa no la tengo a la mano, pero puedo llevarte a los 14 módulos, al mapa 3D, a la historia o al contacto de Marie.",
       "limit": "Llegaste al límite de mensajes por ahora. Espera unos minutos y vuelve a preguntarme."
     },
+    "sources": "Fuentes",
+    "consulted": "Consultado: {{date}}",
     "thinking": "Mini Marie está buscando en los datos del barrio…",
-    "privacy": "Mini Marie redacta con Gemini, la IA de Google: no escribas datos personales."
+    "privacy": "Tus preguntas pueden enviarse a un proveedor externo de IA. No escribas datos personales."
   },
   "ratings": {
     "title": "Calificaciones",

@@ -76,10 +76,11 @@ describe('Chat conectado a /api/v1/chat', () => {
       return slow;
     } });
     renderRoute('/');
-    await ask('hola');
+    await ask('¿Cuántos colegios hay?');
     expect(await screen.findByText('Mini Marie está buscando en los datos del barrio…')).toBeInTheDocument();
     await userEvent.type(screen.getByRole('textbox'), 'otra{Enter}');
     expect(sent).toHaveLength(1);
+    expect(screen.getByRole('textbox')).toHaveValue('otra');
     await act(async () => release({ body: { ...REPLY, texto: '¡Hola!' } }));
     await waitFor(() => expect(screen.queryByText(/está buscando/)).not.toBeInTheDocument());
   });

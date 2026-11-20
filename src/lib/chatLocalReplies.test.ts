@@ -16,8 +16,20 @@ describe('localReply', () => {
     });
   });
 
+  it('ofrece información local y fuente oficial en ambos idiomas', () => {
+    expect(localReply('library').sources?.[0]?.url).toContain('biblored.gov.co');
+    expect(localReply('transporte').sources?.[0]?.url).toContain('transmilenio.gov.co');
+  });
+
   it('entiende inglés y comida', () => {
     expect(localReply('Show me food places').action?.to).toBe('/categorias/sitios-comida');
+  });
+
+  it('distingue la estación de la biblioteca y responde seguimientos sin conexión', () => {
+    expect(localReply('estación biblioteca').key).toBe('chat.replies.transit');
+    expect(localReply('¿Y el teléfono?', 'Biblioteca El Tintal').key).toBe('chat.replies.libraryPhone');
+    expect(localReply('hours?', 'Biblioteca El Tintal').key).toBe('chat.replies.libraryHours');
+    expect(localReply('me están atacando').key).toBe('chat.replies.urgent');
   });
 
   it('casa raíces al inicio de palabra, no dentro de otras', () => {

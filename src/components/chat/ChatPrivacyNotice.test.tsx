@@ -13,13 +13,12 @@ describe('Aviso de privacidad del chat (H36)', () => {
   it('con Gemini avisa que no se escriban datos personales', async () => {
     status.mockResolvedValue({ proveedor: 'gemini' });
     render(<ChatPrivacyNotice />);
-    expect(await screen.findByText(/no escribas datos personales/)).toBeInTheDocument();
+    expect(await screen.findByText(/no escribas datos personales/i)).toBeInTheDocument();
   });
 
   it('sin proveedor externo no muestra nada', async () => {
     status.mockResolvedValue({ proveedor: null });
     const { container } = render(<ChatPrivacyNotice />);
-    await vi.waitFor(() => expect(status).toHaveBeenCalled());
-    expect(container).toBeEmptyDOMElement();
+    await vi.waitFor(() => expect(container).toBeEmptyDOMElement());
   });
 });

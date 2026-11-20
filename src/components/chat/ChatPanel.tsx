@@ -25,7 +25,11 @@ export function ChatPanel({ id, titleId, inputRef, onClose, onNavigate }: ChatPa
   const messages = useChatStore((s) => s.messages);
   const pending = useChatStore((s) => s.pending);
   const sendToStore = useChatStore((s) => s.send);
-  const send = (text: string) => void sendToStore(text, { idioma: i18n.language === 'en' ? 'en' : 'es', ruta: pathname });
+  const send = (text: string) => {
+    if (!text.trim() || useChatStore.getState().pending) return false;
+    void sendToStore(text, { idioma: i18n.language === 'en' ? 'en' : 'es', ruta: pathname });
+    return true;
+  };
   const reduced = useReducedMotion();
   const log = useRef<HTMLDivElement>(null);
   // Mensajes ya existentes al abrir no se vuelven a escribir letra a letra.

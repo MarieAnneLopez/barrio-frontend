@@ -40,13 +40,13 @@ export function ChatBubble({ message, animate, onNavigate }: ChatBubbleProps) {
   if ('remote' in message) {
     // El texto viene del servidor y se muestra como texto (React lo escapa): nunca como HTML.
     const actions = message.remote.acciones.map((a) => ({ to: a.ruta, label: a.etiqueta }));
-    return <MarieBubble text={message.remote.texto} actions={actions} animate={animate} onNavigate={onNavigate} />;
+    return <MarieBubble text={message.remote.texto} actions={actions} animate={animate} onNavigate={onNavigate} sources={message.remote.fuentes} />;
   }
   const { reply } = message;
   const actions = reply.action ? [{ to: reply.action.to, label: t(reply.action.labelKey) }] : [];
   return (
-    <MarieBubble text={t(reply.key, resolveParams(t, reply.params))} actions={actions} animate={animate}
-      onNavigate={onNavigate} />
+    <MarieBubble text={[t(reply.key, resolveParams(t, reply.params)), ...(reply.limited ? [t('chat.replies.limit')] : [])].join('\n')} actions={actions} animate={animate}
+      onNavigate={onNavigate} sources={reply.sources} />
   );
 }
 
@@ -55,9 +55,10 @@ interface MarieBubbleProps {
   actions: QuickAction[];
   animate: boolean;
   onNavigate: () => void;
+  sources?: { titulo: string; url: string; consultado_en: string }[] | undefined;
 }
 
-function MarieBubble({ text, actions, animate, onNavigate }: MarieBubbleProps) {
+function MarieBubble({ text, actions, animate, onNavigate, sources = [] }: MarieBubbleProps) {
   const { t } = useTranslation();
   const shown = useTypewriter(text, animate);
   const typing = shown.length < text.length;
@@ -66,6 +67,12 @@ function MarieBubble({ text, actions, animate, onNavigate }: MarieBubbleProps) {
     <div className="chat-msg ui-card max-w-[90%] self-start px-4 py-3 text-step--1">
       <span className="sr-only">{t('chat.title')}: {text}</span>
       <p aria-hidden="true" className="whitespace-pre-line">{shown}</p>
+      {!typing && sources.length ? <ul aria-label={t('chat.sources')}>
+        {sources.filter((source) => /^https:\/\//i.test(source.url)).map((source) => (
+          <li key={source.url}><a href={source.url} target="_blank" rel="noopener noreferrer">{source.titulo}</a>
+            {' · '}{t('chat.consulted', { date: source.consultado_en })}</li>
+        ))}
+      </ul> : null}
       {!typing && actions.length ? (
         <div className="mt-2 flex flex-wrap gap-2">
           {actions.map((action) => (

@@ -4,7 +4,6 @@ import { afterEach, beforeEach, vi } from 'vitest';
 import i18n from '../i18n/i18n';
 import content from '../i18n/content.en.json';
 import en from '../i18n/en.json';
-import { chatRetry } from '../lib/chatApi';
 import { useAuthStore } from '../store/authStore';
 import { useLoadingStore } from '../store/loadingStore';
 import { useWelcomeStore } from '../store/welcomeStore';
@@ -21,8 +20,6 @@ i18n.addResourceBundle('en', 'content', content);
 
 // Rutas en diferido (H27): con la suite en paralelo un chunk puede tardar más de 1 s en jsdom.
 configure({ asyncUtilTimeout: 3000 });
-// Los reintentos del chat (D82) se prueban sin esperas reales.
-chatRetry.delaysMs = [0, 0];
 // jsdom no desplaza y avisa en cada window.scrollTo, que ScrollRestoration (AppShell) pide al navegar.
 if (typeof window !== 'undefined') window.scrollTo = () => undefined;
 

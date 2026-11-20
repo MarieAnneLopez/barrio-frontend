@@ -71,7 +71,8 @@ export async function proxyToBackend(request: Request, env: ProxyEnv, wake = WAK
   const target = new URL(`${incoming.pathname}${incoming.search}`, env.BACKEND_URL);
   const init: RequestInit = { method: request.method, headers: forwardedHeaders(request, env), redirect: 'manual' };
   if (request.method !== 'GET' && request.method !== 'HEAD') init.body = await request.arrayBuffer();
-  const response = await fetchAwake(target, init, wake);
+  const chatPost = incoming.pathname === '/api/v1/chat' && request.method === 'POST';
+  const response = await fetchAwake(target, init, chatPost ? { totalMs: 0, stepMs: 0 } : wake);
   if (response) return new Response(response.body, response);
   return json(502, 'BACKEND_UNAVAILABLE', 'El servidor está despertando; intenta de nuevo en un minuto');
 }
