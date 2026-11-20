@@ -1,5 +1,5 @@
 import { useFrame, useThree } from '@react-three/fiber';
-import { useEffect, useRef, type RefObject } from 'react';
+import { useCallback, useEffect, useRef, type RefObject } from 'react';
 import type { MapControls as MapControlsImpl } from 'three-stdlib';
 import { useHeroStore } from '../heroStore';
 import type { HomeView } from '../referenceView';
@@ -60,8 +60,8 @@ export function useCameraGoal(
     keepAbove(camera.position);
   });
 
-  return () => {
+  return useCallback(() => {
     goal.current = null;
     wantsFocus.current = false;
-  };
+  }, []);
 }

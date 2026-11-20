@@ -9,7 +9,7 @@ import { Color, Vector3 } from 'three';
  */
 export const LIGHT = {
   /** 0 de día, 1 de noche; suave en el atardecer y el amanecer. */
-  uNight: { value: 0 },
+  uNight: { value: 1 },
   /** 0 fuera del atardecer y el amanecer; 1 en su punto medio. */
   uDusk: { value: 0 },
   /** Hacia el astro que ilumina (unitaria). */

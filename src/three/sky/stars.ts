@@ -7,8 +7,8 @@ import { FOV_DEG } from '../referenceView';
 
 /** Celdas por radián de la esfera del cielo. */
 export const STAR_CELLS = 1400;
-/** Estrellas por radián cuadrado de cielo (≈ 3 veces las de antes: con puntos pequeños, la noche se veía vacía). */
-export const STARS_PER_SQ_RADIAN = 400;
+/** Densidad angular para que también se distingan estrellas en el estrecho encuadre del mapa. */
+export const STARS_PER_SQ_RADIAN = 3200;
 /** Umbral del hash para encender una celda: la probabilidad por celda da la densidad pedida. */
 export const STAR_THRESHOLD = 1 - STARS_PER_SQ_RADIAN / (STAR_CELLS * STAR_CELLS);
 
@@ -32,6 +32,8 @@ float starAt(vec3 dir) {
   vec3 cell = dir * ${STAR_CELLS.toFixed(1)};
   float on = step(${STAR_THRESHOLD.toFixed(8)}, starHash(floor(cell)));
   float dot3 = length(fract(cell) - 0.5);
-  return on * (1.0 - smoothstep(0.16, 0.32, dot3));
+  float variation = starHash(floor(cell) + vec3(19.0, 7.0, 41.0));
+  float radius = mix(0.25, 0.46, variation);
+  return on * mix(0.40, 1.0, variation) * (1.0 - smoothstep(radius * 0.5, radius, dot3));
 }
 `;

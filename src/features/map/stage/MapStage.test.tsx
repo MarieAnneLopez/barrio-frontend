@@ -69,14 +69,14 @@ describe('escenario del mapa a pantalla completa', () => {
 });
 
 describe('tono del ciclo y enlaces directos', () => {
-  it('expone la fase del ciclo (data-ciclo) y, con movimiento reducido, queda de día', () => {
+  it('expone la fase del ciclo (data-ciclo) y, con movimiento reducido, queda de noche', () => {
     vi.spyOn(Date, 'now').mockReturnValue(CYCLE_MS * 100 + 540_000); // en plena noche
     const { unmount } = renderStage();
     expect(screen.getByRole('region', { name: 'Maqueta 3D de El Tintal' })).toHaveAttribute('data-ciclo', 'noche');
     unmount();
     act(() => useA11yStore.setState({ reducedMotion: true }));
     renderStage();
-    expect(screen.getByRole('region', { name: 'Maqueta 3D de El Tintal' })).toHaveAttribute('data-ciclo', 'dia');
+    expect(screen.getByRole('region', { name: 'Maqueta 3D de El Tintal' })).toHaveAttribute('data-ciclo', 'noche');
     vi.restoreAllMocks();
   });
 

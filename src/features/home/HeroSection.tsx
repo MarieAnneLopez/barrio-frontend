@@ -1,7 +1,7 @@
-import { useEffect, useLayoutEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Skeleton } from '../../components/ui/Skeleton';
-import { useSceneHost } from '../../three/sceneHost';
+import { useStageSlot } from '../map/stage/useStageSlot';
 import { useTintal3D } from '../../three/data/useTintal3D';
 import { HeroHud } from './HeroHud';
 import { SittingMarie } from './SittingMarie';
@@ -22,29 +22,14 @@ export function HeroSection() {
   const { t } = useTranslation();
   const state = useTintal3D(); // datos estáticos; reintenta sola: nunca muestra un error
   const section = useRef<HTMLElement>(null);
-  const slot = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    const { attach, detach } = useSceneHost.getState();
-    if (slot.current) attach(slot.current, 'cine');
-    return detach;
-  }, []);
-
-  // Fuera de pantalla no se dibujan cuadros.
-  useEffect(() => {
-    const node = section.current;
-    if (!node || typeof IntersectionObserver === 'undefined') return undefined;
-    const observer = new IntersectionObserver(([entry]) => useSceneHost.getState().setVisible(entry?.isIntersecting ?? true));
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
+  const slot = useStageSlot(section, 'cine');
 
   useEffect(() => {
     const node = slot.current;
     if (!node) return undefined;
     node.addEventListener('wheel', scrollsThePage, { capture: true, passive: true });
     return () => node.removeEventListener('wheel', scrollsThePage, { capture: true });
-  }, []);
+  }, [slot]);
 
   return (
     // El recuadro recorta su contenido (overflow-hidden): Mini Marie va afuera, arriba a la derecha (D88).

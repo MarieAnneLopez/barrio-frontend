@@ -1,26 +1,26 @@
-import { useEffect, useLayoutEffect, useRef, type RefObject } from 'react';
-import { useSceneHost } from '../../../three/sceneHost';
+import { useLayoutEffect, useRef, type RefObject } from 'react';
+import { useSceneHost, type SceneMode } from '../../../three/sceneHost';
 
-/**
- * Presta el recuadro del escenario a la maqueta única (ScenePortal, D83) en modo «mapa»: no crea
- * otro lienzo ni otro contexto WebGL. Fuera de pantalla (al bajar al pie) deja de dibujar cuadros.
- */
-export function useStageSlot(section: RefObject<HTMLElement | null>): RefObject<HTMLDivElement> {
+/** Solo el recuadro dueño del lienzo puede detenerlo o desconectarlo al salir. */
+export function useStageSlot(section: RefObject<HTMLElement | null>, mode: SceneMode = 'mapa'): RefObject<HTMLDivElement> {
   const slot = useRef<HTMLDivElement>(null);
-
   useLayoutEffect(() => {
-    const { attach, detach } = useSceneHost.getState();
-    if (slot.current) attach(slot.current, 'mapa');
-    return detach;
-  }, []);
-
-  useEffect(() => {
-    const node = section.current;
-    if (!node || typeof IntersectionObserver === 'undefined') return undefined;
-    const observer = new IntersectionObserver(([entry]) => useSceneHost.getState().setVisible(entry?.isIntersecting ?? true));
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [section]);
-
+    const owner = slot.current;
+    const region = section.current;
+    if (!owner || !region) return;
+    const { attach, detach, setVisible } = useSceneHost.getState();
+    attach(owner, mode);
+    let mounted = true;
+    const observer = typeof IntersectionObserver !== 'undefined' && new IntersectionObserver((entries) => {
+      const latest = entries[entries.length - 1];
+      if (mounted && latest) setVisible(owner, latest.isIntersecting);
+    });
+    if (observer) observer.observe(region);
+    return () => {
+      mounted = false;
+      if (observer) observer.disconnect();
+      detach(owner);
+    };
+  }, [mode, section]);
   return slot;
 }

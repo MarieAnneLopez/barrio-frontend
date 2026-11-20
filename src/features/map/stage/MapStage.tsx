@@ -2,10 +2,9 @@ import '../vidrio.css';
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Skeleton } from '../../../components/ui/Skeleton';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
-import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useTintal3D } from '../../../three/data/useTintal3D';
 import { useSelectionStore } from '../../../three/selection/selectionStore';
-import { useSkyClock } from '../../../three/sky/useSkyClock';
+import { NIGHT_SKY } from '../../../three/sky/useSkyClock';
 import { SittingMarie } from '../../home/SittingMarie';
 import { SelectionCard } from '../card/SelectionCard';
 import { StageBar } from './StageBar';
@@ -41,7 +40,6 @@ export function MapStage({ label, title, emoji, children, onOpenPlace, mascot = 
   const world = useTintal3D();
   const section = useRef<HTMLElement>(null);
   const slot = useStageSlot(section);
-  const { phase } = useSkyClock(useReducedMotion());
   const panelId = useId();
   const menu = useRef<HTMLButtonElement>(null);
   const startsOpen = useStageParams();
@@ -68,7 +66,7 @@ export function MapStage({ label, title, emoji, children, onOpenPlace, mascot = 
       <section
         ref={section}
         data-hero
-        data-ciclo={phase}
+        data-ciclo={NIGHT_SKY.phase}
         aria-label={label}
         className="relative h-[calc(100svh-4rem)] min-h-[26rem] overflow-hidden bg-[var(--map-fondo)]"
       >

@@ -37,6 +37,7 @@ interface Props {
  */
 export function CameraRig({ radius, view, reducedMotion }: Props) {
   const controls = useRef<MapControlsImpl>(null);
+  const canvas = useThree((s) => s.gl.domElement);
   const aspect = useThree((s) => s.size.width / Math.max(1, s.size.height));
   const mode = useSceneHost((s) => s.mode);
   const home = useMemo(
@@ -72,6 +73,7 @@ export function CameraRig({ radius, view, reducedMotion }: Props) {
 
   return (
     <MapControls
+      domElement={canvas}
       key={epoch}
       ref={controls}
       makeDefault

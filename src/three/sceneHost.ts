@@ -29,8 +29,8 @@ interface SceneHost {
   /** Modo de la sección que la acogió por última vez (CameraRig encuadra según él). */
   mode: SceneMode;
   attach: (slot: HTMLElement, mode?: SceneMode) => void;
-  detach: () => void;
-  setVisible: (visible: boolean) => void;
+  detach: (slot: HTMLElement) => void;
+  setVisible: (slot: HTMLElement, visible: boolean) => void;
 }
 
 export const useSceneHost = create<SceneHost>()((set) => ({
@@ -40,13 +40,16 @@ export const useSceneHost = create<SceneHost>()((set) => ({
   mode: 'cine',
   attach: (slot, mode = 'cine') => {
     slot.appendChild(sceneHostElement());
-    set({ requested: true, attached: true, mode });
+    set({ requested: true, attached: true, visible: true, mode });
   },
-  detach: () => {
+  detach: (slot) => {
+    if (element?.parentElement !== slot) return;
     element?.remove();
     set({ attached: false, visible: true });
   },
-  setVisible: (visible) => set({ visible }),
+  setVisible: (slot, visible) => {
+    if (element?.parentElement === slot) set({ visible });
+  },
 }));
 
 /** Para las pruebas: cada una empieza sin escena montada. */

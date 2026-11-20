@@ -18,7 +18,6 @@ import { FOV_DEG } from './referenceView';
 import { FollowCamera } from './sky/FollowCamera';
 import { SkyDome } from './sky/SkyDome';
 import { SkyDriver } from './sky/SkyDriver';
-import { SunMoon } from './sky/SunMoon';
 import { Streets } from './streets/Streets';
 import type { CategoryData } from './useTintalData';
 import { Vida } from './vida/Vida';
@@ -35,7 +34,7 @@ interface Props {
 
 /**
  * Maqueta 3D de El Tintal (§11.1.1; gran actualización): el barrio real flota sobre una isla en el
- * cielo, con ciclo de día y noche (D106), nubes por debajo y calidad adaptable. Un solo contexto
+ * cielo, de noche, nubes por debajo y calidad adaptable. Un solo contexto
  * WebGL para toda la app (ScenePortal); si el navegador lo pierde, se vuelve a crear solo.
  */
 export default function TintalScene({ world, places, active, reducedMotion }: Props) {
@@ -61,11 +60,10 @@ export default function TintalScene({ world, places, active, reducedMotion }: Pr
       onPointerLeave={() => setInteracting(false)}
     >
       {/* La niebla toma el color del horizonte del ciclo (SkyDriver); CameraRig la ajusta a la distancia. */}
-      <fog attach="fog" args={[mapColor('dia-horizonte'), radius, radius * 4]} />
+      <fog attach="fog" args={[mapColor('manzana'), radius, radius * 4]} />
       <SkyDriver still={reducedMotion} radius={radius} />
       <FollowCamera>
-        <SkyDome radius={radius * 7} />
-        <SunMoon distance={radius * 6} still={reducedMotion} />
+        <SkyDome radius={radius * 7} density={density} />
       </FollowCamera>
       <Island outline={framing.outline} />
       <Clouds center={framing.center} radius={radius} count={Math.max(8, Math.round(28 * density))} still={reducedMotion} />
