@@ -12,6 +12,7 @@ import type { CategoryConfig } from '../../lib/categoryConfig';
 import { moduleFields } from '../../lib/moduleFields';
 import { buildFormSchema, toPayload, type FormValues } from './formSchema';
 import { FormField } from './FormField';
+import { EditorialFields } from './EditorialFields';
 import { toFormValues } from './formValues';
 import { WriteError } from './WriteError';
 
@@ -21,7 +22,7 @@ interface CrudFormModalProps {
   item: ModuleItem | undefined;
   open: boolean;
   onClose: () => void;
-  onSaved: () => void;
+  onSaved: (published: boolean) => void;
 }
 
 /** Crear o editar un lugar (§11.3): campos del módulo validados con zod, como la API. */
@@ -42,11 +43,18 @@ export function CrudFormModal({ category, item, open, onClose, onSaved }: CrudFo
   const submit = async (values: FormValues) => {
     setFailure(null);
     try {
-      const body = toPayload(values, fields, geometry);
+      const initial = toFormValues(item, fields, geometry);
+      const changed = creating ? fields : fields.filter(({ name }) => values[name] !== initial[name]);
+      const body = toPayload(values, changed, geometry);
+      if (!creating && values.lon === initial.lon && values.lat === initial.lat && !values.geometry) delete body.geometry;
+      for (const name of ['descripcion_es', 'descripcion_en']) {
+        if (values[name] !== initial[name]) body[name] = values[name] || null;
+      }
+      if (values.publicado !== initial.publicado) body.publicado = values.publicado === 'true';
       if (creating) await apiSend('POST', `/${slug}`, body);
       else await apiSend('PATCH', `/${slug}/${item.id}`, body);
       useAvatarStore.getState().dispatch({ type: 'CELEBRATE' });
-      onSaved();
+      onSaved(values.publicado === 'true');
     } catch (error) {
       setFailure(error instanceof ApiError ? error : new ApiError(0, 'UNKNOWN', String(error)));
     }
@@ -72,6 +80,7 @@ export function CrudFormModal({ category, item, open, onClose, onSaved }: CrudFo
             error={err('geometry')}
           />
         )}
+        <EditorialFields register={register} />
         <WriteError error={failure} />
         <div className="flex justify-end gap-3">
           <Button type="button" variant="ghost" onClick={onClose}>{t('forms.cancel')}</Button>

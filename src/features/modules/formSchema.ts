@@ -62,7 +62,9 @@ export function buildFormSchema(
   t: TFunction,
 ): z.ZodType<FormValues, FormValues> {
   const shape = Object.fromEntries(fields.map((f) => [f.name, fieldRule(f, t)]));
-  return z.object({ ...shape, ...geometryRules(kind, creating, t) }) as unknown as z.ZodType<FormValues, FormValues>;
+  const editorial = { descripcion_es: z.string().trim().max(1000).optional(), descripcion_en: z.string().trim().max(1000).optional(),
+    publicado: z.enum(['true', 'false']).optional() };
+  return z.object({ ...shape, ...editorial, ...geometryRules(kind, creating, t) }) as unknown as z.ZodType<FormValues, FormValues>;
 }
 
 /** Texto del formulario → JSON de la API: vacío = null, números, booleanos y geometría. */

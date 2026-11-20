@@ -20,6 +20,7 @@ const description = (item: ModuleItem, lang: string) => (lang === 'en' ? item.de
 interface ItemDetailModalProps {
   slug: string;
   itemId: number | null;
+  includeDrafts?: boolean;
   onClose: () => void;
   /** Cierra la ficha y muestra el lugar en la maqueta de la sección. */
   onShowOnMap: (id: number) => void;
@@ -28,9 +29,9 @@ interface ItemDetailModalProps {
 }
 
 /** Ficha completa de un lugar: campos, verificación, fuente, ubicación en la maqueta, galería y calificaciones. */
-export function ItemDetailModal({ slug, itemId, onClose, onShowOnMap, onEdit, onDeleted }: ItemDetailModalProps) {
+export function ItemDetailModal({ slug, itemId, includeDrafts, onClose, onShowOnMap, onEdit, onDeleted }: ItemDetailModalProps) {
   const { t, i18n } = useTranslation();
-  const item = useApi<ModuleItem>(itemId === null ? null : `/${slug}/${itemId}`);
+  const item = useApi<ModuleItem>(itemId === null ? null : `/${slug}${includeDrafts ? '/admin' : ''}/${itemId}`);
   const data = item.status === 'success' ? item.data : undefined;
   const title = data ? labelOf(data, slug) : t('modules.detail');
 
@@ -64,9 +65,11 @@ export function ItemDetailModal({ slug, itemId, onClose, onShowOnMap, onEdit, on
               ))}
           </dl>
           <SourceLine item={data} />
+          {data.publicado === false ? <p><StateIcon kind="warning" />{t('editorial:draft')}</p> : <>
           <PlaceOnModel slug={slug} item={data} onShow={onShowOnMap} />
           <Gallery slug={slug} itemId={data.id} place={title} />
           <RatingPanel slug={slug} itemId={data.id} />
+          </>}
           <AuthGuard role="admin">
             <ItemActions path={`/${slug}/${data.id}`} name={title} onEdit={() => onEdit(data)} onDeleted={onDeleted} />
           </AuthGuard>

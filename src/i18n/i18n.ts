@@ -2,6 +2,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { readPref, writePref } from '../lib/storage';
 import es from './es.json';
+import editorial from './editorial.es.json';
 
 export const SUPPORTED_LANGUAGES = ['es', 'en'] as const;
 export type Language = (typeof SUPPORTED_LANGUAGES)[number];
@@ -22,7 +23,7 @@ export function storedLanguage(): Language {
 // usa. "content" son traducciones al inglés de textos que llegan de la API en español (hitos de la
 // historia); en español se usa el texto de la API tal cual.
 void i18n.use(initReactI18next).init({
-  resources: { es: { translation: es } },
+  resources: { es: { translation: es, editorial } },
   lng: DEFAULT_LANGUAGE,
   fallbackLng: DEFAULT_LANGUAGE,
   supportedLngs: SUPPORTED_LANGUAGES,
@@ -33,9 +34,10 @@ void i18n.use(initReactI18next).init({
 /** Trae las traducciones de un idioma si aún no están (el inglés, en su propio chunk). */
 export async function loadLanguage(lng: Language): Promise<void> {
   if (lng !== 'en' || i18n.hasResourceBundle('en', 'translation')) return;
-  const [en, content] = await Promise.all([import('./en.json'), import('./content.en.json')]);
+  const [en, content, labels] = await Promise.all([import('./en.json'), import('./content.en.json'), import('./editorial.en.json')]);
   i18n.addResourceBundle('en', 'translation', en.default);
   i18n.addResourceBundle('en', 'content', content.default);
+  i18n.addResourceBundle('en', 'editorial', labels.default);
 }
 
 // <html lang> sigue al idioma activo (lectores de pantalla, separación silábica).

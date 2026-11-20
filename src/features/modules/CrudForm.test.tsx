@@ -81,7 +81,7 @@ describe('Crear, editar y eliminar', () => {
     await userEvent.type(name, 'Kings Barber');
     await userEvent.click(within(form).getByRole('button', { name: 'Guardar cambios' }));
     await waitFor(() => expect(sent[0]?.method).toBe('PATCH'));
-    expect(sent[0]?.body).toMatchObject({ nombre: 'Kings Barber', servicios: 'Corte, barba' });
+    expect(sent[0]?.body).toEqual({ nombre: 'Kings Barber' });
 
     await userEvent.click(await screen.findByRole('button', { name: 'Ver detalle de Barbería Kings' }));
     await userEvent.click(await screen.findByRole('button', { name: 'Eliminar' }));

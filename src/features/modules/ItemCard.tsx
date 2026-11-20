@@ -6,6 +6,7 @@ import { isSampleRecord } from '../../lib/verification';
 import { useStage } from '../map/stage/stageContext';
 import { displayValue, hasValue } from './displayValue';
 import { VerifiedBadge } from './VerifiedBadge';
+import { StateIcon } from '../../components/ui/StateIcon';
 
 interface ItemCardProps {
   slug: string;
@@ -49,6 +50,7 @@ export function ItemCard({ slug, item, selected, onShowOnMap, onOpen }: ItemCard
           ))}
         </dl>
       ) : null}
+      {item.publicado === false && <p className="m-0"><StateIcon kind="warning" />{t('editorial:draft')}</p>}
       {sample ? <p className="m-0 text-step--1 text-fg">{t('stage.sample')}</p> : null}
       <div className="flex flex-wrap gap-2">
         <button
@@ -59,7 +61,7 @@ export function ItemCard({ slug, item, selected, onShowOnMap, onOpen }: ItemCard
           {t('modules.detail')}{' '}
           <span className="sr-only">{t('modules.detailOf', { name })}</span>
         </button>
-        {item.geometry && !sample && onTheModel(slug) ? (
+        {item.geometry && !sample && item.publicado !== false && onTheModel(slug) ? (
           <button
             type="button"
             aria-pressed={selected}

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '../../components/ui/Button';
+import { AdminListControls } from './AdminListControls';
 import type { ModuleItem } from '../../lib/apiTypes';
 import type { CategoryConfig } from '../../lib/categoryConfig';
 import { useSelectionStore } from '../../three/selection/selectionStore';
-import { AuthGuard } from '../auth/AuthGuard';
+import { useAuthStore } from '../../store/authStore';
 import { MapStage } from '../map/stage/MapStage';
 import { CrudFormModal } from './CrudFormModal';
 import { ItemDetailModal } from './ItemDetailModal';
@@ -21,11 +21,7 @@ interface ModuleDetailViewProps {
   focusId?: number | null;
 }
 
-/**
- * Sección de un módulo (§11.3; gran actualización): la maqueta a pantalla completa con solo sus
- * lugares reales; la lista filtrable va en el panel izquierdo y lo elegido abre su ficha a la
- * derecha, con la cámara sobre el lugar. La ficha completa y el formulario siguen siendo modales.
- */
+/** El panel puede incluir borradores mientras la maqueta conserva la colección pública. */
 export function ModuleDetailView({ category, initialOpenId = null, focusId = null }: ModuleDetailViewProps) {
   const { t } = useTranslation();
   const [page, setPage] = useState(1);
@@ -35,7 +31,9 @@ export function ModuleDetailView({ category, initialOpenId = null, focusId = nul
   // Formulario: cerrado (null), crear (undefined) o editar un registro.
   const [editing, setEditing] = useState<ModuleItem | undefined | null>(null);
   const { slug } = category;
-  const { list, features, notLoaded, refresh } = useModuleData(slug, page, query, filters);
+  const admin = useAuthStore((s) => s.user?.rol === 'admin');
+  const [drafts, setDrafts] = useState(false);
+  const { list, features, notLoaded, refresh } = useModuleData(slug, page, query, filters, admin && drafts);
   const showOnMap = useModuleMap(slug, features.status === 'success' ? features.data : null, focusId);
   const selectedId = useSelectionStore((s) => (s.selected?.kind === 'place' && s.selected.slug === slug ? s.selected.id : null));
   const name = t(`categories.${slug}.name`);
@@ -52,11 +50,8 @@ export function ModuleDetailView({ category, initialOpenId = null, focusId = nul
         <ModuleIntro category={category} />
         <div className="flex flex-wrap items-end justify-between gap-3">
           <ModuleSearch onSearch={(q) => refine({ query: q })} disabled={notLoaded} />
-          <AuthGuard role="admin">
-            <Button variant="secondary" onClick={() => setEditing(undefined)} disabled={notLoaded}>
-              {t('forms.add')}
-            </Button>
-          </AuthGuard>
+          {admin && <AdminListControls drafts={drafts} notLoaded={notLoaded} onAdd={() => setEditing(undefined)}
+            onDrafts={(next) => { setDrafts(next); setPage(1); }} />}
         </div>
         <ModuleFilters slug={slug} value={filters} onChange={(f) => refine({ filters: f })} disabled={notLoaded} />
         <ModuleList
@@ -73,6 +68,7 @@ export function ModuleDetailView({ category, initialOpenId = null, focusId = nul
       <ItemDetailModal
         slug={slug}
         itemId={openId}
+        includeDrafts={admin && drafts}
         onClose={() => setOpenId(null)}
         onShowOnMap={(id) => {
           setOpenId(null);
@@ -88,13 +84,17 @@ export function ModuleDetailView({ category, initialOpenId = null, focusId = nul
           refresh();
         }}
       />
-      <CrudFormModal
+      {admin && editing !== null && <CrudFormModal
         category={category}
         item={editing ?? undefined}
-        open={editing !== null}
+        open
         onClose={() => setEditing(null)}
-        onSaved={() => { setEditing(null); refresh(); }}
-      />
+        onSaved={(published) => {
+          if (!published && editing?.id === selectedId) useSelectionStore.getState().select(null);
+          setEditing(null);
+          refresh();
+        }}
+      />}
     </>
   );
 }

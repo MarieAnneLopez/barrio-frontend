@@ -8,6 +8,9 @@ const text = (v: unknown) => (v === null || v === undefined ? '' : String(v));
 /** Registro de la API → valores de texto del formulario (vacío si no hay registro). */
 export function toFormValues(item: ModuleItem | undefined, fields: FieldSpec[], kind: GeometryKind): FormValues {
   const values: FormValues = Object.fromEntries(fields.map((f) => [f.name, text(item?.[f.name])]));
+  values.descripcion_es = text(item?.descripcion_es);
+  values.descripcion_en = text(item?.descripcion_en);
+  values.publicado = String(item?.publicado ?? true);
   const geometry = item?.geometry;
   if (kind === 'POINT') {
     const [lon, lat] = geometry?.type === 'Point' ? geometry.coordinates : [];
