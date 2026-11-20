@@ -39,7 +39,7 @@ export function ItemCard({ slug, item, selected, onShowOnMap, onOpen }: ItemCard
         <VerifiedBadge item={item} />
       </div>
       {rows.length ? (
-        <dl className="m-0 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-step--1">
+        <dl className="place-fields m-0 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-step--1">
           {rows.map((field) => (
             <div key={field} className="contents">
               <dt className="text-fg-muted">{t(`fields.${field}`)}</dt>

@@ -2,11 +2,11 @@ import { useLayoutEffect, type RefObject } from 'react';
 
 /** power2.out en CSS: la misma curva que usaba con GSAP. */
 const EASE = 'cubic-bezier(0.5, 1, 0.89, 1)';
-const FROM: Keyframe = { opacity: 0, transform: 'translateY(16px)' };
+const FROM: Keyframe = { opacity: 0, transform: 'scaleY(0)' };
 
 function hide(item: HTMLElement) {
   item.style.opacity = '0';
-  item.style.transform = 'translateY(16px)';
+  item.style.transform = 'scaleY(0)';
 }
 
 function show(item: HTMLElement) {
@@ -15,8 +15,7 @@ function show(item: HTMLElement) {
 }
 
 /**
- * Revela cada hijo [data-reveal] cuando entra en pantalla (una sola vez): opacidad + 16 px de
- * subida, 0,5 s. Cada hito se observa solo: aparecen según el lector baja, sin cola de espera.
+ * Dibuja el tramo vertical de cada hito al entrar en pantalla. El texto siempre está visible.
  * Con movimiento reducido no hay animación y todo se ve desde el principio. Sin GSAP: un
  * IntersectionObserver y una animación nativa del navegador (WAAPI, fuera del hilo principal);
  * Historia va en el paquete inicial (H27) y así no lo engorda (gran actualización, rendimiento).
@@ -26,6 +25,7 @@ export function useScrollReveal(root: RefObject<HTMLElement | null>, ready: bool
     const node = root.current;
     if (!ready || reduced || !node || typeof IntersectionObserver !== 'function') return undefined;
     const items = Array.from(node.querySelectorAll<HTMLElement>('[data-reveal]'));
+    const lines = new Map(items.map((item) => [item, item.querySelector<HTMLElement>('[data-reveal-line]')]));
     const running: Animation[] = [];
     // El hito ya está a la vista cuando su borde de arriba pasa el 85 % de la altura de la ventana.
     const observer = new IntersectionObserver(
@@ -35,22 +35,25 @@ export function useScrollReveal(root: RefObject<HTMLElement | null>, ready: bool
           const passed = boundingClientRect.bottom < 0;
           if ((!isIntersecting && !passed) || !(target instanceof HTMLElement)) return;
           observer.unobserve(target);
-          show(target);
+          const line = lines.get(target);
+          if (!line) return;
+          show(line);
           if (passed) return;
-          const animation = target.animate?.([FROM, { opacity: 1, transform: 'none' }], { duration: 500, easing: EASE });
+          const animation = line.animate?.([FROM, { opacity: 1, transform: 'none' }], { duration: 500, easing: EASE });
           if (animation) running.push(animation);
         });
       },
       { rootMargin: '0px 0px -15% 0px' },
     );
-    items.forEach((item) => {
-      hide(item); // antes de pintar: sin parpadeo
+    lines.forEach((line, item) => {
+      if (!line) return;
+      hide(line); // antes de pintar: sin parpadeo
       observer.observe(item);
     });
     return () => {
       observer.disconnect();
       running.forEach((animation) => animation.cancel());
-      items.forEach(show);
+      lines.forEach((line) => { if (line) show(line); });
     };
   }, [root, ready, reduced]);
 }

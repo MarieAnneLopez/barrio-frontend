@@ -1,4 +1,5 @@
 import { act, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import i18n from '../../i18n/i18n';
 import { mockApi } from '../../test/mockApi';
@@ -24,6 +25,9 @@ describe('Ayuda (H28)', () => {
     ]));
     expect(screen.queryByText('En construcción')).not.toBeInTheDocument();
     expect(screen.getByText(/Enter abre y Escape cierra/)).toBeInTheDocument();
+    const accounts = screen.getByRole('heading', { name: 'Cuentas y permisos' }).closest('summary') as HTMLElement;
+    await userEvent.click(accounts);
+    expect(accounts.closest('details')).toHaveAttribute('open');
     expect(screen.getByRole('link', { name: 'Ir a Acceso / Sesión' })).toHaveAttribute('href', '/acceso');
   });
 

@@ -6,7 +6,7 @@ import { PageHeader } from './PageHeader';
 export function CreatorPage() {
   const { t } = useTranslation();
   return (
-    <div className="flex max-w-3xl flex-col gap-8">
+    <div className="creator-page flex max-w-3xl flex-col gap-8">
       <PageHeader title={t('nav.creator')} description={t('pages.creator')} />
       <CreatorProfileSection headingLevel={2} />
     </div>

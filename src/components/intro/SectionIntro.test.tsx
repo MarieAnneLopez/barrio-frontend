@@ -47,4 +47,13 @@ describe('entrada de sección (D101)', () => {
     expect(container.querySelector('[data-intro]')).toHaveAttribute('data-done');
     expect(container.querySelector('[data-layer="base"]')).toBeNull();
   });
+
+  it.each(['/preguntas-frecuentes', '/faq', '/ayuda', '/acceso', '/creditos-fotos'])(
+    '%s presenta el título desde el primer render',
+    (path) => {
+      const { container } = renderAt(path);
+      expect(container.querySelector('[data-intro]')).toHaveAttribute('data-done');
+      expect(container.querySelector('[data-layer="base"]')).toBeNull();
+    },
+  );
 });

@@ -4,6 +4,7 @@ import { useApi } from '../../hooks/useApi';
 import type { RatingSummary } from '../../lib/apiTypes';
 import { AuthGuard } from '../auth/AuthGuard';
 import { LoginPrompt } from '../auth/LoginPrompt';
+import { useRecentRating } from '../ranking/recentRating';
 import { RatingForm } from './RatingForm';
 
 /** Promedio, últimas reseñas y formulario de un lugar. */
@@ -50,7 +51,7 @@ export function RatingPanel({ slug, itemId }: { slug: string; itemId: number }) 
       <AuthGuard role="user" fallback={
         <p className="m-0 text-step--1 text-fg-secondary"><LoginPrompt message={t('ratings.needLogin')} /></p>
       }>
-        <RatingForm path={path} onRated={summary.retry} />
+        <RatingForm path={path} onRated={() => { useRecentRating.getState().mark(slug, itemId); summary.retry(); }} />
       </AuthGuard>
     </section>
   );

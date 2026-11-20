@@ -23,13 +23,15 @@ function layout(title: string, order: WordOrder, indents: readonly number[]) {
  * escalonado, máscaras y elipse del revelado (playManifesto); por ruta cambian la esquina del
  * revelado, el orden de las palabras, el desfase de las líneas y el color revelado. Se reproduce
  * una vez por entrada (PageHeader la monta con la ruta de clave), dura menos de 1,5 s y no tapa el
- * contenido; con movimiento reducido queda en su estado final.
+ * contenido. FAQ, Ayuda, Acceso y Créditos dejan el título visible desde el inicio, igual que
+ * con movimiento reducido.
  */
 export function SectionIntro(content: IntroContent) {
   const { pathname } = useLocation();
   const reduced = useReducedMotion();
   const node = useRef<HTMLElement>(null);
-  const [done, setDone] = useState(reduced);
+  const quiet = ['/preguntas-frecuentes', '/faq', '/ayuda', '/acceso', '/creditos-fotos'].includes(pathname);
+  const [done, setDone] = useState(reduced || quiet);
   // Pedir movimiento reducido a media animación la da por terminada (ajuste durante el render).
   if (reduced && !done) setDone(true);
   const variant = introVariant(pathname);

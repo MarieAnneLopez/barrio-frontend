@@ -1,0 +1,36 @@
+/* La fila sigue siendo identificable con movimiento reducido. */
+[data-recent-rating] {
+  outline: 2px solid var(--border-strong);
+  outline-offset: -2px;
+}
+
+@keyframes open-map-card {
+  from { opacity: 0; transform: translateX(12px); }
+}
+@keyframes reveal-profile {
+  from { clip-path: inset(0 0 100% 0); }
+  to { clip-path: inset(0); }
+}
+@keyframes show-credit {
+  from { opacity: 0.55; }
+}
+@keyframes acknowledge-rating {
+  50% { transform: scale(1.035); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root:not(.reduce-motion) [data-card] {
+    animation: open-map-card 180ms var(--ease-emphasis) 65ms backwards;
+  }
+  :root:not(.reduce-motion) .creator-page [role="img"] {
+    animation: reveal-profile 420ms var(--ease-emphasis);
+  }
+  :root:not(.reduce-motion) .photo-credits {
+    animation: show-credit 180ms ease-out;
+  }
+  :root:not(.reduce-motion) [data-rating-done] fieldset,
+  :root:not(.reduce-motion) [data-recent-rating] [role="img"] {
+    transform-origin: left center;
+    animation: acknowledge-rating 270ms ease-in-out;
+  }
+}

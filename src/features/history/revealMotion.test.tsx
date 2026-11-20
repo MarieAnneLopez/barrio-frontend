@@ -40,29 +40,32 @@ describe('CountUp sin GSAP', () => {
 function Revealed({ ready = true, reduced = false }) {
   const root = useRef<HTMLDivElement>(null);
   useScrollReveal(root, ready, reduced);
-  return <div ref={root}><p data-reveal>uno</p><p data-reveal>dos</p></div>;
+  return <div ref={root}><p data-reveal><span data-reveal-line />uno</p><p data-reveal><span data-reveal-line />dos</p></div>;
 }
 
+const lineOf = (item: HTMLElement) => item.querySelector<HTMLElement>('[data-reveal-line]');
+
 describe('useScrollReveal sin GSAP', () => {
-  it('oculta cada hito hasta que entra en pantalla y luego lo deja visible', () => {
+  it('observa el hito visible y revela solo su línea al entrar en pantalla', () => {
     render(<Revealed />);
     const [uno, dos] = [screen.getByText('uno'), screen.getByText('dos')];
-    expect(uno.style.opacity).toBe('0');
-    act(() => seen[0]?.([{ isIntersecting: true, target: uno, boundingClientRect: { bottom: 300 } }]));
     expect(uno.style.opacity).toBe('');
+    expect(lineOf(uno)?.style.opacity).toBe('0');
+    act(() => seen[0]?.([{ isIntersecting: true, target: uno, boundingClientRect: { bottom: 300 } }]));
+    expect(lineOf(uno)?.style.opacity).toBe('');
     act(() => seen[0]?.([{ isIntersecting: false, target: dos, boundingClientRect: { bottom: 900 } }]));
-    expect(dos.style.opacity).toBe('0');
+    expect(lineOf(dos)?.style.opacity).toBe('0');
   });
 
   it('lo que ya quedó arriba de la ventana se muestra sin esperar', () => {
     render(<Revealed />);
     const uno = screen.getByText('uno');
     act(() => seen[0]?.([{ isIntersecting: false, target: uno, boundingClientRect: { bottom: -40 } }]));
-    expect(uno.style.opacity).toBe('');
+    expect(lineOf(uno)?.style.opacity).toBe('');
   });
 
   it('con movimiento reducido no oculta nada', () => {
     render(<Revealed reduced />);
-    expect(screen.getByText('uno').style.opacity).toBe('');
+    expect(lineOf(screen.getByText('uno'))?.style.opacity).toBe('');
   });
 });

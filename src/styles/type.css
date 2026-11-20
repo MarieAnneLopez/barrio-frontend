@@ -47,3 +47,7 @@ h3 {
 .font-mono {
   font-variant-numeric: tabular-nums;
 }
+
+button, input, select, textarea, .ui-pressable, [data-card] dd, .place-fields dd {
+  font-family: var(--ff-heading);
+}

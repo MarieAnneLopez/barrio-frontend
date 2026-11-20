@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useApi } from '../../hooks/useApi';
 import type { Photo } from '../../lib/apiTypes';
@@ -10,6 +10,7 @@ export function Gallery({ slug, itemId, place }: { slug: string; itemId: number;
   const { t, i18n } = useTranslation();
   const photos = useApi<Photo[]>(`/${slug}/${itemId}/fotos`);
   const [open, setOpen] = useState<number | null>(null);
+  const thumbnails = useRef<HTMLUListElement>(null);
   const list = photos.status === 'success' ? photos.data : [];
 
   return (
@@ -19,7 +20,7 @@ export function Gallery({ slug, itemId, place }: { slug: string; itemId: number;
         <p className="m-0 text-step--1 text-fg-secondary">{t('gallery.empty')}</p>
       ) : null}
       {list.length ? (
-        <ul className="m-0 grid list-none grid-cols-3 gap-2 p-0">
+        <ul ref={thumbnails} className="m-0 grid list-none grid-cols-3 gap-2 p-0">
           {list.map((photo, index) => (
             <li key={photo.id}>
               <button
@@ -34,7 +35,8 @@ export function Gallery({ slug, itemId, place }: { slug: string; itemId: number;
           ))}
         </ul>
       ) : null}
-      <GalleryLightbox photos={list} index={open} onIndex={setOpen} place={place} />
+      <GalleryLightbox photos={list} index={open} onIndex={setOpen} place={place}
+        thumbnail={(i) => thumbnails.current?.children[i]?.querySelector('img')} />
     </section>
   );
 }

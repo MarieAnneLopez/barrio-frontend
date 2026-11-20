@@ -1,6 +1,7 @@
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 import type { Photo } from '../../lib/apiTypes';
+import { useA11yStore } from '../../store/a11yStore';
 import { GalleryLightbox } from './GalleryLightbox';
 
 // El visor de la Galería y de las fichas: la foto del tamaño que se ve, decodificada sin frenar la página.
@@ -24,5 +25,28 @@ describe('visor de fotos', () => {
     expect(img).toHaveAttribute('src', '/assets/photos/mapillary/1058964018263715-1024.webp');
     expect(img).not.toHaveAttribute('srcset');
     expect(img).toHaveAttribute('decoding', 'async');
+  });
+
+  it('cierra una vez si se activa movimiento reducido durante la salida', () => {
+    const dismiss = vi.fn();
+    const thumbnail = document.createElement('button');
+    vi.spyOn(thumbnail, 'getBoundingClientRect').mockReturnValue(new DOMRect(20, 30, 80, 60));
+    render(<GalleryLightbox
+      photos={[photo(1, '/assets/photos/lugares/campus-tagaste-1280.webp')]}
+      index={0} onIndex={dismiss} place="Lugar" thumbnail={() => thumbnail}
+    />);
+    const image = screen.getByRole('img', { name: 'Foto 1' });
+    vi.spyOn(image, 'getBoundingClientRect').mockReturnValue(new DOMRect(100, 120, 500, 360));
+    const exit = { cancel: vi.fn(), onfinish: null };
+    image.animate = vi.fn().mockReturnValue(exit);
+    const close = screen.getByRole('button', { name: 'Cerrar' });
+    fireEvent.click(close);
+    fireEvent.click(close);
+    expect(image.animate).toHaveBeenCalledTimes(1);
+    expect(dismiss).not.toHaveBeenCalled();
+    act(() => useA11yStore.setState({ reducedMotion: true }));
+    expect(exit.cancel).toHaveBeenCalledOnce();
+    expect(dismiss).toHaveBeenCalledExactlyOnceWith(null);
+    act(() => useA11yStore.setState({ reducedMotion: false }));
   });
 });

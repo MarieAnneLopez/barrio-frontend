@@ -1,12 +1,22 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Stars } from '../../components/ui/Stars';
 import type { RankingEntry } from '../../lib/apiTypes';
 import { categoryPath, findCategory } from '../../lib/categoryConfig';
+import { StateIcon } from '../../components/ui/StateIcon';
+import { useRecentRating } from './recentRating';
 
 /** Lista ordenada: posición, categoría, lugar (enlace a su ficha), estrellas y votos. */
 export function RankingList({ entries }: { entries: RankingEntry[] }) {
   const { t, i18n } = useTranslation();
+  const recent = useRecentRating((state) => state.key);
+  const present = entries.some((row) => recent === `${row.categoria_slug}-${row.objeto_id}`);
+  useEffect(() => {
+    if (!present) return;
+    const timer = window.setTimeout(useRecentRating.getState().clear, 4500);
+    return () => window.clearTimeout(timer);
+  }, [recent, present]);
   const format = (n: number) => n.toLocaleString(i18n.language === 'en' ? 'en-US' : 'es-CO');
 
   if (!entries.length) {
@@ -16,9 +26,10 @@ export function RankingList({ entries }: { entries: RankingEntry[] }) {
     <ol aria-label={t('ranking.list')} className="m-0 flex list-none flex-col gap-3 p-0">
       {entries.map((entry, index) => {
         const category = findCategory(entry.categoria_slug);
+        const key = `${entry.categoria_slug}-${entry.objeto_id}`;
         return (
           <li
-            key={`${entry.categoria_slug}-${entry.objeto_id}`}
+            key={key} data-recent-rating={recent === key || undefined}
             className="flex flex-wrap items-center gap-4 rounded-md border border-line bg-surface p-4"
           >
             <span className="grid min-w-10 place-items-center rounded-sm bg-strong px-2 font-mono text-step-1 text-on-pink" aria-hidden="true">
@@ -32,6 +43,7 @@ export function RankingList({ entries }: { entries: RankingEntry[] }) {
               >
                 {entry.nombre}
               </Link>
+              {recent === key && <span role="status" className="text-step--1"><StateIcon kind="success" />{t('ratings.thanks')}</span>}
               <span className="text-step--1 text-fg-muted">
                 {category?.emoji} {t(`categories.${entry.categoria_slug}.name`)}
               </span>

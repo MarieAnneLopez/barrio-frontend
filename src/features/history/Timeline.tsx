@@ -17,7 +17,7 @@ function badgeOf(hito: Hito, press: Set<string>) {
 // Paleta D100: tarjetas alternas rosa claro y crema; el año va en una etiqueta amarilla (texto negro).
 const TONE = 'ui-card--paper tone-papel';
 
-/** Línea de tiempo vertical (§11.3.1) con ScrollTrigger; cada hito muestra su fuente. */
+/** Línea de tiempo vertical (§11.3.1); cada hito muestra su fuente. */
 export function Timeline({ hitos, fuentes }: { hitos: Hito[]; fuentes: Fuente[] }) {
   const { t } = useTranslation();
   const press = new Set(fuentes.flatMap((f) => (f.tipo === 'prensa' && f.url ? [f.url] : [])));
@@ -31,7 +31,8 @@ export function Timeline({ hitos, fuentes }: { hitos: Hito[]; fuentes: Fuente[] 
         const key = `content:history.${hito.anio}-${hito.orden}`;
         const badge = badgeOf(hito, press);
         return (
-          <li key={hito.id} data-reveal className="relative flex gap-4 border-l border-line-strong pb-6 pl-6 last:pb-0">
+          <li key={hito.id} data-reveal className="relative flex gap-4 pb-6 pl-6 last:pb-0">
+            <span aria-hidden="true" data-reveal-line className="absolute inset-y-0 left-0 w-px origin-top bg-line-strong" />
             <span aria-hidden="true" className="absolute top-7 -left-[5px] size-[9px] rounded-full bg-highlight" />
             <div
               className={`ui-card flex min-w-0 max-w-3xl flex-1 flex-col gap-2 p-5 ${index % 2 ? '' : TONE} ${index % 4 === 3 ? WIDE_ROSA : ''}`}

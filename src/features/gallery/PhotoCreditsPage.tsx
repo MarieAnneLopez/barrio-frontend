@@ -28,7 +28,7 @@ export function PhotoCreditsPage() {
       {photos.status === 'loading' ? <Skeleton className="h-48 w-full" lines={4} /> : null}
       {photos.status === 'error' ? <LoadError onRetry={photos.retry} /> : null}
       {photos.status === 'success' ? (
-        <div className="flex flex-col gap-3 border-t border-line pt-4">
+        <div className="photo-credits flex flex-col gap-3 border-t border-line pt-4">
           <p className="m-0 text-step--1 text-fg-muted">{t('credits.count', { count: photos.items.length })}</p>
           <ol className="m-0 flex list-none flex-col gap-3 p-0">
             {photos.items.map((photo) => (

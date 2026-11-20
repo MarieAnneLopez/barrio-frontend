@@ -80,7 +80,8 @@ export function PhotoRibbon({ photos }: { photos: readonly RibbonPhoto[] }) {
       <p className="ribbon-credits">
         {t('galleryRibbon.credits')} <Link to="/creditos-fotos">{t('credits.link')}</Link>.
       </p>
-      <GalleryLightbox photos={lightbox} index={open} onIndex={show} place={open === null ? '' : (photos[open]?.label ?? '')} />
+      <GalleryLightbox photos={lightbox} index={open} onIndex={show} place={open === null ? '' : (photos[open]?.label ?? '')}
+        thumbnail={(i) => root.current?.querySelector(`[data-grid-index="${i}"] img, [data-ribbon-index="${i}"]:not([data-parked="true"])`)} />
     </div>
   );
 }

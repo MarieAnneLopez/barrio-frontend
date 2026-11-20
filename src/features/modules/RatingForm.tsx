@@ -46,7 +46,7 @@ export function RatingForm({ path, onRated }: RatingFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit(submit)} noValidate className="flex flex-col gap-3">
+    <form onSubmit={handleSubmit(submit)} noValidate className="flex flex-col gap-3" data-rating-done={status.kind === 'done' || undefined}>
       <Controller
         control={control}
         name="estrellas"
