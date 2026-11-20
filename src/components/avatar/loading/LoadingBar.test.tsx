@@ -73,7 +73,7 @@ describe('barra de carga viva', () => {
       const px = railPx(container.querySelector('.loading-bar__rail'));
       expect(Number.isInteger(px)).toBe(true);
       expect(travel).toHaveBeenLastCalledWith(px);
-      const { across, down } = frameTransforms('run', 105, runnerFrame(px));
+      const { across, down } = frameTransforms('run', 120, runnerFrame(px));
       expect(pose()).toEqual([across, down]);
     }
   });

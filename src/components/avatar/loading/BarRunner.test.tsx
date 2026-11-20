@@ -4,10 +4,10 @@ import { describe, expect, it } from 'vitest';
 import { stridePx } from '../loadingRun';
 import { atlasCellWidth, sequenceSpec, spriteUrl } from '../sequences';
 import { BarRunner, type BarRunnerHandle } from './BarRunner';
-import { runnerFrame } from './runnerFrame';
+import { footShift, runnerFrame } from './runnerFrame';
 
 const FRAMES = sequenceSpec('run').frames;
-const STEP = stridePx(105) / FRAMES; // px de barra por cuadro a 105 px de alto (0,875)
+const STEP = stridePx(120) / FRAMES; // px de barra por cuadro a 120 px de alto (0,875)
 
 describe('la Mini Marie de la barra de carga', () => {
   it('sin avance está en el primer cuadro y avanza uno por cada zancada / 32 recorrida', () => {
@@ -18,7 +18,7 @@ describe('la Mini Marie de la barra de carga', () => {
 
   it('da la vuelta al ciclo de 32 cuadros sin salirse de él', () => {
     expect(runnerFrame(STEP * (FRAMES + 2.5))).toBe(2);
-    expect(runnerFrame(stridePx(105))).toBe(0); // una zancada exacta: el ciclo vuelve a empezar
+    expect(runnerFrame(stridePx(120))).toBe(0); // una zancada exacta: el ciclo vuelve a empezar
     for (let px = 0; px <= 1024; px += 1) expect(runnerFrame(px)).toBeLessThan(FRAMES);
   });
 
@@ -35,8 +35,10 @@ describe('la Mini Marie de la barra de carga', () => {
     const [cols] = sequenceSpec('run').grid;
     const strip = container.querySelector<HTMLElement>('.sequence__strip');
     const rows = container.querySelector<HTMLElement>('.sequence__rows');
-    expect(strip?.style.transform).toBe(`translateX(${-(11 % cols) * atlasCellWidth('run', 105)}px)`);
-    expect(rows?.style.transform).toBe(`translateY(${-Math.floor(11 / cols) * 105}px)`);
+    expect(strip?.style.transform).toBe(`translateX(${-(11 % cols) * atlasCellWidth('run', 120)}px)`);
+    expect(rows?.style.transform).toBe(`translateY(${-Math.floor(11 / cols) * 120}px)`);
+    act(() => runner.current?.travel(STEP * 16));
+    expect(container.querySelector<HTMLElement>('.bar-runner')?.style.transform).toBe(`translateX(${footShift(16)}px)`);
     expect(strip).toHaveAttribute('src', spriteUrl('run', 210)); // el mismo atlas que la Mini Marie grande (D111)
     expect(container.querySelectorAll('source')).toHaveLength(0);
   });

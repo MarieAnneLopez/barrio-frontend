@@ -2,7 +2,7 @@ import './bar-runner.css';
 import { forwardRef, useImperativeHandle, useRef } from 'react';
 import { frameTransforms, type SpriteSize } from '../sequences';
 import { SequenceSprite } from '../SequenceSprite';
-import { BAR_RUNNER_SIZE, runnerFrame } from './runnerFrame';
+import { BAR_RUNNER_SIZE, footShift, runnerFrame } from './runnerFrame';
 
 export interface BarRunnerHandle {
   /** Pone el cuadro que toca a `px` de recorrido de la punta. Lo llama la barra en cada rAF. */
@@ -22,7 +22,9 @@ export const BarRunner = forwardRef<BarRunnerHandle, { atlas: SpriteSize<'run'> 
   const box = useRef<HTMLSpanElement>(null);
   useImperativeHandle(ref, () => ({
     travel(px: number) {
-      const { across, down } = frameTransforms('run', BAR_RUNNER_SIZE, runnerFrame(px));
+      const frame = runnerFrame(px);
+      const { across, down } = frameTransforms('run', BAR_RUNNER_SIZE, frame);
+      if (box.current) box.current.style.transform = `translateX(${footShift(frame)}px)`;
       const strip = box.current?.querySelector<HTMLElement>('.sequence__strip');
       const rows = box.current?.querySelector<HTMLElement>('.sequence__rows');
       if (strip) strip.style.transform = across;
@@ -30,7 +32,7 @@ export const BarRunner = forwardRef<BarRunnerHandle, { atlas: SpriteSize<'run'> 
     },
   }), []);
   return (
-    <span ref={box} className="bar-runner">
+    <span ref={box} className="bar-runner" style={{ transform: `translateX(${footShift(0)}px)` }}>
       <SequenceSprite name="run" size={BAR_RUNNER_SIZE} atlas={atlas} playing={false} pose={3} frame={0} />
     </span>
   );

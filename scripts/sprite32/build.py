@@ -56,6 +56,8 @@ def build(name, spec, sizes):
     master, factor = scale(frames, spec['height'], unit, palette)
     cell_w = master[0].shape[1]
     box_w = cell_w if name != 'wave' else min(cell_w, -(-int(body_width(master)) // unit) * unit)
+    # Pose intermedia aprobada para la transición del cuadro 6 al 8, en la paleta original.
+    master[7] = np.asarray(Image.open(ROOT / 'scripts/sprite-cycles' / f'{name}_intermedio.png').convert('RGBA'))
     atlas = np.zeros((4 * spec['height'], 8 * cell_w, 4), np.uint8)
     for n, f in enumerate(master):
         atlas[(n // 8) * spec['height']:(n // 8 + 1) * spec['height'], (n % 8) * cell_w:(n % 8 + 1) * cell_w] = f

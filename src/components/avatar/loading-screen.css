@@ -22,17 +22,6 @@
   background-image: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-accent) 62%, var(--bg-strong) 100%);
 }
 
-/* Avanza un cuadro cada vez, en px enteros: LoadingScreen le pone una posición redondeada por cuadro
-   con la API de animaciones (sprites32: zancada / 32 por cuadro, sin acumular error). Interlineado 0:
-   Mini Marie (inline-block) se apoya en la línea base, y sin esto quedaría sobre el hueco del
-   interlineado, ~9 px por encima del suelo (como en la bienvenida y la sentada). */
-.loading-screen__track {
-  position: absolute;
-  bottom: 0;
-  line-height: 0;
-  will-change: transform;
-}
-
 /* Suelo: una línea marrón quieta de 1 px; solo se mueve ella. */
 .loading-screen__ground {
   width: 100%;
@@ -56,17 +45,4 @@
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--text-primary); /* negro sobre crema: 18,50:1 */
-}
-
-/* Movimiento reducido: pose fija al centro, mirando a la derecha; el fundido de salida se mantiene. */
-@media (prefers-reduced-motion: reduce) {
-  .loading-screen__track {
-    left: 50%;
-    transform: translate3d(-50%, 0, 0);
-  }
-}
-
-:root.reduce-motion .loading-screen__track {
-  left: 50%;
-  transform: translate3d(-50%, 0, 0);
 }

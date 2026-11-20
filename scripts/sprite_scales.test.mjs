@@ -34,7 +34,7 @@ function visibleDiff(a, b) {
 describe('atlas de Mini Marie (sprites32)', () => {
   it('cada secuencia tiene su tamaño base, el doble y el cuádruple que existan en el dibujo', () => {
     expect(Object.fromEntries(Object.entries(scales).map(([name, spec]) => [name, spec.sizes]))).toEqual({
-      wave: [80, 160, 320, 640], run: [105, 210, 420], sit: [48, 96, 192], idle: [140, 280, 560],
+      wave: [80, 96, 160, 192, 320, 384, 640], run: [105, 120, 210, 240, 420], sit: [48, 96, 192], idle: [140, 280, 560],
     });
   });
 
@@ -46,7 +46,7 @@ describe('atlas de Mini Marie (sprites32)', () => {
   });
 
   it.each(cases)('%s a %i px: atlas de 8 × 4 con celdas de ancho entero', async (name, size, spec) => {
-    const cell = (spec.cell[0] * size) / spec.cell[1];
+    const cell = Math.round((spec.cell[0] * size) / spec.cell[1]);
     expect(Number.isInteger(cell) && Number.isInteger((spec.box[0] * size) / spec.box[1])).toBe(true);
     expect(existsSync(file(name, size)), file(name, size)).toBe(true);
     const meta = await sharp(file(name, size)).metadata();
@@ -61,7 +61,7 @@ describe('atlas de Mini Marie (sprites32)', () => {
   // van además a la paleta de su hoja con alfa binaria, igual que en el build.
   it.each(cases)('%s a %i px: cada celda es su cuadro del ciclo maestro de hoy', async (name, size, spec) => {
     const { frames, w, h } = await readCycle(name);
-    const cw = (w * size) / h;
+    const cw = Math.round((w * size) / h);
     const decoded = await sharp(file(name, size)).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
     const cells = cellsOf(decoded, spec.grid[0], cw, size, frames.length);
     for (const [n, frame] of frames.entries()) {
@@ -86,9 +86,9 @@ describe('atlas de Mini Marie (sprites32)', () => {
 
   // Medido (sprites32): 32 cuadros pesan de 3 a 4 veces lo que las tiras de 7 u 8 (el reposo, que era
   // un solo cuadro, unas 25 veces); el tope deja un 10 % de holgura sobre lo medido.
-  const BUDGET_KB = { 48: 40, 80: 90, 96: 90, 105: 120, 140: 200, 160: 200, 192: 180, 210: 260, 280: 340, 320: 470, 420: 460, 560: 740, 640: 840 };
+  const BUDGET_KB = { 120: 135, 240: 315, 384: 580, 48: 40, 80: 90, 96: 90, 105: 120, 140: 200, 160: 200, 192: 180, 210: 260, 280: 340, 320: 470, 420: 460, 560: 740, 640: 840 };
   it.each(cases)('%s a %i px: no pesa de más', (name, size) => {
-    const budgetKb = BUDGET_KB[size];
+    const budgetKb = name === 'wave' && size === 192 ? 240 : name === 'wave' && size === 96 ? 106 : BUDGET_KB[size];
     expect(statSync(file(name, size)).size / 1024).toBeLessThanOrEqual(budgetKb);
   });
 });

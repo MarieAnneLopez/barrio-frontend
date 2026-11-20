@@ -31,8 +31,8 @@ describe('Bienvenida de Mini Marie', () => {
   });
 
   it.each([
-    ['escritorio', true, '100px', '160px', '74px'],
-    ['móvil', false, '50px', '80px', '37px'],
+    ['escritorio', true, '120px', '192px', '88px'],
+    ['móvil', false, '60px', '96px', '44px'],
   ])('en %s son exactamente 8 a escala entera: tamaño fijo y asomo en píxeles enteros (D86)', async (_view, desktop, width, height, rise) => {
     setViewport(desktop);
     renderRoute('/');
@@ -61,7 +61,7 @@ describe('Bienvenida de Mini Marie', () => {
     expect(welcome.querySelectorAll('.sequence[data-playing]')).toHaveLength(0);
     const top = (part: string) => welcome.querySelector<HTMLElement>(`.welcome-peek[data-slot="top"] ${part}`)?.style.transform;
     // tercera pose fija (brazo arriba, chispa) = cuadro 11 del ciclo: columna 2 (2 × 116 px), fila 1 (160 px)
-    expect([top('.sequence__strip'), top('.sequence__rows')]).toEqual(['translateX(-232px)', 'translateY(-160px)']);
+    expect([top('.sequence__strip'), top('.sequence__rows')]).toEqual(['translateX(-278px)', 'translateY(-192px)']);
   });
 
   it('el botón la cierra y la sesión la recuerda (D11)', async () => {

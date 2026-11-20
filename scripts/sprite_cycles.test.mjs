@@ -6,6 +6,7 @@
 // pantalla de carga (revisión de sprites32).
 import { describe, expect, it } from 'vitest';
 import { offsetAt, stridePx } from '../src/components/avatar/loadingRun';
+import { footShift } from '../src/components/avatar/loading/runnerFrame';
 import { defects, drawnFrame, foot, readCycle, scales } from './sprite_cycles_lib.mjs';
 
 // Ciclos con cuadros dibujados e intermedios (el reposo). Carrera, saludo y sentada salen enteros de
@@ -64,7 +65,10 @@ describe('ciclos maestros de Mini Marie (sprites32)', () => {
     const pairs = [];
     feet.forEach((a, n) => {
       const b = feet[(n + 1) % 32];
-      if (touches(a) && touches(b)) pairs.push([n, b.x + offsetAt(n + 1, 420) - a.x - offsetAt(n, 420)]);
+      if (touches(a) && touches(b)) {
+        const position = (footX, i) => footX + offsetAt(i, 420) + footShift(i, 420);
+        pairs.push([n, position(b.x, n + 1) - position(a.x, n)]);
+      }
     });
     expect(pairs.length).toBeGreaterThanOrEqual(8); // dos apoyos de 4 cuadros o más
     expect(pairs.filter(([, drift]) => Math.abs(drift) > 3)).toEqual([]);

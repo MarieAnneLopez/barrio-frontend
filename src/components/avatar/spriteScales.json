@@ -1,6 +1,6 @@
 {
-  "wave": { "frames": 32, "grid": [8, 4], "sheet": "saludando32.jpeg", "cell": [464, 640], "box": [400, 640], "keys": [0, 8, 10, 16, 18, 22, 27], "sizes": [80, 160, 320, 640] },
-  "run": { "frames": 32, "grid": [8, 4], "sheet": "corriendo32.jpeg", "cell": [308, 420], "box": [308, 420], "keys": [0, 4, 8, 12, 16, 20, 24, 28], "sizes": [105, 210, 420] },
+  "wave": { "frames": 32, "grid": [8, 4], "sheet": "saludando32.jpeg", "cell": [464, 640], "box": [400, 640], "keys": [0, 8, 10, 16, 18, 22, 27], "sizes": [80, 96, 160, 192, 320, 384, 640] },
+  "run": { "frames": 32, "grid": [8, 4], "sheet": "corriendo32.jpeg", "cell": [308, 420], "box": [308, 420], "keys": [0, 4, 8, 12, 16, 20, 24, 28], "sizes": [105, 120, 210, 240, 420] },
   "sit": { "frames": 32, "grid": [8, 4], "sheet": "sentada32.jpeg", "cell": [104, 192], "box": [104, 192], "keys": [0, 5, 10, 14, 20, 25, 29], "sizes": [48, 96, 192] },
   "idle": { "frames": 32, "grid": [8, 4], "cell": [256, 560], "box": [256, 560], "keys": [0], "sizes": [140, 280, 560] }
 }

@@ -28,7 +28,7 @@ export const SPRITE_SIZES: Record<SequenceName, readonly number[]> = {
  * Los mismos tamaños como tipos, para que uno que la secuencia no tiene no compile. Deben coincidir
  * con spriteScales.json, que genera `npm run sprites` (lo vigila spriteSizes.test.tsx).
  */
-export const SIZES = { wave: [80, 160, 320, 640], run: [105, 210, 420], sit: [48, 96, 192], idle: [140, 280, 560] } as const;
+export const SIZES = { wave: [80, 96, 160, 192, 320, 384, 640], run: [105, 120, 210, 240, 420], sit: [48, 96, 192], idle: [140, 280, 560] } as const;
 export type SpriteSize<N extends SequenceName> = (typeof SIZES)[N][number];
 
 export interface SequenceSpec {
@@ -50,7 +50,7 @@ function scaled(name: SequenceName, size: number, [width = 1, height = 1]: reado
   if (!SPRITE_SIZES[name].includes(size)) {
     throw new Error(`Mini Marie (${name}) no tiene el tamaño ${size} px: usa ${SPRITE_SIZES[name].join(', ')}`);
   }
-  return (width * size) / height;
+  return Math.round((width * size) / height);
 }
 
 /** Ancho en px de la caja (lo que ocupa en la maqueta) a ese alto. Falla con un tamaño que no sea de la secuencia. */

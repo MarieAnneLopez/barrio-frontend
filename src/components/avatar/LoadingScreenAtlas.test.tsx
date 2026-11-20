@@ -37,13 +37,13 @@ afterEach(() => vi.useRealTimers());
 describe('pantalla de carga: un solo atlas, elegido por la densidad real', () => {
   it.each([
     [390, 844, 1], [390, 844, 1.75], [390, 844, 3], [1440, 800, 1], [1440, 800, 1.25], [1440, 900, 1], [1440, 900, 2], [844, 390, 3],
-  ])('a %i × %i px y %f dppx las dos Mini Marie pintan el mismo archivo, el que toca', (w, h, dppx) => {
+  ])('a %i × %i px y %f dppx la única Mini Marie pinta el archivo precargado, el que toca', (w, h, dppx) => {
     screenIs({ w, h, dppx });
     const { container } = render(<LoadingScreen />);
     const big = container.querySelector('.loading-screen__runner .sequence__strip');
     const small = container.querySelector('.bar-runner .sequence__strip');
-    expect(big).toHaveAttribute('src', painted({ w, h, dppx }));
-    expect(small).toHaveAttribute('src', painted({ w, h, dppx }));
+    expect(big).toBeNull();
+    expect(small).toHaveAttribute('src', painted());
     expect(container.querySelectorAll('source')).toHaveLength(0); // una sola descarga: ningún <source> elige otra
   });
 });

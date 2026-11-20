@@ -60,7 +60,8 @@ for (const [name, { frames, grid, cell, sizes, sheet }] of Object.entries(scales
   const full = await cells(name, cols, rows, cellW, cellH);
   const palette = sheet ? loadPalette(root, name) : null;
   for (const size of sizes) {
-    const w = (cellW * size) / cellH;
+    if (process.env.SPRITE_SIZES && !process.env.SPRITE_SIZES.split(',').includes(String(size))) continue;
+    const w = Math.round((cellW * size) / cellH);
     const parts = [];
     for (const [n, input] of full.entries()) {
       let scaled = size === cellH ? input : await sharp(input).resize(w, size, { kernel: 'lanczos3' }).png().toBuffer();
