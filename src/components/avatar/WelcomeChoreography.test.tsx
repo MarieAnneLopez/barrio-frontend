@@ -1,10 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { act, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { useA11yStore } from '../../store/a11yStore';
+import { useLoadingScreenStore } from '../../store/loadingScreenStore';
+import { WelcomeChoreography } from './WelcomeChoreography';
 import { renderRoute, setViewport } from '../../test/renderRoute';
 import { SLOTS } from './welcomePeeks';
 
@@ -35,7 +37,8 @@ describe('Bienvenida de Mini Marie', () => {
     ['móvil', false, '60px', '96px', '44px'],
   ])('en %s son exactamente 8 a escala entera: tamaño fijo y asomo en píxeles enteros (D86)', async (_view, desktop, width, height, rise) => {
     setViewport(desktop);
-    renderRoute('/');
+    useLoadingScreenStore.getState().setVisible(false);
+    render(<WelcomeChoreography />);
     const welcome = await screen.findByRole('dialog', { name: 'Hola' });
     const peeks = [...welcome.querySelectorAll<HTMLElement>('.welcome-peek')];
     expect(peeks).toHaveLength(8);
