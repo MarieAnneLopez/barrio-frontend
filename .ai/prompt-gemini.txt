@@ -1,0 +1,43 @@
+/superpowers /ponytail
+
+Eres `gemini-analista` en la rama `agent/gemini` de `barrio-frontend`. Escribes los tests de la adaptación HINGE contra el contrato y documentas la arquitectura.
+
+REGLAS:
+- Autocompacta tu conversación al llegar al 50 % de tu ventana de contexto.
+- SEGUNDO CEREBRO CLAUDE: SOLO LECTURA condicional, máximo 1 subagente interno a la vez, prohibido escribir notas o actualizar el grafo. No consultes si `.ai/CONTRACTS.md` y el código bastan (§1: el Director no necesitó memoria). Solo si es estrictamente necesario, en PowerShell:
+  - Factual: `& "C:\Users\mps20\AppData\Local\SegundoCerebro\venv\Scripts\python.exe" "C:\Users\mps20\OneDrive\Documentos\SEGUNDO CEREBRO CLAUDE\cerebro_core\buscar.py" "<consulta corta>"`
+  - Estructural: `Push-Location "C:\Users\mps20\OneDrive\Documentos\SEGUNDO CEREBRO CLAUDE"; if (Get-Command graphify -ErrorAction SilentlyContinue) { graphify query "<pregunta estructural>" --budget 1500 } else { py -3.13 -m graphify query "<pregunta estructural>" --budget 1500 }; Pop-Location`
+  - Prohibido leer `mapa_cerebro.html`, `graphify-out/graph.html`, `graph.json` o `Cerebro/notas/`.
+- Archivos tuyos: solo `src/features/history/__tests__/**` y `docs/hinge-historia.md` (en la raíz del repo `barrio-frontend`). Prohibido tocar `hinge/**`, `Timeline.tsx`, `TimelineStage.tsx`, `TimelineNav.tsx`, `useActiveHito.ts`, `HistoryPage.tsx`, `src/i18n/**`, los tests existentes y `README.md`.
+- Regla del repo: ningún archivo de código supera 100 líneas (`npm run check:lines`): divide los tests si hace falta.
+- No instales dependencias: usa Vitest 5 + jsdom + Testing Library, que ya existen. Los mocks van dentro de tus archivos de test.
+- En tu rama `hinge/**` son STUB y Timeline aún no tiene navegación. Los tests de matemática, de política y de navegación fallarán hasta el merge: es lo esperado. No modifiques los stubs para ponerlos en verde.
+- Informa solo resultados reales de comandos ejecutados. Si algo no se puede verificar en el entorno de test, decláralo; no escribas un test que aparente verificarlo.
+- Si falta `node_modules` en tu worktree, ejecuta `npm ci` en la raíz del worktree (es `barrio-frontend`).
+
+## FASE 1: PLANEACIÓN
+1. Lee `.ai/CONTRACTS.md`, `.ai/TASKS.md`, `package.json`, `vite.config.ts` (bloque `test`), `src/test/setup.ts`, `src/test/historyFixtures.ts` (`HISTORIA`), `src/test/renderRoute.tsx`, `src/test/mockApi.ts` y `src/features/history/HistoryPage.test.tsx` como ejemplo de estilo.
+2. Plan en ≤ 10 líneas: qué cubre cada archivo de test y qué queda como verificación manual.
+
+## FASE 2: EJECUCIÓN
+1. `__tests__/hingeMath.test.ts`, con `toBeCloseTo(valor, 5)` (`sin(π)` no da 0 exacto):
+   - `f = 0`: los 12 paneles en 0. `f = 1`: los 12 con `rotY = π` y `rotX`, `posZ`, `outward` ≈ 0.
+   - Anclas (`f`, `col`, `row` → `rotY`, `rotX`, `posZ`, `outward`):
+     `0.5, 0, 0 → 2.614911, −0.060320, 0.326734, 0.060320`
+     `0.5, 1, 1 → 1.828932, 0, 0.744488, 0.116024`
+     `0.5, 3, 2 → 0.526682, 0.060320, 0.447374, 0.060320`
+     `0.25, 0, 0 → 0.971990, −0.099121, 0.536906, 0.099121`
+     `0.25, 3, 2 → 0, 0, 0, 0`
+     `0.75, 3, 2 → 2.169603, 0.099121, 0.735148, 0.099121`
+     `0.75, 0, 0 → π, 0, 0, 0`
+   - Propiedades: `rotY` no decrece al crecer `f` en cada panel; el panel `(0,0)` termina en `f = 1/1.48 ≈ 0.675676`; el panel `(3,2)` empieza en `f = 0.48/1.48 ≈ 0.324324`; la fila central (`row 1`) siempre tiene `rotX = 0`.
+2. `__tests__/renderPolicy.test.ts`: tabla de verdad completa (16 combinaciones) de `shouldRender` (solo dibuja con animación o hover pendiente, documento visible y componente en viewport).
+3. `__tests__/TimelineHinge.test.tsx`, derivando lo esperado de `HISTORIA` (`src/test/historyFixtures.ts`; no escribas hitos a mano). Usa `vi.mock('../hinge/webglSupport')` (true/false) y `vi.mock('../hinge/HingePanelCanvas')` con un componente espía que registre sus props:
+   - Cada hito aparece una sola vez en el árbol accesible, en el orden original, con año, título, descripción, etiqueta de verificación y `href` de fuentes.
+   - Bloques hermanos presentes en `HistoryPage` (bandera, indicadores, ubicación, fuentes). Ausencia de `FORME`, `TIDAL`, `INDEX`, `MORPH`, `MAISON`, `VERDANT`.
+   - El escenario `[data-hinge-stage]`, si existe, tiene `aria-hidden="true"`. Los botones (dentro de `[data-hinge-nav]`) tienen nombre accesible y clase `hinge-nav__btn`, se deshabilitan en los extremos, y el `<li>` activo lleva `aria-current="step"`.
+   - Teclado: las flechas cambian de hito solo con foco en el grupo de navegación.
+   - `matchMedia` simulando `prefers-reduced-motion: reduce` (o `a11yStore.reducedMotion = true`): el espía recibe `reducedMotion = true`.
+   - `isWebGLAvailable()` falso (en jsdom `getContext` devuelve null): sin escenario ni navegación, con la línea de tiempo completa y enlaces operativos.
+4. `docs/hinge-historia.md` (≤ 60 líneas): arquitectura, contrato de props, accesibilidad, fallback y una lista «Verificación manual en `/integrar`»: tamaño real ≥ 44 × 44 px, ausencia de scroll horizontal a 375 px y 1440 px, liberación real de GPU y fluidez del giro.
+5. Ejecuta `npm test`, `npm run typecheck`, `npm run lint` y `npm run check:lines`. Haz `git commit` en `agent/gemini` con el resultado real por suite, separando «falla por STUB (esperado)» de «falla real».

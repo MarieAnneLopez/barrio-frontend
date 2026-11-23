@@ -1,0 +1,26 @@
+/superpowers /ponytail
+
+Eres `maquetador` en la rama `agent/maquetador` de `barrio-frontend`. Integras el escenario HINGE en la línea de tiempo de Historia Local (`/historia`) con DOM real y accesible, sin cambiar contenido ni identidad visual.
+
+REGLAS:
+- Autocompacta tu conversación al llegar al 50 % de tu ventana de contexto.
+- SEGUNDO CEREBRO CLAUDE: SIN ACCESO. Lee solo `.ai/CONTRACTS.md`, `.ai/TASKS.md` y el repo. Prohibido ejecutar `buscar.py`, `graphify` o `guardar.py`, y leer `C:\Users\mps20\OneDrive\Documentos\SEGUNDO CEREBRO CLAUDE`.
+- Archivos tuyos: `src/features/history/Timeline.tsx` y los nuevos `src/features/history/TimelineStage.tsx`, `src/features/history/TimelineNav.tsx` y `src/features/history/useActiveHito.ts`. Los estilos son utilidades Tailwind inline en esos archivos (no hay hoja de estilos propia). `HistoryPage.tsx`: 0 líneas, no lo toques (Timeline ya lee `useReducedMotion()`). Prohibido tocar `hinge/**`, `__tests__/**`, `docs/**`, `src/i18n/**` y los tests existentes `src/features/history/*.test.*`.
+- Regla del repo: ningún archivo de código supera 100 líneas (`npm run check:lines`).
+- Detente y repórtalo en tu commit si necesitas una dependencia nueva, un archivo fuera de tu frontera o un cambio de firma del contrato.
+- Si falta `node_modules` en tu worktree, ejecuta `npm ci` en la raíz del worktree (es `barrio-frontend`). No instales paquetes.
+
+## FASE 1: PLANEACIÓN
+1. Lee `.ai/CONTRACTS.md`, `.ai/TASKS.md`, `Timeline.tsx`, `HistoryPage.tsx`, `src/hooks/useReducedMotion.ts`, `src/features/history/timelineTone.ts` y `useScrollReveal.ts`. Identifica cómo se renderizan los hitos (año, título, descripción, etiqueta de verificación, enlaces). El control de movimiento reducido ya existe: `useReducedMotion()` = barra de accesibilidad (`a11yStore`) || sistema.
+2. `hinge/HingePanelCanvas.tsx` es un STUB que devuelve `null` y `hinge/webglSupport.ts` devuelve `false` en tu rama: impórtalos con la firma de CONTRACTS (§4) y no los modifiques. En tu rama solo verás el camino sin canvas; el efecto real se valida en `/integrar`.
+3. Plan en ≤ 8 líneas antes de editar.
+
+## FASE 2: EJECUCIÓN
+1. Escenario (`TimelineStage.tsx`): un contenedor `data-hinge-stage aria-hidden="true"` con relación de aspecto fija `aspect-[4/3]` (sin salto de layout al montar o caer al fallback) que monta `<HingePanelCanvas>` con `lazy(() => import('./hinge/HingePanelCanvas'))` dentro de `<Suspense fallback={null}>`, como superficie decorativa. Todos los hitos siguen en el DOM como HTML real, en orden, seleccionables y sin texto duplicado.
+2. Estado (`useActiveHito.ts`): índice de hito activo (inicial 0) con `aria-current="step"` en el `<li>` activo. Pasa a `HingePanelCanvas` las props `activeIndex`, `faces` (`hitos.map(h => ({ year: String(h.anio) }))`), `reducedMotion` y `onUnavailable` derivadas de los datos reales.
+3. Navegación (`TimelineNav.tsx`): grupo `role="group"` con `data-hinge-nav`; botones «Hito anterior» y «Hito siguiente» con `aria-label`, clase `hinge-nav__btn`, mínimo 44 × 44 px CSS (`min-h-11 min-w-11`), deshabilitados en los extremos (si el botón con foco se deshabilita, mueve el foco al otro), y un estado de posición «Hito N de M» en región `aria-live="polite"`. Flechas izquierda y derecha solo cuando el foco está dentro del grupo de navegación (`onKeyDown` del grupo); nunca listeners en `window`. Textos con `t('history.hinge.prev|next|nav|position', { defaultValue: '…' })`; no edites los JSON de i18n.
+4. Movimiento reducido: `reducedMotion = useReducedMotion()` (ya combina `prefers-reduced-motion: reduce` y el control de accesibilidad de la app).
+5. Fallback: si `isWebGLAvailable()` es falso al montar, no montes ni el escenario ni la navegación; la línea de tiempo se ve y funciona exactamente como hoy. Si `onUnavailable` se dispara después, desmonta el canvas y conserva la caja y la navegación (sin salto de layout).
+6. Scroll y tacto: prohibido `touch-action: none` y `preventDefault` en `wheel` o `touchmove`. Sin overflow horizontal en móvil ni escritorio.
+7. Conserva tipografías, paleta, fondos y espaciados actuales; el `<ol>` (ref de `useScrollReveal`, `data-reveal`, tonos, badges, `SourceLinks`) queda igual. Cero contenido demo (`FORME`, `TIDAL`, `INDEX`, `MORPH`, `MAISON`, `VERDANT`), cero secciones, fondos oscuros, videos o galerías.
+8. Verifica `npm run typecheck`, `npm run lint`, `npm run check:lines` y `npx vitest run src/features/history` (los tests existentes deben seguir en verde sin editarlos). Haz `git commit` en `agent/maquetador` indicando qué verificaste y qué queda pendiente de `/integrar`.

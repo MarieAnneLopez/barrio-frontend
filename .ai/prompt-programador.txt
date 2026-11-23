@@ -1,0 +1,39 @@
+/superpowers /ponytail
+
+Eres `programador` en la rama `agent/programador` de `barrio-frontend`. Construyes el motor HINGE: matemática pura, resorte, escena Three.js de 12 paneles (4 × 3), render bajo demanda y limpieza de GPU.
+
+REGLAS:
+- Autocompacta tu conversación al llegar al 50 % de tu ventana de contexto.
+- SEGUNDO CEREBRO CLAUDE: SOLO LECTURA condicional. No consultes si `.ai/CONTRACTS.md` y el código bastan, ni repitas búsquedas ya resumidas ahí (§1: el Director no necesitó memoria). Solo si es estrictamente necesario, en PowerShell:
+  - Factual: `& "C:\Users\mps20\AppData\Local\SegundoCerebro\venv\Scripts\python.exe" "C:\Users\mps20\OneDrive\Documentos\SEGUNDO CEREBRO CLAUDE\cerebro_core\buscar.py" "<consulta corta>"`
+  - Estructural: `Push-Location "C:\Users\mps20\OneDrive\Documentos\SEGUNDO CEREBRO CLAUDE"; if (Get-Command graphify -ErrorAction SilentlyContinue) { graphify query "<pregunta estructural>" --budget 1500 } else { py -3.13 -m graphify query "<pregunta estructural>" --budget 1500 }; Pop-Location`
+  - Prohibido leer `mapa_cerebro.html`, `graphify-out/graph.html`, `graph.json` o `Cerebro/notas/`, y modificar `graphify-out/`.
+- Archivos tuyos: solo `src/features/history/hinge/**` (stubs existentes: `types.ts`, `hingeMath.ts`, `renderPolicy.ts`, `webglSupport.ts`, `HingePanelCanvas.tsx`; puedes añadir módulos dentro de `hinge/`). Reemplaza los STUB manteniendo las firmas de CONTRACTS §4 EXACTAS. Prohibido tocar `Timeline.tsx`, `TimelineStage.tsx`, `TimelineNav.tsx`, `useActiveHito.ts`, `HistoryPage.tsx`, `__tests__/**` y `docs/**`.
+- Regla del repo: ningún archivo de código supera 100 líneas (`npm run check:lines`). Sin colores literales: lee tokens CSS (`--bg-surface`, `--text-primary`, `--border-strong`) con `getComputedStyle`.
+- Detente y repórtalo en tu commit si necesitas una dependencia nueva o un cambio de firma. `@react-three/fiber` 8.18.0 YA está instalado y en uso (`src/three/`): úsalo con `frameloop="demand"` + `invalidate()`. Puedes importar en solo lectura utilidades de `src/three/` (p. ej. `contextRecovery.ts`) sin modificarlas.
+- Si falta `node_modules` en tu worktree, ejecuta `npm ci` en la raíz del worktree (es `barrio-frontend`). No instales paquetes.
+
+## FASE 1: PLANEACIÓN
+1. Lee `.ai/CONTRACTS.md`, `.ai/TASKS.md`, `package.json` (`three` 0.172.0), los stubs y `src/three/TintalScene.tsx` / `src/three/contextRecovery.ts` como referencia.
+2. Plan en ≤ 10 líneas: módulos, quién crea y quién libera cada recurso GPU, y cuándo se dibuja un frame.
+
+## FASE 2: EJECUCIÓN
+1. `hingeMath.ts`: funciones puras y deterministas. `col 0` = izquierda, `row 0` = fila superior:
+   `retraso = col*0.11 + row*0.075`
+   `local = clamp(fraccion*1.48 − retraso, 0, 1)`
+   `suavizado = local*local*(3 − 2*local)`
+   `arco = Math.sin(Math.PI*suavizado)`
+   `rotY = Math.PI*suavizado` · `rotX = arco*(row−1)*0.12` · `posZ = arco*(0.65 + row*0.12)` · `outward = arco*0.12`
+2. Progreso y resorte: un escalar continuo `p` que persigue a `activeIndex`. `fraccion = p − floor(p)`; cara frontal = hito `floor(p)`, trasera = `floor(p)+1`. Amortiguamiento crítico (sin rebote), `dt` limitado a 1/30 s por paso y velocidad máxima acotada para que clics o gestos rápidos no disparen la animación. Con `reducedMotion`, `p = activeIndex` de inmediato y sin hover.
+3. Escena (`HingePanelCanvas.tsx` + módulos en `hinge/`):
+   - R3F `<Canvas aria-hidden="true" className={className} frameloop="demand" dpr={[1, 1.75]} gl={{ alpha: true }}>`. El componente se carga con `lazy()` desde Timeline: mantén el `export default`.
+   - 12 paneles con grosor visible (0.08). Unidad de escena = alto de un panel (panel 1×1, grid 4:3). La cámara encuadra el grid al contenedor sin deformar; al redimensionar, reajusta y pide un frame.
+   - Desplazamiento XY por panel = `(centroPanel − centroGrid) * outward`.
+   - Cada panel muestra su 1/12 de la textura; UV trasera espejada en U. Los hitos no tienen imagen: `CanvasTexture` con fondo `--bg-surface` y el año en Anton (`--text-primary`), esperando `document.fonts` antes de dibujar; si `imageSrc` existe, úsalo. Cantos en `--border-strong`. Sin fondo oscuro.
+   - Una textura por cara, nunca 12 copias. Comparte geometría y material donde no exija shaders a medida.
+   - Pixel ratio = `Math.min(window.devicePixelRatio || 1, 1.75)`.
+   - Hover: raycast solo con `(hover: hover) and (pointer: fine)` y sin `reducedMotion`; realce sutil únicamente en la pieza señalada.
+4. Render bajo demanda: `shouldRender` en `renderPolicy.ts` como función pura. Dibuja (`invalidate()`) solo si hay animación o cambio de hover Y el documento está visible Y el componente está en el viewport (`IntersectionObserver`). En reposo, ningún frame.
+5. Disponibilidad: `isWebGLAvailable()` con `try/catch` sobre `getContext('webgl2') || getContext('webgl')`. Ante `webglcontextlost` o un error al crear el renderer, llama a `onUnavailable()` y libera todo.
+6. Desmontaje: `dispose()` de geometrías, materiales y texturas, `renderer.dispose()`, y desconexión de observers y listeners.
+7. Verifica `npm run typecheck`, `npm run lint` y `npm run check:lines`. Haz `git commit` en `agent/programador` indicando qué verificaste con herramientas y qué no pudiste verificar sin navegador.
