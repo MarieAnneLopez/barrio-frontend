@@ -1,15 +1,14 @@
-/** Tipos públicos del escenario HINGE (congelados en .ai/CONTRACTS.md). */
-
-/** Cara de un hito: imagen si existe; si no, textura con el año sobre el color de superficie. */
-export interface HingeFace {
-  imageSrc?: string;
-  year: string;
-}
+/** Tipos públicos de la cubierta HINGE de cada tarjeta de la línea de tiempo. */
 
 export interface HingePanelCanvasProps {
-  activeIndex: number;
-  faces: ReadonlyArray<HingeFace>;
-  reducedMotion: boolean;
+  /** Tarjeta real (HTML) que la cubierta tapa y descubre; de ella salen tamaño, colores y progreso. */
+  card: HTMLElement;
+  /** Año del hito, dibujado en la cara frontal (la capa es aria-hidden: no se duplica para lectores). */
+  year: string;
+  /** Progreso visual al montar: 1 si la tarjeta ya se veía abierta, para no dar saltos. */
+  start: number;
+  /** La tarjeta quedó abierta y quieta: el lienzo puede desmontarse y liberar la GPU. */
+  onRest: () => void;
   onUnavailable: () => void;
   className?: string;
 }

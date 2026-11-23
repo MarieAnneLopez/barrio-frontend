@@ -1,9 +1,10 @@
 import { Canvas } from '@react-three/fiber';
 import { Component } from 'react';
+import { HINGE_CAMERA } from './hingeMath';
 import { HingeScene } from './HingeScene';
 import type { HingePanelCanvasProps } from './types';
 
-// El único picking de la escena lo activa watchPanelHover al detectar un puntero fino.
+// Capa solo visual (pointer-events: none): sin picking, los clics llegan a los enlaces de la tarjeta.
 const events = () => ({ enabled: false, priority: 1 });
 
 class CanvasBoundary extends Component<HingePanelCanvasProps> {
@@ -26,7 +27,7 @@ class CanvasBoundary extends Component<HingePanelCanvasProps> {
     const { className } = this.props;
     return (
       <Canvas aria-hidden="true" className={className} frameloop="demand" dpr={[1, 1.75]}
-        gl={{ alpha: true }} orthographic flat events={events} resize={{ scroll: false }}>
+        gl={{ alpha: true }} camera={HINGE_CAMERA} flat events={events} resize={{ scroll: false }}>
         <HingeScene {...this.props} onUnavailable={this.fail} />
       </Canvas>
     );

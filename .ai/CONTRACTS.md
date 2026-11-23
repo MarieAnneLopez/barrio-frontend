@@ -52,7 +52,11 @@ Raíz del repo = `barrio-frontend/` (repo propio). Base: `main` @ 59b4cad (= ori
 - `webglcontextlost`, error de renderer o fallo de `gl.render` en `useFrame` → `onUnavailable()` + liberar todo.
 - Los únicos listeners en `window` permitidos son los de medida de R3F (`resize`, con `scroll: false`); nunca de teclado. Desmontaje: dispose de geometrías, materiales, texturas, renderer, observers y listeners.
 
-## 7. Integración en Timeline (maquetador)
+## 7-bis. CORRECCIÓN 2026-11-23 (Director): la superficie HINGE es CADA TARJETA (pedido original:
+«adapta el efecto a los hitos y tarjetas existentes»). Se retiran escenario aparte y navegación por
+botones. Vigente: `docs/hinge-historia.md`. Lo de §4 `HingePanelCanvasProps` y §6–§7 queda sustituido.
+
+## 7. Integración en Timeline (maquetador) — SUSTITUIDO por 7-bis
 - `Timeline({ hitos, fuentes })` conserva firma. `<ol>` actual intacto (ref de `useScrollReveal`, `data-reveal`, clases, tonos, badges, `SourceLinks`).
 - Activo: índice inicial 0; `<li aria-current="step">` solo en el activo.
 - Escenario: `<div data-hinge-stage aria-hidden="true" class="relative aspect-[4/3] w-full max-w-3xl">` con `<Suspense fallback={null}><HingePanelCanvas className="absolute inset-0 size-full" …/></Suspense>` ANTES del `<ol>`; `const HingePanelCanvas = lazy(() => import('./hinge/HingePanelCanvas'))`.
