@@ -1,5 +1,6 @@
 import { useEffect, useRef, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Button } from '../../components/ui/Button';
 
 type TimelineNavProps = {
   activeIndex: number;
@@ -27,10 +28,21 @@ export function TimelineNav({ activeIndex, total, prev, next }: TimelineNavProps
   };
 
   return (
-    <div role="group" data-hinge-nav aria-label={t('history.hinge.nav', { defaultValue: 'Navegación de hitos' })} onKeyDown={onKeyDown}>
-      <button ref={prevButton} type="button" className="hinge-nav__btn min-h-11 min-w-11" aria-label={t('history.hinge.prev', { defaultValue: 'Hito anterior' })} disabled={!canPrev} onClick={prev}>←</button>
-      <span aria-live="polite">{t('history.hinge.position', { defaultValue: 'Hito {{current}} de {{total}}', current: activeIndex + 1, total })}</span>
-      <button ref={nextButton} type="button" className="hinge-nav__btn min-h-11 min-w-11" aria-label={t('history.hinge.next', { defaultValue: 'Hito siguiente' })} disabled={!canNext} onClick={next}>→</button>
+    // Mismo lenguaje visual que la paginación del sitio (Pagination): botón secundario y posición en mono.
+    <div role="group" data-hinge-nav aria-label={t('history.hinge.nav')} onKeyDown={onKeyDown}
+      className="flex w-full max-w-3xl items-center justify-between gap-3">
+      <Button ref={prevButton} variant="secondary" className="hinge-nav__btn min-w-11" disabled={!canPrev} onClick={prev}
+        icon={<span aria-hidden="true">←</span>}>
+        <span className="sr-only sm:not-sr-only">{t('history.hinge.prev')}</span>
+      </Button>
+      <p className="m-0 whitespace-nowrap font-mono text-step--1 text-fg-muted" aria-live="polite">
+        {t('history.hinge.position', { current: activeIndex + 1, total })}
+      </p>
+      <Button ref={nextButton} variant="secondary" className="hinge-nav__btn min-w-11 flex-row-reverse" disabled={!canNext}
+        onClick={next} icon={<span aria-hidden="true">→</span>}>
+        {/* En móvil solo se ve la flecha; el nombre accesible sigue siendo el texto completo. */}
+        <span className="sr-only sm:not-sr-only">{t('history.hinge.next')}</span>
+      </Button>
     </div>
   );
 }
