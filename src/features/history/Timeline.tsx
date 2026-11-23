@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toneAttrs } from '../../components/layout/footerTones';
 import type { Fuente, Hito } from '../../lib/apiTypes';
@@ -6,6 +6,10 @@ import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { SourceLinks } from './SourceLinks';
 import { titleTone, WIDE_ROSA } from './timelineTone';
 import { useScrollReveal } from './useScrollReveal';
+import { isWebGLAvailable } from './hinge/webglSupport';
+import { TimelineNav } from './TimelineNav';
+import { TimelineStage } from './TimelineStage';
+import { useActiveHito } from './useActiveHito';
 
 /** Etiqueta de un hito sin fuente oficial (D56): «Prensa» si lo respalda un medio, si no «Por verificar». */
 function badgeOf(hito: Hito, press: Set<string>) {
@@ -23,15 +27,32 @@ export function Timeline({ hitos, fuentes }: { hitos: Hito[]; fuentes: Fuente[] 
   const press = new Set(fuentes.flatMap((f) => (f.tipo === 'prensa' && f.url ? [f.url] : [])));
   const root = useRef<HTMLOListElement>(null);
   const reduced = useReducedMotion(); // barra de accesibilidad o sistema (H30)
+  const [hingeReady, setHingeReady] = useState(false);
+  const [canvasAvailable, setCanvasAvailable] = useState(false);
+  const { activeIndex, prev, next } = useActiveHito(hitos.length);
+  const faces = hitos.map((hito) => ({ year: String(hito.anio) }));
   useScrollReveal(root, hitos.length > 0, reduced);
 
+  useEffect(() => {
+    const available = isWebGLAvailable();
+    setHingeReady(available);
+    setCanvasAvailable(available);
+  }, []);
+
   return (
+    <>
+      {hingeReady && hitos.length ? (
+        <>
+          <TimelineStage activeIndex={activeIndex} faces={faces} reducedMotion={reduced} showCanvas={canvasAvailable} onUnavailable={() => setCanvasAvailable(false)} />
+          <TimelineNav activeIndex={activeIndex} total={hitos.length} prev={prev} next={next} />
+        </>
+      ) : null}
     <ol ref={root} aria-label={t('history.timeline')} className="m-0 flex list-none flex-col gap-0 p-0">
       {hitos.map((hito, index) => {
         const key = `content:history.${hito.anio}-${hito.orden}`;
         const badge = badgeOf(hito, press);
         return (
-          <li key={hito.id} data-reveal className="relative flex gap-4 pb-6 pl-6 last:pb-0">
+          <li key={hito.id} data-reveal aria-current={index === activeIndex ? 'step' : undefined} className="relative flex gap-4 pb-6 pl-6 last:pb-0">
             <span aria-hidden="true" data-reveal-line className="absolute inset-y-0 left-0 w-px origin-top bg-line-strong" />
             <span aria-hidden="true" className="absolute top-7 -left-[5px] size-[9px] rounded-full bg-highlight" />
             <div
@@ -61,5 +82,6 @@ export function Timeline({ hitos, fuentes }: { hitos: Hito[]; fuentes: Fuente[] 
         );
       })}
     </ol>
+    </>
   );
 }
