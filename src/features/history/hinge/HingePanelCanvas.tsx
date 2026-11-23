@@ -26,7 +26,7 @@ class CanvasBoundary extends Component<HingePanelCanvasProps> {
     const { className } = this.props;
     return (
       <Canvas aria-hidden="true" className={className} frameloop="demand" dpr={[1, 1.75]}
-        gl={{ alpha: true }} orthographic flat events={events}>
+        gl={{ alpha: true }} orthographic flat events={events} resize={{ scroll: false }}>
         <HingeScene {...this.props} onUnavailable={this.fail} />
       </Canvas>
     );

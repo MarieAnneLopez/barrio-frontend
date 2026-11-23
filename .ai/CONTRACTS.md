@@ -48,7 +48,9 @@ Raíz del repo = `barrio-frontend/` (repo propio). Base: `main` @ 59b4cad (= ori
 - Cara sin imagen: CanvasTexture con fondo `--bg-surface` y año en Anton (`--text-primary`); esperar `document.fonts` antes de dibujar. Cantos `--border-strong`.
 - `alpha: true`, sin fondo oscuro. Pixel ratio = `min(devicePixelRatio || 1, 1.75)` (`dpr`). Hover solo con `(hover: hover) and (pointer: fine)` y sin reducedMotion.
 - Render bajo demanda: `shouldRender` = (animating || hoverDirty) && !hidden && inViewport (IntersectionObserver + visibilitychange). Solo se llama `invalidate()` si `shouldRender` es true. En reposo: ningún frame.
-- `webglcontextlost` o error de renderer → `onUnavailable()` + liberar todo. Desmontaje: dispose de geometrías, materiales, texturas, renderer, observers y listeners.
+- `isWebGLAvailable()` exige `webgl2` (three 0.172 ya no renderiza con WebGL 1; corregido tras `/codex:review`).
+- `webglcontextlost`, error de renderer o fallo de `gl.render` en `useFrame` → `onUnavailable()` + liberar todo.
+- Los únicos listeners en `window` permitidos son los de medida de R3F (`resize`, con `scroll: false`); nunca de teclado. Desmontaje: dispose de geometrías, materiales, texturas, renderer, observers y listeners.
 
 ## 7. Integración en Timeline (maquetador)
 - `Timeline({ hitos, fuentes })` conserva firma. `<ol>` actual intacto (ref de `useScrollReveal`, `data-reveal`, clases, tonos, badges, `SourceLinks`).

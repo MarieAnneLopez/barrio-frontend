@@ -88,7 +88,8 @@ export function HingeScene({ activeIndex, reducedMotion, faces, onUnavailable }:
     engine.grid.pose(progress.current.position, engine.library.texture);
     engine.grid.group.updateMatrixWorld(true);
     engine.grid.hover(hover.current?.current());
-    gl.render(scene, camera);
+    // Los límites de error de React no ven fallos dentro de useFrame: aquí se activa el fallback.
+    try { gl.render(scene, camera); } catch { onUnavailable(); return; }
     engine.frames.painted(progress.current.position !== target);
   }, 1);
   return null;
