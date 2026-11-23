@@ -578,12 +578,6 @@
   },
   "history": {
     "timeline": "Línea de tiempo",
-    "hinge": {
-      "nav": "Navegación de hitos",
-      "prev": "Hito anterior",
-      "next": "Hito siguiente",
-      "position": "Hito {{current}} de {{total}}"
-    },
     "unverified": "Por verificar",
     "press": "Prensa",
     "flag": {

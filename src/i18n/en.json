@@ -578,12 +578,6 @@
   },
   "history": {
     "timeline": "Timeline",
-    "hinge": {
-      "nav": "Milestone navigation",
-      "prev": "Previous milestone",
-      "next": "Next milestone",
-      "position": "Milestone {{current}} of {{total}}"
-    },
     "unverified": "To be verified",
     "press": "Press",
     "flag": {

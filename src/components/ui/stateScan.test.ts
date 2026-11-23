@@ -36,7 +36,6 @@ const NEUTRAL_LIVE: Record<string, [number, string]> = {
   'components/ui/Skeleton.tsx': [1, 'cargando'],
   'features/gallery/ribbon/PhotoRibbon.tsx': [1, 'foto actual'],
   'features/home/film/reel/ModuleReel.tsx': [1, 'descripción del módulo'],
-  'features/history/TimelineNav.tsx': [1, 'hito n de m'],
   'features/home/HeroHud.tsx': [1, 'lugar señalado en la maqueta'],
   'features/home/NeighborhoodCarousel.tsx': [1, 'diapositiva actual'],
   'features/map/stage/StageFooter.tsx': [1, 'lugar señalado en el mapa'],
