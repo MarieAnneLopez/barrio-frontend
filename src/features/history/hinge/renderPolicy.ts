@@ -1,5 +1,5 @@
-// STUB: firma congelada en .ai/CONTRACTS.md; `programador` implementa la política de render.
 import type { RenderInput } from './types';
 
-// STUB: nunca dibuja.
-export const shouldRender: (input: RenderInput) => boolean = () => false;
+export function shouldRender(input: RenderInput): boolean {
+  return (input.animating || input.hoverDirty) && !input.hidden && input.inViewport;
+}
