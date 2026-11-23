@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toneAttrs } from '../../components/layout/footerTones';
 import type { Fuente, Hito } from '../../lib/apiTypes';
@@ -27,17 +27,12 @@ export function Timeline({ hitos, fuentes }: { hitos: Hito[]; fuentes: Fuente[] 
   const press = new Set(fuentes.flatMap((f) => (f.tipo === 'prensa' && f.url ? [f.url] : [])));
   const root = useRef<HTMLOListElement>(null);
   const reduced = useReducedMotion(); // barra de accesibilidad o sistema (H30)
-  const [hingeReady, setHingeReady] = useState(false);
-  const [canvasAvailable, setCanvasAvailable] = useState(false);
+  // Se decide en el primer render (sin efecto): el escenario no aparece después y no hay salto de layout.
+  const [hingeReady] = useState(isWebGLAvailable);
+  const [canvasAvailable, setCanvasAvailable] = useState(hingeReady);
   const { activeIndex, prev, next } = useActiveHito(hitos.length);
   const faces = hitos.map((hito) => ({ year: String(hito.anio) }));
   useScrollReveal(root, hitos.length > 0, reduced);
-
-  useEffect(() => {
-    const available = isWebGLAvailable();
-    setHingeReady(available);
-    setCanvasAvailable(available);
-  }, []);
 
   return (
     <>
@@ -52,7 +47,7 @@ export function Timeline({ hitos, fuentes }: { hitos: Hito[]; fuentes: Fuente[] 
         const key = `content:history.${hito.anio}-${hito.orden}`;
         const badge = badgeOf(hito, press);
         return (
-          <li key={hito.id} data-reveal aria-current={index === activeIndex ? 'step' : undefined} className="relative flex gap-4 pb-6 pl-6 last:pb-0">
+          <li key={hito.id} data-reveal aria-current={hingeReady && index === activeIndex ? 'step' : undefined} className="relative flex gap-4 pb-6 pl-6 last:pb-0">
             <span aria-hidden="true" data-reveal-line className="absolute inset-y-0 left-0 w-px origin-top bg-line-strong" />
             <span aria-hidden="true" className="absolute top-7 -left-[5px] size-[9px] rounded-full bg-highlight" />
             <div
